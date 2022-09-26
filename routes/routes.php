@@ -17,7 +17,7 @@ $router->cors(
 );
 
 // --Requerimos a todos los archivos--
-$router->importAll("../app");
+$router->importAll("../app/home");
 
 $router->get("/get/{idUser}", function (Request $req, Response $res) {
     $res->status(200)->send($req->params->idUser);
