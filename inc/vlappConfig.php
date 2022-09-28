@@ -7,8 +7,11 @@ define('LANG', 'es');
 
 // Rutas principales
 define('ROOT_PATH', $_SERVER['DOCUMENT_ROOT'] . '/vlapp/');
-define('INC', ROOT_PATH . 'inc/');
 define('APP', ROOT_PATH . 'app/');
+define('INC', ROOT_PATH . 'inc/');
+define('PUBLIC_PATH', ROOT_PATH . 'public/');
+define('JS', PUBLIC_PATH . 'js/');
+define('VIEW', PUBLIC_PATH . 'views/');
 
 // Rutas de la app
 define('CONTROLLERS', APP . 'controllers/');

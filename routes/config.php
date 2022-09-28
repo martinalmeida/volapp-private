@@ -1,5 +1,4 @@
 <?php
-require_once(__DIR__ . '/config.php');
 require_once(__DIR__ . '/routing.php');
 
 $folderPath =  dirname($_SERVER['SCRIPT_NAME']);
