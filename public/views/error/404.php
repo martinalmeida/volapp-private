@@ -5,6 +5,7 @@ Template::Head('404');
 Template::startBody();
 ?>
 
+<!-- ========== Inicio Componente de Vista ========== -->
 <div class="h-alt-hf d-flex flex-column align-items-center justify-content-center text-center">
     <h1 class="page-error color-fusion-500">
         ERROR <span class="text-gradient">404</span>
@@ -20,5 +21,6 @@ Template::startBody();
         <br>In the meantime, check out whats new on SmartAdmin WebApp:
     </h4>
 </div>
+<!-- ========== Fin Componente de Vista ========== -->
 
 <?= Template::endBody(); ?>
