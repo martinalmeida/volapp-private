@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <h1>Esto es la visa de login</h1>
+    <h1>Esta es la vista de login</h1>
 </body>
 
 </html>

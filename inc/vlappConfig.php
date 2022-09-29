@@ -6,7 +6,7 @@ date_default_timezone_set('America/Bogota');
 define('LANG', 'es');
 
 // Rutas principales
-define('ROOT_PATH', $_SERVER['DOCUMENT_ROOT'] . '/vlapp/');
+define('ROOT_PATH', '/vlapp/');
 define('APP', ROOT_PATH . 'app/');
 define('RESOURCES', ROOT_PATH . 'resources/');
 define('ASEETS', ROOT_PATH . 'aseets/');
@@ -24,9 +24,8 @@ define('MODELS', APP . 'models/');
 // // Rutas de archivos o assets con base URL
 define('ASSETS', RESOURCES . 'assets/');
 define('CSS', ASSETS . 'css/');
-define('IMG', ASSETS . 'imag/');
-define('FAVICON', ASSETS . 'favicon/');
-define('FONTS', ASSETS . 'fonts/');
+define('IMG', ASSETS . 'img/');
+define('FONTS', ASSETS . 'webfonts/');
 // define('JS', ASSETS . 'js/'); muestra error REVISAR
 define('PLUGINS', ASSETS . 'plugins/');
 define('UPLOADS', ASSETS . 'uploads/');

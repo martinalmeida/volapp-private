@@ -23,7 +23,7 @@ RewriteRule .* - [F]
 LimitRequestBody 10000000
 
 # Mensaje de error personalizado en ubicación local
-ErrorDocument 404 http://localhost/rvo-ips-pagina/404
+ErrorDocument 404 http://localhost/vlapp/public/views/error/404
 
 # Bloquear el propio htaccess
 <Files .htaccess>
