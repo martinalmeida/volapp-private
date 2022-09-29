@@ -12,8 +12,6 @@ define('RESOURCES', ROOT_PATH . 'resources/');
 define('ASEETS', ROOT_PATH . 'aseets/');
 define('INC', ROOT_PATH . 'inc/');
 define('PUBLIC_PATH', ROOT_PATH . 'public/');
-define('JS', PUBLIC_PATH . 'js/');
-define('VIEW', PUBLIC_PATH . 'views/');
 
 // Rutas de la app
 define('CONTROLLERS', APP . 'controllers/');
@@ -21,14 +19,19 @@ define('INCLUDES', APP . 'includes/');
 define('LIBRARIES', APP . 'librarias/');
 define('MODELS', APP . 'models/');
 
-// // Rutas de archivos o assets con base URL
+// Rutas de interfaz
+define('JSFETCH', PUBLIC_PATH . 'js/');
+define('VIEW', PUBLIC_PATH . 'views/');
+
+// Rutas de estilos
 define('ASSETS', RESOURCES . 'assets/');
 define('CSS', ASSETS . 'css/');
 define('IMG', ASSETS . 'img/');
 define('FONTS', ASSETS . 'webfonts/');
-// define('JS', ASSETS . 'js/'); muestra error REVISAR
-define('PLUGINS', ASSETS . 'plugins/');
-define('UPLOADS', ASSETS . 'uploads/');
+
+// Rutas de javaScript y componentes
+define('COMPONENTS', RESOURCES . 'components/');
+define('JS', RESOURCES . 'js/');
 
 // Credenciales de la base de datos
 define('HOST_DB', 'localhost');
