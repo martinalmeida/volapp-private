@@ -10,7 +10,7 @@ class Roots
         $self = new self();
         $self->folder = $folder;
         $self->file = $file;
-        $url = '/vlapp/public/views/' . $self->folder . '/' . $self->file;
+        $url = '/volapp/public/views/' . $self->folder . '/' . $self->file;
         if (file_exists($_SERVER['DOCUMENT_ROOT'] . $url . '.php')) {
             header('Location: ' . $url);
         } else {
@@ -24,7 +24,7 @@ class Roots
         $self = new self();
         $self->folder = $folder;
         $self->file = $file;
-        $url = '/vlapp/public/views/' . $self->folder . '/' . $self->file;
+        $url = '/volapp/public/views/' . $self->folder . '/' . $self->file;
         if (file_exists($_SERVER['DOCUMENT_ROOT'] . $url . '.php')) {
             header('Location: ' . $url);
         } else {

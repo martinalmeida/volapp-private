@@ -17,7 +17,7 @@ class Roting
         $this->controller = $url[1];
         $this->method = $url[2];
         $this->controller = $this->controller . 'controller';
-        require_once($_SERVER['DOCUMENT_ROOT'] . '/vlapp/app/controllers/' . $this->controller . '.php');
+        require_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/app/controllers/' . $this->controller . '.php');
     }
 
     public function run()

@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
-include_once($_SERVER['DOCUMENT_ROOT'] . '/vlapp/inc/vlappConfig.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/vlappConfig.php');
 
 class Template
 {
@@ -14,7 +14,7 @@ class Template
     //     }
     // }
 
-    static public function Head($title)
+    static public function head($title)
     {
         $html = "<!DOCTYPE html>
                 <html lang='" . LANG . "'>
@@ -1347,6 +1347,175 @@ class Template
                     <script src='" . JS . "vendors.bundle.js'></script>
                     <script src='" . JS . "app.bundle.js'></script>
                     </body>
+                    </html>";
+        echo $html;
+    }
+
+    static public function headLogin($title)
+    {
+        $html = "<!DOCTYPE html>
+                <html lang='" . LANG . "'>
+                <head>
+                    <meta charset='utf-8'>
+                    <title>
+                        $title
+                    </title>
+                    <meta name='description' content='Introduction'>
+                    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+                    <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui'>
+                    <meta name='apple-mobile-web-app-capable' content='yes' />
+                    <meta name='msapplication-tap-highlight' content='no'>
+                    <link id='vendorsbundle' rel='stylesheet' media='screen, print' href='" . CSS . "vendors.bundle.css'>
+                    <link id='appbundle' rel='stylesheet' media='screen, print' href='" . CSS . "app.bundle.css'>
+                    <link id='mytheme' rel='stylesheet' media='screen, print' href='#'>
+                    <link id='myskin' rel='stylesheet' media='screen, print' href='" . CSS . "skins/skin-master.css'>
+                    <link rel='apple-touch-icon' sizes='180x180' href='" . IMG . "favicon/apple-touch-icon.png'>
+                    <link rel='icon' type='image/png' sizes='32x32' href='" . IMG . "favicon/favicon-32x32.png'>
+                    <link rel='mask-icon' href='" . IMG . "favicon/safari-pinned-tab.svg' color='#5bbad5'>
+                </head>";
+        echo $html;
+    }
+
+    static public function startBodyLogin()
+    {
+        $html =  "<body>
+                    <script>
+                        'use strict';
+                        var classHolder = document.getElementsByTagName('BODY')[0],
+                            themeSettings = (localStorage.getItem('themeSettings')) ? JSON.parse(localStorage.getItem('themeSettings')) : {},
+                            themeURL = themeSettings.themeURL || '',
+                            themeOptions = themeSettings.themeOptions || '';
+                        if (themeSettings.themeOptions) {
+                            classHolder.className = themeSettings.themeOptions;
+                            console.log('%c✔ Theme settings loaded', 'color: #148f32');
+                        } else {
+                            console.log('%c✔ Heads up! Theme settings is empty or does not exist, loading default settings...', 'color: #ed1c24');
+                        }
+                        if (themeSettings.themeURL && !document.getElementById('mytheme')) {
+                            var cssfile = document.createElement('link');
+                            cssfile.id = 'mytheme';
+                            cssfile.rel = 'stylesheet';
+                            cssfile.href = themeURL;
+                            document.getElementsByTagName('head')[0].appendChild(cssfile);
+                
+                        } else if (themeSettings.themeURL && document.getElementById('mytheme')) {
+                            document.getElementById('mytheme').href = themeSettings.themeURL;
+                        }
+                        var saveSettings = function() {
+                            themeSettings.themeOptions = String(classHolder.className).split(/[^\w-]+/).filter(function(item) {
+                                return /^(nav|header|footer|mod|display)-/i.test(item);
+                            }).join(' ');
+                            if (document.getElementById('mytheme')) {
+                                themeSettings.themeURL = document.getElementById('mytheme').getAttribute('href');
+                            };
+                            localStorage.setItem('themeSettings', JSON.stringify(themeSettings));
+                        }
+                        var resetSettings = function() {
+                            localStorage.setItem('themeSettings', ');
+                        }
+                    </script>
+                    <div class='page-wrapper auth'>
+                        <div class='page-inner bg-brand-gradient'>
+                            <div class='page-content-wrapper bg-transparent m-0'>
+                                <div class='height-10 w-100 shadow-lg px-4 bg-brand-gradient'>
+                                    <div class='d-flex align-items-center container p-0'>
+                                        <div class='page-logo width-mobile-auto m-0 align-items-center justify-content-center p-0 bg-transparent bg-img-none shadow-0 height-9 border-0'>
+                                            <a href='javascript:void(0)' class='page-logo-link press-scale-down d-flex align-items-center'>
+                                                <img src='" . IMG . "/logo.png' alt='SmartAdmin WebApp' aria-roledescription='logo'>
+                                                <span class='page-logo-text mr-1'>VolApp</span>
+                                            </a>
+                                        </div>
+                                        <a href='page_register.html' class='btn-link text-white ml-auto'>
+                                            Recuperar Contraseña
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class='flex-1' style='background: url(" . IMG . "/svg/pattern-1.svg) no-repeat center bottom fixed; background-size: cover;'>";
+        echo $html;
+    }
+
+    static public function endBodyLogin()
+    {
+        $html = "</div>
+                    </div>
+                    </div>
+                    </div>
+                    <p id='js-color-profile' class='d-none'>
+                        <span class='color-primary-50'></span>
+                        <span class='color-primary-100'></span>
+                        <span class='color-primary-200'></span>
+                        <span class='color-primary-300'></span>
+                        <span class='color-primary-400'></span>
+                        <span class='color-primary-500'></span>
+                        <span class='color-primary-600'></span>
+                        <span class='color-primary-700'></span>
+                        <span class='color-primary-800'></span>
+                        <span class='color-primary-900'></span>
+                        <span class='color-info-50'></span>
+                        <span class='color-info-100'></span>
+                        <span class='color-info-200'></span>
+                        <span class='color-info-300'></span>
+                        <span class='color-info-400'></span>
+                        <span class='color-info-500'></span>
+                        <span class='color-info-600'></span>
+                        <span class='color-info-700'></span>
+                        <span class='color-info-800'></span>
+                        <span class='color-info-900'></span>
+                        <span class='color-danger-50'></span>
+                        <span class='color-danger-100'></span>
+                        <span class='color-danger-200'></span>
+                        <span class='color-danger-300'></span>
+                        <span class='color-danger-400'></span>
+                        <span class='color-danger-500'></span>
+                        <span class='color-danger-600'></span>
+                        <span class='color-danger-700'></span>
+                        <span class='color-danger-800'></span>
+                        <span class='color-danger-900'></span>
+                        <span class='color-warning-50'></span>
+                        <span class='color-warning-100'></span>
+                        <span class='color-warning-200'></span>
+                        <span class='color-warning-300'></span>
+                        <span class='color-warning-400'></span>
+                        <span class='color-warning-500'></span>
+                        <span class='color-warning-600'></span>
+                        <span class='color-warning-700'></span>
+                        <span class='color-warning-800'></span>
+                        <span class='color-warning-900'></span>
+                        <span class='color-success-50'></span>
+                        <span class='color-success-100'></span>
+                        <span class='color-success-200'></span>
+                        <span class='color-success-300'></span>
+                        <span class='color-success-400'></span>
+                        <span class='color-success-500'></span>
+                        <span class='color-success-600'></span>
+                        <span class='color-success-700'></span>
+                        <span class='color-success-800'></span>
+                        <span class='color-success-900'></span>
+                        <span class='color-fusion-50'></span>
+                        <span class='color-fusion-100'></span>
+                        <span class='color-fusion-200'></span>
+                        <span class='color-fusion-300'></span>
+                        <span class='color-fusion-400'></span>
+                        <span class='color-fusion-500'></span>
+                        <span class='color-fusion-600'></span>
+                        <span class='color-fusion-700'></span>
+                        <span class='color-fusion-800'></span>
+                        <span class='color-fusion-900'></span>
+                    </p>
+                    <script src='" . JS . "/vendors.bundle.js'></script>
+                    <script src='" . JS . "/app.bundle.js'></script>
+                    <script>
+                        $('#js-login-btn').click(function(event) {
+                            var form = $('#js-login')
+                            if (form[0].checkValidity() === false) {
+                                event.preventDefault()
+                                event.stopPropagation()
+                            }
+                            form.addClass('was-validated');
+                        });
+                    </script>
+                    </body>
+                    
                     </html>";
         echo $html;
     }

@@ -1,5 +1,5 @@
 <?php
-include_once($_SERVER['DOCUMENT_ROOT'] . '/vlapp/inc/vlappConfig.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/vlappConfig.php');
 include($_SERVER['DOCUMENT_ROOT'] . MODELS . 'modelTest.php');
 
 class TestController

@@ -6,7 +6,7 @@ date_default_timezone_set('America/Bogota');
 define('LANG', 'es');
 
 // Rutas principales
-define('ROOT_PATH', '/vlapp/');
+define('ROOT_PATH', '/volapp/');
 define('APP', ROOT_PATH . 'app/');
 define('RESOURCES', ROOT_PATH . 'resources/');
 define('ASEETS', ROOT_PATH . 'aseets/');

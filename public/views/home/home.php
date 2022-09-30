@@ -1,5 +1,5 @@
 <?php
-include_once($_SERVER['DOCUMENT_ROOT'] . '/vlapp/inc/vlappConfig.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/vlappConfig.php');
 include_once($_SERVER['DOCUMENT_ROOT'] . INCLUDES . 'template.php');
 Template::Head('404');
 Template::startBody();
