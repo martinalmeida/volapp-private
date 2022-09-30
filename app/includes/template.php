@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
-include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/vlappConfig.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/volappConfig.php');
 
 class Template
 {

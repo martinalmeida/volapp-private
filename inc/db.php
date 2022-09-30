@@ -6,7 +6,7 @@ class Database
 
     public function getConnection()
     {
-        include_once __DIR__ . "/vlappConfig.php";
+        include_once __DIR__ . "/volappConfig.php";
         $host = HOST_DB;
         $dbName = NAME_DB;
         $userName = USER_DB;
