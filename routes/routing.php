@@ -6,7 +6,9 @@ class Roting
 
     public function __construct()
     {
-        $this->matchRoute();
+        if (URL !== '/') {
+            $this->matchRoute();
+        }
     }
 
     public function matchRoute()
