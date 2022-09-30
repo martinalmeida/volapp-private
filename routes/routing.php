@@ -18,7 +18,7 @@ class Roting
         $this->method = $url[2];
         $this->controller = $this->controller . 'controller';
         $fileController = $_SERVER['DOCUMENT_ROOT'] . '/volapp/app/controllers/' . $this->controller . '.php';
-        if (file_exists($fileController)) {
+        if (file_exists($fileController) && $this->controller != 0) {
             require_once($fileController);
         } else {
             $request['status'] = '4';
