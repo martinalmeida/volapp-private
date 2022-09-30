@@ -1,3 +1,9 @@
+<!-- ========== Start STATUS ========== 
+     status->0 == Fallo la consulta
+     status->1 == Exito en la consulta
+     status->2 == Error de validacion
+     status->3 == Archivos falta
+     ========== End STATUS ========== -->
 <?php
 class Test
 {
