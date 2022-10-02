@@ -5,3 +5,7 @@ Diseño, desarrollo e Implementación de una plataforma para la facturación de 
 #---------------- Instructivo ----------------- <br>
 
 ◻ Renombrar la carpeta en la raiz del servidor: **./carga-pesada** POR **./volapp**
+
+<br>
+
+◻ Instalar paquetes de composer: **composer install**
