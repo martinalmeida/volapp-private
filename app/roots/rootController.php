@@ -5,7 +5,7 @@ class Roots
     private $file;
 
     // --Ruta principal--
-    public static function vlapp($folder, $file)
+    public static function volapp($folder, $file)
     {
         $self = new self();
         $self->folder = $folder;
