@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 class Test
 {
     // --Parametros--
@@ -13,13 +16,12 @@ class Test
     }
 
     // --Collection--
-    function selecTest()
+    public function selecTest(): void
     {
         $query = "SELECT * FROM " . $this->tableName . " ";
         $stmt = $this->conn->prepare($query);
         $stmt->execute(array());
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         echo json_encode($row);
-        return $row;
     }
 }
