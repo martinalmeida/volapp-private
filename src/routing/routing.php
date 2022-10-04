@@ -1,5 +1,10 @@
 <?php
-class Roting
+
+declare(strict_types=1);
+
+namespace App;
+
+class Routing
 {
     private $controller;
     private $method;
