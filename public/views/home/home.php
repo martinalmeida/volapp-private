@@ -1,7 +1,7 @@
 <?php
 include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/volappConfig.php');
 include_once($_SERVER['DOCUMENT_ROOT'] . INCLUDES . 'template.php');
-Template::Head('404');
+Template::Head('Home');
 Template::startBody();
 ?>
 
