@@ -1377,6 +1377,7 @@ class Template
                     <link rel='apple-touch-icon' sizes='180x180' href='" . IMG . "favicon/apple-touch-icon.png'>
                     <link rel='icon' type='image/png' sizes='32x32' href='" . IMG . "favicon/favicon-32x32.png'>
                     <link rel='mask-icon' href='" . IMG . "favicon/safari-pinned-tab.svg' color='#5bbad5'>
+                    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css' integrity='sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==' crossorigin='anonymous' referrerpolicy='no-referrer' />
                 </head>";
         echo $html;
     }
@@ -1430,7 +1431,7 @@ class Template
                                                 <span class='page-logo-text mr-1'>VolApp</span>
                                             </a>
                                         </div>
-                                        <a href='page_register.html' class='btn-link text-white ml-auto'>
+                                        <a href='#' class='btn-link text-white ml-auto'>
                                             Recuperar Contraseña
                                         </a>
                                     </div>
@@ -1507,10 +1508,10 @@ class Template
                         <span class='color-fusion-800'></span>
                         <span class='color-fusion-900'></span>
                     </p>
-                    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css' integrity='sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==' crossorigin='anonymous' referrerpolicy='no-referrer' />
-                    <script src='https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.4.37/sweetalert2.min.js' integrity='sha512-hMhiMG2V37nTipBqREV4+PdbKWnM3qXH9JPcD4s+YC9FStVfOMAyPvZ5tWx/SacBtHjTSsVvx7lg6CBUox1ZEA==' crossorigin='anonymous' referrerpolicy='no-referrer'></script>
                     <script src='" . JS . "vendors.bundle.js?v=" . rand() . "'></script>
                     <script src='" . JS . "app.bundle.js?v=" . rand() . "'></script>
+                    <script src='" . JS . "notifications/sweetalert2/sweetalert2@9.js'></script>
+                    <script src='" . JS . "validaciones.js?v=" . rand() . "'></script>
                     <script>
                         $('#js-login-btn').click(function(event) {
                             var form = $('#js-login')
@@ -1521,7 +1522,6 @@ class Template
                             form.addClass('was-validated');
                         });
                     </script>
-                    <script src='" . JS . "validaciones.js?v=" . rand() . "'></script>
                     </body>
                     </html>";
         echo $html;
