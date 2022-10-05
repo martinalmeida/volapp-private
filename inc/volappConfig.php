@@ -16,11 +16,11 @@ define('PUBLIC_PATH', ROOT_PATH . 'public/');
 // Rutas de la app
 define('CONTROLLERS', APP . 'controllers/');
 define('INCLUDES', APP . 'includes/');
-define('LIBRARIES', APP . 'librarias/');
+define('LIBRARIES', APP . 'librariEs/');
 define('MODELS', APP . 'models/');
 
 // Rutas de interfaz
-define('JSFETCH', PUBLIC_PATH . 'js/');
+define('JSAJAX', PUBLIC_PATH . 'js/');
 define('VIEW', PUBLIC_PATH . 'views/');
 
 // Rutas de estilos

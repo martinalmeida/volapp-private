@@ -11,7 +11,7 @@ Template::startBodyLogin();
             <h2 class="fs-xxl fw-500 mt-4 text-white">
                 VolApp
                 <small class="h3 fw-300 mt-3 mb-5 text-white opacity-60">
-                    Soluciones de software para negocios ortientados al transporte de carga pesada.
+                    Soluciones de software para negocios orientados al transporte de carga pesada.
                 </small>
             </h2>
             <!-- <a href="#" class="fs-lg fw-500 text-white opacity-70">Ver más &gt;&gt;</a> -->
@@ -37,19 +37,19 @@ Template::startBodyLogin();
         </div>
         <div class="col-sm-12 col-md-6 col-lg-5 col-xl-4 ml-auto">
             <h1 class="text-white fw-300 mb-3 d-sm-block d-md-none">
-              Inicio de sesión seguro
+                Inicio de sesión seguro
             </h1>
             <div class="card p-4 rounded-plus bg-faded">
-                <form id="js-login" novalidate="" action="intel_analytics_dashboard.html">
+                <form id="frmLogin">
                     <div class="form-group">
-                        <label class="form-label" for="username">Email</label>
-                        <input type="email" id="username" class="form-control form-control-lg" placeholder="Ingresa tu email" required>
+                        <label class="form-label" for="usuarioLogin">Email</label>
+                        <input type="email" name="usuarioLogin" id="usuarioLogin" class="form-control form-control-lg" placeholder="Ingresa tu email" required>
                         <div class="invalid-feedback">Lo siento, Usuario incorrecto.</div>
                         <div class="help-block">Escribe tu email</div>
                     </div>
                     <div class="form-group">
-                        <label class="form-label" for="password">Contraseña</label>
-                        <input type="password" id="password" class="form-control form-control-lg" placeholder="Ingresa tu contraseña" required>
+                        <label class="form-label" for="contraseniaLogin">Contraseña</label>
+                        <input type="password" name="contraseniaLogin" id="contraseniaLogin" class="form-control form-control-lg" placeholder="Ingresa tu contraseña" required>
                         <div class="invalid-feedback">Lo siento, contraseña incorrecta.</div>
                         <div class="help-block">Escribe tu contraseña</div>
                     </div>
@@ -61,7 +61,7 @@ Template::startBodyLogin();
                     </div>
                     <div class="row no-gutters">
                         <div class="col-lg-12 pr-lg-1 my-2">
-                            <button type="submit" class="btn btn-info btn-block btn-lg">Iniciar Sesión <i class="fa-solid fa-right-to-bracket"></i></button>
+                            <a class="btn btn-info btn-block btn-lg text-white" id="btnLoginIngresar" onclick="login('frmLogin');">Iniciar Sesión <i class="fa-solid fa-right-to-bracket"></i></a>
                         </div>
                         <!-- <div class="col-lg-6 pl-lg-1 my-2">
                             <button id="js-login-btn" type="submit" class="btn btn-danger btn-block btn-lg">Iniciar sesión</button>
@@ -77,4 +77,4 @@ Template::startBodyLogin();
 </div>
 
 <?= Template::endBodyLogin(); ?>
-
+<?= Template::azyncScript('login'); ?>

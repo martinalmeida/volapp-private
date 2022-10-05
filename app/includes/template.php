@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/volappConfig.php');
@@ -1393,7 +1394,7 @@ class Template
                             classHolder.className = themeSettings.themeOptions;
                             console.log('%c✔ Theme settings loaded', 'color: #148f32');
                         } else {
-                            console.log('%c✔ Heads up! Theme settings is empty or does not exist, loading default settings...', 'color: #ed1c24');
+                            console.log('%c✔ Heads up! Theme settings is empty or does not exist, loading default settings...', 'color: #C39BD3');
                         }
                         if (themeSettings.themeURL && !document.getElementById('mytheme')) {
                             var cssfile = document.createElement('link');
@@ -1415,7 +1416,7 @@ class Template
                             localStorage.setItem('themeSettings', JSON.stringify(themeSettings));
                         }
                         var resetSettings = function() {
-                            localStorage.setItem('themeSettings', ');
+                            localStorage.setItem('themeSettings', '');
                         }
                     </script>
                     <div class='page-wrapper auth'>
@@ -1507,8 +1508,9 @@ class Template
                         <span class='color-fusion-900'></span>
                     </p>
                     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css' integrity='sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==' crossorigin='anonymous' referrerpolicy='no-referrer' />
-                    <script src='" . JS . "/vendors.bundle.js'></script>
-                    <script src='" . JS . "/app.bundle.js'></script>
+                    <script src='https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.4.37/sweetalert2.min.js' integrity='sha512-hMhiMG2V37nTipBqREV4+PdbKWnM3qXH9JPcD4s+YC9FStVfOMAyPvZ5tWx/SacBtHjTSsVvx7lg6CBUox1ZEA==' crossorigin='anonymous' referrerpolicy='no-referrer'></script>
+                    <script src='" . JS . "vendors.bundle.js?v=" . rand() . "'></script>
+                    <script src='" . JS . "app.bundle.js?v=" . rand() . "'></script>
                     <script>
                         $('#js-login-btn').click(function(event) {
                             var form = $('#js-login')
@@ -1519,9 +1521,16 @@ class Template
                             form.addClass('was-validated');
                         });
                     </script>
+                    <script src='" . JS . "validaciones.js?v=" . rand() . "'></script>
                     </body>
                     </html>";
         echo $html;
     }
 
+    static public function azyncScript($nameScript)
+    {
+        $html = '<script src="' . JSAJAX . $nameScript . 'Async.js?v=' . rand() . '"></script>';
+
+        return $html;
+    }
 }

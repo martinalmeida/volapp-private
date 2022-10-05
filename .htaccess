@@ -25,11 +25,11 @@ LimitRequestBody 10000000
 # Mensaje de error personalizado en ubicación local
 ErrorDocument 404 http://localhost/volapp/public/views/error/404
 
-# Bloquear el propio htaccess
-<Files .htaccess>
-order allow,deny
-deny from all
-</Files>
+# Bloquear Archivos
+<FilesMatch "\.(htaccess|env|phps|log|bak|txt)$">
+ Order Allow,Deny
+ Deny from all
+</FilesMatch>
 
 </IfModule>
 # php -- END cPanel-generated handler, do not edit
