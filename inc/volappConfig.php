@@ -34,8 +34,8 @@ define('COMPONENTS', RESOURCES . 'components/');
 define('JS', RESOURCES . 'js/');
 
 // Credenciales de la base de datos
-define('HOST_DB', 'localhost');
-define('USER_DB', 'root');
-define('PASSWORD_DB', '');
-define('NAME_DB', 'irma');
-define('LDB_CHARSET', 'utf8');
+// define('HOST_DB', 'localhost');
+// define('USER_DB', 'root');
+// define('PASSWORD_DB', '');
+// define('NAME_DB', 'volapp');
+// define('LDB_CHARSET', 'utf8');

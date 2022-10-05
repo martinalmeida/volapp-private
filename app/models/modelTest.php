@@ -6,7 +6,7 @@ class Test
 {
     // --Parametros--
     private $conn;
-    private $tableName = "inputs";
+    private $tableName = "rol";
     public $data;
 
     // --Constructor para la conexion de la BD--
