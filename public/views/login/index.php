@@ -9,12 +9,12 @@ Template::startBodyLogin();
     <div class="row">
         <div class="col col-md-6 col-lg-7 hidden-sm-down">
             <h2 class="fs-xxl fw-500 mt-4 text-white">
-                VACIO &amp; VACIO
+                VolApp
                 <small class="h3 fw-300 mt-3 mb-5 text-white opacity-60">
-                    EJEMPLO
+                    Soluciones de software para negocios ortientados al transporte de carga pesada.
                 </small>
             </h2>
-            <a href="#" class="fs-lg fw-500 text-white opacity-70">Ver más &gt;&gt;</a>
+            <!-- <a href="#" class="fs-lg fw-500 text-white opacity-70">Ver más &gt;&gt;</a> -->
             <div class="d-sm-flex flex-column align-items-center justify-content-center d-md-block">
                 <div class="px-0 py-1 mt-5 text-white fs-nano opacity-50">
                     REDES SOCIALES
@@ -42,38 +42,39 @@ Template::startBodyLogin();
             <div class="card p-4 rounded-plus bg-faded">
                 <form id="js-login" novalidate="" action="intel_analytics_dashboard.html">
                     <div class="form-group">
-                        <label class="form-label" for="username">Usuario</label>
-                        <input type="email" id="username" class="form-control form-control-lg" placeholder="your id or email" value="drlantern@gotbootstrap.com" required>
+                        <label class="form-label" for="username">Email</label>
+                        <input type="email" id="username" class="form-control form-control-lg" placeholder="Ingresa tu email" required>
                         <div class="invalid-feedback">Lo siento, Usuario incorrecto.</div>
-                        <div class="help-block">Escribe tu usuario</div>
+                        <div class="help-block">Escribe tu email</div>
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="password">Contraseña</label>
-                        <input type="password" id="password" class="form-control form-control-lg" placeholder="password" value="password123" required>
+                        <input type="password" id="password" class="form-control form-control-lg" placeholder="Ingresa tu contraseña" required>
                         <div class="invalid-feedback">Lo siento, contraseña incorrecta.</div>
                         <div class="help-block">Escribe tu contraseña</div>
                     </div>
                     <div class="form-group text-left">
-                        <div class="custom-control custom-checkbox">
+                        <!-- <div class="custom-control custom-checkbox">
                             <input type="checkbox" class="custom-control-input" id="rememberme">
                             <label class="custom-control-label" for="rememberme"> Recuerdame</label>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="row no-gutters">
-                        <div class="col-lg-6 pr-lg-1 my-2">
-                            <button type="submit" class="btn btn-info btn-block btn-lg">Iniciar con <i class="fab fa-google"></i></button>
+                        <div class="col-lg-12 pr-lg-1 my-2">
+                            <button type="submit" class="btn btn-info btn-block btn-lg">Iniciar Sesión <i class="fa-solid fa-right-to-bracket"></i></button>
                         </div>
-                        <div class="col-lg-6 pl-lg-1 my-2">
+                        <!-- <div class="col-lg-6 pl-lg-1 my-2">
                             <button id="js-login-btn" type="submit" class="btn btn-danger btn-block btn-lg">Iniciar sesión</button>
-                        </div>
+                        </div> -->
                     </div>
                 </form>
             </div>
         </div>
     </div>
     <div class="position-absolute pos-bottom pos-left pos-right p-3 text-center text-white">
-        2020 © SmartAdmin by&nbsp;<a href='https://www.gotbootstrap.com' class='text-white opacity-40 fw-500' title='gotbootstrap.com' target='_blank'>gotbootstrap.com</a>
+        2022 © volapp by&nbsp;<a href='https://www.gotbootstrap.com' class='text-white opacity-40 fw-500' title='gotbootstrap.com' target='_blank'>volapp</a>
     </div>
 </div>
 
 <?= Template::endBodyLogin(); ?>
+

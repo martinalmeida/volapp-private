@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
+declare(strict_types=1);
+
 include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/volappConfig.php');
 
 class Template
@@ -36,6 +36,8 @@ class Template
                     <link rel='apple-touch-icon' sizes='180x180' href='" . IMG . "favicon/apple-touch-icon.png'>
                     <link rel='icon' type='image/png' sizes='32x32' href='" . IMG . "favicon/favicon-32x32.png'>
                     <link rel='mask-icon' href='" . IMG . "favicon/safari-pinned-tab.svg' color='#5bbad5'>
+                    <link rel='stylesheet' media='screen, print' href='" . CSS . "/datagrid/datatables/datatables.bundle.css'>
+                    <link rel='stylesheet' media='screen, print' href='" . CSS . "/fa-solid.css'>
                 </head>";
         echo $html;
     }
@@ -141,7 +143,7 @@ class Template
                                             </a>
                                             <span class='d-inline-block text-truncate text-truncate-sm'>Toronto, Canada</span>
                                         </div>
-                                        <img src='" . IMG . "card-backgrounds/cover-2-lg.png' class='cover' alt='cover'>
+                                        <img src='" . IMG . "card-backgrounds/canva.png' class='cover' alt='cover'>
                                         <a href='#' onclick='return false;' class='pull-trigger-btn' data-action='toggle' data-class='list-filter-active' data-target='.page-sidebar' data-focus='nav_filter_input'>
                                             <i class='fal fa-angle-down'></i>
                                         </a>
@@ -532,10 +534,7 @@ class Template
                                 <!-- the #js-page-content id is needed for some plugins to initialize -->
                                 <main id='js-page-content' role='main' class='page-content'>
                                     <ol class='breadcrumb page-breadcrumb'>
-                                        <li class='breadcrumb-item'><a href='javascript:void(0);'>UNO</a></li>
-                                        <li class='breadcrumb-item'>DOS</li>
-                                        <li class='breadcrumb-item active'>TRES</li>
-                                        <li class='position-absolute pos-top pos-right d-none d-sm-block'><span class='js-get-date'></span></li>
+                                        <li class='position-absolute pos-top pos-left d-none d-sm-block'><span class='js-get-date'></span></li>
                                     </ol>    
                                     <div class='subheader'></div>";
         echo $html;
@@ -1348,6 +1347,9 @@ class Template
                     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css' integrity='sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==' crossorigin='anonymous' referrerpolicy='no-referrer' />
                     <script src='" . JS . "vendors.bundle.js'></script>
                     <script src='" . JS . "app.bundle.js'></script>
+                    <script src='" . JS . "datagrid/datatables/datatables.bundle.js'></script>
+                    <script src='" . JS . "datagrid/datatables/datatables.export.js'></script>
+                    <script src='" . JS . "dataTablesCustom.js'></script>
                     </body>
                     </html>";
         echo $html;
@@ -1521,4 +1523,5 @@ class Template
                     </html>";
         echo $html;
     }
+
 }

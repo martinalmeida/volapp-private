@@ -5,13 +5,12 @@ class Roots
     private $file;
 
     // --Ruta principal--
-    public static function volapp($folder, $file)
+    public static function volapp($folder)
     {
         $self = new self();
         $self->folder = $folder;
-        $self->file = $file;
-        $url = '/volapp/public/views/' . $self->folder . '/' . $self->file;
-        if (file_exists($_SERVER['DOCUMENT_ROOT'] . $url . '.php')) {
+        $url = '/volapp/public/views/' . $self->folder;
+        if (file_exists($_SERVER['DOCUMENT_ROOT'] . $url . '/index.php')) {
             header('Location: ' . $url);
         } else {
             self::error404('error', '404');
