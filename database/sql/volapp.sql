@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 30-09-2022 a las 17:23:17
+-- Tiempo de generación: 05-10-2022 a las 19:12:04
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.1.6
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `coosersum`
+-- Base de datos: `volapp`
 --
 
 -- --------------------------------------------------------
@@ -83,7 +83,7 @@ CREATE TABLE `persona` (
   `a_materno` varchar(30) COLLATE utf8mb4_spanish_ci NOT NULL,
   `telefono` bigint(20) DEFAULT NULL,
   `email_user` varchar(100) COLLATE utf8mb4_spanish_ci NOT NULL,
-  `password` varchar(100) COLLATE utf8mb4_spanish_ci NOT NULL,
+  `pswd` text COLLATE utf8mb4_spanish_ci NOT NULL,
   `ruc` varchar(20) COLLATE utf8mb4_spanish_ci DEFAULT NULL,
   `nombrefiscal` varchar(81) COLLATE utf8mb4_spanish_ci DEFAULT NULL,
   `direccionfiscal` varchar(100) COLLATE utf8mb4_spanish_ci DEFAULT NULL,
@@ -97,9 +97,9 @@ CREATE TABLE `persona` (
 -- Volcado de datos para la tabla `persona`
 --
 
-INSERT INTO `persona` (`idpersona`, `identificacion`, `nombres`, `a_paterno`, `a_materno`, `telefono`, `email_user`, `password`, `ruc`, `nombrefiscal`, `direccionfiscal`, `token`, `rolid`, `datecreated`, `status`) VALUES
+INSERT INTO `persona` (`idpersona`, `identificacion`, `nombres`, `a_paterno`, `a_materno`, `telefono`, `email_user`, `pswd`, `ruc`, `nombrefiscal`, `direccionfiscal`, `token`, `rolid`, `datecreated`, `status`) VALUES
 (1, '', 'Martin', 'Almeida', 'Cavanzo', 3107698290, 'martinalmeida56@gmail.com', 'admin123', NULL, NULL, NULL, NULL, 1, '2022-09-08 01:36:11', '1'),
-(2, '1096241229', 'Martin', 'Almeida', 'Cavanzo', 3107698290, 'martinalmeida56@gmail.com', 'admin123', NULL, NULL, NULL, NULL, 1, '2022-09-08 01:37:45', '1');
+(2, '1096241229', 'Martin', 'Almeida', 'Cavanzo', 3107698290, 'martinalmeida56@gmail.ad', 'admin123', NULL, NULL, NULL, NULL, 1, '2022-09-08 01:37:45', '1');
 
 -- --------------------------------------------------------
 
