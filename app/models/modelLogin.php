@@ -23,7 +23,7 @@ class Login
     public function validatedUser(): void
     {
         // -- ↓↓ Preparamos la consulta ↓↓ --
-        $query = "SELECT idpersona, nombres, email_user,  FROM $this->tableName WHERE email_user=? AND pswd=? AND status = 1 ;";
+        $query = "SELECT idpersona, nombres, email_user, content_type, base_64 FROM $this->tableName WHERE email_user=? AND pswd=? AND status = 1 ;";
         $stmt = $this->conn->prepare($query);
 
         // -- ↓↓ Escapamos los caracteres ↓↓ --

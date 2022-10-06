@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 05-10-2022 a las 19:12:04
+-- Tiempo de generación: 07-10-2022 a las 00:36:50
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.1.6
 
@@ -87,7 +87,8 @@ CREATE TABLE `persona` (
   `ruc` varchar(20) COLLATE utf8mb4_spanish_ci DEFAULT NULL,
   `nombrefiscal` varchar(81) COLLATE utf8mb4_spanish_ci DEFAULT NULL,
   `direccionfiscal` varchar(100) COLLATE utf8mb4_spanish_ci DEFAULT NULL,
-  `token` varchar(255) COLLATE utf8mb4_spanish_ci DEFAULT NULL,
+  `content_type` text COLLATE utf8mb4_spanish_ci NOT NULL,
+  `base_64` longtext COLLATE utf8mb4_spanish_ci NOT NULL,
   `rolid` bigint(20) DEFAULT NULL,
   `datecreated` timestamp NOT NULL DEFAULT current_timestamp(),
   `status` char(1) COLLATE utf8mb4_spanish_ci DEFAULT '1'
@@ -97,9 +98,9 @@ CREATE TABLE `persona` (
 -- Volcado de datos para la tabla `persona`
 --
 
-INSERT INTO `persona` (`idpersona`, `identificacion`, `nombres`, `a_paterno`, `a_materno`, `telefono`, `email_user`, `pswd`, `ruc`, `nombrefiscal`, `direccionfiscal`, `token`, `rolid`, `datecreated`, `status`) VALUES
-(1, '', 'Martin', 'Almeida', 'Cavanzo', 3107698290, 'martinalmeida56@gmail.com', 'admin123', NULL, NULL, NULL, NULL, 1, '2022-09-08 01:36:11', '1'),
-(2, '1096241229', 'Martin', 'Almeida', 'Cavanzo', 3107698290, 'martinalmeida56@gmail.ad', 'admin123', NULL, NULL, NULL, NULL, 1, '2022-09-08 01:37:45', '1');
+INSERT INTO `persona` (`idpersona`, `identificacion`, `nombres`, `a_paterno`, `a_materno`, `telefono`, `email_user`, `pswd`, `ruc`, `nombrefiscal`, `direccionfiscal`, `content_type`, `base_64`, `rolid`, `datecreated`, `status`) VALUES
+(1, '', 'Martin', 'Almeida', 'Cavanzo', 3107698290, 'martinalmeida56@gmail.com', 'admin123', NULL, NULL, NULL, '', '', 1, '2022-09-08 01:36:11', '1'),
+(2, '1096241229', 'Martin', 'Almeida', 'Cavanzo', 3107698290, 'martinalmeida56@gmail.ad', 'admin123', NULL, NULL, NULL, '', '', 1, '2022-09-08 01:37:45', '1');
 
 -- --------------------------------------------------------
 
@@ -120,6 +121,27 @@ CREATE TABLE `rol` (
 
 INSERT INTO `rol` (`idrol`, `nombrerol`, `descripcion`, `status`) VALUES
 (1, 'ADMINISTRADOR', 'Perfi que tiene acceso completo al sistema', '1');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `status`
+--
+
+CREATE TABLE `status` (
+  `id` int(11) NOT NULL,
+  `status` varchar(20) COLLATE utf8mb4_spanish_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `status`
+--
+
+INSERT INTO `status` (`id`, `status`) VALUES
+(1, 'activo'),
+(2, 'inactivo'),
+(3, 'eliminado'),
+(4, 'restaurado');
 
 --
 -- Índices para tablas volcadas
@@ -153,6 +175,12 @@ ALTER TABLE `rol`
   ADD PRIMARY KEY (`idrol`);
 
 --
+-- Indices de la tabla `status`
+--
+ALTER TABLE `status`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -179,6 +207,12 @@ ALTER TABLE `persona`
 --
 ALTER TABLE `rol`
   MODIFY `idrol` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT de la tabla `status`
+--
+ALTER TABLE `status`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Restricciones para tablas volcadas
