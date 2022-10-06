@@ -1,2 +1,0 @@
-Renombrar la carpeta en la raiz del servidor:
-./carga-pesada POR ./volapp
