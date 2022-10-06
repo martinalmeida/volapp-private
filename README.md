@@ -9,7 +9,7 @@ Diseño, desarrollo e Implementación de una plataforma para la facturación de 
 ◻ Instalar paquetes de composer: **composer install**
 
 #---------------- Status Back ----------------- <br>
-<br>
+
 status->0 == Fallo la consulta <br>
 status->1 == Exito en la consulta <br>
 status->2 == Error de validacion <br>
