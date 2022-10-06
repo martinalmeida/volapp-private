@@ -37,81 +37,18 @@ class Template
                     <link rel='apple-touch-icon' sizes='180x180' href='" . IMG . "favicon/apple-touch-icon.png'>
                     <link rel='icon' type='image/png' sizes='32x32' href='" . IMG . "favicon/favicon-32x32.png'>
                     <link rel='mask-icon' href='" . IMG . "favicon/safari-pinned-tab.svg' color='#5bbad5'>
-                    <link rel='stylesheet' media='screen, print' href='" . CSS . "/datagrid/datatables/datatables.bundle.css'>
-                    <link rel='stylesheet' media='screen, print' href='" . CSS . "/fa-solid.css'>
+                    <link rel='stylesheet' media='screen, print' href='" . CSS . "datagrid/datatables/datatables.bundle.css'>
+                    <link rel='stylesheet' media='screen, print' href='" . CSS . "fa-solid.css'>
+                    <link rel='stylesheet' media='screen, print' href='" . CSS . "formplugins/select2/select2.bundle.css'>
                 </head>";
         echo $html;
     }
 
     static public function startBody()
     {
-        $html =  "<body class='mod-bg-1 mod-nav-link '>
-                    <!-- DOC: script to save and load page settings -->
-                    <script>
-                        /**
-                         *	This script should be placed right after the body tag for fast execution 
-                        *	Note: the script is written in pure javascript and does not depend on thirdparty library
-                        **/
-                        'use strict';
-
-                        var classHolder = document.getElementsByTagName('BODY')[0],
-                            /** 
-                             * Load from localstorage
-                             **/
-                            themeSettings = (localStorage.getItem('themeSettings')) ? JSON.parse(localStorage.getItem('themeSettings')) :
-                            {},
-                            themeURL = themeSettings.themeURL || '',
-                            themeOptions = themeSettings.themeOptions || '';
-                        /** 
-                         * Load theme options
-                         **/
-                        if (themeSettings.themeOptions)
-                        {
-                            classHolder.className = themeSettings.themeOptions;
-                            console.log('%c✔ Theme settings loaded', 'color: #148f32');
-                        }
-                        else
-                        {
-                            console.log('%c✔ Heads up! Theme settings is empty or does not exist, loading default settings...', 'color: #ed1c24');
-                        }
-                        if (themeSettings.themeURL && !document.getElementById('mytheme'))
-                        {
-                            var cssfile = document.createElement('link');
-                            cssfile.id = 'mytheme';
-                            cssfile.rel = 'stylesheet';
-                            cssfile.href = themeURL;
-                            document.getElementsByTagName('head')[0].appendChild(cssfile);
-
-                        }
-                        else if (themeSettings.themeURL && document.getElementById('mytheme'))
-                        {
-                            document.getElementById('mytheme').href = themeSettings.themeURL;
-                        }
-                        /** 
-                         * Save to localstorage 
-                         **/
-                        var saveSettings = function()
-                        {
-                            themeSettings.themeOptions = String(classHolder.className).split(/[^\w-]+/).filter(function(item)
-                            {
-                                return /^(nav|header|footer|mod|display)-/i.test(item);
-                            }).join(' ');
-                            if (document.getElementById('mytheme'))
-                            {
-                                themeSettings.themeURL = document.getElementById('mytheme').getAttribute('href');
-                            };
-                            localStorage.setItem('themeSettings', JSON.stringify(themeSettings));
-                        }
-                        /** 
-                         * Reset settings
-                         **/
-                        var resetSettings = function()
-                        {
-                            localStorage.setItem('themeSettings', '');
-                        }
-
-                    </script>
-                    <!-- BEGIN Page Wrapper -->
+        $html =  "
+                <body class='mod-bg-1 mod-nav-link '>
+                    <script src='" . JS . "configApp.js'></script>
                     <div class='page-wrapper'>
                         <div class='page-inner'>
                             <!-- BEGIN Left Aside -->
@@ -285,193 +222,12 @@ class Template
                                             <i class='ni ni-menu'></i>
                                         </a>
                                     </div>
-                                    <div class='search'>
-                                        <form class='app-forms hidden-xs-down' role='search' action='page_search.html' autocomplete='off'>
-                                            <input type='text' id='search-field' placeholder='Buscar' class='form-control' tabindex='1'>
-                                            <a href='#' onclick='return false;' class='btn-danger btn-search-close js-waves-off d-none' data-action='toggle' data-class='mobile-search-on'>
-                                                <i class='fal fa-times'></i>
-                                            </a>
-                                        </form>
-                                    </div>
                                     <div class='ml-auto d-flex'>
-                                        <!-- activate app search icon (mobile) -->
-                                        <div class='hidden-sm-up'>
-                                            <a href='#' class='header-icon' data-action='toggle' data-class='mobile-search-on' data-focus='search-field' title='Search'>
-                                                <i class='fal fa-search'></i>
-                                            </a>
-                                        </div>
                                         <!-- app settings -->
                                         <div class='hidden-md-down'>
                                             <a href='#' class='header-icon' data-toggle='modal' data-target='.js-modal-settings'>
                                                 <i class='fal fa-cog'></i>
                                             </a>
-                                        </div>
-                                        <!-- app shortcuts -->
-                                        <div>
-                                            <a href='#' class='header-icon' data-toggle='dropdown' title='My Apps'>
-                                                <i class='fal fa-cube'></i>
-                                            </a>
-                                            <div class='dropdown-menu dropdown-menu-animated w-auto h-auto'>
-                                                <div class='dropdown-header bg-trans-gradient d-flex justify-content-center align-items-center rounded-top'>
-                                                    <h4 class='m-0 text-center color-white'>
-                                                        Quick Shortcut
-                                                        <small class='mb-0 opacity-80'>User Applications & Addons</small>
-                                                    </h4>
-                                                </div>
-                                                <div class='custom-scroll h-100'>
-                                                    <ul class='app-list'>
-                                                        <li>
-                                                            <a href='#' class='app-list-item hover-white'>
-                                                                <span class='icon-stack'>
-                                                                    <i class='base-2 icon-stack-3x color-primary-600'></i>
-                                                                    <i class='base-3 icon-stack-2x color-primary-700'></i>
-                                                                    <i class='ni ni-settings icon-stack-1x text-white fs-lg'></i>
-                                                                </span>
-                                                                <span class='app-list-name'>
-                                                                    Services
-                                                                </span>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href='#' class='app-list-item hover-white'>
-                                                                <span class='icon-stack'>
-                                                                    <i class='base-2 icon-stack-3x color-primary-400'></i>
-                                                                    <i class='base-10 text-white icon-stack-1x'></i>
-                                                                    <i class='ni md-profile color-primary-800 icon-stack-2x'></i>
-                                                                </span>
-                                                                <span class='app-list-name'>
-                                                                    Account
-                                                                </span>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href='#' class='app-list-item hover-white'>
-                                                                <span class='icon-stack'>
-                                                                    <i class='base-9 icon-stack-3x color-success-400'></i>
-                                                                    <i class='base-2 icon-stack-2x color-success-500'></i>
-                                                                    <i class='ni ni-shield icon-stack-1x text-white'></i>
-                                                                </span>
-                                                                <span class='app-list-name'>
-                                                                    Security
-                                                                </span>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href='#' class='app-list-item hover-white'>
-                                                                <span class='icon-stack'>
-                                                                    <i class='base-18 icon-stack-3x color-info-700'></i>
-                                                                    <span class='position-absolute pos-top pos-left pos-right color-white fs-md mt-2 fw-400'>28</span>
-                                                                </span>
-                                                                <span class='app-list-name'>
-                                                                    Calendar
-                                                                </span>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href='#' class='app-list-item hover-white'>
-                                                                <span class='icon-stack'>
-                                                                    <i class='base-7 icon-stack-3x color-info-500'></i>
-                                                                    <i class='base-7 icon-stack-2x color-info-700'></i>
-                                                                    <i class='ni ni-graph icon-stack-1x text-white'></i>
-                                                                </span>
-                                                                <span class='app-list-name'>
-                                                                    Stats
-                                                                </span>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href='#' class='app-list-item hover-white'>
-                                                                <span class='icon-stack'>
-                                                                    <i class='base-4 icon-stack-3x color-danger-500'></i>
-                                                                    <i class='base-4 icon-stack-1x color-danger-400'></i>
-                                                                    <i class='ni ni-envelope icon-stack-1x text-white'></i>
-                                                                </span>
-                                                                <span class='app-list-name'>
-                                                                    Messages
-                                                                </span>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href='#' class='app-list-item hover-white'>
-                                                                <span class='icon-stack'>
-                                                                    <i class='base-4 icon-stack-3x color-fusion-400'></i>
-                                                                    <i class='base-5 icon-stack-2x color-fusion-200'></i>
-                                                                    <i class='base-5 icon-stack-1x color-fusion-100'></i>
-                                                                    <i class='fal fa-keyboard icon-stack-1x color-info-50'></i>
-                                                                </span>
-                                                                <span class='app-list-name'>
-                                                                    Notes
-                                                                </span>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href='#' class='app-list-item hover-white'>
-                                                                <span class='icon-stack'>
-                                                                    <i class='base-16 icon-stack-3x color-fusion-500'></i>
-                                                                    <i class='base-10 icon-stack-1x color-primary-50 opacity-30'></i>
-                                                                    <i class='base-10 icon-stack-1x fs-xl color-primary-50 opacity-20'></i>
-                                                                    <i class='fal fa-dot-circle icon-stack-1x text-white opacity-85'></i>
-                                                                </span>
-                                                                <span class='app-list-name'>
-                                                                    Photos
-                                                                </span>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href='#' class='app-list-item hover-white'>
-                                                                <span class='icon-stack'>
-                                                                    <i class='base-19 icon-stack-3x color-primary-400'></i>
-                                                                    <i class='base-7 icon-stack-2x color-primary-300'></i>
-                                                                    <i class='base-7 icon-stack-1x fs-xxl color-primary-200'></i>
-                                                                    <i class='base-7 icon-stack-1x color-primary-500'></i>
-                                                                    <i class='fal fa-globe icon-stack-1x text-white opacity-85'></i>
-                                                                </span>
-                                                                <span class='app-list-name'>
-                                                                    Maps
-                                                                </span>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href='#' class='app-list-item hover-white'>
-                                                                <span class='icon-stack'>
-                                                                    <i class='base-5 icon-stack-3x color-success-700 opacity-80'></i>
-                                                                    <i class='base-12 icon-stack-2x color-success-700 opacity-30'></i>
-                                                                    <i class='fal fa-comment-alt icon-stack-1x text-white'></i>
-                                                                </span>
-                                                                <span class='app-list-name'>
-                                                                    Chat
-                                                                </span>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href='#' class='app-list-item hover-white'>
-                                                                <span class='icon-stack'>
-                                                                    <i class='base-5 icon-stack-3x color-warning-600'></i>
-                                                                    <i class='base-7 icon-stack-2x color-warning-800 opacity-50'></i>
-                                                                    <i class='fal fa-phone icon-stack-1x text-white'></i>
-                                                                </span>
-                                                                <span class='app-list-name'>
-                                                                    Phone
-                                                                </span>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href='#' class='app-list-item hover-white'>
-                                                                <span class='icon-stack'>
-                                                                    <i class='base-6 icon-stack-3x color-danger-600'></i>
-                                                                    <i class='fal fa-chart-line icon-stack-1x text-white'></i>
-                                                                </span>
-                                                                <span class='app-list-name'>
-                                                                    Projects
-                                                                </span>
-                                                            </a>
-                                                        </li>
-                                                        <li class='w-100'>
-                                                            <a href='#' class='btn btn-default mt-4 mb-2 pr-5 pl-5'> Add more apps </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
                                         </div>
                                         <div>
                                             <a href='#' data-toggle='dropdown' title='drlantern@gotbootstrap.com' class='header-icon d-flex align-items-center justify-content-center ml-2'>
@@ -692,9 +448,6 @@ class Template
                         </a>
                         <a href='#' class='menu-item btn' data-action='app-print' data-toggle='tooltip' data-placement='left' title='Print page'>
                             <i class='fal fa-print'></i>
-                        </a>
-                        <a href='#' class='menu-item btn' data-action='app-voice' data-toggle='tooltip' data-placement='left' title='Voice command'>
-                            <i class='fal fa-microphone'></i>
                         </a>
                     </nav>
                     <!-- END Quick Menu -->
@@ -1219,7 +972,6 @@ class Template
                                             <div class='d-table-cell align-middle'>
                                                 <h5 class='p-0 pr-2 d-flex'>
                                                     Theme colors
-                                                    <a href='#' class='ml-auto fw-400 fs-xs' data-toggle='popover' data-trigger='focus' data-placement='top' title='' data-html='true' data-content='The settings below uses <code>localStorage</code> to load the external <strong>CSS</strong> file as an overlap to the base css. Due to network latency and <strong>CPU utilization</strong>, you may experience a brief flickering effect on page load which may show the intial applied theme for a split second. Setting the prefered style/theme in the header will prevent this from happening.' data-original-title='<span class='text-primary'><i class='fal fa-exclamation-triangle mr-1'></i> Heads up!</span>' data-template='<div class=&quot;popover bg-white border-white&quot; role=&quot;tooltip&quot;><div class=&quot;arrow&quot;></div><h3 class=&quot;popover-header bg-transparent&quot;></h3><div class=&quot;popover-body fs-xs&quot;></div></div>'><i class='fal fa-info-circle mr-1'></i> more info</a>
                                                 </h5>
                                             </div>
                                         </div>
@@ -1229,49 +981,49 @@ class Template
                                                     <a href='#' id='myapp-0' data-action='theme-update' data-themesave data-theme='' data-toggle='tooltip' data-placement='top' title='Wisteria (base css)' data-original-title='Wisteria (base css)'></a>
                                                 </li>
                                                 <li>
-                                                    <a href='#' id='myapp-1' data-action='theme-update' data-themesave data-theme='css/themes/cust-theme-1.css' data-toggle='tooltip' data-placement='top' title='Tapestry' data-original-title='Tapestry'></a>
+                                                    <a href='#' id='myapp-1' data-action='theme-update' data-themesave data-theme='" . CSS . "themes/cust-theme-1.css' data-toggle='tooltip' data-placement='top' title='Tapestry' data-original-title='Tapestry'></a>
                                                 </li>
                                                 <li>
-                                                    <a href='#' id='myapp-2' data-action='theme-update' data-themesave data-theme='css/themes/cust-theme-2.css' data-toggle='tooltip' data-placement='top' title='Atlantis' data-original-title='Atlantis'></a>
+                                                    <a href='#' id='myapp-2' data-action='theme-update' data-themesave data-theme='" . CSS . "themes/cust-theme-2.css' data-toggle='tooltip' data-placement='top' title='Atlantis' data-original-title='Atlantis'></a>
                                                 </li>
                                                 <li>
-                                                    <a href='#' id='myapp-3' data-action='theme-update' data-themesave data-theme='css/themes/cust-theme-3.css' data-toggle='tooltip' data-placement='top' title='Indigo' data-original-title='Indigo'></a>
+                                                    <a href='#' id='myapp-3' data-action='theme-update' data-themesave data-theme='" . CSS . "themes/cust-theme-3.css' data-toggle='tooltip' data-placement='top' title='Indigo' data-original-title='Indigo'></a>
                                                 </li>
                                                 <li>
-                                                    <a href='#' id='myapp-4' data-action='theme-update' data-themesave data-theme='css/themes/cust-theme-4.css' data-toggle='tooltip' data-placement='top' title='Dodger Blue' data-original-title='Dodger Blue'></a>
+                                                    <a href='#' id='myapp-4' data-action='theme-update' data-themesave data-theme='" . CSS . "themes/cust-theme-4.css' data-toggle='tooltip' data-placement='top' title='Dodger Blue' data-original-title='Dodger Blue'></a>
                                                 </li>
                                                 <li>
-                                                    <a href='#' id='myapp-5' data-action='theme-update' data-themesave data-theme='css/themes/cust-theme-5.css' data-toggle='tooltip' data-placement='top' title='Tradewind' data-original-title='Tradewind'></a>
+                                                    <a href='#' id='myapp-5' data-action='theme-update' data-themesave data-theme='" . CSS . "themes/cust-theme-5.css' data-toggle='tooltip' data-placement='top' title='Tradewind' data-original-title='Tradewind'></a>
                                                 </li>
                                                 <li>
-                                                    <a href='#' id='myapp-6' data-action='theme-update' data-themesave data-theme='css/themes/cust-theme-6.css' data-toggle='tooltip' data-placement='top' title='Cranberry' data-original-title='Cranberry'></a>
+                                                    <a href='#' id='myapp-6' data-action='theme-update' data-themesave data-theme='" . CSS . "themes/cust-theme-6.css' data-toggle='tooltip' data-placement='top' title='Cranberry' data-original-title='Cranberry'></a>
                                                 </li>
                                                 <li>
-                                                    <a href='#' id='myapp-7' data-action='theme-update' data-themesave data-theme='css/themes/cust-theme-7.css' data-toggle='tooltip' data-placement='top' title='Oslo Gray' data-original-title='Oslo Gray'></a>
+                                                    <a href='#' id='myapp-7' data-action='theme-update' data-themesave data-theme='" . CSS . "themes/cust-theme-7.css' data-toggle='tooltip' data-placement='top' title='Oslo Gray' data-original-title='Oslo Gray'></a>
                                                 </li>
                                                 <li>
-                                                    <a href='#' id='myapp-8' data-action='theme-update' data-themesave data-theme='css/themes/cust-theme-8.css' data-toggle='tooltip' data-placement='top' title='Chetwode Blue' data-original-title='Chetwode Blue'></a>
+                                                    <a href='#' id='myapp-8' data-action='theme-update' data-themesave data-theme='" . CSS . "themes/cust-theme-8.css' data-toggle='tooltip' data-placement='top' title='Chetwode Blue' data-original-title='Chetwode Blue'></a>
                                                 </li>
                                                 <li>
-                                                    <a href='#' id='myapp-9' data-action='theme-update' data-themesave data-theme='css/themes/cust-theme-9.css' data-toggle='tooltip' data-placement='top' title='Apricot' data-original-title='Apricot'></a>
+                                                    <a href='#' id='myapp-9' data-action='theme-update' data-themesave data-theme='" . CSS . "themes/cust-theme-9.css' data-toggle='tooltip' data-placement='top' title='Apricot' data-original-title='Apricot'></a>
                                                 </li>
                                                 <li>
-                                                    <a href='#' id='myapp-10' data-action='theme-update' data-themesave data-theme='css/themes/cust-theme-10.css' data-toggle='tooltip' data-placement='top' title='Blue Smoke' data-original-title='Blue Smoke'></a>
+                                                    <a href='#' id='myapp-10' data-action='theme-update' data-themesave data-theme='" . CSS . "themes/cust-theme-10.css' data-toggle='tooltip' data-placement='top' title='Blue Smoke' data-original-title='Blue Smoke'></a>
                                                 </li>
                                                 <li>
-                                                    <a href='#' id='myapp-11' data-action='theme-update' data-themesave data-theme='css/themes/cust-theme-11.css' data-toggle='tooltip' data-placement='top' title='Green Smoke' data-original-title='Green Smoke'></a>
+                                                    <a href='#' id='myapp-11' data-action='theme-update' data-themesave data-theme='" . CSS . "themes/cust-theme-11.css' data-toggle='tooltip' data-placement='top' title='Green Smoke' data-original-title='Green Smoke'></a>
                                                 </li>
                                                 <li>
-                                                    <a href='#' id='myapp-12' data-action='theme-update' data-themesave data-theme='css/themes/cust-theme-12.css' data-toggle='tooltip' data-placement='top' title='Wild Blue Yonder' data-original-title='Wild Blue Yonder'></a>
+                                                    <a href='#' id='myapp-12' data-action='theme-update' data-themesave data-theme='" . CSS . "themes/cust-theme-12.css' data-toggle='tooltip' data-placement='top' title='Wild Blue Yonder' data-original-title='Wild Blue Yonder'></a>
                                                 </li>
                                                 <li>
-                                                    <a href='#' id='myapp-13' data-action='theme-update' data-themesave data-theme='css/themes/cust-theme-13.css' data-toggle='tooltip' data-placement='top' title='Emerald' data-original-title='Emerald'></a>
+                                                    <a href='#' id='myapp-13' data-action='theme-update' data-themesave data-theme='" . CSS . "themes/cust-theme-13.css' data-toggle='tooltip' data-placement='top' title='Emerald' data-original-title='Emerald'></a>
                                                 </li>
                                                 <li>
-                                                    <a href='#' id='myapp-14' data-action='theme-update' data-themesave data-theme='css/themes/cust-theme-14.css' data-toggle='tooltip' data-placement='top' title='Supernova' data-original-title='Supernova'></a>
+                                                    <a href='#' id='myapp-14' data-action='theme-update' data-themesave data-theme='" . CSS . "themes/cust-theme-14.css' data-toggle='tooltip' data-placement='top' title='Supernova' data-original-title='Supernova'></a>
                                                 </li>
                                                 <li>
-                                                    <a href='#' id='myapp-15' data-action='theme-update' data-themesave data-theme='css/themes/cust-theme-15.css' data-toggle='tooltip' data-placement='top' title='Hoki' data-original-title='Hoki'></a>
+                                                    <a href='#' id='myapp-15' data-action='theme-update' data-themesave data-theme='" . CSS . "themes/cust-theme-15.css' data-toggle='tooltip' data-placement='top' title='Hoki' data-original-title='Hoki'></a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -1279,8 +1031,7 @@ class Template
                                         <div class='mt-4 d-table w-100 pl-5 pr-3'>
                                             <div class='d-table-cell align-middle'>
                                                 <h5 class='p-0 pr-2 d-flex'>
-                                                    Theme Modes (beta)
-                                                    <a href='#' class='ml-auto fw-400 fs-xs' data-toggle='popover' data-trigger='focus' data-placement='top' title='' data-html='true' data-content='This is a brand new technique we are introducing which uses CSS variables to infiltrate color options. While this has been working nicely on modern browsers without much issues, some users <strong>may still face issues on Internet Explorer </strong>. Until these issues are resolved or Internet Explorer improves, this feature will remain in Beta' data-original-title='<span class='text-primary'><i class='fal fa-question-circle mr-1'></i> Why beta?</span>' data-template='<div class=&quot;popover bg-white border-white&quot; role=&quot;tooltip&quot;><div class=&quot;arrow&quot;></div><h3 class=&quot;popover-header bg-transparent&quot;></h3><div class=&quot;popover-body fs-xs&quot;></div></div>'><i class='fal fa-question-circle mr-1'></i> why beta?</a>
+                                                    Theme Modes
                                                 </h5>
                                             </div>
                                         </div>
@@ -1348,6 +1099,10 @@ class Template
                     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css' integrity='sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==' crossorigin='anonymous' referrerpolicy='no-referrer' />
                     <script src='" . JS . "vendors.bundle.js'></script>
                     <script src='" . JS . "app.bundle.js'></script>
+                    <script src='" . JS . "formplugins/select2/select2.bundle.js'></script>
+                    <script src='" . JS . "select2Custom.js'></script>
+                    <script src='" . JS . "notifications/sweetalert2/sweetalert2@9.js'></script>
+                    <script src='" . JS . "validaciones.js?v=" . rand() . "'></script>
                     <script src='" . JS . "datagrid/datatables/datatables.bundle.js'></script>
                     <script src='" . JS . "datagrid/datatables/datatables.export.js'></script>
                     <script src='" . JS . "dataTablesCustom.js'></script>

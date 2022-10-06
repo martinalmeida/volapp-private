@@ -56,12 +56,13 @@ function login(form) {
               backdrop: true,
             });
             break;
+
           case "1":
-            if (result.url != "") {
-              window.location = result.url;
-            } else {
-              window.location.replace(urlBase + "Inicio");
-            }
+            // if (result.url != "") {
+            //   window.location = result.url;
+            // } else {
+            //   window.location.replace(urlBase + "Inicio");
+            // }
             break;
 
           case "2":
