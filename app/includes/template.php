@@ -81,7 +81,7 @@ class Template
                                             </a>
                                             <span class='d-inline-block text-truncate text-truncate-sm'>Toronto, Canada</span>
                                         </div>
-                                        <img src='" . IMG . "card-backgrounds/canva.png' class='cover' alt='cover'>
+                                        <img src='" . IMG . "card-backgrounds/cover1.png' class='cover' alt='cover'>
                                         <a href='#' onclick='return false;' class='pull-trigger-btn' data-action='toggle' data-class='list-filter-active' data-target='.page-sidebar' data-focus='nav_filter_input'>
                                             <i class='fal fa-angle-down'></i>
                                         </a>

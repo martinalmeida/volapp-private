@@ -10,7 +10,7 @@ Template::startBody();
     <h1 class="subheader-title">
         <i class='fal fa-info-circle'></i> INICIO
     </h1>
-    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#default-example-modal-lg">Default Modal Large</button>
+    <button type="button" class="btn btn-info active" data-toggle="modal" data-target="#default-example-modal-lg">AGREGAR</button>
 </div>
 
 <div class="row">

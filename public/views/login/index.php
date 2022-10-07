@@ -43,13 +43,13 @@ Template::startBodyLogin();
                 <form id="frmLogin">
                     <div class="form-group">
                         <label class="form-label" for="usuarioLogin">Email</label>
-                        <input type="email" name="usuarioLogin" id="usuarioLogin" class="form-control form-control-lg" placeholder="Ingresa tu email" required>
+                        <input type="email" name="usuarioLogin" id="usuarioLogin" class="form-control form-control-lg" placeholder="Ingresa tu email" required="Falta Email">
                         <div class="invalid-feedback">Lo siento, Usuario incorrecto.</div>
                         <div class="help-block">Escribe tu email</div>
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="contraseniaLogin">Contraseña</label>
-                        <input type="password" name="contraseniaLogin" id="contraseniaLogin" class="form-control form-control-lg" placeholder="Ingresa tu contraseña" required>
+                        <input type="password" name="contraseniaLogin" id="contraseniaLogin" class="form-control form-control-lg" placeholder="Ingresa tu contraseña" required="">
                         <div class="invalid-feedback">Lo siento, contraseña incorrecta.</div>
                         <div class="help-block">Escribe tu contraseña</div>
                     </div>
