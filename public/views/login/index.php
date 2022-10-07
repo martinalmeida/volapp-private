@@ -43,14 +43,14 @@ Template::startBodyLogin();
                 <form id="frmLogin">
                     <div class="form-group">
                         <label class="form-label" for="usuarioLogin">Email</label>
-                        <input type="email" name="usuarioLogin" id="usuarioLogin" class="form-control form-control-lg" placeholder="Ingresa tu email" required="Falta Email">
-                        <div class="invalid-feedback">Lo siento, Usuario incorrecto.</div>
+                        <input type="email" name="usuarioLogin" id="usuarioLogin" class="form-control form-control-lg" placeholder="Ingresa tu email" required>
+                        <div class="invalid-feedback">Falta email.</div>
                         <div class="help-block">Escribe tu email</div>
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="contraseniaLogin">Contraseña</label>
-                        <input type="password" name="contraseniaLogin" id="contraseniaLogin" class="form-control form-control-lg" placeholder="Ingresa tu contraseña" required="">
-                        <div class="invalid-feedback">Lo siento, contraseña incorrecta.</div>
+                        <input type="password" name="contraseniaLogin" id="contraseniaLogin" class="form-control form-control-lg" placeholder="Ingresa tu contraseña" required>
+                        <div class="invalid-feedback">Falta contraseña.</div>
                         <div class="help-block">Escribe tu contraseña</div>
                     </div>
                     <div class="form-group text-left">
@@ -76,5 +76,5 @@ Template::startBodyLogin();
     </div>
 </div>
 
-<?= Template::endBodyLogin(); ?>
+<?= Template::endBodyLogin('frmLogin', 'btnLoginIngresar'); ?>
 <?= Template::azyncScript('login'); ?>

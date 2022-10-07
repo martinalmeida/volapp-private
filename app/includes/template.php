@@ -1195,7 +1195,7 @@ class Template
         echo $html;
     }
 
-    static public function endBodyLogin()
+    static public function endBodyLogin($form, $boton)
     {
         $html = "</div>
                     </div>
@@ -1268,8 +1268,8 @@ class Template
                     <script src='" . JS . "notifications/sweetalert2/sweetalert2@9.js'></script>
                     <script src='" . JS . "validaciones.js?v=" . rand() . "'></script>
                     <script>
-                        $('#js-login-btn').click(function(event) {
-                            var form = $('#js-login')
+                        $('#" . $boton . "').click(function(event) {
+                            var form = $('#" . $form . "')
                             if (form[0].checkValidity() === false) {
                                 event.preventDefault()
                                 event.stopPropagation()
