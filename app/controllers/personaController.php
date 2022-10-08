@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+header('Content-type: application/json');
 
 include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/volappConfig.php');
 include($_SERVER['DOCUMENT_ROOT'] . LIBRARIES . 'validations.php');
@@ -23,7 +24,7 @@ class PersonaController
         $persona->a_materno = isset($_POST['a_materno']) ? strtoupper(trim($_POST['a_materno'])) : NULL;
         $persona->telefono = isset($_POST['telefono']) ? strtoupper(trim($_POST['telefono'])) : NULL;
         $persona->email_user = isset($_POST['email_user']) ? strtoupper(trim($_POST['email_user'])) : NULL;
-        $persona->password = isset($_POST['password']) ? strtoupper(trim($_POST['password'])) : NULL;
+        $persona->pswd = isset($_POST['pswd']) ? strtoupper(trim($_POST['pswd'])) : NULL;
         $persona->ruc = isset($_POST['ruc']) ? strtoupper(trim($_POST['ruc'])) : NULL;
         $persona->nombrefiscal = isset($_POST['nombrefiscal']) ? strtoupper(trim($_POST['nombrefiscal'])) : NULL;
         $persona->direccionfiscal = isset($_POST['direccionfiscal']) ? strtoupper(trim($_POST['direccionfiscal'])) : NULL;
@@ -50,7 +51,7 @@ class PersonaController
         $persona->a_materno = isset($_POST['a_materno']) ? strtoupper(trim($_POST['a_materno'])) : NULL;
         $persona->telefono = isset($_POST['telefono']) ? strtoupper(trim($_POST['telefono'])) : NULL;
         $persona->email_user = isset($_POST['email_user']) ? strtoupper(trim($_POST['email_user'])) : NULL;
-        $persona->password = isset($_POST['password']) ? strtoupper(trim($_POST['password'])) : NULL;
+        $persona->pswd = isset($_POST['pswd']) ? strtoupper(trim($_POST['pswd'])) : NULL;
         $persona->ruc = isset($_POST['ruc']) ? strtoupper(trim($_POST['ruc'])) : NULL;
         $persona->nombrefiscal = isset($_POST['nombrefiscal']) ? strtoupper(trim($_POST['nombrefiscal'])) : NULL;
         $persona->direccionfiscal = isset($_POST['direccionfiscal']) ? strtoupper(trim($_POST['direccionfiscal'])) : NULL;

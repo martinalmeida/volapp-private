@@ -29,7 +29,7 @@ class Login
     public function validatedUser(): void
     {
         // -- ↓↓ Preparamos la consulta ↓↓ --
-        $query = "SELECT idpersona, nombres, email_user, content_type, base_64 FROM $this->tableName WHERE email_user=? AND pswd=? AND status = 1 ;";
+        $query = "SELECT id, nombres, email_user, content_type, base_64 FROM $this->tableName WHERE email_user=? AND pswd=? AND status = 1 ;";
         $stmt = $this->conn->prepare($query);
 
         // -- ↓↓ Escapamos los caracteres ↓↓ --
@@ -50,10 +50,10 @@ class Login
                 $data = $stmt->fetch(PDO::FETCH_OBJ);
 
                 // -- ↓↓ Traemos los permisos ↓↓ --
-                $permisos = self::permisosUsuario($data->idpersona);
+                $permisos = self::permisosUsuario($data->id);
                 // -- ↓↓ Creamos la sesion y le pasamos todos los datos del usuario ↓↓ --
                 $datosSesion = array(
-                    'id' => $data->idpersona,
+                    'id' => $data->id,
                     'usuario' => $data->nombres,
                     'email' => $data->email_user,
                     'permisos' => $permisos,
@@ -75,24 +75,24 @@ class Login
     }
 
     // -- ⊡ Funcion para traer el rol, permisos y url del modulo ⊡ --
-    private function permisosUsuario($idPersona)
+    private function permisosUsuario($id)
     {
         // -- ↓↓ Preparamos la consulta ↓↓ --
         $query = "SELECT 
-                  (p2.rolid)rol, (p2.moduloid)idmodulo, (m.menu_id)idsubmodulo, (m.titulo)modulo, m.icono, (m.page)pagina, p2.r, p2.w, p2.u, p2.d
+                  (p2.rolid)rol, (p2.moduloid)id, (m.menu_id)idsubmodulo, (m.titulo)modulo, m.icono, (m.page)pagina, p2.r, p2.w, p2.u, p2.d
                   FROM $this->tableName p 
-                  JOIN $this->tableRol r ON p.rolid = r.idrol 
-                  JOIN $this->tablePermisos p2 ON p2.rolid = r.idrol 
-                  JOIN $this->tableModulo m ON p2.moduloid = m.idmodulo
+                  JOIN $this->tableRol r ON p.rolid = r.id 
+                  JOIN $this->tablePermisos p2 ON p2.rolid = r.id 
+                  JOIN $this->tableModulo m ON p2.moduloid = m.id
                   WHERE m.status = 1
-                  AND p.idpersona = ?; ";
+                  AND p.id = ?; ";
         $stmt = $this->conn->prepare($query);
 
         // -- ↓↓ Preparamos arreglo de permisos que retornaremos ↓↓ --
         $arrayPermisos = array();
 
         // -- ↓↓ Almacenamos los valores ↓↓ --
-        $stmt->bindParam(1, $idPersona);
+        $stmt->bindParam(1, $id);
 
         // -- ↓↓ Ejecutamos la consulta y validamos ejecucion ↓↓ --
         if ($stmt->execute()) {
@@ -104,7 +104,7 @@ class Login
                 foreach ($data as $row) {
                     $arrayPermisos[] = array(
                         "rol" => $row["rol"],
-                        "idModulo" => $row["idmodulo"],
+                        "id" => $row["id"],
                         "idSubmodulo" => $row["idsubmodulo"],
                         "modulo" => $row["modulo"],
                         "icono" => $row["icono"],

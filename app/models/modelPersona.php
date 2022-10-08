@@ -14,7 +14,7 @@ class Persona {
     public $a_materno;
     public $telefono;
     public $email_user;
-    public $password;
+    public $pswd;
     public $ruc;
     public $nombrefiscal;
     public $direccionfiscal;
@@ -33,7 +33,7 @@ class Persona {
     public function createPersona(): void 
     {
         // --Preparamos la consulta--
-        $query = "INSERT INTO ".$this->tableName." SET identificacion=?, nombres=?, a_paterno=?, a_materno=?, telefono=?, email_user=?, password=?,
+        $query = "INSERT INTO ".$this->tableName." SET identificacion=?, nombres=?, a_paterno=?, a_materno=?, telefono=?, email_user=?, pswd=?,
         ruc=?, nombrefiscal=?, direccionfiscal=?, rolid=?, datecreated=?, status=?";
         $stmt = $this->conn->prepare($query);
 
@@ -44,7 +44,7 @@ class Persona {
         $this->a_materno=htmlspecialchars(strip_tags($this->a_materno));
         $this->telefono=htmlspecialchars(strip_tags($this->telefono));
         $this->email_user=htmlspecialchars(strip_tags($this->email_user));
-        $this->password=htmlspecialchars(strip_tags($this->password));
+        $this->pswd=htmlspecialchars(strip_tags($this->pswd));
         $this->ruc=htmlspecialchars(strip_tags($this->ruc));
         $this->nombrefiscal=htmlspecialchars(strip_tags($this->nombrefiscal));
         $this->direccionfiscal=htmlspecialchars(strip_tags($this->direccionfiscal));
@@ -59,7 +59,7 @@ class Persona {
         $stmt->bindParam(4, $this->a_materno);
         $stmt->bindParam(5, $this->telefono);
         $stmt->bindParam(6, $this->email_user);
-        $stmt->bindParam(7, $this->password);
+        $stmt->bindParam(7, $this->pswd);
         $stmt->bindParam(8, $this->ruc);
         $stmt->bindParam(9, $this->nombrefiscal);
         $stmt->bindParam(10, $this->direccionfiscal);
@@ -84,7 +84,7 @@ class Persona {
     public function updatePersona(): void
     {
         // --Preparamos la consulta--
-        $query = "UPDATE ".$this->tableName." SET identificacion=?, nombres=?, a_paterno=?, a_materno=?, telefono=?, email_user=?, password=?,
+        $query = "UPDATE ".$this->tableName." SET identificacion=?, nombres=?, a_paterno=?, a_materno=?, telefono=?, email_user=?, pswd=?,
         ruc=?, nombrefiscal=?, direccionfiscal=?, rolid=?, datecreated=?, status=? WHERE id=?";
         $stmt = $this->conn->prepare($query);
 
@@ -95,7 +95,7 @@ class Persona {
         $this->a_materno=htmlspecialchars(strip_tags($this->a_materno));
         $this->telefono=htmlspecialchars(strip_tags($this->telefono));
         $this->email_user=htmlspecialchars(strip_tags($this->email_user));
-        $this->password=htmlspecialchars(strip_tags($this->password));
+        $this->pswd=htmlspecialchars(strip_tags($this->pswd));
         $this->ruc=htmlspecialchars(strip_tags($this->ruc));
         $this->nombrefiscal=htmlspecialchars(strip_tags($this->nombrefiscal));
         $this->direccionfiscal=htmlspecialchars(strip_tags($this->direccionfiscal));
@@ -111,7 +111,7 @@ class Persona {
         $stmt->bindParam(4, $this->a_materno);
         $stmt->bindParam(5, $this->telefono);
         $stmt->bindParam(6, $this->email_user);
-        $stmt->bindParam(7, $this->password);
+        $stmt->bindParam(7, $this->pswd);
         $stmt->bindParam(8, $this->ruc);
         $stmt->bindParam(9, $this->nombrefiscal);
         $stmt->bindParam(10, $this->direccionfiscal);

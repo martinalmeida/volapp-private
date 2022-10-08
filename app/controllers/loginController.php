@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+header('Content-type: application/json');
 
 include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/volappConfig.php');
 include($_SERVER['DOCUMENT_ROOT'] . LIBRARIES . 'validations.php');
