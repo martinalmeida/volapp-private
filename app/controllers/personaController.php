@@ -16,35 +16,20 @@ class PersonaController
         $db = $database->getConnection();
         $persona = new Persona($db);
 
-        $identificacion = '1096251410';
-        $nombres = 'jhonny';
-        $a_paterno = 'bravo';
-        $a_materno = 'si señor';
-        $telefono = '3115706925';
-        $email_user = 'jgomez1genio@gmail.com';
-        $password = '124351hdbf';
-        $ruc = '4857jj';
-        $nombrefiscal = 'priuena';
-        $direccionfiscal = 'dddssd';
-        $rolid = '1';
-        $datecreated = '2008-01-01 00:00:01';
-        $status = '2';
-
         // --Seteo de valores existentes en el POST--
-        $persona->identificacion = isset($identificacion) ? strtoupper(trim($identificacion)) : NULL;
-        $persona->nombres = isset($nombres) ? strtoupper(trim($nombres)) : NULL;
-        $persona->a_paterno = isset($a_paterno) ? strtoupper(trim($a_paterno)) : NULL;
-        $persona->a_materno = isset($a_materno) ? strtoupper(trim($a_materno)) : NULL;
-        $persona->telefono = isset($telefono) ? strtoupper(trim($telefono)) : NULL;
-        $persona->email_user = isset($email_user) ? strtoupper(trim($email_user)) : NULL;
-        $persona->password = isset($password) ? strtoupper(trim($password)) : NULL;
-        $persona->ruc = isset($ruc) ? strtoupper(trim($ruc)) : NULL;
-        $persona->nombrefiscal = isset($nombrefiscal) ? strtoupper(trim($nombrefiscal)) : NULL;
-        $persona->direccionfiscal = isset($direccionfiscal) ? strtoupper(trim($direccionfiscal)) : NULL;
-        $persona->rolid = isset($rolid) ? strtoupper(trim($rolid)) : NULL;
-        $persona->datecreated = isset($datecreated) ? strtoupper(trim($datecreated)) : NULL;
-        $persona->status = isset($status) ? strtoupper(trim($status)) : NULL;
-
+        $persona->identificacion = isset($_POST['identificacion']) ? strtoupper(trim($_POST['identificacion'])) : NULL;
+        $persona->nombres = isset($_POST['nombres']) ? strtoupper(trim($_POST['nombres'])) : NULL;
+        $persona->a_paterno = isset($_POST['a_paterno']) ? strtoupper(trim($_POST['a_paterno'])) : NULL;
+        $persona->a_materno = isset($_POST['a_materno']) ? strtoupper(trim($_POST['a_materno'])) : NULL;
+        $persona->telefono = isset($_POST['telefono']) ? strtoupper(trim($_POST['telefono'])) : NULL;
+        $persona->email_user = isset($_POST['email_user']) ? strtoupper(trim($_POST['email_user'])) : NULL;
+        $persona->password = isset($_POST['password']) ? strtoupper(trim($_POST['password'])) : NULL;
+        $persona->ruc = isset($_POST['ruc']) ? strtoupper(trim($_POST['ruc'])) : NULL;
+        $persona->nombrefiscal = isset($_POST['nombrefiscal']) ? strtoupper(trim($_POST['nombrefiscal'])) : NULL;
+        $persona->direccionfiscal = isset($_POST['direccionfiscal']) ? strtoupper(trim($_POST['direccionfiscal'])) : NULL;
+        $persona->rolid = isset($_POST['rolid']) ? strtoupper(trim($_POST['rolid'])) : NULL;
+        $persona->datecreated = isset($_POST['datecreated']) ? strtoupper(trim($_POST['datecreated'])) : NULL;
+        $persona->status = isset($_POST['status']) ? strtoupper(trim($_POST['status'])) : NULL;
 
         $data = $persona->createPersona();
         echo json_encode($data);
@@ -58,37 +43,21 @@ class PersonaController
         $db = $database->getConnection();
         $persona = new Persona($db);
 
-        $identificacion = '1096251410';
-        $nombres = 'jonathan';
-        $a_paterno = 'contento';
-        $a_materno = 'si señor';
-        $telefono = '3115706925';
-        $email_user = 'jgomez1genio@gmail.com';
-        $password = '124351hdbf';
-        $ruc = '4857jj';
-        $nombrefiscal = 'siii';
-        $direccionfiscal = 'dddssd';
-        $rolid = '1';
-        $datecreated = '2008-01-01 00:00:01';
-        $status = '2';
-        $id = '3';
-
         // --Seteo de valores existentes en el POST--
-        $persona->identificacion = isset($identificacion) ? strtoupper(trim($identificacion)) : NULL;
-        $persona->nombres = isset($nombres) ? strtoupper(trim($nombres)) : NULL;
-        $persona->a_paterno = isset($a_paterno) ? strtoupper(trim($a_paterno)) : NULL;
-        $persona->a_materno = isset($a_materno) ? strtoupper(trim($a_materno)) : NULL;
-        $persona->telefono = isset($telefono) ? strtoupper(trim($telefono)) : NULL;
-        $persona->email_user = isset($email_user) ? strtoupper(trim($email_user)) : NULL;
-        $persona->password = isset($password) ? strtoupper(trim($password)) : NULL;
-        $persona->ruc = isset($ruc) ? strtoupper(trim($ruc)) : NULL;
-        $persona->nombrefiscal = isset($nombrefiscal) ? strtoupper(trim($nombrefiscal)) : NULL;
-        $persona->direccionfiscal = isset($direccionfiscal) ? strtoupper(trim($direccionfiscal)) : NULL;
-        $persona->rolid = isset($rolid) ? strtoupper(trim($rolid)) : NULL;
-        $persona->datecreated = isset($datecreated) ? strtoupper(trim($datecreated)) : NULL;
-        $persona->status = isset($status) ? strtoupper(trim($status)) : NULL;
-        $persona->id = isset($id) ? strtoupper(trim($id)) : NULL;
-
+        $persona->identificacion = isset($_POST['identificacion']) ? strtoupper(trim($_POST['identificacion'])) : NULL;
+        $persona->nombres = isset($_POST['nombres']) ? strtoupper(trim($_POST['nombres'])) : NULL;
+        $persona->a_paterno = isset($_POST['a_paterno']) ? strtoupper(trim($_POST['a_paterno'])) : NULL;
+        $persona->a_materno = isset($_POST['a_materno']) ? strtoupper(trim($_POST['a_materno'])) : NULL;
+        $persona->telefono = isset($_POST['telefono']) ? strtoupper(trim($_POST['telefono'])) : NULL;
+        $persona->email_user = isset($_POST['email_user']) ? strtoupper(trim($_POST['email_user'])) : NULL;
+        $persona->password = isset($_POST['password']) ? strtoupper(trim($_POST['password'])) : NULL;
+        $persona->ruc = isset($_POST['ruc']) ? strtoupper(trim($_POST['ruc'])) : NULL;
+        $persona->nombrefiscal = isset($_POST['nombrefiscal']) ? strtoupper(trim($_POST['nombrefiscal'])) : NULL;
+        $persona->direccionfiscal = isset($_POST['direccionfiscal']) ? strtoupper(trim($_POST['direccionfiscal'])) : NULL;
+        $persona->rolid = isset($_POST['rolid']) ? strtoupper(trim($_POST['rolid'])) : NULL;
+        $persona->datecreated = isset($_POST['datecreated']) ? strtoupper(trim($_POST['datecreated'])) : NULL;
+        $persona->status = isset($_POST['status']) ? strtoupper(trim($_POST['status'])) : NULL;
+        $persona->id = isset($_POST['id']) ? strtoupper(trim($_POST['id'])) : NULL;
 
         $data = $persona->updatePersona();
         echo json_encode($data);
