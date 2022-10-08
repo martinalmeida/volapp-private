@@ -1,6 +1,7 @@
 <?php
 include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/volappConfig.php');
 include_once($_SERVER['DOCUMENT_ROOT'] . INCLUDES . 'template.php');
+Template::verificarSesion();
 Template::Head('Home');
 Template::startBody();
 ?>
@@ -16,11 +17,8 @@ Template::startBody();
 </div>
 <div class="fs-lg fw-300 p-5 bg-white border-faded rounded mb-g">
     <h3 class="mb-g">
-        DIV VACIO
+        <?= var_dump($_SESSION); ?>
     </h3>
-    <p>
-        DIV VACIO.
-    </p>
 </div>
 <h3>
     Titulo abajo

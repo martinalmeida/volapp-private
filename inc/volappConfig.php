@@ -35,3 +35,6 @@ define('JS', RESOURCES . 'js/');
 
 // Composer Autoload.php
 define('COMPOSER', ROOT_PATH . 'vendor/autoload.php');
+
+// Login
+define('LOGIN', VIEW . 'login/');

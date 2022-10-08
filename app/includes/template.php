@@ -3,17 +3,18 @@
 declare(strict_types=1);
 
 include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/volappConfig.php');
+include($_SERVER['DOCUMENT_ROOT'] . LIBRARIES . 'sesion.php');
 
 class Template
 {
-    // static public function verificarSesion()
-    // {
-    //     $usuario = sesion::getparametro('usuario');
-    //     if ($usuario == '') {
-    //         header('Location: login.php', true);
-    //         exit;
-    //     }
-    // }
+    static public function verificarSesion()
+    {
+        $usuario = sesion::getparametro('usuario');
+        if ($usuario == '') {
+            header('Location: ' . LOGIN, true);
+            exit;
+        }
+    }
 
     static public function head($title)
     {

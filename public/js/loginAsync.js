@@ -1,5 +1,5 @@
 // --URL principal del servidor para peticiones--
-var urlPeticion = "http://localhost/volapp/routes/";
+var urlBase = "http://localhost/volapp/";
 
 // --Variables globales para los timer de desconexion 900000 15 minutos
 var contadorCerrarSesion;
@@ -29,7 +29,7 @@ function login(form) {
       processData: false, //necesario para enviar archivos
       data: formData, //necesario para enviar archivos
       dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-      url: urlPeticion + "login/getUser", //url a donde hacemos la peticion
+      url: urlBase + "routes/login/getUser", //url a donde hacemos la peticion
       type: "POST",
       beforeSend: function () {
         // $("#overlayText").text("Iniciando Sesion...");
@@ -58,11 +58,9 @@ function login(form) {
             break;
 
           case "1":
-            // if (result.url != "") {
-            //   window.location = result.url;
-            // } else {
-            //   window.location.replace(urlBase + "Inicio");
-            // }
+            if (result.url != "") {
+              window.location = urlBase + result.url;
+            }
             break;
 
           case "2":
