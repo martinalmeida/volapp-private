@@ -29,23 +29,23 @@ class InitRouting
         // --Comprobar si hay un metodo autorizado GET && POST
         //if ($_SERVER['REQUEST_METHOD'] == 'GET' or $_SERVER['REQUEST_METHOD'] == 'POST') {
         // --Comprobar el token de la plataforma
-        $this->tokenUser = $_POST["token"];
-        if (self::TOKEN === $this->tokenUser) {
-            // --Validacion de ruta
-            if (URL !== '/') {
-                // --Ejecucion del router
-                require_once(__DIR__ . '/routing.php');
-                $router = new Routing;
-                $router->run();
-            } else {
-                $request['status'] = '0';
-                echo json_encode($request);
-            }
+        // $this->tokenUser = $_POST["token"];
+        // if (self::TOKEN === $this->tokenUser) {
+        // --Validacion de ruta
+        if (URL !== '/') {
+            // --Ejecucion del router
+            require_once(__DIR__ . '/routing.php');
+            $router = new Routing;
+            $router->run();
         } else {
-            echo json_encode('NO HAY TOKEN QUE COINCIDA');
-            $this->tokenUser = NULL;
-            exit;
+            $request['status'] = '0';
+            echo json_encode($request);
         }
+        // } else {
+        //     echo json_encode('NO HAY TOKEN QUE COINCIDA');
+        //     $this->tokenUser = NULL;
+        //     exit;
+        // }
         // } else {
         //     echo json_encode('SERVICIOS DENEGADOS POR NO CONTENER UN METODO VALIDO');
         //     $this->tokenUser = NULL;
