@@ -23,6 +23,16 @@ class Persona {
     public $status;
     public $id;
 
+    /* Propiedades de los objetos de Datatables para utilizar (Serverside) 
+    Procesamiento del lado del servidor */
+    public $draw;
+    public $row;
+    public $rowperpage;
+    public $columnIndex;
+    public $columnName;
+    public $columnSortOrder;
+    public $searchValue;
+
 
     // --Constructor para la conexion de la BD--
     public function __construct($db)
@@ -131,6 +141,124 @@ class Persona {
             echo json_encode(array('status' => '0', 'data' => 'Hubo un error'));
         }
 
+    }
+
+    public function deletePersona(): void
+    {
+        // --Preparamos la consulta--
+        $query = "DELETE FROM ".$this->tableName." WHERE id=?";
+        $stmt = $this->conn->prepare($query);
+
+        // --Escapamos los caracteres--
+        $this->id=htmlspecialchars(strip_tags($this->id));
+
+        // --Almacenamos los valores--
+        $stmt->bindParam(1, $this->id);
+
+        // --Ejecutamos la consulta y validamos ejecucion--
+        if ($stmt->execute()) {
+            if ($stmt->rowCount() >= 1) {
+                echo json_encode(array('status' => '1', 'message' => 'Usuario Borrado Exitosamente'));
+            } else {
+                echo json_encode(array('status' => '3', 'message' => 'Hubo un error al Borrar el usuario'));
+            }
+        } else {
+            echo json_encode(array('status' => '0', 'data' => 'Hubo un error'));
+        }
+    }
+
+    public function readAllDaTablePerson(): void
+    {
+        ## Read value
+        $draw = $this->draw=htmlspecialchars(strip_tags($this->draw));
+        $row = $this->row=htmlspecialchars(strip_tags($this->row));
+        $rowperpage = $this->rowperpage=htmlspecialchars(strip_tags($this->rowperpage));
+        $columnIndex = $this->columnIndex=htmlspecialchars(strip_tags($this->columnIndex));
+        $columnName = $this->columnName=htmlspecialchars(strip_tags($this->columnName));
+        $columnSortOrder = $this->columnSortOrder=htmlspecialchars(strip_tags($this->columnSortOrder));
+        $searchValue = $this->searchValue=htmlspecialchars(strip_tags($this->searchValue));
+        $searchArray = array();
+        ## Search 
+        $searchQuery = " ";
+        if($searchValue != ''){
+            $searchQuery = " AND (id LIKE :id OR 
+                identificacion LIKE :identificacion OR
+                nombres LIKE :nombres OR 
+                a_paterno LIKE :a_paterno OR
+                a_materno LIKE a_materno OR
+                telefono LIKE telefono OR
+                email_user LIKE email_user OR
+                pswd LIKE pswd OR
+                ruc LIKE ruc OR
+                nombrefiscal LIKE nombrefiscal OR
+                direccionfiscal LIKE direccionfiscal OR
+                rolid LIKE rolid OR
+                datecreated LIKE datecreated OR
+                status LIKE status )";
+            $searchArray = array( 
+                'id'=>"%$searchValue%",
+                'identificacion'=>"%$searchValue%",
+                'nombres'=>"%$searchValue%",
+                'a_paterno'=>"%$searchValue%",
+                'a_materno'=>"%$searchValue%",
+                'telefono'=>"%$searchValue%",
+                'email_user'=>"%$searchValue%",
+                'pswd'=>"%$searchValue%",
+                'ruc'=>"%$searchValue%",
+                'nombrefiscal'=>"%$searchValue%",
+                'direccionfiscal'=>"%$searchValue%",
+                'rolid'=>"%$searchValue%",
+                'datecreated'=>"%$searchValue%",
+                'status'=>"%$searchValue%"
+            );
+        }
+        ## Total number of records without filtering
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM ".$this->tableName."");
+        $stmt->execute();
+        $records = $stmt->fetch();
+        $totalRecords = $records['allcount'];
+        ## Total number of records with filtering
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM ".$this->tableName." WHERE 1 ".$searchQuery."");
+        $stmt->execute($searchArray);
+        $records = $stmt->fetch();
+        $totalRecordwithFilter = $records['allcount'];
+        ## Fetch records
+        $stmt = $this->conn->prepare("SELECT id, identificacion, nombres, a_paterno, a_materno, telefono, email_user, pswd, ruc, nombrefiscal, direccionfiscal, rolid, datecreated, status FROM ".$this->tableName." WHERE 1 ".$searchQuery." ORDER BY ".$columnName." ".$columnSortOrder." LIMIT :limit,:offset ");
+        // Bind values
+        foreach($searchArray as $key=>$search){
+            $stmt->bindValue(':'.$key, $search,PDO::PARAM_STR);
+        }
+        $stmt->bindValue(':limit', (int)$row, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', (int)$rowperpage, PDO::PARAM_INT);
+        $stmt->execute();
+        $empRecords = $stmt->fetchAll();
+        $data = array();
+        foreach($empRecords as $row){
+            $data[] = array(
+                    "id"=>$row['id'],
+                    "identificacion"=>$row['identificacion'],
+                    "nombres"=>$row['nombres'],
+                    "a_paterno"=>$row['a_paterno'],
+                    "a_materno"=>$row['a_materno'],
+                    "telefono"=>$row['telefono'],
+                    "email_user"=>$row['email_user'],
+                    "pswd"=>$row['pswd'],
+                    "ruc"=>$row['ruc'],
+                    "nombrefiscal"=>$row['nombrefiscal'],
+                    "direccionfiscal"=>$row['direccionfiscal'],
+                    "rolid"=>$row['rolid'],
+                    "datecreated"=>$row['datecreated'],
+                    "status"=>$row['status']
+                );
+        }
+        ## Response
+        $response = array(
+            "draw" => intval($draw),
+            "iTotalRecords" => $totalRecords,
+            "iTotalDisplayRecords" => $totalRecordwithFilter,
+            "aaData" => $data
+        );
+        echo json_encode($response);
     }
     
 }

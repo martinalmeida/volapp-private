@@ -61,4 +61,38 @@ class PersonaController
 
         $persona->updatePersona();
     }
+
+    public function delete(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include($_SERVER['DOCUMENT_ROOT'] . INC . 'db.php');
+        $database = new Database();
+        $db = $database->getConnection();
+        $persona = new Persona($db);
+
+        // --Seteo de valores existentes en el POST--
+        $persona->id = isset($_POST['id']) ? strtoupper(trim($_POST['id'])) : NULL;
+
+        $persona->deletePersona();
+    }
+
+    # objetos de Datatables para utilizar (Serverside)
+    public function readAllDaTable(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include($_SERVER['DOCUMENT_ROOT'] . INC . 'db.php');
+        $database = new Database();
+        $db = $database->getConnection();
+        $persona = new Persona($db);
+
+        $persona->draw = htmlspecialchars($_POST['draw']);
+        $persona->row = htmlspecialchars($_POST['start']);
+        $persona->rowperpage = htmlspecialchars($_POST['length']);
+        $persona->columnIndex = htmlspecialchars($_POST['order'][0]['column']);
+        $persona->columnName = htmlspecialchars($_POST['columns'][$persona->columnIndex]['data']);
+        $persona->columnSortOrder = htmlspecialchars($_POST['order'][0]['dir']);
+        $persona->searchValue = htmlspecialchars($_POST['search']['value']);
+
+        $persona->readAllDaTablePerson();
+    }
 }
