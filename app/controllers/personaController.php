@@ -32,8 +32,7 @@ class PersonaController
         $persona->datecreated = isset($_POST['datecreated']) ? strtoupper(trim($_POST['datecreated'])) : NULL;
         $persona->status = isset($_POST['status']) ? strtoupper(trim($_POST['status'])) : NULL;
 
-        $data = $persona->createPersona();
-        echo json_encode($data);
+        $persona->createPersona();
     }
 
     public function update(): void
@@ -60,8 +59,6 @@ class PersonaController
         $persona->status = isset($_POST['status']) ? strtoupper(trim($_POST['status'])) : NULL;
         $persona->id = isset($_POST['id']) ? strtoupper(trim($_POST['id'])) : NULL;
 
-        $data = $persona->updatePersona();
-        echo json_encode($data);
-
+        $persona->updatePersona();
     }
 }
