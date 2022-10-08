@@ -2,10 +2,10 @@
 -- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 07-10-2022 a las 00:36:50
--- Versión del servidor: 10.4.24-MariaDB
--- Versión de PHP: 8.1.6
+-- Host: 127.0.0.1
+-- Generation Time: Oct 08, 2022 at 06:49 AM
+-- Server version: 10.4.25-MariaDB
+-- PHP Version: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,17 +18,17 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `volapp`
+-- Database: `volapp`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `modulo`
+-- Table structure for table `modulo`
 --
 
 CREATE TABLE `modulo` (
-  `idmodulo` bigint(20) NOT NULL,
+  `id` bigint(20) NOT NULL,
   `menu_id` int(11) DEFAULT NULL,
   `page` varchar(30) COLLATE utf8mb4_spanish_ci DEFAULT NULL,
   `titulo` varchar(50) COLLATE utf8mb4_spanish_ci NOT NULL,
@@ -38,21 +38,21 @@ CREATE TABLE `modulo` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 --
--- Volcado de datos para la tabla `modulo`
+-- Dumping data for table `modulo`
 --
 
-INSERT INTO `modulo` (`idmodulo`, `menu_id`, `page`, `titulo`, `icono`, `descripcion`, `status`) VALUES
+INSERT INTO `modulo` (`id`, `menu_id`, `page`, `titulo`, `icono`, `descripcion`, `status`) VALUES
 (1, NULL, NULL, 'INICIO', 'fal fa-home', 'PAGINA PRINCIPAL', '1'),
 (2, 1, 'Dashboard', 'Home', NULL, 'PAGINA PRINCIPAL DE LA INTERFAZ', '1');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `permisos`
+-- Table structure for table `permisos`
 --
 
 CREATE TABLE `permisos` (
-  `idpermiso` bigint(20) NOT NULL,
+  `id` bigint(20) NOT NULL,
   `rolid` bigint(20) DEFAULT NULL,
   `moduloid` bigint(20) DEFAULT NULL,
   `r` int(11) DEFAULT 0,
@@ -62,21 +62,21 @@ CREATE TABLE `permisos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 --
--- Volcado de datos para la tabla `permisos`
+-- Dumping data for table `permisos`
 --
 
-INSERT INTO `permisos` (`idpermiso`, `rolid`, `moduloid`, `r`, `w`, `u`, `d`) VALUES
+INSERT INTO `permisos` (`id`, `rolid`, `moduloid`, `r`, `w`, `u`, `d`) VALUES
 (1, 1, 1, 0, 0, 0, 0),
 (2, 1, 2, 1, 0, 0, 0);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `persona`
+-- Table structure for table `persona`
 --
 
 CREATE TABLE `persona` (
-  `idpersona` bigint(20) NOT NULL,
+  `id` bigint(20) NOT NULL,
   `identificacion` varchar(50) COLLATE utf8mb4_spanish_ci NOT NULL,
   `nombres` varchar(50) COLLATE utf8mb4_spanish_ci NOT NULL,
   `a_paterno` varchar(30) COLLATE utf8mb4_spanish_ci NOT NULL,
@@ -95,37 +95,37 @@ CREATE TABLE `persona` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 --
--- Volcado de datos para la tabla `persona`
+-- Dumping data for table `persona`
 --
 
-INSERT INTO `persona` (`idpersona`, `identificacion`, `nombres`, `a_paterno`, `a_materno`, `telefono`, `email_user`, `pswd`, `ruc`, `nombrefiscal`, `direccionfiscal`, `content_type`, `base_64`, `rolid`, `datecreated`, `status`) VALUES
+INSERT INTO `persona` (`id`, `identificacion`, `nombres`, `a_paterno`, `a_materno`, `telefono`, `email_user`, `pswd`, `ruc`, `nombrefiscal`, `direccionfiscal`, `content_type`, `base_64`, `rolid`, `datecreated`, `status`) VALUES
 (1, '', 'Martin', 'Almeida', 'Cavanzo', 3107698290, 'martinalmeida56@gmail.com', 'admin123', NULL, NULL, NULL, '', '', 1, '2022-09-08 01:36:11', '1'),
 (2, '1096241229', 'Martin', 'Almeida', 'Cavanzo', 3107698290, 'martinalmeida56@gmail.ad', 'admin123', NULL, NULL, NULL, '', '', 1, '2022-09-08 01:37:45', '1');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `rol`
+-- Table structure for table `rol`
 --
 
 CREATE TABLE `rol` (
-  `idrol` bigint(20) NOT NULL,
+  `id` bigint(20) NOT NULL,
   `nombrerol` varchar(50) COLLATE utf8mb4_spanish_ci NOT NULL,
   `descripcion` text COLLATE utf8mb4_spanish_ci DEFAULT NULL,
   `status` char(1) COLLATE utf8mb4_spanish_ci DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 --
--- Volcado de datos para la tabla `rol`
+-- Dumping data for table `rol`
 --
 
-INSERT INTO `rol` (`idrol`, `nombrerol`, `descripcion`, `status`) VALUES
+INSERT INTO `rol` (`id`, `nombrerol`, `descripcion`, `status`) VALUES
 (1, 'ADMINISTRADOR', 'Perfi que tiene acceso completo al sistema', '1');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `status`
+-- Table structure for table `status`
 --
 
 CREATE TABLE `status` (
@@ -134,7 +134,7 @@ CREATE TABLE `status` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 --
--- Volcado de datos para la tabla `status`
+-- Dumping data for table `status`
 --
 
 INSERT INTO `status` (`id`, `status`) VALUES
@@ -144,92 +144,92 @@ INSERT INTO `status` (`id`, `status`) VALUES
 (4, 'restaurado');
 
 --
--- Índices para tablas volcadas
+-- Indexes for dumped tables
 --
 
 --
--- Indices de la tabla `modulo`
+-- Indexes for table `modulo`
 --
 ALTER TABLE `modulo`
-  ADD PRIMARY KEY (`idmodulo`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `permisos`
+-- Indexes for table `permisos`
 --
 ALTER TABLE `permisos`
-  ADD PRIMARY KEY (`idpermiso`),
+  ADD PRIMARY KEY (`id`),
   ADD KEY `permisos_ibfk_1` (`rolid`),
   ADD KEY `permisos_ibfk_2` (`moduloid`);
 
 --
--- Indices de la tabla `persona`
+-- Indexes for table `persona`
 --
 ALTER TABLE `persona`
-  ADD PRIMARY KEY (`idpersona`),
+  ADD PRIMARY KEY (`id`),
   ADD KEY `persona_ibfk_1` (`rolid`);
 
 --
--- Indices de la tabla `rol`
+-- Indexes for table `rol`
 --
 ALTER TABLE `rol`
-  ADD PRIMARY KEY (`idrol`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `status`
+-- Indexes for table `status`
 --
 ALTER TABLE `status`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT de las tablas volcadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de la tabla `modulo`
+-- AUTO_INCREMENT for table `modulo`
 --
 ALTER TABLE `modulo`
-  MODIFY `idmodulo` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT de la tabla `permisos`
+-- AUTO_INCREMENT for table `permisos`
 --
 ALTER TABLE `permisos`
-  MODIFY `idpermiso` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT de la tabla `persona`
+-- AUTO_INCREMENT for table `persona`
 --
 ALTER TABLE `persona`
-  MODIFY `idpersona` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT de la tabla `rol`
+-- AUTO_INCREMENT for table `rol`
 --
 ALTER TABLE `rol`
-  MODIFY `idrol` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT de la tabla `status`
+-- AUTO_INCREMENT for table `status`
 --
 ALTER TABLE `status`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- Restricciones para tablas volcadas
+-- Constraints for dumped tables
 --
 
 --
--- Filtros para la tabla `permisos`
+-- Constraints for table `permisos`
 --
 ALTER TABLE `permisos`
-  ADD CONSTRAINT `permisos_ibfk_1` FOREIGN KEY (`rolid`) REFERENCES `rol` (`idrol`),
-  ADD CONSTRAINT `permisos_ibfk_2` FOREIGN KEY (`moduloid`) REFERENCES `modulo` (`idmodulo`);
+  ADD CONSTRAINT `permisos_ibfk_1` FOREIGN KEY (`rolid`) REFERENCES `rol` (`id`),
+  ADD CONSTRAINT `permisos_ibfk_2` FOREIGN KEY (`moduloid`) REFERENCES `modulo` (`id`);
 
 --
--- Filtros para la tabla `persona`
+-- Constraints for table `persona`
 --
 ALTER TABLE `persona`
-  ADD CONSTRAINT `persona_ibfk_1` FOREIGN KEY (`rolid`) REFERENCES `rol` (`idrol`);
+  ADD CONSTRAINT `persona_ibfk_1` FOREIGN KEY (`rolid`) REFERENCES `rol` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
