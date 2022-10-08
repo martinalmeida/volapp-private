@@ -16,3 +16,4 @@ status->2 == Error de validacion <br>
 status->3 == No hay datos <br>
 status->4 == Routing Controller Url Api no existe <br>
 status->5 == Archivos falta <br>
+status->6 == Usuario no tiene permisos ni modulos asignados <br>

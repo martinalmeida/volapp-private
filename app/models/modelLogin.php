@@ -2,16 +2,22 @@
 
 declare(strict_types=1);
 
+include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/volappConfig.php');
+include($_SERVER['DOCUMENT_ROOT'] . LIBRARIES . 'sesion.php');
+
 class Login
 {
     // --Parametros Privados--
     private $conn;
     private $tableName = "persona";
+    private $tableRol = "rol";
+    private $tablePermisos = "permisos";
+    private $tableModulo = "modulo";
+    private const URLDEFAULT = '/public/views/home/';
 
     // --Parametros Publicos--
     public $correo;
     public $password;
-    public $data;
 
     // --Constructor para la conexion de la BD--
     public function __construct($db)
@@ -41,10 +47,23 @@ class Login
             if ($stmt->rowCount() >= 1) {
 
                 // -- ↓↓ Usuario encontrado y activo ↓↓ --
-                $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                var_dump($data);
-                exit;
-                echo json_encode(array('status' => '1', 'data' => $data));
+                $data = $stmt->fetch(PDO::FETCH_OBJ);
+
+                // -- ↓↓ Traemos los permisos ↓↓ --
+                $permisos = self::permisosUsuario($data->idpersona);
+                // -- ↓↓ Creamos la sesion y le pasamos todos los datos del usuario ↓↓ --
+                $datosSesion = array(
+                    'id' => $data->idpersona,
+                    'usuario' => $data->nombres,
+                    'email' => $data->email_user,
+                    'permisos' => $permisos,
+                    'content' => $data->content_type,
+                    'base64' => $data->base_64,
+                    'token' => "dqtQS2cBmGd8MbyMCHBj3Dq38Xm89vVyxxum4aySt9witAwBN9",
+                );
+                Sesion::CrearSesion($datosSesion);
+                // -- ↓↓ Retornamos las respuestas con la urldefault ↓↓ --
+                echo json_encode(array('status' => '1', 'data' => $data, 'url' => self::URLDEFAULT));
             } else {
                 // -- ↓↓ Usuario no encontrado o inactivo ↓↓ --
                 echo json_encode(array('status' => '3', 'data' => NULL));
@@ -55,37 +74,56 @@ class Login
         }
     }
 
-    // -- ⊡ Funcion para traer el rol y los permisos del usuario ⊡ --
-    public function permisosUsuario(): void
+    // -- ⊡ Funcion para traer el rol, permisos y url del modulo ⊡ --
+    private function permisosUsuario($idPersona)
     {
         // -- ↓↓ Preparamos la consulta ↓↓ --
-        $query = "SELECT * FROM $this->tableName WHERE p.email_user=? AND p.pswd=? AND p.status = 1 ;";
+        $query = "SELECT 
+                  (p2.rolid)rol, (p2.moduloid)idmodulo, (m.menu_id)idsubmodulo, (m.titulo)modulo, m.icono, (m.page)pagina, p2.r, p2.w, p2.u, p2.d
+                  FROM $this->tableName p 
+                  JOIN $this->tableRol r ON p.rolid = r.idrol 
+                  JOIN $this->tablePermisos p2 ON p2.rolid = r.idrol 
+                  JOIN $this->tableModulo m ON p2.moduloid = m.idmodulo
+                  WHERE m.status = 1
+                  AND p.idpersona = ?; ";
         $stmt = $this->conn->prepare($query);
 
-        // -- ↓↓ Escapamos los caracteres ↓↓ --
-        $this->correo = htmlspecialchars(strip_tags($this->correo));
-        $this->password = htmlspecialchars(strip_tags($this->password));
+        // -- ↓↓ Preparamos arreglo de permisos que retornaremos ↓↓ --
+        $arrayPermisos = array();
 
         // -- ↓↓ Almacenamos los valores ↓↓ --
-        $stmt->bindParam(1, $this->correo);
-        $stmt->bindParam(2, $this->password);
+        $stmt->bindParam(1, $idPersona);
 
         // -- ↓↓ Ejecutamos la consulta y validamos ejecucion ↓↓ --
         if ($stmt->execute()) {
 
             // -- ↓↓ Comprobamos que venga algun dato ↓↓ --
             if ($stmt->rowCount() >= 1) {
-
-                // -- ↓↓ Usuario encontrado y activo ↓↓ --
-                $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                echo json_encode(array('status' => '1', 'data' => $data));
+                // -- ↓↓ Permisos encontrados ↓↓ --
+                $data = $stmt->fetchAll();
+                foreach ($data as $row) {
+                    $arrayPermisos[] = array(
+                        "rol" => $row["rol"],
+                        "idModulo" => $row["idmodulo"],
+                        "idSubmodulo" => $row["idsubmodulo"],
+                        "modulo" => $row["modulo"],
+                        "icono" => $row["icono"],
+                        "pagina" => $row["pagina"],
+                        "r" => $row["r"],
+                        "w" => $row["w"],
+                        "u" => $row["u"],
+                        "d" => $row["d"]
+                    );
+                }
+                return $arrayPermisos;
             } else {
-                // -- ↓↓ Usuario no encontrado o inactivo ↓↓ --
-                echo json_encode(array('status' => '3', 'data' => NULL));
+                // -- ↓↓ Permisos no encontrados paramos el proceso ↓↓ --
+                echo json_encode(array('status' => '6', 'data' => NULL));
+                exit;
             }
         } else {
             // -- ↓↓ Falla en la ejecución de la consulta ↓↓ --
-            echo json_encode(array('status' => '0', 'data' => NULL));
+            print_r($stmt->errorInfo());
         }
     }
 }
