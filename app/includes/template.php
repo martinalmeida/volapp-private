@@ -1184,11 +1184,11 @@ class Template
                                         <div class='page-logo width-mobile-auto m-0 align-items-center justify-content-center p-0 bg-transparent bg-img-none shadow-0 height-9 border-0'>
                                             <a href='javascript:void(0)' class='page-logo-link press-scale-down d-flex align-items-center'>
                                                 <img src='" . IMG . "/logo.png' alt='SmartAdmin WebApp' aria-roledescription='logo'>
-                                                <span class='page-logo-text mr-1'>VolApp</span>
+                                                <span class='page-logo-text mr-1'><b></b></span>
                                             </a>
                                         </div>
-                                        <a href='#' class='btn-link text-white ml-auto'>
-                                            Recuperar Contraseña
+                                        <a class='btn-link text-white ml-auto'>
+                                            <b>Bienvenidos</b>
                                         </a>
                                     </div>
                                 </div>

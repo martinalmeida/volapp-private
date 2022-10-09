@@ -9,9 +9,9 @@ Template::startBodyLogin();
     <div class="row">
         <div class="col col-md-6 col-lg-7 hidden-sm-down">
             <h2 class="fs-xxl fw-500 mt-4 text-white">
-                VolApp
-                <small class="h3 fw-300 mt-3 mb-5 text-white opacity-60">
-                    Soluciones de software para negocios orientados al transporte de carga pesada.
+                <img src="../../../resources/assets/img/logo-login.png" alt="VolApp">
+                <small class="h3 fw-300 mt-2 mb-5 text-white opacity-60 text-center">
+                    <b>Soluciones de software para negocios orientados al transporte de carga pesada.</b>
                 </small>
             </h2>
             <!-- <a href="#" class="fs-lg fw-500 text-white opacity-70">Ver más &gt;&gt;</a> -->
@@ -72,7 +72,8 @@ Template::startBodyLogin();
         </div>
     </div>
     <div class="position-absolute pos-bottom pos-left pos-right p-3 text-center text-white">
-        2022 © volapp by&nbsp;<a href='https://www.gotbootstrap.com' class='text-white opacity-40 fw-500' title='gotbootstrap.com' target='_blank'>volapp</a>
+        <!-- 2022 © volapp by&nbsp;<a href='' class='text-white opacity-40 fw-500' title='gotbootstrap.com' target='_blank'>volapp</a> -->
+        2022 © VOLAPP
     </div>
 </div>
 
