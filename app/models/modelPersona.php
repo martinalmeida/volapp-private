@@ -172,16 +172,16 @@ class Persona
                 identificacion LIKE :identificacion OR
                 nombres LIKE :nombres OR 
                 a_paterno LIKE :a_paterno OR
-                a_materno LIKE a_materno OR
-                telefono LIKE telefono OR
-                email_user LIKE email_user OR
-                pswd LIKE pswd OR
-                ruc LIKE ruc OR
-                nombrefiscal LIKE nombrefiscal OR
-                direccionfiscal LIKE direccionfiscal OR
-                rolid LIKE rolid OR
-                datecreated LIKE datecreated OR
-                status LIKE status )";
+                a_materno LIKE :a_materno OR
+                telefono LIKE :telefono OR
+                email_user LIKE :email_user OR
+                pswd LIKE :pswd OR
+                ruc LIKE :ruc OR
+                nombrefiscal LIKE :nombrefiscal OR
+                direccionfiscal LIKE :direccionfiscal OR
+                rolid LIKE :rolid OR
+                datecreated LIKE :datecreated OR
+                status LIKE :status )";
             $searchArray = array(
                 'id' => "%$searchValue%",
                 'identificacion' => "%$searchValue%",
@@ -225,16 +225,13 @@ class Persona
                 "id" => $row['id'],
                 "identificacion" => $row['identificacion'],
                 "nombres" => $row['nombres'],
-                "a_paterno" => $row['a_paterno'],
-                "a_materno" => $row['a_materno'],
+                "apellidos" => $row['a_paterno'].$row['a_materno'],
                 "telefono" => $row['telefono'],
                 "email_user" => $row['email_user'],
-                "pswd" => $row['pswd'],
                 "ruc" => $row['ruc'],
                 "nombrefiscal" => $row['nombrefiscal'],
                 "direccionfiscal" => $row['direccionfiscal'],
                 "rolid" => $row['rolid'],
-                "datecreated" => $row['datecreated'],
                 "status" => $row['status']
             );
         }
