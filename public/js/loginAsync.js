@@ -105,9 +105,8 @@ function login(form) {
 // --Funcion de cerrar Sesión--
 function cerrarSesion() {
   $.ajax({
-    data: { peticion: "logout" }, //necesario para enviar archivos
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-    url: "php/controller/controller_login.php", //url a donde hacemos la peticion
+    url: urlBase + "routes/login/getUser", //url a donde hacemos la peticion
     type: "POST",
     beforeSend: function () {
       $("#overlayText").text("Cerrando Sesión...");

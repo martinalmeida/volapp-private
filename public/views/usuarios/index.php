@@ -1,7 +1,7 @@
 <?php
 include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/volappConfig.php');
 include_once($_SERVER['DOCUMENT_ROOT'] . INCLUDES . 'template.php');
-Template::headLogin('Login');
+Template::verificarSesion();
 Template::Head('Usuarios');
 Template::startBody();
 ?>
@@ -9,7 +9,7 @@ Template::startBody();
 <!-- ========== Inicio Componente de Vista ========== -->
 <div class="subheader">
     <h1 class="subheader-title">
-        <i class='fal fa-info-circle'></i> INICIO
+        <i class='fal fa-info-circle'></i> Usuarios
     </h1>
     <button type="button" class="btn btn-info active" data-toggle="modal" data-target="#default-example-modal-lg">AGREGAR</button>
 </div>
@@ -19,7 +19,8 @@ Template::startBody();
         <div id="panel-1" class="panel">
             <div class="panel-hdr">
                 <h2>
-                Usuarios  <!-- Tabla <span class="fw-300"><i>Usuarios</i></span> -->
+                    Usuarios
+                    <!-- Tabla <span class="fw-300"><i>Usuarios</i></span> -->
                 </h2>
                 <div class="panel-toolbar">
                     <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
@@ -34,17 +35,17 @@ Template::startBody();
                     <table id="table_persona" class="table table-bordered table-hover table-striped w-100">
                         <thead class="bg-primary-600">
                             <tr>
-                            <th>Id</th>
-                            <th>Identificación</th>
-                            <th>Nombres</th>
-                            <th>Apellidos</th>
-                            <th>Telefono</th>
-                            <th>Correo</th>
-                            <th>RUC</th>
-                            <th>Nombre del Fiscal</th>
-                            <th>Dirección Fiscal</th>
-                            <th>Rol</th>
-                            <th>Estado</th>
+                                <th>Id</th>
+                                <th>Identificación</th>
+                                <th>Nombres</th>
+                                <th>Apellidos</th>
+                                <th>Telefono</th>
+                                <th>Correo</th>
+                                <th>RUC</th>
+                                <th>Nombre del Fiscal</th>
+                                <th>Dirección Fiscal</th>
+                                <th>Rol</th>
+                                <th>Estado</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -58,7 +59,7 @@ Template::startBody();
 </div>
 
 <h3>
-    Titulo abajo
+    Pagina de Usuarios
 </h3>
 
 <?php

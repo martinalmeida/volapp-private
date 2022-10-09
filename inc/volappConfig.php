@@ -18,6 +18,7 @@ define('CONTROLLERS', APP . 'controllers/');
 define('INCLUDES', APP . 'includes/');
 define('LIBRARIES', APP . 'librariEs/');
 define('MODELS', APP . 'models/');
+define('ROOTS', APP . 'roots/rootController.php');
 
 // Rutas de interfaz
 define('JSAJAX', PUBLIC_PATH . 'js/');

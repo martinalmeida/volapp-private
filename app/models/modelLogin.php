@@ -13,7 +13,7 @@ class Login
     private $tableRol = "rol";
     private $tablePermisos = "permisos";
     private $tableModulo = "modulo";
-    private const URLDEFAULT = '/public/views/home/';
+    private const URLDEFAULT = 'public/views/home/';
 
     // --Parametros Publicos--
     public $correo;
