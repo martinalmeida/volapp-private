@@ -55,11 +55,10 @@ class Template
                             <!-- BEGIN Left Aside -->
                             <aside class='page-sidebar'>
                                 <div class='page-logo'>
-                                    <a href='#' class='page-logo-link press-scale-down d-flex align-items-center position-relative' data-toggle='modal' data-target='#modal-shortcut'>
+                                    <a href='" . VIEW . "home/' class='page-logo-link press-scale-down d-flex align-items-center position-relative'>
                                         <img src='" . IMG . "logo.png' alt='SmartAdmin WebApp' aria-roledescription='logo'>
-                                        <span class='page-logo-text mr-1'>VLAPP</span>
+                                        <span class='page-logo-text mr-1'>VolApp ®</span>
                                         <span class='position-absolute text-white opacity-50 small pos-top pos-right mr-2 mt-n2'></span>
-                                        <i class='fal fa-angle-down d-inline-block ml-1 fs-lg color-primary-300'></i>
                                     </a>
                                 </div>
                                 <!-- BEGIN PRIMARY NAVIGATION -->
@@ -251,37 +250,24 @@ class Template
                                                 </div>
                                                 <div class='dropdown-divider m-0'></div>
                                                 <a href='#' class='dropdown-item' data-action='app-reset'>
-                                                    <span data-i18n='drpdwn.reset_layout'>Reset Layout</span>
+                                                    <span data-i18n='drpdwn.reset_layout'>Reset Plataforma</span>
                                                 </a>
                                                 <a href='#' class='dropdown-item' data-toggle='modal' data-target='.js-modal-settings'>
-                                                    <span data-i18n='drpdwn.settings'>Settings</span>
+                                                    <span data-i18n='drpdwn.settings'>Ajustes</span>
                                                 </a>
                                                 <div class='dropdown-divider m-0'></div>
                                                 <a href='#' class='dropdown-item' data-action='app-fullscreen'>
-                                                    <span data-i18n='drpdwn.fullscreen'>Fullscreen</span>
+                                                    <span data-i18n='drpdwn.fullscreen'>Pantalla Completa</span>
                                                     <i class='float-right text-muted fw-n'>F11</i>
                                                 </a>
                                                 <a href='#' class='dropdown-item' data-action='app-print'>
-                                                    <span data-i18n='drpdwn.print'>Print</span>
+                                                    <span data-i18n='drpdwn.print'>Imprimir</span>
                                                     <i class='float-right text-muted fw-n'>Ctrl + P</i>
                                                 </a>
-                                                <div class='dropdown-multilevel dropdown-multilevel-left'>
-                                                    <div class='dropdown-item'>
-                                                        Language
-                                                    </div>
-                                                    <div class='dropdown-menu'>
-                                                        <a href='#?lang=fr' class='dropdown-item' data-action='lang' data-lang='fr'>Français</a>
-                                                        <a href='#?lang=en' class='dropdown-item active' data-action='lang' data-lang='en'>English (US)</a>
-                                                        <a href='#?lang=es' class='dropdown-item' data-action='lang' data-lang='es'>Español</a>
-                                                        <a href='#?lang=ru' class='dropdown-item' data-action='lang' data-lang='ru'>Русский язык</a>
-                                                        <a href='#?lang=jp' class='dropdown-item' data-action='lang' data-lang='jp'>日本語</a>
-                                                        <a href='#?lang=ch' class='dropdown-item' data-action='lang' data-lang='ch'>中文</a>
-                                                    </div>
-                                                </div>
                                                 <div class='dropdown-divider m-0'></div>
                                                 <a class='dropdown-item fw-500 pt-3 pb-3' href='page_login.html'>
-                                                    <span data-i18n='drpdwn.page-logout'>Logout</span>
-                                                    <span class='float-right fw-n'>&commat;codexlantern</span>
+                                                    <span data-i18n='drpdwn.page-logout'>Salir</span>
+                                                    <span class='float-right fw-n'>&commat;VolApp</span>
                                                 </a>
                                             </div>
                                         </div>
@@ -318,53 +304,6 @@ class Template
                         </div>
                     </footer>
                     <!-- END Page Footer -->
-                    <!-- BEGIN Shortcuts -->
-                    <div class='modal fade modal-backdrop-transparent' id='modal-shortcut' tabindex='-1' role='dialog' aria-labelledby='modal-shortcut' aria-hidden='true'>
-                        <div class='modal-dialog modal-dialog-top modal-transparent' role='document'>
-                            <div class='modal-content'>
-                                <div class='modal-body'>
-                                    <ul class='app-list w-auto h-auto p-0 text-left'>
-                                        <li>
-                                            <a href='intel_introduction.html' class='app-list-item text-white border-0 m-0'>
-                                                <div class='icon-stack'>
-                                                    <i class='base base-7 icon-stack-3x opacity-100 color-primary-500 '></i>
-                                                    <i class='base base-7 icon-stack-2x opacity-100 color-primary-300 '></i>
-                                                    <i class='fal fa-home icon-stack-1x opacity-100 color-white'></i>
-                                                </div>
-                                                <span class='app-list-name'>
-                                                    Home
-                                                </span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href='page_inbox_general.html' class='app-list-item text-white border-0 m-0'>
-                                                <div class='icon-stack'>
-                                                    <i class='base base-7 icon-stack-3x opacity-100 color-success-500 '></i>
-                                                    <i class='base base-7 icon-stack-2x opacity-100 color-success-300 '></i>
-                                                    <i class='ni ni-envelope icon-stack-1x text-white'></i>
-                                                </div>
-                                                <span class='app-list-name'>
-                                                    Inbox
-                                                </span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href='intel_introduction.html' class='app-list-item text-white border-0 m-0'>
-                                                <div class='icon-stack'>
-                                                    <i class='base base-7 icon-stack-2x opacity-100 color-primary-300 '></i>
-                                                    <i class='fal fa-plus icon-stack-1x opacity-100 color-white'></i>
-                                                </div>
-                                                <span class='app-list-name'>
-                                                    Add More
-                                                </span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- END Shortcuts -->
                     <!-- BEGIN Color profile -->
                     <!-- this area is hidden and will not be seen on screens or screen readers -->
                     <!-- we use this only for CSS color refernce for JS stuff -->
@@ -1106,7 +1045,6 @@ class Template
                     <script src='" . JS . "validaciones.js?v=" . rand() . "'></script>
                     <script src='" . JS . "datagrid/datatables/datatables.bundle.js'></script>
                     <script src='" . JS . "datagrid/datatables/datatables.export.js'></script>
-                    <script src='" . JS . "dataTablesCustom.js'></script>
                     </body>
                     </html>";
         echo $html;
