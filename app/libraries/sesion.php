@@ -59,9 +59,5 @@ class sesion
         }
         $_SESSION = array();
         session_destroy();
-
-        $respuesta['status'] = "1";
-
-        return $respuesta;
     }
 }

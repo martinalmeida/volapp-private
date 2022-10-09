@@ -28,4 +28,18 @@ class LoginController
             echo json_encode(array('status' => '2', 'data' => NULL));
         }
     }
+
+    public function logoutPlataform(): void
+    {
+        // --Importacion de librerias--
+        include($_SERVER['DOCUMENT_ROOT'] . LIBRARIES . 'sesion.php');
+
+        // --Validacion de cerrar sesion--
+        if (sesion::cerrarsesion()) {
+            include($_SERVER['DOCUMENT_ROOT'] . ROOTS);
+            Roots::volapp('login');
+        } else {
+            echo json_encode(array('status' => '2', 'data' => NULL));
+        }
+    }
 }
