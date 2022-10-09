@@ -11,6 +11,7 @@ $(document).ready(function () {
     'serverSide': true,
     'responsive': true,
     'lengthChange': false,
+    "pageLength": 30,
     "ajax": {
       "type": "POST",
       "url": "http://localhost/volapp/routes/persona/readAllDaTable",
