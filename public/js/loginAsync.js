@@ -119,7 +119,7 @@ function cerrarSesion() {
       var estado = result.status;
       switch (estado) {
         case "1":
-          window.location.replace(urlBase + "public/view/Login/");
+          window.location.replace(urlBase);
           break;
       }
     },
