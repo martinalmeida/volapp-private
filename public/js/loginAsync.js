@@ -106,20 +106,20 @@ function login(form) {
 function cerrarSesion() {
   $.ajax({
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-    url: urlBase + "routes/login/getUser", //url a donde hacemos la peticion
+    url: urlBase + "routes/login/logout", //url a donde hacemos la peticion
     type: "POST",
     beforeSend: function () {
-      $("#overlayText").text("Cerrando Sesión...");
-      $(".overlayCargue").fadeOut("slow");
+      // $("#overlayText").text("Cerrando Sesión...");
+      // $(".overlayCargue").fadeOut("slow");
     },
     complete: function () {
-      $(".overlayCargue").fadeIn("slow");
+      // $(".overlayCargue").fadeIn("slow");
     },
     success: function (result) {
       var estado = result.status;
       switch (estado) {
         case "1":
-          window.location.replace(urlBase + "Login");
+          window.location.replace(urlBase + "public/view/Login/");
           break;
       }
     },

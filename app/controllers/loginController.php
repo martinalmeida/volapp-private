@@ -4,8 +4,8 @@ declare(strict_types=1);
 header('Content-type: application/json');
 
 include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/volappConfig.php');
-include($_SERVER['DOCUMENT_ROOT'] . LIBRARIES . 'validations.php');
-include($_SERVER['DOCUMENT_ROOT'] . MODELS . 'modelLogin.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . LIBRARIES . 'validations.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . MODELS . 'modelLogin.php');
 
 class LoginController
 {
@@ -29,15 +29,11 @@ class LoginController
         }
     }
 
-    public function logoutPlataform(): void
+    public function logout(): void
     {
-        // --Importacion de librerias--
-        include($_SERVER['DOCUMENT_ROOT'] . LIBRARIES . 'sesion.php');
-
         // --Validacion de cerrar sesion--
-        if (sesion::cerrarsesion()) {
-            include($_SERVER['DOCUMENT_ROOT'] . ROOTS);
-            Roots::volapp('login');
+        if (SesionTools::cerrarsesion()) {
+            echo json_encode(array('status' => '1', 'data' => NULL));
         } else {
             echo json_encode(array('status' => '2', 'data' => NULL));
         }

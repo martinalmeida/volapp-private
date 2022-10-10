@@ -1,8 +1,8 @@
 <?php
 include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/volappConfig.php');
-include_once($_SERVER['DOCUMENT_ROOT'] . INCLUDES . 'template.php');
-Template::headLogin('Login');
-Template::startBodyLogin();
+include_once($_SERVER['DOCUMENT_ROOT'] . INCLUDES . 'templateLogin.php');
+TemplateLogin::head('Login');
+TemplateLogin::startBody();
 ?>
 
 <div class="container py-4 py-lg-5 my-lg-5 px-4 px-sm-0">
@@ -77,5 +77,5 @@ Template::startBodyLogin();
     </div>
 </div>
 
-<?= Template::endBodyLogin('frmLogin', 'btnLoginIngresar'); ?>
-<?= Template::azyncScript('login'); ?>
+<?= TemplateLogin::endBody('frmLogin', 'btnLoginIngresar'); ?>
+<?= TemplateLogin::azyncScript('login'); ?>

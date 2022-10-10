@@ -1,21 +1,20 @@
 <?php
 
-/**
- * clase sesion para manejar el inicio, cierre, comprobacion de la sesion del usuario
- */
+declare(strict_types=1);
+
 ini_set("session.cookie_lifetime", "600000");
 ini_set("session.gc_maxlifetime", "600000");
 session_start();
 session_regenerate_id();
-class sesion
-{
-    public static function setparametro($parametro, $valor)
-    {
 
+class SesionTools
+{
+    public static function setParametro($parametro, $valor)
+    {
         $_SESSION[$parametro] = $valor;
     }
 
-    public static function crearsesion($parametros)
+    public static function crearSesion($parametros)
     {
         // self::iniciarTiempoSesion();
         foreach ($parametros as $key => $value) {
@@ -33,7 +32,7 @@ class sesion
         session_regenerate_id();
     }
 
-    public static function getparametro($parametro)
+    public static function getParametro($parametro)
     {
 
         if (isset($_SESSION[$parametro])) {
@@ -43,7 +42,7 @@ class sesion
         }
     }
 
-    public static function cerrarsesion()
+    public static function cerrarSesion()
     {
         if (ini_get("session.use_cookies")) {
             $params = session_get_cookie_params();
@@ -59,5 +58,9 @@ class sesion
         }
         $_SESSION = array();
         session_destroy();
+
+        $respuesta['status'] = "1";
+
+        return $respuesta;
     }
 }

@@ -3,16 +3,26 @@
 declare(strict_types=1);
 
 include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/volappConfig.php');
-include($_SERVER['DOCUMENT_ROOT'] . LIBRARIES . 'sesion.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . CONTROLLERS . 'sesionController.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . LIBRARIES . 'sesion.php');
 
 class Template
 {
+    static public function verificar($submodulo)
+    {
+        $respuesta = LoginController::verificar($submodulo);
+        if (!$respuesta) {
+            header('Location: ' . LOGIN, true);
+            exit();
+        }
+    }
+
     static public function verificarSesion()
     {
-        $usuario = sesion::getparametro('usuario');
-        if ($usuario == '') {
+        $respuesta = LoginController::verificarUsuario();
+        if (!$respuesta) {
             header('Location: ' . LOGIN, true);
-            exit;
+            exit();
         }
     }
 
@@ -265,7 +275,7 @@ class Template
                                                     <i class='float-right text-muted fw-n'>Ctrl + P</i>
                                                 </a>
                                                 <div class='dropdown-divider m-0'></div>
-                                                <a class='dropdown-item fw-500 pt-3 pb-3' href='page_login.html'>
+                                                <a class='dropdown-item fw-500 pt-3 pb-3' onclick='cerrarSesion();'>
                                                     <span data-i18n='drpdwn.page-logout'>Salir</span>
                                                     <span class='float-right fw-n'>&commat;VolApp</span>
                                                 </a>
@@ -1045,6 +1055,7 @@ class Template
                     <script src='" . JS . "validaciones.js?v=" . rand() . "'></script>
                     <script src='" . JS . "datagrid/datatables/datatables.bundle.js'></script>
                     <script src='" . JS . "datagrid/datatables/datatables.export.js'></script>
+                    <script src='" . JSAJAX . "loginAsync.js'></script>
                     </body>
                     </html>";
         echo $html;

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/volappConfig.php');
-include($_SERVER['DOCUMENT_ROOT'] . LIBRARIES . 'sesion.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . LIBRARIES . 'sesion.php');
 
 class Login
 {
@@ -59,9 +59,10 @@ class Login
                     'permisos' => $permisos,
                     'content' => $data->content_type,
                     'base64' => $data->base_64,
+                    'timeout' => time(),
                     'token' => "dqtQS2cBmGd8MbyMCHBj3Dq38Xm89vVyxxum4aySt9witAwBN9",
                 );
-                Sesion::CrearSesion($datosSesion);
+                SesionTools::crearSesion($datosSesion);
                 // -- ↓↓ Retornamos las respuestas con la urldefault ↓↓ --
                 echo json_encode(array('status' => '1', 'data' => $data, 'url' => self::URLDEFAULT));
             } else {
