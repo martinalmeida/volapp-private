@@ -13,6 +13,7 @@ include_once(TEMPLATE_LOGIN);
 class ViewController
 {
     private const LOGIN = 'login';
+    private $modulo;
 
     public function __construct($modulo)
     {
@@ -25,7 +26,6 @@ class ViewController
             echo TemplateLogin::head($this->modulo);
             echo TemplateLogin::startBody();
         } else {
-            echo Template::test();
             echo Template::verificarSesion();
             echo Template::head($this->modulo);
             echo Template::startBody();

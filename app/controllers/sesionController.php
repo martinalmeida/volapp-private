@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-include_once(LIBRARIES . 'sesion.php');
+include_once(MODELS . 'modelSesion.php');
 
 class SesionController
 {
+    private const TOKEN = 'dqtQS2cBmGd8MbyMCHBj3Dq38Xm89vVyxxum4aySt9witAwBN9';
+
     public static function verificar($submoduloPermitido)
     {
         $arrayPermisos = SesionTools::getParametro('permisos');
@@ -41,39 +43,20 @@ class SesionController
         return false;
     }
 
-    public static function menuDinamico()
+    public static function menuDinamico(): void
     {
-        $arrayPermisos[] = SesionTools::getparametro('permisos');
         $token = SesionTools::getparametro('token');
 
-        $html = "";
+        if ($token == self::TOKEN) {
 
-        if ($token == "dqtQS2cBmGd8MbyMCHBj3Dq38Xm89vVyxxum4aySt9witAwBN9") {
-            echo gettype($arrayPermisos[0]);
-            // foreach ($arrayPermisos[0] as $key => $value) {
-            //     echo $key . ':' . $value . '<br>';
-            // }
+            // --Importacion e inicializacion de conexion--
+            include_once(DB);
+            $database = new Database();
+            $db = $database->getConnection();
+            $menu = new Sesion($db);
+
+            $html = $menu->getMenuDinamico();
+            echo $html;
         }
-        return $html;
-
-        // var_dump($_SESSION['permisos']);
-
-        // $html = "";
-
-        // if ($token == "dqtQS2cBmGd8MbyMCHBj3Dq38Xm89vVyxxum4aySt9witAwBN9") {
-        //     for ($i = 0; $i < count($arrayPermisos); $i++) {
-        //         $html .= '<div class="nav-item has-sub text-capitalize"><a class="cursor-pointer"><i class="' . $arrayPermisos[$i]["icono"] . '"></i><span>' . $arrayPermisos[$i]["modulo"] . '</span></a>';
-
-        //         for ($j = 0; $j < count($arrayPermisos[$i]["submodulos"]); $j++) {
-        //             $submodulo = $arrayPermisos[$i]["submodulos"][$j];
-        //             $arraySubmodulo = explode('|JUAN|', $submodulo);
-        //             $html .= '<div class="submenu-content"><a href="' . $arraySubmodulo[1] . '" class="menu-item"><i class="ik ik-corner-down-right nav-icon"></i>' . $arraySubmodulo[0] . '</a></div>';
-        //         }
-
-        //         $html .= '</div>';
-        //     }
-        // }
-
-        // return $html;
     }
 }

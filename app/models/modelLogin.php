@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/volappConfig.php');
 include_once(LIBRARIES . 'sesion.php');
 
 class Login
@@ -117,7 +116,7 @@ class Login
                 }
                 return $arrayPermisos;
             } else {
-                // -- ↓↓ Permisos no encontrados paramos el proceso ↓↓ --
+                // -- ↓↓ Permisos no encontrados ↓↓ --
                 echo json_encode(array('status' => '6', 'data' => NULL));
                 exit;
             }
