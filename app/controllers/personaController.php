@@ -3,16 +3,15 @@
 declare(strict_types=1);
 header('Content-type: application/json');
 
-include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/volappConfig.php');
-include($_SERVER['DOCUMENT_ROOT'] . LIBRARIES . 'validations.php');
-include($_SERVER['DOCUMENT_ROOT'] . MODELS . 'modelPersona.php');
+include(LIBRARIES . 'validations.php');
+include(MODELS . 'modelPersona.php');
 
 class PersonaController
 {
     public function create(): void
     {
         // --Importacion e inicializacion de conexion--
-        include($_SERVER['DOCUMENT_ROOT'] . INC . 'db.php');
+        include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
         $persona = new Persona($db);
@@ -38,7 +37,7 @@ class PersonaController
     public function update(): void
     {
         // --Importacion e inicializacion de conexion--
-        include($_SERVER['DOCUMENT_ROOT'] . INC . 'db.php');
+        include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
         $persona = new Persona($db);
@@ -65,7 +64,7 @@ class PersonaController
     public function delete(): void
     {
         // --Importacion e inicializacion de conexion--
-        include($_SERVER['DOCUMENT_ROOT'] . INC . 'db.php');
+        include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
         $persona = new Persona($db);
@@ -80,7 +79,7 @@ class PersonaController
     public function readAllDaTable(): void
     {
         // --Importacion e inicializacion de conexion--
-        include($_SERVER['DOCUMENT_ROOT'] . INC . 'db.php');
+        include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
         $persona = new Persona($db);

@@ -1,8 +1,12 @@
 <?php
 include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/volappConfig.php');
-include_once($_SERVER['DOCUMENT_ROOT'] . INCLUDES . 'template.php');
-Template::Head('404');
-Template::startBody();
+include_once(VIEW_CONTROLLER);
+
+use View\ViewController;
+
+$view = new ViewController('404');
+
+$view->initializationView();
 ?>
 
 <!-- ========== Inicio Componente de Vista ========== -->
@@ -23,4 +27,4 @@ Template::startBody();
 </div>
 <!-- ========== Fin Componente de Vista ========== -->
 
-<?= Template::endBody(); ?>
+<?= $view->finalizeView();

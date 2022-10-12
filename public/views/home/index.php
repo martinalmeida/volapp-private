@@ -1,20 +1,23 @@
 <?php
 include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/volappConfig.php');
-include_once($_SERVER['DOCUMENT_ROOT'] . INCLUDES . 'template.php');
-Template::verificarSesion();
-Template::Head('Home');
-Template::startBody();
+include_once(VIEW_CONTROLLER);
+
+use View\ViewController;
+
+$view = new ViewController('home');
+
+$view->initializationView();
 ?>
 
 <!-- ========== Inicio Componente de Vista ========== -->
 <div class="subheader">
     <h1 class="subheader-title">
-        <i class='fal fa-info-circle'></i> Home
+        <i class='fal fa-info-circle'></i> Inicio
     </h1>
 </div>
 
 <div class="row">
-    <div class="col-lg-6 col-xl-9 order-lg-1 order-xl-1">
+    <div class="col-lg-9 col-xl-9 order-lg-1 order-xl-1">
         <!-- profile summary -->
         <div class="card mb-g rounded-top">
             <div class="row no-gutters row-grid">
@@ -78,7 +81,7 @@ Template::startBody();
 
     </div>
 
-    <div class="col-lg-6 col-xl-3 order-lg-2 order-xl-3">
+    <div class="col-lg-3 col-xl-3 order-lg-2 order-xl-3">
         <!-- add : -->
         <div class="card mb-2">
             <div class="card-body">
@@ -123,4 +126,4 @@ Template::startBody();
 </h3>
 <!-- ========== Fin Componente de Vista ========== -->
 
-<?= Template::endBody(); ?>
+<?= $view->finalizeView();

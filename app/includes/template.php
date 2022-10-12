@@ -2,15 +2,19 @@
 
 declare(strict_types=1);
 
-include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/volappConfig.php');
-include_once($_SERVER['DOCUMENT_ROOT'] . CONTROLLERS . 'sesionController.php');
-require_once($_SERVER['DOCUMENT_ROOT'] . LIBRARIES . 'sesion.php');
+include_once(CONTROLLERS . 'sesionController.php');
+require_once(LIBRARIES . 'sesion.php');
 
 class Template
 {
+    static public function test()
+    {
+        // SesionController::menuDinamico();
+    }
+
     static public function verificar($submodulo)
     {
-        $respuesta = LoginController::verificar($submodulo);
+        $respuesta = SesionController::verificar($submodulo);
         if (!$respuesta) {
             header('Location: ' . LOGIN, true);
             exit();
@@ -19,7 +23,7 @@ class Template
 
     static public function verificarSesion()
     {
-        $respuesta = LoginController::verificarUsuario();
+        $respuesta = SesionController::verificarUsuario();
         if (!$respuesta) {
             header('Location: ' . LOGIN, true);
             exit();
@@ -65,7 +69,7 @@ class Template
                             <!-- BEGIN Left Aside -->
                             <aside class='page-sidebar'>
                                 <div class='page-logo'>
-                                    <a href='" . VIEW . "home/' class='page-logo-link press-scale-down d-flex align-items-center position-relative'>
+                                    <a href='" . VIEW_HREF . "home/' class='page-logo-link press-scale-down d-flex align-items-center position-relative'>
                                         <img src='" . IMG . "logo.png' alt='SmartAdmin WebApp' aria-roledescription='logo'>
                                         <span class='page-logo-text mr-1'>VolApp ®</span>
                                         <span class='position-absolute text-white opacity-50 small pos-top pos-right mr-2 mt-n2'></span>
@@ -97,25 +101,6 @@ class Template
                                         </a>
                                     </div>
                                     <ul id='js-nav-menu' class='nav-menu'>
-                                        <li class='nav-title'>Primera parte</li>
-                                        <li class='active open'>
-                                            <a href='#' title='Application Intel' data-filter-tags='application intel'>
-                                                <i class='fal fa-info-circle'></i>
-                                                <span class='nav-link-text' data-i18n='nav.application_intel'>Application Intel</span>
-                                            </a>
-                                            <ul>
-                                                <li class='active'>
-                                                    <a href='intel_introduction.html' title='Introduction' data-filter-tags='application intel introduction'>
-                                                        <span class='nav-link-text' data-i18n='nav.application_intel_introduction'>Introduction</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href='intel_privacy.html' title='Privacy' data-filter-tags='application intel privacy'>
-                                                        <span class='nav-link-text' data-i18n='nav.application_intel_privacy'>Privacy</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </li>
                                         <li>
                                             <a href='#' title='Theme Settings' data-filter-tags='theme settings'>
                                                 <i class='fal fa-cog'></i>
@@ -130,62 +115,6 @@ class Template
                                                 <li>
                                                     <a href='settings_layout_options.html' title='Layout Options' data-filter-tags='theme settings layout options'>
                                                         <span class='nav-link-text' data-i18n='nav.theme_settings_layout_options'>Layout Options</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li class='nav-title'>Segunda parte</li>
-                                        <li>
-                                            <a href='#' title='Plugins' data-filter-tags='plugins'>
-                                                <i class='fal fa-shield-alt'></i>
-                                                <span class='nav-link-text' data-i18n='nav.plugins'>Core Plugins</span>
-                                            </a>
-                                            <ul>
-                                                <li>
-                                                    <a href='plugins_faq.html' title='Plugins FAQ' data-filter-tags='plugins plugins faq'>
-                                                        <span class='nav-link-text' data-i18n='nav.plugins_plugins_faq'>Plugins FAQ</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href='plugins_waves.html' title='Waves' data-filter-tags='plugins waves'>
-                                                        <span class='nav-link-text' data-i18n='nav.plugins_waves'>Waves</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li>
-                                            <a href='#' title='Datatables' data-filter-tags='datatables datagrid'>
-                                                <i class='fal fa-table'></i>
-                                                <span class='nav-link-text' data-i18n='nav.datatables'>Datatables</span>
-                                            </a>
-                                            <ul>
-                                                <li>
-                                                    <a href='datatables_basic.html' title='Basic' data-filter-tags='datatables datagrid basic'>
-                                                        <span class='nav-link-text' data-i18n='nav.datatables_basic'>Basic</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href='datatables_autofill.html' title='Autofill' data-filter-tags='datatables datagrid autofill'>
-                                                        <span class='nav-link-text' data-i18n='nav.datatables_autofill'>Autofill</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li class='nav-title'>Tercera parte</li>
-                                        <li>
-                                            <a href='#' title='Pages' data-filter-tags='pages'>
-                                                <i class='fal fa-plus-circle'></i>
-                                                <span class='nav-link-text' data-i18n='nav.pages'>Page Views</span>
-                                            </a>
-                                            <ul>
-                                                <li>
-                                                    <a href='page_chat.html' title='Chat' data-filter-tags='pages chat'>
-                                                        <span class='nav-link-text' data-i18n='nav.pages_chat'>Chat</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href='page_contacts.html' title='Contacts' data-filter-tags='pages contacts'>
-                                                        <span class='nav-link-text' data-i18n='nav.pages_contacts'>Contacts</span>
                                                     </a>
                                                 </li>
                                             </ul>

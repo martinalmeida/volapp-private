@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/volappConfig.php');
-include_once($_SERVER['DOCUMENT_ROOT'] . LIBRARIES . 'sesion.php');
+include_once(LIBRARIES . 'sesion.php');
 
 class Login
 {
@@ -59,7 +59,6 @@ class Login
                     'permisos' => $permisos,
                     'content' => $data->content_type,
                     'base64' => $data->base_64,
-                    'timeout' => time(),
                     'token' => "dqtQS2cBmGd8MbyMCHBj3Dq38Xm89vVyxxum4aySt9witAwBN9",
                 );
                 SesionTools::crearSesion($datosSesion);
@@ -113,7 +112,7 @@ class Login
                         "r" => $row["r"],
                         "w" => $row["w"],
                         "u" => $row["u"],
-                        "d" => $row["d"]
+                        "d" => $row["d"],
                     );
                 }
                 return $arrayPermisos;

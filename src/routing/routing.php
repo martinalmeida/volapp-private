@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App;
 
+// Globalizar el llamado de todos los directorios para el uso de ellos en los controladores
+include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/volappConfig.php');
+
 class Routing
 {
     private $controller;

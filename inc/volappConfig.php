@@ -5,24 +5,29 @@ date_default_timezone_set('America/Bogota');
 // Lenguaje
 define('LANG', 'es');
 
+// Ruta del servidor
+define('SERVER', $_SERVER['DOCUMENT_ROOT'] . '/volapp/');
+
 // Rutas principales
 define('ROOT_PATH', '/volapp/');
-define('APP', ROOT_PATH . 'app/');
+define('APP', SERVER . 'app/');
 define('RESOURCES', ROOT_PATH . 'resources/');
 define('ASEETS', ROOT_PATH . 'aseets/');
-define('INC', ROOT_PATH . 'inc/');
+define('INC', SERVER . 'inc/');
 define('PUBLIC_PATH', ROOT_PATH . 'public/');
+define('PUBLIC_PATH_SERVER', SERVER . 'public/');
 
 // Rutas de la app
 define('CONTROLLERS', APP . 'controllers/');
 define('INCLUDES', APP . 'includes/');
-define('LIBRARIES', APP . 'librariEs/');
+define('LIBRARIES', APP . 'libraries/');
 define('MODELS', APP . 'models/');
 define('ROOTS', APP . 'roots/rootController.php');
 
 // Rutas de interfaz
 define('JSAJAX', PUBLIC_PATH . 'js/');
-define('VIEW', PUBLIC_PATH . 'views/');
+define('VIEW_HREF', PUBLIC_PATH . 'views/');
+define('VIEW', PUBLIC_PATH_SERVER . 'views/');
 
 // Rutas de estilos
 define('ASSETS', RESOURCES . 'assets/');
@@ -34,8 +39,12 @@ define('FONTS', ASSETS . 'webfonts/');
 define('COMPONENTS', RESOURCES . 'components/');
 define('JS', RESOURCES . 'js/');
 
-// Composer Autoload.php
-define('COMPOSER', ROOT_PATH . 'vendor/autoload.php');
+// Rutas a archivos puntuales
+define('DB', INC . '/db.php');
+define('COMPOSER', SERVER . 'vendor/autoload.php');
+define('TEMPLATE', INCLUDES . '/template.php');
+define('TEMPLATE_LOGIN', INCLUDES . '/templateLogin.php');
+define('VIEW_CONTROLLER', CONTROLLERS . '/viewController.php');
 
-// Login
+// Login vista
 define('LOGIN', VIEW . 'login/');

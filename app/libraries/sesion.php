@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-ini_set("session.cookie_lifetime", "600000");
-ini_set("session.gc_maxlifetime", "600000");
 session_start();
 session_regenerate_id();
 

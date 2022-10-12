@@ -1,9 +1,12 @@
 <?php
 include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/volappConfig.php');
-include_once($_SERVER['DOCUMENT_ROOT'] . INCLUDES . 'template.php');
-Template::verificarSesion();
-Template::Head('Usuarios');
-Template::startBody();
+include_once(VIEW_CONTROLLER);
+
+use View\ViewController;
+
+$view = new ViewController('usuarios');
+
+$view->initializationView();
 ?>
 
 <!-- ========== Inicio Componente de Vista ========== -->
@@ -63,7 +66,5 @@ Template::startBody();
 </h3>
 
 <?php
-include_once($_SERVER['DOCUMENT_ROOT'] . VIEW . 'usuarios/modalForm.php');
-Template::endBody();
-?>
-<?= Template::azyncScript('usuarios'); ?>
+include_once(VIEW . 'usuarios/modalForm.php');
+$view->finalizeView();

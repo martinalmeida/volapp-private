@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 include_once(__DIR__ . '/volappConfig.php');
-include($_SERVER['DOCUMENT_ROOT'] . COMPOSER);
+include_once(COMPOSER);
 
 $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT'] . ROOT_PATH);
 $dotenv->load();

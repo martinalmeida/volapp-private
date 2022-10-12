@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/volappConfig.php');
-
 class TemplateLogin
 {
     static public function head($title)
@@ -86,13 +84,19 @@ class TemplateLogin
                                         </a>
                                     </div>
                                 </div>
-                                <div class='flex-1' style='background: url(" . IMG . "/svg/pattern-1.svg) no-repeat center bottom fixed; background-size: cover;'>";
+                                <div class='flex-1' style='background: url(" . IMG . "/svg/pattern-1.svg) no-repeat center bottom fixed; background-size: cover;'>
+                                <div class='container py-4 py-lg-5 my-lg-5 px-4 px-sm-0'>";
         echo $html;
     }
 
     static public function endBody($form, $boton)
     {
-        $html = "</div>
+        $html = "<div class='position-absolute pos-bottom pos-left pos-right p-3 text-center text-white'>
+                    <!-- 2022 © volapp by&nbsp;<a href='' class='text-white opacity-40 fw-500' title='gotbootstrap.com' target='_blank'>volapp</a> -->
+                    2022 © VOLAPP
+                </div>
+                </div>
+                </div>
                     </div>
                     </div>
                     </div>

@@ -3,16 +3,15 @@
 declare(strict_types=1);
 header('Content-type: application/json');
 
-include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/volappConfig.php');
-include_once($_SERVER['DOCUMENT_ROOT'] . LIBRARIES . 'validations.php');
-include_once($_SERVER['DOCUMENT_ROOT'] . MODELS . 'modelLogin.php');
+include_once(LIBRARIES . 'validations.php');
+include_once(MODELS . 'modelLogin.php');
 
 class LoginController
 {
     public function getUser(): void
     {
         // --Importacion e inicializacion de conexion--
-        include($_SERVER['DOCUMENT_ROOT'] . INC . 'db.php');
+        include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
         $login = new Login($db);
