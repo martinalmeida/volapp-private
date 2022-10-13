@@ -34,7 +34,7 @@ class Sesion
                   WHERE ISNULL(m.menu_id) 
                   AND m.status = 1 
                   AND p.id=?
-                  ORDER BY m.titulo DESC; ";
+                  ORDER BY m.titulo ASC; ";
         $stmt = $this->conn->prepare($query);
 
         // -- ↓↓ Traer el id del usuario ↓↓ --
@@ -50,6 +50,7 @@ class Sesion
             if ($stmt->rowCount() >= 1) {
                 // -- ↓↓ Modulos encontrados ↓↓ --
                 $data = $stmt->fetchAll();
+
                 foreach ($data as $row) {
                     $html = "<li><a href='#' title='" . $row['descripcion'] . "' data-filter-tags='" . $row['titulo'] . "'>";
                     $html .= "<i class='" . $row['icono'] . "'></i>";
@@ -89,7 +90,7 @@ class Sesion
                   WHERE m.menu_id = ?
                   AND m.status = 1 
                   AND p.id=?
-                  ORDER BY m.titulo DESC; ";
+                  ORDER BY m.titulo ASC; ";
         $stmt = $this->conn->prepare($query);
 
         // -- ↓↓ Almacenamos los valores ↓↓ --
