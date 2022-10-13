@@ -23,7 +23,7 @@ class Sesion
     }
 
     // -- ⊡ Funcion para traer el menu del usuario ⊡ --
-    public function getMenuDinamico()
+    public function getMenuDinamico(): void
     {
         // -- ↓↓ Preparamos la consulta ↓↓ --
         $query = "SELECT m.id, m.titulo, m.descripcion, m.icono 
@@ -45,28 +45,20 @@ class Sesion
 
         // -- ↓↓ Ejecutamos la consulta y validamos ejecucion ↓↓ --
         if ($stmt->execute()) {
-
+            $html = "";
             // -- ↓↓ Comprobamos que venga algun dato ↓↓ --
             if ($stmt->rowCount() >= 1) {
                 // -- ↓↓ Modulos encontrados ↓↓ --
                 $data = $stmt->fetchAll();
 
                 foreach ($data as $row) {
-                    $html = "<li><a href='#' title='" . $row['descripcion'] . "' data-filter-tags='" . $row['titulo'] . "'>";
-                    $html .= "<i class='" . $row['icono'] . "'></i>";
-                    $html .= "<span class='nav-link-text' data-i18n='nav.theme_settings'>" . $row['titulo'] . "</span>";
-                    $html .= "</a>";
+                    echo "<li><a href='#' title='" . $row['descripcion'] . "' data-filter-tags='" . $row['titulo'] . "'><i class='" . $row['icono'] . "'></i><span class='nav-link-text' data-i18n='nav.theme_settings'>" . $row['titulo'] . "</span></a>";
 
                     $submodulos = self::getSubmodulo($row['id'], $this->idUser);
                     foreach ($submodulos as $rowsub) {
-                        $html .= "<ul><li>";
-                        $html .= "<a href='../" . $rowsub['page'] . "/' title='" . $rowsub['descripcion'] . "' data-filter-tags='" . $rowsub['titulo'] . "'>";
-                        $html .= "<span class='nav-link-text' data-i18n='nav.theme_settings_how_it_works'>" . $rowsub['titulo'] . "</span>";
-                        $html .= "</a>";
-                        $html .= "</li></ul></li>";
+                        echo "<ul><li><a href='../" . $rowsub['page'] . "/' title='" . $rowsub['descripcion'] . "' data-filter-tags='" . $rowsub['titulo'] . "'><span class='nav-link-text' data-i18n='nav.theme_settings_how_it_works'>" . $rowsub['titulo'] . "</span></a></li></ul></li>";
                     }
                 }
-                return $html;
             } else {
                 // -- ↓↓ Modulos no encontrados ↓↓ --
                 echo json_encode(array('status' => '6', 'data' => NULL));
