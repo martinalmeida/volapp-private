@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-10-2022 a las 17:23:20
+-- Tiempo de generación: 14-10-2022 a las 00:12:21
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.1.6
 
@@ -20,6 +20,30 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `volapp`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `empresas`
+--
+
+CREATE TABLE `empresas` (
+  `nit` bigint(20) NOT NULL,
+  `digito` int(10) NOT NULL,
+  `nombre` varchar(55) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `representante` varchar(55) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `telefono` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `direccion` varchar(100) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `correo` varchar(100) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `pais` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `ciudad` varchar(110) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `contacto` varchar(100) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `email_tec` varchar(100) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `email_logis` varchar(100) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `content_type` text CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `base_64` longtext CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `status` char(1) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -83,6 +107,7 @@ INSERT INTO `permisos` (`id`, `rolid`, `moduloid`, `r`, `w`, `u`, `d`) VALUES
 
 CREATE TABLE `persona` (
   `id` bigint(20) NOT NULL,
+  `sucursalid` bigint(20) DEFAULT NULL,
   `identificacion` varchar(50) COLLATE utf8mb4_spanish_ci NOT NULL,
   `nombres` varchar(50) COLLATE utf8mb4_spanish_ci NOT NULL,
   `a_paterno` varchar(30) COLLATE utf8mb4_spanish_ci NOT NULL,
@@ -104,9 +129,9 @@ CREATE TABLE `persona` (
 -- Volcado de datos para la tabla `persona`
 --
 
-INSERT INTO `persona` (`id`, `identificacion`, `nombres`, `a_paterno`, `a_materno`, `telefono`, `email_user`, `pswd`, `ruc`, `nombrefiscal`, `direccionfiscal`, `content_type`, `base_64`, `rolid`, `datecreated`, `status`) VALUES
-(1, '', 'Martin', 'Almeida', 'Cavanzo', 3107698290, 'martinalmeida56@gmail.com', 'admin123', NULL, NULL, NULL, '', '', 1, '2022-09-08 01:36:11', '1'),
-(2, '1096241229', 'Martin', 'Almeida', 'Cavanzo', 3107698290, 'martinalmeida56@gmail.ad', 'admin123', NULL, NULL, NULL, '', '', 1, '2022-09-08 01:37:45', '1');
+INSERT INTO `persona` (`id`, `sucursalid`, `identificacion`, `nombres`, `a_paterno`, `a_materno`, `telefono`, `email_user`, `pswd`, `ruc`, `nombrefiscal`, `direccionfiscal`, `content_type`, `base_64`, `rolid`, `datecreated`, `status`) VALUES
+(1, NULL, '', 'Martin', 'Almeida', 'Cavanzo', 3107698290, 'martinalmeida56@gmail.com', 'admin123', NULL, NULL, NULL, '', '', 1, '2022-09-08 01:36:11', '1'),
+(2, NULL, '1096241229', 'Martin', 'Almeida', 'Cavanzo', 3107698290, 'martinalmeida56@gmail.ad', 'admin123', NULL, NULL, NULL, '', '', 1, '2022-09-08 01:37:45', '1');
 
 -- --------------------------------------------------------
 
@@ -135,7 +160,7 @@ INSERT INTO `rol` (`id`, `nombrerol`, `descripcion`, `status`) VALUES
 --
 
 CREATE TABLE `status` (
-  `id` int(11) NOT NULL,
+  `id` bigint(11) NOT NULL,
   `status` varchar(20) COLLATE utf8mb4_spanish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
@@ -149,9 +174,31 @@ INSERT INTO `status` (`id`, `status`) VALUES
 (3, 'eliminado'),
 (4, 'restaurado');
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `sucursal`
+--
+
+CREATE TABLE `sucursal` (
+  `id` bigint(20) NOT NULL,
+  `nit` bigint(20) NOT NULL,
+  `descripcion` text COLLATE utf8mb4_spanish_ci NOT NULL,
+  `direccion` varchar(100) COLLATE utf8mb4_spanish_ci NOT NULL,
+  `telefono` bigint(20) NOT NULL,
+  `email` varchar(100) COLLATE utf8mb4_spanish_ci NOT NULL,
+  `status` char(1) COLLATE utf8mb4_spanish_ci NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `empresas`
+--
+ALTER TABLE `empresas`
+  ADD PRIMARY KEY (`nit`);
 
 --
 -- Indices de la tabla `modulo`
@@ -172,7 +219,8 @@ ALTER TABLE `permisos`
 --
 ALTER TABLE `persona`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `persona_ibfk_1` (`rolid`);
+  ADD KEY `persona_ibfk_1` (`rolid`),
+  ADD KEY `nit` (`sucursalid`);
 
 --
 -- Indices de la tabla `rol`
@@ -185,6 +233,13 @@ ALTER TABLE `rol`
 --
 ALTER TABLE `status`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `sucursal`
+--
+ALTER TABLE `sucursal`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `nit` (`nit`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -218,7 +273,13 @@ ALTER TABLE `rol`
 -- AUTO_INCREMENT de la tabla `status`
 --
 ALTER TABLE `status`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT de la tabla `sucursal`
+--
+ALTER TABLE `sucursal`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- Restricciones para tablas volcadas
@@ -235,7 +296,14 @@ ALTER TABLE `permisos`
 -- Filtros para la tabla `persona`
 --
 ALTER TABLE `persona`
-  ADD CONSTRAINT `persona_ibfk_1` FOREIGN KEY (`rolid`) REFERENCES `rol` (`id`);
+  ADD CONSTRAINT `persona_ibfk_1` FOREIGN KEY (`rolid`) REFERENCES `rol` (`id`),
+  ADD CONSTRAINT `persona_ibfk_2` FOREIGN KEY (`sucursalid`) REFERENCES `sucursal` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `sucursal`
+--
+ALTER TABLE `sucursal`
+  ADD CONSTRAINT `sucursal_ibfk_1` FOREIGN KEY (`nit`) REFERENCES `empresas` (`nit`) ON DELETE NO ACTION ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
