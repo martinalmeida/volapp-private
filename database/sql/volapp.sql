@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-10-2022 a las 00:48:39
+-- Tiempo de generación: 13-10-2022 a las 17:23:20
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.1.6
 
@@ -44,8 +44,9 @@ CREATE TABLE `modulo` (
 INSERT INTO `modulo` (`id`, `menu_id`, `page`, `titulo`, `icono`, `descripcion`, `status`) VALUES
 (1, NULL, NULL, 'Inicio', 'fal fa-home', 'PAGINA PRINCIPAL', '1'),
 (2, 1, 'home', 'Home', NULL, 'PAGINA PRINCIPAL DE LA INTERFAZ', '1'),
-(3, NULL, NULL, 'Usuarios', 'fa-light fa-users', 'PAGINA DE ADMINISTRACION DE USUARIOS', '1'),
-(4, 3, 'usuarios', 'Admon Usuarios', NULL, 'ADMINISTRACION DE USUARIOS MODULOS ROLES Y PERMISOS', '1');
+(3, NULL, NULL, 'Usuarios', 'fal fa-users', 'PAGINA DE ADMINISTRACION DE USUARIOS', '1'),
+(4, 3, 'usuarios', 'Usuarios', NULL, 'ADMINISTRACION DE USUARIOS MODULOS ROLES Y PERMISOS', '1'),
+(5, 3, 'roles', 'Roles', NULL, 'ADMINISTRACION DE ROLES', '1');
 
 -- --------------------------------------------------------
 
@@ -71,7 +72,8 @@ INSERT INTO `permisos` (`id`, `rolid`, `moduloid`, `r`, `w`, `u`, `d`) VALUES
 (1, 1, 1, 0, 0, 0, 0),
 (2, 1, 2, 1, 0, 0, 0),
 (3, 1, 3, 0, 0, 0, 0),
-(4, 1, 4, 1, 0, 0, 0);
+(4, 1, 4, 1, 0, 0, 0),
+(5, 1, 5, 1, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -192,13 +194,13 @@ ALTER TABLE `status`
 -- AUTO_INCREMENT de la tabla `modulo`
 --
 ALTER TABLE `modulo`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `permisos`
 --
 ALTER TABLE `permisos`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `persona`

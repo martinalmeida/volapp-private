@@ -5,7 +5,7 @@ $(document).ready(function () {
 
 // --Funcion de renderizar contenido--
 function renderInterfaz() {
-  html = "";
+  var html = "";
   html =
     '<h1 class="page-error color-fusion-500">' +
     'ERROR <span class="text-gradient">404</span>' +

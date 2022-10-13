@@ -6,7 +6,7 @@
                 <div class="panel-content">
                     <div class="panel-hdr">
                         <h2>
-                            Agregar Usuario
+                            Agregar Rol
                             <!-- Tabla <span class="fw-300"><i>Usuarios</i></span> -->
                         </h2>
                         <div class="panel-toolbar">

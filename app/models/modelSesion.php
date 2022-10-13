@@ -52,12 +52,14 @@ class Sesion
                 $data = $stmt->fetchAll();
 
                 foreach ($data as $row) {
-                    echo "<li><a href='#' title='" . $row['descripcion'] . "' data-filter-tags='" . $row['titulo'] . "'><i class='" . $row['icono'] . "'></i><span class='nav-link-text' data-i18n='nav.theme_settings'>" . $row['titulo'] . "</span></a>";
+                    echo "<li><a href='#' title='" . $row['descripcion'] . "' data-filter-tags='" . $row['titulo'] . "'><i class='" . $row['icono'] . "'></i><span class='nav-link-text' data-i18n='nav.theme_settings'>" . $row['titulo'] . "</span></a><ul>";
 
                     $submodulos = self::getSubmodulo($row['id'], $this->idUser);
                     foreach ($submodulos as $rowsub) {
-                        echo "<ul><li><a href='../" . $rowsub['page'] . "/' title='" . $rowsub['descripcion'] . "' data-filter-tags='" . $rowsub['titulo'] . "'><span class='nav-link-text' data-i18n='nav.theme_settings_how_it_works'>" . $rowsub['titulo'] . "</span></a></li></ul></li>";
+                        echo "<li><a href='../" . $rowsub['page'] . "/' title='" . $rowsub['descripcion'] . "' data-filter-tags='" . $rowsub['titulo'] . "'><span class='nav-link-text' data-i18n='nav.theme_settings_how_it_works'>" . $rowsub['titulo'] . "</span></a></li>";
                     }
+
+                    echo '</ul></li>';
                 }
             } else {
                 // -- ↓↓ Modulos no encontrados ↓↓ --

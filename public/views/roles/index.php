@@ -4,15 +4,15 @@ include_once(VIEW_CONTROLLER);
 
 use View\ViewController;
 
-$view = new ViewController('usuarios');
+$view = new ViewController('roles');
 
 $view->initializationView();
 ?>
 
 <!-- ========== Inicio Componente de Vista ========== -->
-<div class="subheader">
+<div class="subheader" id="titleModule">
     <h1 class="subheader-title">
-        <i class='fal fa-info-circle'></i> Usuarios
+        <i class='fal fa-info-circle'></i> Roles
     </h1>
     <button type="button" class="btn btn-info active" data-toggle="modal" data-target="#default-example-modal-lg">AGREGAR</button>
 </div>
@@ -22,7 +22,7 @@ $view->initializationView();
         <div id="panel-1" class="panel">
             <div class="panel-hdr">
                 <h2>
-                    Tabla deUsuarios
+                    Tabla de Roles
                     <!-- Tabla <span class="fw-300"><i>Usuarios</i></span> -->
                 </h2>
                 <div class="panel-toolbar">
@@ -62,9 +62,9 @@ $view->initializationView();
 </div>
 
 <h3>
-    Pagina de Usuarios
+    Pagina de Roles
 </h3>
 
 <?php
-include_once(VIEW . 'usuarios/modalForm.php');
+include_once(VIEW . 'roles/modalForm.php');
 $view->finalizeView();
