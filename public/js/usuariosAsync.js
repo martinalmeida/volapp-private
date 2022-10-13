@@ -1,8 +1,4 @@
-// --URL principal del servidor para peticiones--
-var urlBase = "http://localhost/volapp/";
-
 /* ---------  START Serverside Tabla ( table_persona ) ----------- */
-
 $(document).ready(function () {
   var table_persona = $("#table_persona").DataTable({
     processing: true,

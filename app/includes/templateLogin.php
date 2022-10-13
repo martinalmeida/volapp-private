@@ -166,6 +166,7 @@ class TemplateLogin
                     <script src='" . JS . "app.bundle.js?v=" . rand() . "'></script>
                     <script src='" . JS . "notifications/sweetalert2/sweetalert2@9.js'></script>
                     <script src='" . JS . "validaciones.js?v=" . rand() . "'></script>
+                    <script src='" . JS . "globales.js?v=" . rand() . "'></script>
                     <script>
                         $('#" . $boton . "').click(function(event) {
                             var form = $('#" . $form . "')

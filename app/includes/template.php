@@ -971,7 +971,9 @@ class Template
             <script src="<?= JS ?>select2Custom.js"></script>
             <script src="<?= JS ?>notifications/sweetalert2/sweetalert2@9.js"></script>
             <script src="<?= JS ?>validaciones.js?v=<?= rand() ?>"></script>
+            <script src="<?= JS ?>globales.js?v=<?= rand() ?>"></script>
             <script src="<?= JS ?>datagrid/datatables/datatables.bundle.js"></script>
+            <script src="<?= JS ?>datagrid/datatables/datatables.export.js"></script>
             <script src="<?= JS ?>datagrid/datatables/datatables.export.js"></script>
             <script src="<?= JSAJAX ?>loginAsync.js"></script>
         </body>
@@ -980,37 +982,6 @@ class Template
     <?php
                         return ob_get_clean();
                     }
-
-                    static public function headLogin($title)
-                    {
-                        ob_start();
-    ?>
-        <!DOCTYPE html>
-        <html lang="<?= LANG ?>">
-
-        <head>
-            <meta charset="utf-8">
-            <title>
-                <?= $title ?>
-            </title>
-            <meta name="description" content="Introduction">
-            <meta http-equiv="X-UA-Compatible" content="IE=edge">
-            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
-            <meta name="apple-mobile-web-app-capable" content="yes" />
-            <meta name="msapplication-tap-highlight" content="no">
-            <link id="vendorsbundle" rel="stylesheet" media="screen, print" href="<?= CSS ?>vendors.bundle.css">
-            <link id="appbundle" rel="stylesheet" media="screen, print" href="<?= CSS ?>app.bundle.css">
-            <link id="mytheme" rel="stylesheet" media="screen, print" href="#">
-            <link id="myskin" rel="stylesheet" media="screen, print" href="<?= CSS ?>skins/skin-master.css">
-            <link rel="apple-touch-icon" sizes="180x180" href="<?= IMG ?>favicon/apple-touch-icon.png">
-            <link rel="icon" type="image/png" sizes="32x32" href="<?= IMG ?>favicon/favicon-32x32.png">
-            <link rel="mask-icon" href="<?= IMG ?>favicon/safari-pinned-tab.svg" color="#5bbad5">
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer"   />
-        </head>
-    <?php
-                        return ob_get_clean();
-                    }
-
 
                     static public function azyncScript($nameScript)
                     {
