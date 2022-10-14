@@ -225,7 +225,7 @@ class Persona
                 "id" => $row['id'],
                 "identificacion" => $row['identificacion'],
                 "nombres" => $row['nombres'],
-                "apellidos" => $row['a_paterno'].$row['a_materno'],
+                "apellidos" => $row['a_paterno'] . $row['a_materno'],
                 "telefono" => $row['telefono'],
                 "email_user" => $row['email_user'],
                 "ruc" => $row['ruc'],
@@ -233,7 +233,20 @@ class Persona
                 "direccionfiscal" => $row['direccionfiscal'],
                 "rolid" => $row['rolid'],
                 "status" => $row['status'],
-                "defaultContent" => "<div class='btn-group'><button class='btn btn-success'><i class='fa-regular fa-pen-to-square'></i></button><button type='button' class='btn btn-danger'><i class='fa-regular fa-trash-can'></i></button></div>"
+                "defaultContent" => "
+                                    <div class='btn-group'>
+                                        <button type='button' class='btn btn-success text-white' data-toggle='tooltip' data-placement='top' title='Editar Usuario' onclick='editarRegistro(" . $row['id'] . ");'>
+                                            <i class='fa-regular fa-pen-to-square'></i>
+                                        </button>
+                                        <button type='button' class='btn btn-danger text-white' data-toggle='tooltip' data-placement='top' title='Eliminar Usuario' onclick='eliminarRegistro(" . $row['id'] . ");'>
+                                            <i class='fa-regular fa-trash-can'></i>
+                                        </button>
+                                        <button type='button' class='btn btn-warning text-white' data-toggle='tooltip' data-placement='top' title='Estado Usuario' onclick='statusRegistro(" . $row['id'] . ");'>
+                                            <i class='fa-regular fa-eye'></i></button>
+                                        <button type='button' class='btn btn-primary text-white' data-toggle='tooltip' data-placement='top' title='Permisos Usuario' onclick='permisosPersonas(" . $row['id'] . ");'>
+                                            <i class='fa-solid fa-check-double'></i>
+                                        </button>
+                                    </div>"
             );
         }
         ## Response

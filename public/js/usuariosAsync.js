@@ -2,6 +2,7 @@
 $(document).ready(function () {
   var table_persona = $("#table_persona").DataTable({
     processing: true,
+    orderClasses: false,
     deferRender: true,
     serverSide: true,
     responsive: true,
@@ -47,7 +48,7 @@ $(document).ready(function () {
       { data: "direccionfiscal" },
       { data: "rolid" },
       { data: "status" },
-      { data: 'defaultContent', }
+      { data: "defaultContent" },
     ],
     language: {
       lengthMenu: "Mostrar _MENU_ registros",

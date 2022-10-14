@@ -56,6 +56,17 @@ $view->initializationView();
                     <div class="invalid-feedback">Falta contraseña.</div>
                     <div class="help-block">Escribe tu contraseña</div>
                 </div>
+
+                <!-- Inicio Spinner de carga -->
+                <div class="panel-container show">
+                    <div class="panel-content d-flex justify-content-center">
+                        <div class="demo" id="spinnerLogin">
+
+                        </div>
+                    </div>
+                </div>
+                <!-- fin Spinner de carga -->
+
                 <div class="form-group text-left">
                     <!-- <div class="custom-control custom-checkbox">
                             <input type="checkbox" class="custom-control-input" id="rememberme">

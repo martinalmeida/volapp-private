@@ -29,8 +29,12 @@ function login(form) {
       url: urlBase + "routes/login/getUser", //url a donde hacemos la peticion
       type: "POST",
       beforeSend: function () {
-        // $("#overlayText").text("Iniciando Sesion...");
-        // $(".overlayCargue").fadeIn("slow");
+        var html = "";
+        html +=
+          '<button class="btn btn-success rounded-pill" type="button" disabled>' +
+          '<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>Iniciando Sesión</button>';
+
+        $("#spinnerLogin").html(html);
       },
       complete: function () {
         //$(".overlayCargue").fadeOut("slow");
