@@ -47,6 +47,7 @@ $(document).ready(function () {
       { data: "direccionfiscal" },
       { data: "rolid" },
       { data: "status" },
+      { data: 'defaultContent', }
     ],
     language: {
       lengthMenu: "Mostrar _MENU_ registros",

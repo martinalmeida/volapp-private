@@ -232,7 +232,8 @@ class Persona
                 "nombrefiscal" => $row['nombrefiscal'],
                 "direccionfiscal" => $row['direccionfiscal'],
                 "rolid" => $row['rolid'],
-                "status" => $row['status']
+                "status" => $row['status'],
+                "defaultContent" => "<div class='btn-group'><button class='btn btn-success'><i class='fa-regular fa-pen-to-square'></i></button><button type='button' class='btn btn-danger'><i class='fa-regular fa-trash-can'></i></button></div>"
             );
         }
         ## Response

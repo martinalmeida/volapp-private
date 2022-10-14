@@ -49,6 +49,7 @@ $view->initializationView();
                                 <th>Dirección Fiscal</th>
                                 <th>Rol</th>
                                 <th>Estado</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
