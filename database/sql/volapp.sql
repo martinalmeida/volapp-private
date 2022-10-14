@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 14-10-2022 a las 00:12:21
+-- Tiempo de generación: 14-10-2022 a las 20:39:28
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.1.6
 
@@ -107,7 +107,7 @@ INSERT INTO `permisos` (`id`, `rolid`, `moduloid`, `r`, `w`, `u`, `d`) VALUES
 
 CREATE TABLE `persona` (
   `id` bigint(20) NOT NULL,
-  `sucursalid` bigint(20) DEFAULT NULL,
+  `nit` bigint(20) DEFAULT NULL,
   `identificacion` varchar(50) COLLATE utf8mb4_spanish_ci NOT NULL,
   `nombres` varchar(50) COLLATE utf8mb4_spanish_ci NOT NULL,
   `a_paterno` varchar(30) COLLATE utf8mb4_spanish_ci NOT NULL,
@@ -121,6 +121,7 @@ CREATE TABLE `persona` (
   `content_type` text COLLATE utf8mb4_spanish_ci NOT NULL,
   `base_64` longtext COLLATE utf8mb4_spanish_ci NOT NULL,
   `rolid` bigint(20) DEFAULT NULL,
+  `sucursalid` bigint(20) DEFAULT NULL,
   `datecreated` timestamp NOT NULL DEFAULT current_timestamp(),
   `status` char(1) COLLATE utf8mb4_spanish_ci DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
@@ -129,9 +130,9 @@ CREATE TABLE `persona` (
 -- Volcado de datos para la tabla `persona`
 --
 
-INSERT INTO `persona` (`id`, `sucursalid`, `identificacion`, `nombres`, `a_paterno`, `a_materno`, `telefono`, `email_user`, `pswd`, `ruc`, `nombrefiscal`, `direccionfiscal`, `content_type`, `base_64`, `rolid`, `datecreated`, `status`) VALUES
-(1, NULL, '', 'Martin', 'Almeida', 'Cavanzo', 3107698290, 'martinalmeida56@gmail.com', 'admin123', NULL, NULL, NULL, '', '', 1, '2022-09-08 01:36:11', '1'),
-(2, NULL, '1096241229', 'Martin', 'Almeida', 'Cavanzo', 3107698290, 'martinalmeida56@gmail.ad', 'admin123', NULL, NULL, NULL, '', '', 1, '2022-09-08 01:37:45', '1');
+INSERT INTO `persona` (`id`, `nit`, `identificacion`, `nombres`, `a_paterno`, `a_materno`, `telefono`, `email_user`, `pswd`, `ruc`, `nombrefiscal`, `direccionfiscal`, `content_type`, `base_64`, `rolid`, `sucursalid`, `datecreated`, `status`) VALUES
+(1, NULL, '', 'Martin', 'Almeida', 'Cavanzo', 3107698290, 'martinalmeida56@gmail.com', 'admin123', NULL, NULL, NULL, '', '', 1, NULL, '2022-09-08 01:36:11', '1'),
+(2, NULL, '1096241229', 'Martin', 'Almeida', 'Cavanzo', 3107698290, 'martinalmeida56@gmail.ad', 'admin123', NULL, NULL, NULL, '', '', 1, NULL, '2022-09-08 01:37:45', '1');
 
 -- --------------------------------------------------------
 
@@ -182,7 +183,6 @@ INSERT INTO `status` (`id`, `status`) VALUES
 
 CREATE TABLE `sucursal` (
   `id` bigint(20) NOT NULL,
-  `nit` bigint(20) NOT NULL,
   `descripcion` text COLLATE utf8mb4_spanish_ci NOT NULL,
   `direccion` varchar(100) COLLATE utf8mb4_spanish_ci NOT NULL,
   `telefono` bigint(20) NOT NULL,
@@ -220,7 +220,8 @@ ALTER TABLE `permisos`
 ALTER TABLE `persona`
   ADD PRIMARY KEY (`id`),
   ADD KEY `persona_ibfk_1` (`rolid`),
-  ADD KEY `nit` (`sucursalid`);
+  ADD KEY `nit` (`nit`),
+  ADD KEY `sucursalid` (`sucursalid`);
 
 --
 -- Indices de la tabla `rol`
@@ -238,8 +239,7 @@ ALTER TABLE `status`
 -- Indices de la tabla `sucursal`
 --
 ALTER TABLE `sucursal`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `nit` (`nit`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -297,13 +297,8 @@ ALTER TABLE `permisos`
 --
 ALTER TABLE `persona`
   ADD CONSTRAINT `persona_ibfk_1` FOREIGN KEY (`rolid`) REFERENCES `rol` (`id`),
-  ADD CONSTRAINT `persona_ibfk_2` FOREIGN KEY (`sucursalid`) REFERENCES `sucursal` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `sucursal`
---
-ALTER TABLE `sucursal`
-  ADD CONSTRAINT `sucursal_ibfk_1` FOREIGN KEY (`nit`) REFERENCES `empresas` (`nit`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `persona_ibfk_3` FOREIGN KEY (`sucursalid`) REFERENCES `sucursal` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `persona_ibfk_4` FOREIGN KEY (`nit`) REFERENCES `empresas` (`nit`) ON DELETE SET NULL ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

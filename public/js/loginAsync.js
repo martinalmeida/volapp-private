@@ -31,7 +31,7 @@ function login(form) {
       beforeSend: function () {
         var html = "";
         html +=
-          '<button class="btn btn-success rounded-pill" type="button" disabled>' +
+          '<button class="btn btn-primary rounded-pill" type="button" disabled>' +
           '<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>Iniciando Sesión</button>';
 
         $("#spinnerLogin").html(html);
