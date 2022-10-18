@@ -12,6 +12,7 @@ function tableServerside() {
     responsive: true,
     lengthChange: false,
     pageLength: 30,
+    destroy: true,
     ajax: {
       type: "POST",
       url: urlBase + "routes/usuarios/readAllDaTable",
