@@ -157,11 +157,14 @@ class Persona
     public function statusPersona(): void
     {
         // --Preparamos la consulta--
-        $query = "UPDATE " . $this->tableName . " SET status = 2 WHERE id=?";
+        $query = "UPDATE " . $this->tableName . " SET status =? WHERE id=?";
         $stmt = $this->conn->prepare($query);
 
+        $estado = $this->status == '1' ? '2' : '1';
+
         // --Almacenamos los valores--
-        $stmt->bindParam(1, $this->id);
+        $stmt->bindParam(1, $estado);
+        $stmt->bindParam(2, $this->id);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
@@ -238,7 +241,7 @@ class Persona
         $empRecords = $stmt->fetchAll();
         $data = array();
         foreach ($empRecords as $row) {
-            $statusColor = $row['status'] = 1 ? 'info' : 'secondary';
+            $statusColor = $row['status'] == '1' ? 'info' : 'secondary';
             $data[] = array(
                 "id" => $row['id'],
                 "identificacion" => $row['identificacion'],
@@ -259,7 +262,7 @@ class Persona
                                         <button type='button' class='btn btn-danger text-white' data-toggle='tooltip' data-placement='top' title='Eliminar Usuario' onclick='eliminarRegistro(" . $row['id'] . ");'>
                                             <i class='fa-regular fa-trash-can'></i>
                                         </button>
-                                        <button type='button' class='btn btn-" . $statusColor . " text-white' data-toggle='tooltip' data-placement='top' title='Estado del Usuario' onclick='statusRegistro(" . $row['id'] . ");'>
+                                        <button type='button' class='btn btn-" . $statusColor . " text-white' data-toggle='tooltip' data-placement='top' title='Estado del Usuario' onclick='statusRegistro(" . $row['id'] . ", " . $row['status'] . ");'>
                                             <i class='fa-regular fa-eye'></i></button>
                                         <button type='button' class='btn btn-primary text-white' data-toggle='tooltip' data-placement='top' title='Roles del Usuario' onclick='rolesPersonas(" . $row['id'] . ");'>
                                             <i class='fa-solid fa-person-digging'></i>

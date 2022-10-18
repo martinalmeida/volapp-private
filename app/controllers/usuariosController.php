@@ -84,7 +84,8 @@ class UsuariosController
         $persona = new Persona($db);
 
         // --Seteo de valores existentes en el POST--
-        $persona->id = isset($_POST['id']) ? strtoupper(trim($_POST['id'])) : NULL;
+        $persona->id = isset($_POST['idRegistro']) ? strtoupper(trim($_POST['idRegistro'])) : NULL;
+        $persona->status = isset($_POST['status']) ? strtoupper(trim($_POST['status'])) : NULL;
 
         $persona->statusPersona();
     }
