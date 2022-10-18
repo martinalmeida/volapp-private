@@ -8,7 +8,7 @@ class Login
 {
     // --Parametros Privados--
     private $conn;
-    private $tableName = "persona";
+    private $tableName = "usuarios";
     private $tableRol = "rol";
     private $tablePermisos = "permisos";
     private $tableModulo = "modulo";

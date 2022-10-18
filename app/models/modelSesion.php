@@ -11,7 +11,7 @@ class Sesion
     private $tableName = "modulo";
     private $tablePermisos = "permisos";
     private $tableRol = "rol";
-    private $tablePersona = "persona";
+    private $tableUsuarios = "usuarios";
 
     // --Parametros Publicos--
     public $idUser;
@@ -30,7 +30,7 @@ class Sesion
                   FROM $this->tableName m 
                   JOIN $this->tablePermisos pe ON pe.moduloid = m.id 
                   JOIN $this->tableRol r ON r.id = pe.rolid
-                  JOIN $this->tablePersona p ON p.rolid = r.id 
+                  JOIN $this->tableUsuarios p ON p.rolid = r.id 
                   WHERE ISNULL(m.menu_id) 
                   AND m.status = 1 
                   AND p.id=?
@@ -80,7 +80,7 @@ class Sesion
                   FROM $this->tableName m 
                   JOIN $this->tablePermisos pe ON pe.moduloid = m.id 
                   JOIN $this->tableRol r ON r.id = pe.rolid
-                  JOIN $this->tablePersona p ON p.rolid = r.id 
+                  JOIN $this->tableUsuarios p ON p.rolid = r.id 
                   WHERE m.menu_id = ?
                   AND m.status = 1 
                   AND p.id=?

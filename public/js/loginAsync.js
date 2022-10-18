@@ -31,13 +31,12 @@ function login(form) {
       beforeSend: function () {
         var html = "";
         html +=
-          '<button class="btn btn-primary rounded-pill" type="button" disabled>' +
-          '<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>Iniciando Sesión</button>';
+          '<div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div>';
 
         $("#spinnerLogin").html(html);
       },
       complete: function () {
-        //$(".overlayCargue").fadeOut("slow");
+        // $("#spinnerLogin").html("");
       },
       success: function (result) {
         $("#btnLoginIngresar").prop("disabled", false);
@@ -56,6 +55,7 @@ function login(form) {
               showCancelButton: true,
               backdrop: true,
             });
+            $("#spinnerLogin").html("");
             break;
 
           case "1":
@@ -76,6 +76,7 @@ function login(form) {
               showCancelButton: true,
               backdrop: true,
             });
+            $("#spinnerLogin").html("");
             break;
 
           case "3":
@@ -90,6 +91,7 @@ function login(form) {
               showCancelButton: true,
               backdrop: true,
             });
+            $("#spinnerLogin").html("");
             break;
 
           default:

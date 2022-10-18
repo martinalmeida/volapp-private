@@ -53,6 +53,7 @@ class Template
             <link rel='stylesheet' media='screen, print' href="<?= CSS ?>datagrid/datatables/datatables.bundle.css">
             <link rel='stylesheet' media='screen, print' href="<?= CSS ?>fa-solid.css">
             <link rel='stylesheet' media='screen, print' href="<?= CSS ?>formplugins/select2/select2.bundle.css">
+            <link rel="stylesheet" media="screen, print" href="<?= CSS ?>notifications/toastr/toastr.css">
         </head>
     <?php
         return ob_get_clean();
@@ -967,6 +968,7 @@ class Template
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer"   />
             <script src="<?= JS ?>vendors.bundle.js"></script>
             <script src="<?= JS ?>app.bundle.js"></script>
+            <script src="<?= JS ?>notifications/toastr/toastr.js"></script>
             <script src="<?= JS ?>formplugins/select2/select2.bundle.js"></script>
             <script src="<?= JS ?>select2Custom.js"></script>
             <script src="<?= JS ?>notifications/sweetalert2/sweetalert2@9.js"></script>

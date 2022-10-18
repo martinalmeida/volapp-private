@@ -1,5 +1,9 @@
 /* ---------  START Serverside Tabla ( table_persona ) ----------- */
 $(document).ready(function () {
+  tableServerside();
+});
+
+function tableServerside() {
   var table_persona = $("#table_persona").DataTable({
     processing: true,
     orderClasses: false,
@@ -10,7 +14,7 @@ $(document).ready(function () {
     pageLength: 30,
     ajax: {
       type: "POST",
-      url: urlBase + "routes/persona/readAllDaTable",
+      url: urlBase + "routes/usuarios/readAllDaTable",
     },
     dom:
       "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
@@ -65,4 +69,55 @@ $(document).ready(function () {
       sProcessing: "Procesando...",
     },
   });
-});
+}
+
+function statusRegistro(id) {
+  window.alert(id + "hola");
+  tableServerside();
+  // $.ajax({
+  //   dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
+  //   url: urlBase + "routes/usuarios/status", //url a donde hacemos la peticion
+  //   type: "POST",
+  //   beforeSend: function () {
+  //     // $("#overlayText").text("Cerrando Sesión...");
+  //     // $(".overlayCargue").fadeOut("slow");
+  //   },
+  //   complete: function () {
+  //     // $(".overlayCargue").fadeIn("slow");
+  //   },
+  //   success: function (result) {
+  //     var estado = result.status;
+  //     switch (estado) {
+  //       case "1":
+  //         Command: toastr["success"](
+  //           "Estado del usuario cambiado exitosamente.",
+  //           "Estado Cambiado"
+  //         );
+
+  //         toastr.options = {
+  //           closeButton: false,
+  //           debug: false,
+  //           newestOnTop: true,
+  //           progressBar: true,
+  //           positionClass: "toast-top-right",
+  //           preventDuplicates: true,
+  //           onclick: null,
+  //           showDuration: 300,
+  //           hideDuration: 100,
+  //           timeOut: 5000,
+  //           extendedTimeOut: 1000,
+  //           showEasing: "swing",
+  //           hideEasing: "linear",
+  //           showMethod: "fadeIn",
+  //           hideMethod: "fadeOut",
+  //         };
+
+  //         tableServerside();
+  //         break;
+  //     }
+  //   },
+  //   error: function (xhr) {
+  //     console.log(xhr);
+  //   },
+  // });
+}

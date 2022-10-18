@@ -4,9 +4,9 @@ declare(strict_types=1);
 header('Content-type: application/json');
 
 include(LIBRARIES . 'validations.php');
-include(MODELS . 'modelPersona.php');
+include(MODELS . 'modelUsuarios.php');
 
-class PersonaController
+class UsuariosController
 {
     public function create(): void
     {
@@ -73,6 +73,20 @@ class PersonaController
         $persona->id = isset($_POST['id']) ? strtoupper(trim($_POST['id'])) : NULL;
 
         $persona->deletePersona();
+    }
+
+    public function status(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $persona = new Persona($db);
+
+        // --Seteo de valores existentes en el POST--
+        $persona->id = isset($_POST['id']) ? strtoupper(trim($_POST['id'])) : NULL;
+
+        $persona->statusPersona();
     }
 
     # objetos de Datatables para utilizar (Serverside)

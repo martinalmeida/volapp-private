@@ -6,7 +6,7 @@ class Persona
 {
     // --Parametros Privados--
     private $conn;
-    private $tableName = "persona";
+    private $tableName = "usuarios";
 
     // --Parametros Publicos--
     public $identificacion;
@@ -154,6 +154,23 @@ class Persona
         }
     }
 
+    public function statusPersona(): void
+    {
+        // --Preparamos la consulta--
+        $query = "UPDATE " . $this->tableName . " SET status = 2 WHERE id=?";
+        $stmt = $this->conn->prepare($query);
+
+        // --Almacenamos los valores--
+        $stmt->bindParam(1, $this->id);
+
+        // --Ejecutamos la consulta y validamos ejecucion--
+        if ($stmt->execute()) {
+            echo json_encode(array('status' => '1', 'data' => NULL));
+        } else {
+            echo json_encode(array('status' => '0', 'data' => NULL));
+        }
+    }
+
     public function readAllDaTablePerson(): void
     {
         ## Read value
@@ -221,6 +238,7 @@ class Persona
         $empRecords = $stmt->fetchAll();
         $data = array();
         foreach ($empRecords as $row) {
+            $statusColor = $row['status'] = 1 ? 'info' : 'secondary';
             $data[] = array(
                 "id" => $row['id'],
                 "identificacion" => $row['identificacion'],
@@ -241,10 +259,10 @@ class Persona
                                         <button type='button' class='btn btn-danger text-white' data-toggle='tooltip' data-placement='top' title='Eliminar Usuario' onclick='eliminarRegistro(" . $row['id'] . ");'>
                                             <i class='fa-regular fa-trash-can'></i>
                                         </button>
-                                        <button type='button' class='btn btn-warning text-white' data-toggle='tooltip' data-placement='top' title='Estado Usuario' onclick='statusRegistro(" . $row['id'] . ");'>
+                                        <button type='button' class='btn btn-" . $statusColor . " text-white' data-toggle='tooltip' data-placement='top' title='Estado del Usuario' onclick='statusRegistro(" . $row['id'] . ");'>
                                             <i class='fa-regular fa-eye'></i></button>
-                                        <button type='button' class='btn btn-primary text-white' data-toggle='tooltip' data-placement='top' title='Permisos Usuario' onclick='permisosPersonas(" . $row['id'] . ");'>
-                                            <i class='fa-solid fa-check-double'></i>
+                                        <button type='button' class='btn btn-primary text-white' data-toggle='tooltip' data-placement='top' title='Roles del Usuario' onclick='rolesPersonas(" . $row['id'] . ");'>
+                                            <i class='fa-solid fa-person-digging'></i>
                                         </button>
                                     </div>"
             );
