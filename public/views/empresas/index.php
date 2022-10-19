@@ -4,7 +4,7 @@ include_once(VIEW_CONTROLLER);
 
 use View\ViewController;
 
-$view = new ViewController('usuarios');
+$view = new ViewController('empresas');
 
 $view->initializationView();
 ?>
@@ -12,9 +12,9 @@ $view->initializationView();
 <!-- ========== Inicio Componente de Vista ========== -->
 <div class="subheader">
     <h1 class="subheader-title">
-        <i class='fal fa-info-circle'></i> Usuarios
+        <i class='fal fa-info-circle'></i> Empresas
     </h1>
-    <button type="button" class="btn btn-info active" data-toggle="modal" data-target="#default-example-modal-lg">Agregar <i class="fa-solid fa-plus"></i></button>
+    <button type="button" class="btn btn-info active" onclick="showModalRegistro();">Agregar <i class="fa-solid fa-plus"></i></button>
 </div>
 
 <div class="row">
@@ -22,7 +22,7 @@ $view->initializationView();
         <div id="panel-1" class="panel">
             <div class="panel-hdr">
                 <h2>
-                    Tabla de Usuarios
+                    Tabla de Empresas
                     <!-- Tabla <span class="fw-300"><i>Usuarios</i></span> -->
                 </h2>
                 <div class="panel-toolbar">
@@ -63,9 +63,9 @@ $view->initializationView();
 </div>
 
 <h3>
-    Pagina de Usuarios
+    Pagina de Empresas
 </h3>
 
 <?php
-include_once(VIEW . 'usuarios/modalForm.php');
+include_once(VIEW . 'empresas/modalForm.php');
 $view->finalizeView();

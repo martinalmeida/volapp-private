@@ -13,7 +13,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="frmRegistro">
+                <form>
                     <div class="form-row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label" for="nit">NIT</label>
@@ -71,8 +71,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="reset();">Cerrar</button>
-                <button type="button" class="btn btn-info active" id="btnRegistro">Guardar Empresa</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-info active" id="btnRegistro"></button>
             </div>
         </div>
     </div>

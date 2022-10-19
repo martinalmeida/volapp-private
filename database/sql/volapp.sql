@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-10-2022 a las 17:22:14
+-- Tiempo de generación: 19-10-2022 a las 22:31:38
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.1.6
 
@@ -56,7 +56,7 @@ CREATE TABLE `modulo` (
   `menu_id` int(11) DEFAULT NULL,
   `page` varchar(30) COLLATE utf8mb4_spanish_ci DEFAULT NULL,
   `titulo` varchar(50) COLLATE utf8mb4_spanish_ci NOT NULL,
-  `icono` varchar(25) COLLATE utf8mb4_spanish_ci DEFAULT NULL,
+  `icono` varchar(100) COLLATE utf8mb4_spanish_ci DEFAULT NULL,
   `descripcion` text COLLATE utf8mb4_spanish_ci DEFAULT NULL,
   `status` char(1) COLLATE utf8mb4_spanish_ci DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
@@ -70,7 +70,10 @@ INSERT INTO `modulo` (`id`, `menu_id`, `page`, `titulo`, `icono`, `descripcion`,
 (2, 1, 'home', 'Home', NULL, 'PAGINA PRINCIPAL DE LA INTERFAZ', '1'),
 (3, NULL, NULL, 'Usuarios', 'fal fa-users', 'PAGINA DE ADMINISTRACION DE USUARIOS', '1'),
 (4, 3, 'usuarios', 'Usuarios', NULL, 'ADMINISTRACION DE USUARIOS MODULOS ROLES Y PERMISOS', '1'),
-(5, 3, 'roles', 'Roles', NULL, 'ADMINISTRACION DE ROLES', '1');
+(5, 3, 'sucursales', 'Sucursales', NULL, 'PANEL ADMINISTRATIVO DE SUCURSALES PARA ROL GERENTE', '1'),
+(6, NULL, NULL, 'Sistema', 'fa-solid fa-gears', 'MODULO DE SISTEMAS PARA ADMINISTRADOR DE LA PLATAFORMA', '1'),
+(7, 6, 'empresas', 'Empresas', NULL, 'PANEL ADMINISTRATIVO DE EMPRESAS', '1'),
+(8, 6, 'roles', 'Roles', NULL, 'MODULO DE DEFINICION DE ROLES PARA PERMISOS A MODULOS', '1');
 
 -- --------------------------------------------------------
 
@@ -97,7 +100,10 @@ INSERT INTO `permisos` (`id`, `rolid`, `moduloid`, `r`, `w`, `u`, `d`) VALUES
 (2, 1, 2, 1, 0, 0, 0),
 (3, 1, 3, 0, 0, 0, 0),
 (4, 1, 4, 1, 0, 0, 0),
-(5, 1, 5, 1, 0, 0, 0);
+(5, 1, 5, 1, 0, 0, 0),
+(6, 1, 6, 0, 0, 0, 0),
+(7, 1, 7, 1, 0, 0, 0),
+(8, 1, 8, 1, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -249,13 +255,13 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `modulo`
 --
 ALTER TABLE `modulo`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `permisos`
 --
 ALTER TABLE `permisos`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `rol`

@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 header('Content-type: application/json');
 
 include(LIBRARIES . 'validations.php');
@@ -14,24 +15,24 @@ class UsuariosController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $persona = new Persona($db);
+        $usuario = new Usuario($db);
 
         // --Seteo de valores existentes en el POST--
-        $persona->identificacion = isset($_POST['identificacion']) ? strtoupper(trim($_POST['identificacion'])) : NULL;
-        $persona->nombres = isset($_POST['nombres']) ? strtoupper(trim($_POST['nombres'])) : NULL;
-        $persona->a_paterno = isset($_POST['a_paterno']) ? strtoupper(trim($_POST['a_paterno'])) : NULL;
-        $persona->a_materno = isset($_POST['a_materno']) ? strtoupper(trim($_POST['a_materno'])) : NULL;
-        $persona->telefono = isset($_POST['telefono']) ? strtoupper(trim($_POST['telefono'])) : NULL;
-        $persona->email_user = isset($_POST['email_user']) ? strtoupper(trim($_POST['email_user'])) : NULL;
-        $persona->pswd = isset($_POST['pswd']) ? strtoupper(trim($_POST['pswd'])) : NULL;
-        $persona->ruc = isset($_POST['ruc']) ? strtoupper(trim($_POST['ruc'])) : NULL;
-        $persona->nombrefiscal = isset($_POST['nombrefiscal']) ? strtoupper(trim($_POST['nombrefiscal'])) : NULL;
-        $persona->direccionfiscal = isset($_POST['direccionfiscal']) ? strtoupper(trim($_POST['direccionfiscal'])) : NULL;
-        $persona->rolid = isset($_POST['rolid']) ? strtoupper(trim($_POST['rolid'])) : NULL;
-        $persona->datecreated = isset($_POST['datecreated']) ? strtoupper(trim($_POST['datecreated'])) : NULL;
-        $persona->status = isset($_POST['status']) ? strtoupper(trim($_POST['status'])) : NULL;
+        $usuario->identificacion = isset($_POST['identificacion']) ? strtoupper(trim($_POST['identificacion'])) : NULL;
+        $usuario->nombres = isset($_POST['nombres']) ? strtoupper(trim($_POST['nombres'])) : NULL;
+        $usuario->a_paterno = isset($_POST['a_paterno']) ? strtoupper(trim($_POST['a_paterno'])) : NULL;
+        $usuario->a_materno = isset($_POST['a_materno']) ? strtoupper(trim($_POST['a_materno'])) : NULL;
+        $usuario->telefono = isset($_POST['telefono']) ? strtoupper(trim($_POST['telefono'])) : NULL;
+        $usuario->email_user = isset($_POST['email_user']) ? strtoupper(trim($_POST['email_user'])) : NULL;
+        $usuario->pswd = isset($_POST['pswd']) ? strtoupper(trim($_POST['pswd'])) : NULL;
+        $usuario->ruc = isset($_POST['ruc']) ? strtoupper(trim($_POST['ruc'])) : NULL;
+        $usuario->nombrefiscal = isset($_POST['nombrefiscal']) ? strtoupper(trim($_POST['nombrefiscal'])) : NULL;
+        $usuario->direccionfiscal = isset($_POST['direccionfiscal']) ? strtoupper(trim($_POST['direccionfiscal'])) : NULL;
+        $usuario->rolid = isset($_POST['rolid']) ? strtoupper(trim($_POST['rolid'])) : NULL;
+        $usuario->datecreated = isset($_POST['datecreated']) ? strtoupper(trim($_POST['datecreated'])) : NULL;
+        $usuario->status = isset($_POST['status']) ? strtoupper(trim($_POST['status'])) : NULL;
 
-        $persona->createPersona();
+        $usuario->createUsuario();
     }
 
     public function update(): void
@@ -40,25 +41,25 @@ class UsuariosController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $persona = new Persona($db);
+        $usuario = new Usuario($db);
 
         // --Seteo de valores existentes en el POST--
-        $persona->identificacion = isset($_POST['identificacion']) ? strtoupper(trim($_POST['identificacion'])) : NULL;
-        $persona->nombres = isset($_POST['nombres']) ? strtoupper(trim($_POST['nombres'])) : NULL;
-        $persona->a_paterno = isset($_POST['a_paterno']) ? strtoupper(trim($_POST['a_paterno'])) : NULL;
-        $persona->a_materno = isset($_POST['a_materno']) ? strtoupper(trim($_POST['a_materno'])) : NULL;
-        $persona->telefono = isset($_POST['telefono']) ? strtoupper(trim($_POST['telefono'])) : NULL;
-        $persona->email_user = isset($_POST['email_user']) ? strtoupper(trim($_POST['email_user'])) : NULL;
-        $persona->pswd = isset($_POST['pswd']) ? strtoupper(trim($_POST['pswd'])) : NULL;
-        $persona->ruc = isset($_POST['ruc']) ? strtoupper(trim($_POST['ruc'])) : NULL;
-        $persona->nombrefiscal = isset($_POST['nombrefiscal']) ? strtoupper(trim($_POST['nombrefiscal'])) : NULL;
-        $persona->direccionfiscal = isset($_POST['direccionfiscal']) ? strtoupper(trim($_POST['direccionfiscal'])) : NULL;
-        $persona->rolid = isset($_POST['rolid']) ? strtoupper(trim($_POST['rolid'])) : NULL;
-        $persona->datecreated = isset($_POST['datecreated']) ? strtoupper(trim($_POST['datecreated'])) : NULL;
-        $persona->status = isset($_POST['status']) ? strtoupper(trim($_POST['status'])) : NULL;
-        $persona->id = isset($_POST['id']) ? strtoupper(trim($_POST['id'])) : NULL;
+        $usuario->identificacion = isset($_POST['identificacion']) ? strtoupper(trim($_POST['identificacion'])) : NULL;
+        $usuario->nombres = isset($_POST['nombres']) ? strtoupper(trim($_POST['nombres'])) : NULL;
+        $usuario->a_paterno = isset($_POST['a_paterno']) ? strtoupper(trim($_POST['a_paterno'])) : NULL;
+        $usuario->a_materno = isset($_POST['a_materno']) ? strtoupper(trim($_POST['a_materno'])) : NULL;
+        $usuario->telefono = isset($_POST['telefono']) ? strtoupper(trim($_POST['telefono'])) : NULL;
+        $usuario->email_user = isset($_POST['email_user']) ? strtoupper(trim($_POST['email_user'])) : NULL;
+        $usuario->pswd = isset($_POST['pswd']) ? strtoupper(trim($_POST['pswd'])) : NULL;
+        $usuario->ruc = isset($_POST['ruc']) ? strtoupper(trim($_POST['ruc'])) : NULL;
+        $usuario->nombrefiscal = isset($_POST['nombrefiscal']) ? strtoupper(trim($_POST['nombrefiscal'])) : NULL;
+        $usuario->direccionfiscal = isset($_POST['direccionfiscal']) ? strtoupper(trim($_POST['direccionfiscal'])) : NULL;
+        $usuario->rolid = isset($_POST['rolid']) ? strtoupper(trim($_POST['rolid'])) : NULL;
+        $usuario->datecreated = isset($_POST['datecreated']) ? strtoupper(trim($_POST['datecreated'])) : NULL;
+        $usuario->status = isset($_POST['status']) ? strtoupper(trim($_POST['status'])) : NULL;
+        $usuario->id = isset($_POST['id']) ? strtoupper(trim($_POST['id'])) : NULL;
 
-        $persona->updatePersona();
+        $usuario->updateUsuario();
     }
 
     public function delete(): void
@@ -67,12 +68,12 @@ class UsuariosController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $persona = new Persona($db);
+        $usuario = new Usuario($db);
 
         // --Seteo de valores existentes en el POST--
-        $persona->id = isset($_POST['id']) ? strtoupper(trim($_POST['id'])) : NULL;
+        $usuario->id = isset($_POST['id']) ? strtoupper(trim($_POST['id'])) : NULL;
 
-        $persona->deletePersona();
+        $usuario->deleteUsuario();
     }
 
     public function status(): void
@@ -81,13 +82,13 @@ class UsuariosController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $persona = new Persona($db);
+        $usuario = new Usuario($db);
 
         // --Seteo de valores existentes en el POST--
-        $persona->id = isset($_POST['idRegistro']) ? strtoupper(trim($_POST['idRegistro'])) : NULL;
-        $persona->status = isset($_POST['status']) ? strtoupper(trim($_POST['status'])) : NULL;
+        $usuario->id = isset($_POST['idRegistro']) ? strtoupper(trim($_POST['idRegistro'])) : NULL;
+        $usuario->status = isset($_POST['status']) ? strtoupper(trim($_POST['status'])) : NULL;
 
-        $persona->statusPersona();
+        $usuario->statusUsuario();
     }
 
     # objetos de Datatables para utilizar (Serverside)
@@ -97,16 +98,16 @@ class UsuariosController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $persona = new Persona($db);
+        $usuario = new Usuario($db);
 
-        $persona->draw = htmlspecialchars($_POST['draw']);
-        $persona->row = htmlspecialchars($_POST['start']);
-        $persona->rowperpage = htmlspecialchars($_POST['length']);
-        $persona->columnIndex = htmlspecialchars($_POST['order'][0]['column']);
-        $persona->columnName = htmlspecialchars($_POST['columns'][$persona->columnIndex]['data']);
-        $persona->columnSortOrder = htmlspecialchars($_POST['order'][0]['dir']);
-        $persona->searchValue = htmlspecialchars($_POST['search']['value']);
+        $usuario->draw = htmlspecialchars($_POST['draw']);
+        $usuario->row = htmlspecialchars($_POST['start']);
+        $usuario->rowperpage = htmlspecialchars($_POST['length']);
+        $usuario->columnIndex = htmlspecialchars($_POST['order'][0]['column']);
+        $usuario->columnName = htmlspecialchars($_POST['columns'][$usuario->columnIndex]['data']);
+        $usuario->columnSortOrder = htmlspecialchars($_POST['order'][0]['dir']);
+        $usuario->searchValue = htmlspecialchars($_POST['search']['value']);
 
-        $persona->readAllDaTablePerson();
+        $usuario->readAllDaTableUsuario();
     }
 }

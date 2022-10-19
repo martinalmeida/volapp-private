@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-class Usuario
+class Empresa
 {
     // --Parametros Privados--
     private $conn;
-    private $tableName = "usuarios";
+    private $tableName = "empresas";
 
     // --Parametros Publicos--
     public $identificacion;
@@ -41,7 +41,7 @@ class Usuario
         $this->conn = $db;
     }
 
-    public function createUsuario(): void
+    public function createEmpresa(): void
     {
         // --Preparamos la consulta--
         $query = "INSERT INTO " . $this->tableName . " SET identificacion=?, nombres=?, a_paterno=?, a_materno=?, telefono=?, email_user=?, pswd=?,
@@ -87,7 +87,7 @@ class Usuario
     }
 
 
-    public function updateUsuario(): void
+    public function updatePersona(): void
     {
         // --Preparamos la consulta--
         $query = "UPDATE " . $this->tableName . " SET identificacion=?, nombres=?, a_paterno=?, a_materno=?, telefono=?, email_user=?, pswd=?,
@@ -134,7 +134,7 @@ class Usuario
         }
     }
 
-    public function deleteUsuario(): void
+    public function deletePersona(): void
     {
         // --Preparamos la consulta--
         $query = "DELETE FROM " . $this->tableName . " WHERE id=?";
@@ -154,7 +154,7 @@ class Usuario
         }
     }
 
-    public function statusUsuario(): void
+    public function statusPersona(): void
     {
         // --Preparamos la consulta--
         $query = "UPDATE " . $this->tableName . " SET status =? WHERE id=?";
@@ -174,7 +174,7 @@ class Usuario
         }
     }
 
-    public function readAllDaTableUsuario(): void
+    public function readAllDaTablePerson(): void
     {
         ## Read value
         $draw = $this->draw = htmlspecialchars(strip_tags($this->draw));
@@ -259,7 +259,7 @@ class Usuario
                                         <button type='button' class='btn btn-success text-white' data-toggle='tooltip' data-placement='top' title='Editar Usuario' onclick='editarRegistro(" . $row['id'] . ");'>
                                             <i class='fa-regular fa-pen-to-square'></i>
                                         </button>
-                                        <button type='button' class='btn btn-warning text-white' data-toggle='tooltip' data-placement='top' title='Asignación de Sucursal' onclick='sucursalesUsuarios(" . $row['id'] . ");'>
+                                        <button type='button' class='btn btn-warning text-white' data-toggle='tooltip' data-placement='top' title='Asignación de Sucursal' onclick='sucursalesPersonas(" . $row['id'] . ");'>
                                             <i class='fa-sharp fa-solid fa-building-lock'></i>
                                         </button>
                                         <button type='button' class='btn btn-danger text-white' data-toggle='tooltip' data-placement='top' title='Eliminar Usuario' onclick='eliminarRegistro(" . $row['id'] . ");'>
@@ -267,7 +267,7 @@ class Usuario
                                         </button>
                                         <button type='button' class='btn btn-" . $statusColor . " text-white' data-toggle='tooltip' data-placement='top' title='Estado del Usuario' onclick='statusRegistro(" . $row['id'] . ", " . $row['status'] . ");'>
                                             <i class='fa-regular fa-eye'></i></button>
-                                        <button type='button' class='btn btn-primary text-white' data-toggle='tooltip' data-placement='top' title='Roles del Usuario' onclick='rolesUsuarios(" . $row['id'] . ");'>
+                                        <button type='button' class='btn btn-primary text-white' data-toggle='tooltip' data-placement='top' title='Roles del Usuario' onclick='rolesPersonas(" . $row['id'] . ");'>
                                             <i class='fa-solid fa-person-digging'></i>
                                         </button>
                                     </div>"
