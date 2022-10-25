@@ -1,7 +1,5 @@
 /* ---------  START Serverside Tabla ( table_persona ) ----------- */
-$(document).ready(function () {});
-
-var tablaUsuarios = $("#table_persona").DataTable({
+var tablaUsuarios = $("#tablaUsuarios").DataTable({
   processing: true,
   orderClasses: false,
   deferRender: true,
@@ -66,6 +64,8 @@ var tablaUsuarios = $("#table_persona").DataTable({
     sProcessing: "Procesando...",
   },
 });
+
+$(document).ready(function () {});
 
 function statusRegistro(id, status) {
   $.ajax({
@@ -139,4 +139,8 @@ function statusRegistro(id, status) {
       };
     },
   });
+}
+
+function reajustDatatables() {
+  tablaUsuarios.columns.adjust().draw();
 }

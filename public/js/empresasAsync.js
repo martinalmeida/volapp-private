@@ -1,7 +1,7 @@
-/* ---------  START Serverside Tabla ( table_persona ) ----------- */
-var tablaEmpresas = $("#table_persona").DataTable({
+/* ---------  START Serverside Tabla ( tablaEmpresas ) ----------- */
+var tablaEmpresas = $("#tablaEmpresas").DataTable({
   processing: true,
-  orderClasses: false,
+  orderClasses: true,
   deferRender: true,
   serverSide: true,
   responsive: true,
@@ -9,7 +9,7 @@ var tablaEmpresas = $("#table_persona").DataTable({
   pageLength: 30,
   ajax: {
     type: "POST",
-    url: urlBase + "routes/usuarios/readAllDaTable",
+    url: urlBase + "routes/empresas/readAllDaTable",
   },
   dom:
     "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
@@ -36,16 +36,17 @@ var tablaEmpresas = $("#table_persona").DataTable({
     },
   ],
   columns: [
-    { data: "id" },
-    { data: "identificacion" },
-    { data: "nombres" },
-    { data: "apellidos" },
+    { data: "nit" },
+    { data: "nombre" },
+    { data: "representante" },
     { data: "telefono" },
-    { data: "email_user" },
-    { data: "ruc" },
-    { data: "nombrefiscal" },
-    { data: "direccionfiscal" },
-    { data: "rolid" },
+    { data: "direccion" },
+    { data: "correo" },
+    { data: "pais" },
+    { data: "ciudad" },
+    { data: "contacto" },
+    { data: "emailTec" },
+    { data: "emaiLogis" },
     { data: "status" },
     { data: "defaultContent" },
   ],
@@ -65,16 +66,19 @@ var tablaEmpresas = $("#table_persona").DataTable({
   },
 });
 
+$(document).ready(function () {});
+
 let edit = false;
+var peticion = null;
 
 function registrar(form) {
   var respuestavalidacion = validarcampos("#" + form);
   if (respuestavalidacion) {
     var formData = new FormData(document.getElementById(form));
     if (edit == true) {
-      var peticion = urlBase + "routes/empresas/update";
+      peticion = urlBase + "routes/empresas/update";
     } else {
-      var peticion = urlBase + "routes/empresas/create";
+      peticion = urlBase + "routes/empresas/create";
     }
     $.ajax({
       cache: false, //necesario para enviar archivos
@@ -98,8 +102,8 @@ function registrar(form) {
           case "0":
             Swal.fire({
               icon: "error",
-              title: "<strong>Error!</strong>",
-              html: "<h5>Se ha presentado un error, por favor informar al area de Sistemas.</h5>",
+              title: "<strong>Error en el servidor</strong>",
+              html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
               showCloseButton: true,
               showConfirmButton: false,
               cancelButtonText: "Cerrar",
@@ -107,13 +111,15 @@ function registrar(form) {
               showCancelButton: true,
               backdrop: true,
             });
+            $("#ModalRegistro").modal("hide");
             break;
+
           case "1":
             if (edit == false) {
               Swal.fire({
                 icon: "success",
-                title: "<strong>Cargo Creado</strong>",
-                html: "<h5>El Cargo se ha registrado exitosamente</h5>",
+                title: "<strong>Empresa Creada</strong>",
+                html: "<h5>La Empresa se ha registrado exitosamente</h5>",
                 showCloseButton: false,
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#64a19d",
@@ -122,8 +128,8 @@ function registrar(form) {
             } else {
               Swal.fire({
                 icon: "success",
-                title: "<strong>Cargo Editado</strong>",
-                html: "<h5>El Cargo se ha editado exitosamente</h5>",
+                title: "<strong>Empresa Editado</strong>",
+                html: "<h5>La Empresa se ha editado exitosamente</h5>",
                 showCloseButton: false,
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#64a19d",
@@ -134,15 +140,67 @@ function registrar(form) {
             $("#ModalRegistro").modal("hide");
             tablaEmpresas.clear().draw();
             break;
+
           case "2":
-            $.toast({
-              heading: "Error!",
-              text: "Ya existe un Cargo con este nombre",
-              showHideTransition: "slide",
-              icon: "info",
-              position: "top-right",
+            Swal.fire({
+              icon: "error",
+              title: "<strong>Error de Validacón</strong>",
+              html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
+              showCloseButton: true,
+              showConfirmButton: false,
+              cancelButtonText: "Cerrar",
+              cancelButtonColor: "#dc3545",
+              showCancelButton: true,
+              backdrop: true,
             });
+            $("#ModalRegistro").modal("hide");
             break;
+
+          case "4":
+            Swal.fire({
+              icon: "warning",
+              title: "<strong>Archivo Dañado</strong>",
+              html: "<h5>El archivo esta corrupto.</h5>",
+              showCloseButton: true,
+              showConfirmButton: false,
+              cancelButtonText: "Cerrar",
+              cancelButtonColor: "#dc3545",
+              showCancelButton: true,
+              backdrop: true,
+            });
+            $("#ModalRegistro").modal("hide");
+            break;
+
+          case "5":
+            Swal.fire({
+              icon: "warning",
+              title: "<strong>Adjunte un Archivo</strong>",
+              html: "<h5>No se ha adjuntado un archivo.</h5>",
+              showCloseButton: true,
+              showConfirmButton: false,
+              cancelButtonText: "Cerrar",
+              cancelButtonColor: "#dc3545",
+              showCancelButton: true,
+              backdrop: true,
+            });
+            $("#ModalRegistro").modal("hide");
+            break;
+
+          case "6":
+            Swal.fire({
+              icon: "error",
+              title: "<strong>Tamaño execivo de Archivo</strong>",
+              html: "<h5>Adjunta un archivo de menor tamaño, el peso maximo es de 2MB.</h5>",
+              showCloseButton: true,
+              showConfirmButton: false,
+              cancelButtonText: "Cerrar",
+              cancelButtonColor: "#dc3545",
+              showCancelButton: true,
+              backdrop: true,
+            });
+            $("#ModalRegistro").modal("hide");
+            break;
+
           default:
             // Code
             break;
@@ -161,6 +219,7 @@ function registrar(form) {
           showCancelButton: true,
           backdrop: true,
         });
+        $("#ModalRegistro").modal("hide");
       },
     });
   }
@@ -249,10 +308,10 @@ function datos_registro(id) {
   });
 }
 
-function statusRegistro(id, status) {
+function statusRegistro(nit, status) {
   $.ajax({
     data: {
-      idRegistro: id,
+      nitEmpresa: nit,
       status: status,
     },
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
@@ -298,7 +357,7 @@ function statusRegistro(id, status) {
     error: function (xhr) {
       console.log(xhr);
       Command: toastr["error"](
-        "Fallo la ejecucion de la funcion, por favor comunicate con soporte.",
+        "Fallo la ejecucion de la acción, por favor comunicate con soporte.",
         "Operación Fallida."
       );
 
@@ -327,11 +386,18 @@ function showModalRegistro() {
   $("#btnRegistro").show();
   $("#btnRegistro").text("Registrar Empresa");
   $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
-  $("#ModalRegistro").modal("show");
+  $("#ModalRegistro").modal({
+    backdrop: "static",
+    keyboard: false,
+  });
 }
 
 function reset() {
   vercampos("#frmRegistro", 1);
   limpiarcampos("#frmRegistro");
   edit = false;
+}
+
+function reajustDatatables() {
+  tablaEmpresas.columns.adjust().draw();
 }

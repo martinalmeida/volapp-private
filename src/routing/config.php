@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App;
 
+header('Content-type: application/json');
+
 class InitRouting
 {
-    private const TOKEN = 'dqtQS2cBmGd8MbyMCHBj3Dq38Xm89vVyxxum4aySt9witAwBN9';
-    private $tokenUser;
 
     public function __construct()
     {
@@ -22,39 +22,28 @@ class InitRouting
         define('URL', $url);
     }
 
-    public function startRouting()
+    public function startRouting(): void
     {
         // --Validamos si es una peticion HTTPS--
-        //if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-        // --Comprobar si hay un metodo autorizado GET && POST
-        //if ($_SERVER['REQUEST_METHOD'] == 'GET' or $_SERVER['REQUEST_METHOD'] == 'POST') {
-        // --Comprobar el token de la plataforma
-        // $this->tokenUser = $_POST["token"];
-        // if (self::TOKEN === $this->tokenUser) {
-        // --Validacion de ruta
-        if (URL !== '/') {
-            // --Ejecucion del router
-            require_once(__DIR__ . '/routing.php');
-            $router = new Routing;
-            $router->run();
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+            // --Comprobar si hay un metodo autorizado GET && POST
+            if ($_SERVER['REQUEST_METHOD'] == 'GET' or $_SERVER['REQUEST_METHOD'] == 'POST') {
+                // --Validacion de ruta
+                if (URL !== '/') {
+                    // --Ejecucion del router
+                    require_once(__DIR__ . '/routing.php');
+                    $router = new Routing;
+                    $router->run();
+                } else {
+                    echo json_encode(array('status' => '8', 'data' => NULL));
+                }
+            } else {
+                echo json_encode(array('status' => '9', 'data' => NULL));
+                exit;
+            }
         } else {
-            $request['status'] = '0';
-            echo json_encode($request);
+            echo json_encode(array('status' => '10', 'data' => NULL));
+            exit;
         }
-        // } else {
-        //     echo json_encode('NO HAY TOKEN QUE COINCIDA');
-        //     $this->tokenUser = NULL;
-        //     exit;
-        // }
-        // } else {
-        //     echo json_encode('SERVICIOS DENEGADOS POR NO CONTENER UN METODO VALIDO');
-        //     $this->tokenUser = NULL;
-        //     exit;
-        // }
-        // } else {
-        //     echo json_encode('SERVICIOS DENEGADOS POR NO CUMPLIR CON LAS REGLAS');
-        //     $this->tokenUser = NULL;
-        //     exit;
-        // }
     }
 }

@@ -45,14 +45,14 @@ $view->initializationView();
         <div class="card p-4 rounded-plus bg-faded">
             <form id="frmLogin">
                 <div class="form-group">
-                    <label class="form-label" for="usuarioLogin">Email</label>
-                    <input type="email" name="usuarioLogin" id="usuarioLogin" class="form-control form-control-lg" placeholder="Ingresa tu email" required>
-                    <div class="invalid-feedback">Falta email.</div>
+                    <label class="form-label" for="usuarioLogin">Correo</label>
+                    <input type="email" onKeyPress="if(this.value.length==100)return false;" min="0" class="form-control form-control-lg" id="usuarioLogin" name="usuarioLogin" placeholder="Ingresa tu email" required>
+                    <div class="invalid-feedback">Falta Correo Electronico.</div>
                     <div class="help-block">Escribe tu email</div>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="contraseniaLogin">Contraseña</label>
-                    <input type="password" name="contraseniaLogin" id="contraseniaLogin" class="form-control form-control-lg" placeholder="Ingresa tu contraseña" required>
+                    <input type="password" onKeyPress="if(this.value.length==100)return false;" min="0" class="form-control form-control-lg" id="contraseniaLogin" name="contraseniaLogin" placeholder="Ingresa tu contraseña" required>
                     <div class="invalid-feedback">Falta contraseña.</div>
                     <div class="help-block">Escribe tu contraseña</div>
                 </div>

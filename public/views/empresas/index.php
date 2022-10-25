@@ -35,19 +35,20 @@ $view->initializationView();
                 <div class="panel-content">
                     <!-- <div class="panel-tag">
                     </div> -->
-                    <table id="table_persona" class="table table-bordered table-hover table-striped w-100">
+                    <table id="tablaEmpresas" class="table table-bordered table-hover table-striped w-100">
                         <thead class="bg-primary-600">
                             <tr>
-                                <th>Id</th>
-                                <th>Identificación</th>
-                                <th>Nombres</th>
-                                <th>Apellidos</th>
+                                <th>Nit</th>
+                                <th>Nombre</th>
+                                <th>Representante</th>
                                 <th>Telefono</th>
-                                <th>Correo</th>
-                                <th>RUC</th>
-                                <th>Nombre del Fiscal</th>
-                                <th>Dirección Fiscal</th>
-                                <th>Rol</th>
+                                <th>Direccion</th>
+                                <th>Correo Electronico</th>
+                                <th>Pais</th>
+                                <th>Ciudad</th>
+                                <th>Nmro. Contacto</th>
+                                <th>Correo Tecnico</th>
+                                <th>Correo Logistica</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
                             </tr>

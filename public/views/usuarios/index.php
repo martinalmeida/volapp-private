@@ -35,7 +35,7 @@ $view->initializationView();
                 <div class="panel-content">
                     <!-- <div class="panel-tag">
                     </div> -->
-                    <table id="table_persona" class="table table-bordered table-hover table-striped w-100">
+                    <table id="tablaUsuarios" class="table table-bordered table-hover table-striped w-100">
                         <thead class="bg-primary-600">
                             <tr>
                                 <th>Id</th>

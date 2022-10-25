@@ -1,14 +1,5 @@
-// --Variables globales para los timer de desconexion 900000 15 minutos
-var contadorCerrarSesion;
-var contadorSeguirConectado;
-var tiempoMaximo = 900000;
-var tiempoEspera = 30000;
-var tiempoMaximoCierreSesion = tiempoMaximo + tiempoEspera;
-
 // --Se ejecuta la cargar toda la pagina--
-$(document).ready(function () {
-  Swal.close();
-});
+$(document).ready(function () {});
 
 // --Funcion de inicio de Sesión--
 function login(form) {
@@ -16,10 +7,6 @@ function login(form) {
   if (respuestavalidacion) {
     $("#btnLoginIngresar").prop("disabled", true);
     var formData = new FormData(document.getElementById(form)); //Datos del formulario
-    formData.append(
-      "token",
-      "dqtQS2cBmGd8MbyMCHBj3Dq38Xm89vVyxxum4aySt9witAwBN9"
-    );
     $.ajax({
       cache: false, //necesario para enviar archivos
       contentType: false, //necesario para enviar archivos

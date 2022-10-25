@@ -79,14 +79,6 @@ class Template
                         </div>
                         <!-- BEGIN PRIMARY NAVIGATION -->
                         <nav id="js-primary-nav" class="primary-nav" role="navigation">
-                            <div class="nav-filter">
-                                <div class="position-relative">
-                                    <input type="text" id="nav_filter_input" placeholder="Filter menu" class="form-control" tabindex="0">
-                                    <a href="#" onclick="return false;" class="btn-primary btn-search-close js-waves-off" data-action="toggle" data-class="list-filter-active" data-target=".page-sidebar">
-                                        <i class="fal fa-chevron-up"></i>
-                                    </a>
-                                </div>
-                            </div>
                             <div class="info-card">
                                 <img src="<?= IMG ?>demo/avatars/avatar-admin.png" class="profile-image rounded-circle" alt="Dr. Codex Lantern">
                                 <div class="info-card-text">
@@ -98,9 +90,6 @@ class Template
                                     <span class="d-inline-block text-truncate text-truncate-sm">Toronto, Canada</span>
                                 </div>
                                 <img src="<?= IMG ?>card-backgrounds/banner.png" class="cover" alt="cover">
-                                <a href="#" onclick="return false;" class="pull-trigger-btn" data-action="toggle" data-class="list-filter-active" data-target=".page-sidebar" data-focus="nav_filter_input">
-                                    <i class="fal fa-angle-down"></i>
-                                </a>
                             </div>
                             <ul id="js-nav-menu" class="nav-menu">
                                 <?php
@@ -126,21 +115,21 @@ class Template
                             </div>
                             <!-- DOC: nav menu layout change shortcut -->
                             <div class="hidden-md-down dropdown-icon-menu position-relative">
-                                <a href="#" class="header-btn btn js-waves-off" data-action="toggle" data-class="nav-function-hidden" title="Hide Navigation">
+                                <a href="#" class="header-btn btn js-waves-off" data-action="toggle" data-class="nav-function-minify" title="Minimizar Menu" onclick="reajustDatatables();">
                                     <i class="ni ni-menu"></i>
                                 </a>
-                                <ul>
+                                <!-- <ul>
                                     <li>
-                                        <a href="#" class="btn js-waves-off" data-action="toggle" data-class="nav-function-minify" title="Minify Navigation">
+                                        <a href="#" class="btn js-waves-off" data-action="toggle" data-class="nav-function-hidden" title="Ocultar Menu">
                                             <i class="ni ni-minify-nav"></i>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" class="btn js-waves-off" data-action="toggle" data-class="nav-function-fixed" title="Lock Navigation">
+                                        <a href="#" class="btn js-waves-off" data-action="toggle" data-class="nav-function-fixed" title="Bloquear Menu">
                                             <i class="ni ni-lock-nav"></i>
                                         </a>
                                     </li>
-                                </ul>
+                                </ul> -->
                             </div>
                             <!-- DOC: mobile button appears during mobile width -->
                             <div class="hidden-lg-up">
@@ -972,7 +961,6 @@ class Template
             <script src="<?= JS ?>validaciones.js?v=<?= rand() ?>"></script>
             <script src="<?= JS ?>globales.js?v=<?= rand() ?>"></script>
             <script src="<?= JS ?>datagrid/datatables/datatables.bundle.js"></script>
-            <script src="<?= JS ?>datagrid/datatables/datatables.export.js"></script>
             <script src="<?= JS ?>datagrid/datatables/datatables.export.js"></script>
             <script src="<?= JSAJAX ?>loginAsync.js"></script>
         </body>

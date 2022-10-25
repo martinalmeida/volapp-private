@@ -3,7 +3,7 @@
 /**
  * clase para validar datos recibidos en php
  */
-class validar
+class Validar
 {
     public static function longitud($valor, $minimo, $maximo)
     {

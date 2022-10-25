@@ -9,6 +9,7 @@ class Usuario
     private $tableName = "usuarios";
 
     // --Parametros Publicos--
+    public $id;
     public $identificacion;
     public $nombres;
     public $a_paterno;
@@ -22,7 +23,6 @@ class Usuario
     public $rolid;
     public $datecreated;
     public $status;
-    public $id;
 
     /* Propiedades de los objetos de Datatables para utilizar (Serverside) 
     Procesamiento del lado del servidor */
