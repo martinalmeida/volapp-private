@@ -298,14 +298,19 @@ function editarRegistro(nit) {
           break;
 
         case "2":
-          $.toast({
-            heading: "Información!",
-            text: "Sin datos",
-            showHideTransition: "slide",
-            icon: "info",
-            position: "top-right",
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error de Validacón</strong>",
+            html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
           });
           break;
+
         default:
           break;
       }
@@ -375,6 +380,20 @@ function statusRegistro(nit, status) {
             hideMethod: "fadeOut",
           };
           tablaEmpresas.clear().draw();
+          break;
+
+        case "2":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error de Validacón</strong>",
+            html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
           break;
       }
     },
@@ -456,6 +475,20 @@ function eliminarRegistro(nit) {
                 hideMethod: "fadeOut",
               };
               tablaEmpresas.clear().draw();
+              break;
+
+            case "2":
+              Swal.fire({
+                icon: "error",
+                title: "<strong>Error de Validacón</strong>",
+                html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
+                showCloseButton: true,
+                showConfirmButton: false,
+                cancelButtonText: "Cerrar",
+                cancelButtonColor: "#dc3545",
+                showCancelButton: true,
+                backdrop: true,
+              });
               break;
           }
         },

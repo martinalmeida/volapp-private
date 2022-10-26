@@ -39,10 +39,10 @@ class EmpresasController
                     $empresa->contenType = $_FILES['logo']['type'];
                     $empresa->base64 = base64_encode(file_get_contents($_FILES['logo']['tmp_name']));
                     if (
-                        validar::numeros($empresa->nit) && validar::numeros($empresa->digito) && validar::alfanumerico($empresa->nombre) &&
-                        validar::alfanumerico($empresa->representante) && validar::numeros($empresa->telefono) && validar::alfanumerico($empresa->direccion) &&
-                        validar::correo($empresa->correo) && validar::numeros($empresa->contacto) && validar::correo($empresa->emailTec) &&
-                        validar::correo($empresa->emailLogis) && validar::tipoarchivo($empresa->contenType, 7)
+                        Validar::numeros($empresa->nit) && Validar::numeros($empresa->digito) && Validar::alfanumerico($empresa->nombre) &&
+                        Validar::alfanumerico($empresa->representante) && Validar::numeros($empresa->telefono) && Validar::alfanumerico($empresa->direccion) &&
+                        Validar::correo($empresa->correo) && Validar::numeros($empresa->contacto) && Validar::correo($empresa->emailTec) &&
+                        Validar::correo($empresa->emailLogis) && Validar::tipoarchivo($empresa->contenType, 7)
                     ) {
                         $empresa->createEmpresa();
                     } else {
@@ -91,7 +91,11 @@ class EmpresasController
         $empresa->nit = isset($_POST['nitEmpresa']) ? strtoupper(trim($_POST['nitEmpresa'])) : NULL;
         $empresa->status = isset($_POST['status']) ? strtoupper(trim($_POST['status'])) : NULL;
 
-        $empresa->statusEmpresa();
+        if (Validar::numeros($empresa->nit) && Validar::numeros($empresa->status)) {
+            $empresa->statusEmpresa();
+        } else {
+            echo json_encode(array('status' => '2', 'data' => NULL));
+        }
     }
 
     public function getData(): void
@@ -106,7 +110,7 @@ class EmpresasController
         $empresa->nit = isset($_POST['nitEmpresa']) ? strtoupper(trim($_POST['nitEmpresa'])) : NULL;
 
         // --Validacion de datos a enviar al modelo--
-        if (validar::numeros($empresa->nit)) {
+        if (Validar::numeros($empresa->nit)) {
             $empresa->dataEmpresa();
         } else {
             echo json_encode(array('status' => '2', 'data' => NULL));
@@ -146,10 +150,10 @@ class EmpresasController
                     $empresa->contenType = $_FILES['logo']['type'];
                     $empresa->base64 = base64_encode(file_get_contents($_FILES['logo']['tmp_name']));
                     if (
-                        validar::numeros($empresa->nit) && validar::numeros($empresa->digito) && validar::alfanumerico($empresa->nombre) &&
-                        validar::alfanumerico($empresa->representante) && validar::numeros($empresa->telefono) && validar::alfanumerico($empresa->direccion) &&
-                        validar::correo($empresa->correo) && validar::numeros($empresa->contacto) && validar::correo($empresa->emailTec) &&
-                        validar::correo($empresa->emailLogis) && validar::tipoarchivo($empresa->contenType, 7)
+                        Validar::numeros($empresa->nit) && Validar::numeros($empresa->digito) && Validar::alfanumerico($empresa->nombre) &&
+                        Validar::alfanumerico($empresa->representante) && Validar::numeros($empresa->telefono) && Validar::alfanumerico($empresa->direccion) &&
+                        Validar::correo($empresa->correo) && Validar::numeros($empresa->contacto) && Validar::correo($empresa->emailTec) &&
+                        Validar::correo($empresa->emailLogis) && Validar::tipoarchivo($empresa->contenType, 7) && Validar::numeros($empresa->id)
                     ) {
                         $empresa->updateEmpresa();
                     } else {
@@ -164,9 +168,9 @@ class EmpresasController
         } else {
             // --No se adjunta un archivo nuevo--
             if (
-                validar::numeros($empresa->nit) && validar::numeros($empresa->digito) && validar::alfanumerico($empresa->nombre) && validar::alfanumerico($empresa->representante) &&
-                validar::numeros($empresa->telefono) && validar::alfanumerico($empresa->direccion) && validar::correo($empresa->correo) &&
-                validar::numeros($empresa->contacto) && validar::correo($empresa->emailTec) && validar::correo($empresa->emailLogis) && validar::numeros($empresa->id)
+                Validar::numeros($empresa->nit) && Validar::numeros($empresa->digito) && Validar::alfanumerico($empresa->nombre) && Validar::alfanumerico($empresa->representante) &&
+                Validar::numeros($empresa->telefono) && Validar::alfanumerico($empresa->direccion) && Validar::correo($empresa->correo) &&
+                Validar::numeros($empresa->contacto) && Validar::correo($empresa->emailTec) && Validar::correo($empresa->emailLogis) && Validar::numeros($empresa->id)
             ) {
                 $empresa->updateEmpresa();
             } else {
@@ -187,6 +191,10 @@ class EmpresasController
         // --Seteo de valores existentes en el POST--
         $empresa->nit = isset($_POST['nitEmpresa']) ? strtoupper(trim($_POST['nitEmpresa'])) : NULL;
 
-        $empresa->deleteEmpresa();
+        if (Validar::numeros($empresa->nit)) {
+            $empresa->deleteEmpresa();
+        } else {
+            echo json_encode(array('status' => '2', 'data' => NULL));
+        }
     }
 }
