@@ -39,6 +39,7 @@ $view->initializationView();
                         <thead class="bg-primary-600">
                             <tr>
                                 <th>Nit</th>
+                                <th>Digito</th>
                                 <th>Nombre</th>
                                 <th>Representante</th>
                                 <th>Telefono</th>

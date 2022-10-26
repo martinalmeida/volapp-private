@@ -24,6 +24,7 @@ class Empresa
     public $contenType;
     public $base64;
     public $status;
+    public $id;
 
     /* Propiedades de los objetos de Datatables para utilizar (Serverside) 
     Procesamiento del lado del servidor */
@@ -42,10 +43,11 @@ class Empresa
         $this->conn = $db;
     }
 
+    // -- ⊡ Funcion para crear una empresa ⊡ --
     public function createEmpresa(): void
     {
         // --Preparamos la consulta--
-        $query = "INSERT INTO  $this->tableName SET nit=?, digito=?, nombre=?, representante=?, telefono=?, direccion=?, correo=?,
+        $query = "INSERT INTO $this->tableName SET nit=?, digito=?, nombre=?, representante=?, telefono=?, direccion=?, correo=?,
         contacto=?, email_tec=?, email_logis=?, content_type=?, base_64=?";
         $stmt = $this->conn->prepare($query);
 
@@ -85,6 +87,7 @@ class Empresa
         }
     }
 
+    // -- ⊡ Funcion para dataTables Serverside ⊡ --
     public function readAllDaTableEmpresa(): void
     {
         // --Read value--
@@ -96,10 +99,11 @@ class Empresa
         $columnSortOrder = $this->columnSortOrder = htmlspecialchars(strip_tags($this->columnSortOrder));
         $searchValue = $this->searchValue = htmlspecialchars(strip_tags($this->searchValue));
         $searchArray = array();
-        // --Search-- 
+        // --Search--
         $searchQuery = " ";
         if ($searchValue != '') {
             $searchQuery = " AND (nit LIKE :nit OR 
+                            digito LIKE :digito OR
                             nombre LIKE :nombre OR
                             representante LIKE :representante OR 
                             telefono LIKE :telefono OR
@@ -113,6 +117,7 @@ class Empresa
                             status LIKE :status )";
             $searchArray = array(
                 'nit' => "%$searchValue%",
+                'digito' => "%$searchValue%",
                 'nombre' => "%$searchValue%",
                 'representante' => "%$searchValue%",
                 'telefono' => "%$searchValue%",
@@ -121,8 +126,8 @@ class Empresa
                 'pais' => "%$searchValue%",
                 'ciudad' => "%$searchValue%",
                 'contacto' => "%$searchValue%",
-                'emailTec' => "%$searchValue%",
-                'emaiLogis' => "%$searchValue%",
+                'email_tec' => "%$searchValue%",
+                'email_logis' => "%$searchValue%",
                 'status' => "%$searchValue%"
             );
         }
@@ -137,7 +142,7 @@ class Empresa
         $records = $stmt->fetch();
         $totalRecordwithFilter = $records['allcount'];
         // --Fetch records--
-        $stmt = $this->conn->prepare("SELECT (nit)nitId, concat(nit,' - ',digito)nit, nombre, representante, telefono, direccion, correo, pais, ciudad, contacto, email_tec, email_logis, status FROM " . $this->tableName . " WHERE 1 " . $searchQuery . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
+        $stmt = $this->conn->prepare("SELECT nit, digito, nombre, representante, telefono, direccion, correo, pais, ciudad, contacto, email_tec, email_logis, status FROM " . $this->tableName . " WHERE 1 " . $searchQuery . " AND status in(1, 2) ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
         // --Bind values--
         foreach ($searchArray as $key => $search) {
             $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
@@ -152,6 +157,7 @@ class Empresa
             $statusColor = $row['status'] == '1' ? 'info' : 'secondary';
             $data[] = array(
                 "nit" => $row['nit'],
+                "digito" => $row['digito'],
                 "nombre" => $row['nombre'],
                 "representante" => $row['representante'],
                 "telefono" => $row['telefono'],
@@ -165,13 +171,13 @@ class Empresa
                 "status" => $estado,
                 "defaultContent" => "
                                     <div class='btn-group'>
-                                        <button type='button' class='btn btn-success text-white' data-toggle='tooltip' data-placement='top' title='Editar Empresa' onclick='editarRegistro(" . $row['nitId'] . ");'>
+                                        <button type='button' class='btn btn-success text-white' data-toggle='tooltip' data-placement='top' title='Editar Empresa' onclick='editarRegistro(" . $row['nit'] . ");'>
                                             <i class='fa-regular fa-pen-to-square'></i>
                                         </button>
-                                        <button type='button' class='btn btn-danger text-white' data-toggle='tooltip' data-placement='top' title='Eliminar Empresa' onclick='eliminarRegistro(" . $row['nitId'] . ");'>
+                                        <button type='button' class='btn btn-danger text-white' data-toggle='tooltip' data-placement='top' title='Eliminar Empresa' onclick='eliminarRegistro(" . $row['nit'] . ");'>
                                             <i class='fa-regular fa-trash-can'></i>
                                         </button>
-                                        <button type='button' class='btn btn-" . $statusColor . " text-white' data-toggle='tooltip' data-placement='top' title='Estado de la Empresa' onclick='statusRegistro(" . $row['nitId'] . ", " . $row['status'] . ");'>
+                                        <button type='button' class='btn btn-" . $statusColor . " text-white' data-toggle='tooltip' data-placement='top' title='Estado de la Empresa' onclick='statusRegistro(" . $row['nit'] . ", " . $row['status'] . ");'>
                                             <i class='fa-regular fa-eye'></i></button>
                                     </div>"
             );
@@ -186,10 +192,11 @@ class Empresa
         echo json_encode($response);
     }
 
+    // -- ⊡ Funcion para cambiar el estado de la empresa ⊡ --
     public function statusEmpresa(): void
     {
         // --Preparamos la consulta--
-        $query = "UPDATE " . $this->tableName . " SET status =? WHERE nit=?";
+        $query = "UPDATE $this->tableName SET status =? WHERE nit=?";
         $stmt = $this->conn->prepare($query);
 
         $estado = $this->status == '1' ? '2' : '1';
@@ -206,72 +213,109 @@ class Empresa
         }
     }
 
+    // -- ⊡ Funcion para traer datos de la empresa segun nit ⊡ --
+    public function dataEmpresa(): void
+    {
+        // --Preparamos la consulta--
+        $query = "SELECT nit, digito, nombre, representante, telefono, direccion, correo, contacto, email_tec, email_logis, content_type, base_64, status FROM $this->tableName WHERE nit=? ;";
+        $stmt = $this->conn->prepare($query);
 
-    // public function updatePersona(): void
-    // {
-    //     // --Preparamos la consulta--
-    //     $query = "UPDATE " . $this->tableName . " SET identificacion=?, nombres=?, a_paterno=?, a_materno=?, telefono=?, email_user=?, pswd=?,
-    //     ruc=?, nombrefiscal=?, direccionfiscal=?, rolid=?, datecreated=?, status=? WHERE id=?";
-    //     $stmt = $this->conn->prepare($query);
+        // --Almacenamos los valores--
+        $stmt->bindParam(1, $this->nit);
 
-    //     // --Escapamos los caracteres--
-    //     $this->identificacion = htmlspecialchars(strip_tags($this->identificacion));
-    //     $this->nombres = htmlspecialchars(strip_tags($this->nombres));
-    //     $this->a_paterno = htmlspecialchars(strip_tags($this->a_paterno));
-    //     $this->a_materno = htmlspecialchars(strip_tags($this->a_materno));
-    //     $this->telefono = htmlspecialchars(strip_tags($this->telefono));
-    //     $this->email_user = htmlspecialchars(strip_tags($this->email_user));
-    //     $this->pswd = htmlspecialchars(strip_tags($this->pswd));
-    //     $this->ruc = htmlspecialchars(strip_tags($this->ruc));
-    //     $this->nombrefiscal = htmlspecialchars(strip_tags($this->nombrefiscal));
-    //     $this->direccionfiscal = htmlspecialchars(strip_tags($this->direccionfiscal));
-    //     $this->rolid = htmlspecialchars(strip_tags($this->rolid));
-    //     $this->datecreated = htmlspecialchars(strip_tags($this->datecreated));
-    //     $this->status = htmlspecialchars(strip_tags($this->status));
-    //     $this->id = htmlspecialchars(strip_tags($this->id));
+        // --Ejecutamos la consulta y validamos ejecucion--
+        if ($stmt->execute()) {
 
-    //     // --Almacenamos los valores--
-    //     $stmt->bindParam(1, $this->identificacion);
-    //     $stmt->bindParam(2, $this->nombres);
-    //     $stmt->bindParam(3, $this->a_paterno);
-    //     $stmt->bindParam(4, $this->a_materno);
-    //     $stmt->bindParam(5, $this->telefono);
-    //     $stmt->bindParam(6, $this->email_user);
-    //     $stmt->bindParam(7, $this->pswd);
-    //     $stmt->bindParam(8, $this->ruc);
-    //     $stmt->bindParam(9, $this->nombrefiscal);
-    //     $stmt->bindParam(10, $this->direccionfiscal);
-    //     $stmt->bindParam(11, $this->rolid);
-    //     $stmt->bindParam(12, $this->datecreated);
-    //     $stmt->bindParam(13, $this->status);
-    //     $stmt->bindParam(14, $this->id);
+            // --Comprobamos que venga algun dato--
+            if ($stmt->rowCount() >= 1) {
 
-    //     // --Ejecutamos la consulta y validamos ejecucion--
-    //     if ($stmt->execute()) {
-    //         echo json_encode(array('status' => '1', 'message' => 'Usuario Actualizado Exitosamente'));
-    //     } else {
-    //         echo json_encode(array('status' => '0', 'data' => 'Hubo un error'));
-    //     }
-    // }
+                // --Cosulta a Objetos--
+                $data = $stmt->fetch(PDO::FETCH_OBJ);
 
-    // public function deletePersona(): void
-    // {
-    //     // --Preparamos la consulta--
-    //     $query = "DELETE FROM " . $this->tableName . " WHERE id=?";
-    //     $stmt = $this->conn->prepare($query);
+                $datos = array(
+                    'nit' => $data->nit,
+                    'digito' => $data->digito,
+                    'nombre' => $data->nombre,
+                    'representante' => $data->representante,
+                    'telefono' => $data->telefono,
+                    'direccion' => $data->direccion,
+                    'correo' => $data->correo,
+                    'contacto' => $data->contacto,
+                    'emailTec' => $data->email_tec,
+                    'emaiLogis' => $data->email_logis,
+                    'contenType' => $data->content_type,
+                    'base64' => $data->base_64
+                );
+                // --Retornamos las respuestas--
+                echo json_encode(array('status' => '1', 'data' => $datos));
+            } else {
+                // --Usuario no encontrado o inactivo--
+                echo json_encode(array('status' => '3', 'data' => NULL));
+            }
+        } else {
+            // --Falla en la ejecución de la consulta--
+            echo json_encode(array('status' => '0', 'data' => NULL));
+        }
+    }
 
-    //     // --Escapamos los caracteres--
-    //     $this->id = htmlspecialchars(strip_tags($this->id));
+    // -- ⊡ Funcion para actualizar empresa ⊡ --
+    public function updateEmpresa(): void
+    {
+        // --Preparamos la consulta--
+        $query = "UPDATE $this->tableName SET nit=?, digito=?, nombre=?, representante=?, telefono=?, direccion=?, correo=?, contacto=?,
+        email_tec=?, email_logis=?, content_type=?, base_64=? WHERE nit=?";
+        $stmt = $this->conn->prepare($query);
 
-    //     // --Almacenamos los valores--
-    //     $stmt->bindParam(1, $this->id);
+        // --Escapamos los caracteres--
+        $this->nit = htmlspecialchars(strip_tags($this->nit));
+        $this->digito = htmlspecialchars(strip_tags($this->digito));
+        $this->nombre = htmlspecialchars(strip_tags($this->nombre));
+        $this->representante = htmlspecialchars(strip_tags($this->representante));
+        $this->telefono = htmlspecialchars(strip_tags($this->telefono));
+        $this->direccion = htmlspecialchars(strip_tags($this->direccion));
+        $this->correo = htmlspecialchars(strip_tags($this->correo));
+        $this->contacto = htmlspecialchars(strip_tags($this->contacto));
+        $this->emailTec = htmlspecialchars(strip_tags($this->emailTec));
+        $this->emailLogis = htmlspecialchars(strip_tags($this->emailLogis));
 
-    //     // --Ejecutamos la consulta y validamos ejecucion--
-    //     if ($stmt->execute()) {
-    //         echo json_encode(array('status' => '1', 'message' => 'Usuario Borrado Exitosamente'));
-    //     } else {
-    //         echo json_encode(array('status' => '0', 'data' => 'Hubo un error'));
-    //     }
-    // }
+        // --Almacenamos los valores--
+        $stmt->bindParam(1, $this->nit);
+        $stmt->bindParam(2, $this->digito);
+        $stmt->bindParam(3, $this->nombre);
+        $stmt->bindParam(4, $this->representante);
+        $stmt->bindParam(5, $this->telefono);
+        $stmt->bindParam(6, $this->direccion);
+        $stmt->bindParam(7, $this->correo);
+        $stmt->bindParam(8, $this->contacto);
+        $stmt->bindParam(9, $this->emailTec);
+        $stmt->bindParam(10, $this->emailLogis);
+        $stmt->bindParam(11, $this->contenType);
+        $stmt->bindParam(12, $this->base64);
+        $stmt->bindParam(13, $this->id);
 
+        // --Ejecutamos la consulta y validamos ejecucion--
+        if ($stmt->execute()) {
+            echo json_encode(array('status' => '1', 'data' => NULL));
+        } else {
+            echo json_encode(array('status' => '0', 'data' => NULL));
+        }
+    }
+
+    // -- ⊡ Funcion para eliminar empresa ⊡ --
+    public function deleteEmpresa(): void
+    {
+        // --Preparamos la consulta--
+        $query = "UPDATE $this->tableName SET status = 3 WHERE nit=?";
+        $stmt = $this->conn->prepare($query);
+
+        // --Almacenamos los valores--
+        $stmt->bindParam(1, $this->nit);
+
+        // --Ejecutamos la consulta y validamos ejecucion--
+        if ($stmt->execute()) {
+            echo json_encode(array('status' => '1', 'data' => NULL));
+        } else {
+            echo json_encode(array('status' => '0', 'data' => NULL));
+        }
+    }
 }

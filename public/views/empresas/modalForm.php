@@ -62,6 +62,11 @@
                         </div>
                     </div>
                     <div class="form-group">
+
+                        <div id="imagenBase64">
+
+                        </div>
+
                         <label class="form-label" for="logo">Logo de la empresa</label>
                         <div class="input-group">
 
@@ -76,7 +81,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-info active" id="btnRegistro"></button>
+                <button type="button" id="btnRegistro"></button>
             </div>
         </div>
     </div>
