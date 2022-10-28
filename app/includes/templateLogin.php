@@ -25,7 +25,6 @@ class TemplateLogin
                     <link rel='apple-touch-icon' sizes='180x180' href='" . IMG . "favicon/apple-touch-icon.png'>
                     <link rel='icon' type='image/png' sizes='32x32' href='" . IMG . "favicon/favicon-32x32.png'>
                     <link rel='mask-icon' href='" . IMG . "favicon/safari-pinned-tab.svg' color='#5bbad5'>
-                    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css' integrity='sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==' crossorigin='anonymous' referrerpolicy='no-referrer' />
                 </head>";
         echo $html;
     }

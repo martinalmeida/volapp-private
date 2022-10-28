@@ -10,11 +10,11 @@ $view->initializationView();
 ?>
 
 <!-- ========== Inicio Componente de Vista ========== -->
-<div class="subheader" id="titleModule">
+<div class="subheader">
     <h1 class="subheader-title">
-        <i class='fal fa-info-circle'></i> Roles
+        <i class='fal fa-info-circle'></i> Roles y Permisos
     </h1>
-    <button type="button" class="btn btn-info active" data-toggle="modal" data-target="#default-example-modal-lg">AGREGAR</button>
+    <button type="button" class="btn btn-info active" onclick="showModalRegistro();">Agregar <i class="fal fa-plus-square"></i></button>
 </div>
 
 <div class="row">
@@ -22,7 +22,7 @@ $view->initializationView();
         <div id="panel-1" class="panel">
             <div class="panel-hdr">
                 <h2>
-                    Tabla de Roles
+                    Tabla de Roles y Permisos
                     <!-- Tabla <span class="fw-300"><i>Usuarios</i></span> -->
                 </h2>
                 <div class="panel-toolbar">
@@ -35,20 +35,14 @@ $view->initializationView();
                 <div class="panel-content">
                     <!-- <div class="panel-tag">
                     </div> -->
-                    <table id="table_persona" class="table table-bordered table-hover table-striped w-100">
+                    <table id="tablaRoles" class="table table-bordered table-hover table-striped w-100">
                         <thead class="bg-primary-600">
                             <tr>
-                                <th>Id</th>
-                                <th>Identificación</th>
-                                <th>Nombres</th>
-                                <th>Apellidos</th>
-                                <th>Telefono</th>
-                                <th>Correo</th>
-                                <th>RUC</th>
-                                <th>Nombre del Fiscal</th>
-                                <th>Dirección Fiscal</th>
-                                <th>Rol</th>
+                                <th>id</th>
+                                <th>Nombre Rol</th>
+                                <th>Descripción</th>
                                 <th>Estado</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -62,9 +56,11 @@ $view->initializationView();
 </div>
 
 <h3>
-    Pagina de Roles
+    Pagina de Roles y Permisos
 </h3>
 
 <?php
 include_once(VIEW . 'roles/modalForm.php');
+include_once(VIEW . 'roles/modalPermisos.php');
+include_once(VIEW . 'roles/modalAsignarModulos.php');
 $view->finalizeView();

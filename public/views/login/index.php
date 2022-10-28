@@ -24,16 +24,13 @@ $view->initializationView();
             </div>
             <div class="d-flex flex-row opacity-70">
                 <a href="#" class="mr-2 fs-xxl text-white">
-                    <i class="fa-brands fa-facebook"></i>
+                    <i class="ni ni-social-facebook"></i>
                 </a>
                 <a href="#" class="mr-2 fs-xxl text-white">
-                    <i class="fab fa-twitter-square"></i>
+                    <i class="ni ni-social-twitter"></i>
                 </a>
                 <a href="#" class="mr-2 fs-xxl text-white">
-                    <i class="fab fa-google-plus-square"></i>
-                </a>
-                <a href="#" class="mr-2 fs-xxl text-white">
-                    <i class="fab fa-linkedin"></i>
+                    <i class="ni ni-social-youtube"></i>
                 </a>
             </div>
         </div>

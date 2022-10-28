@@ -136,8 +136,8 @@ class EmpresasController
         $empresa->contacto = isset($_POST['contacto']) ? strtoupper(trim($_POST['contacto'])) : NULL;
         $empresa->emailTec = isset($_POST['emailTec']) ? strtoupper(trim($_POST['emailTec'])) : NULL;
         $empresa->emailLogis = isset($_POST['emailLogis']) ? strtoupper(trim($_POST['emailLogis'])) : NULL;
-        $empresa->contenType = isset($_POST['contenType']) ? strtoupper(trim($_POST['contenType'])) : NULL;
-        $empresa->base64 = isset($_POST['base64']) ? strtoupper(trim($_POST['base64'])) : NULL;
+        $empresa->contenType = isset($_POST['contenType']) ? trim($_POST['contenType']) : NULL;
+        $empresa->base64 = isset($_POST['base64']) ? trim($_POST['base64']) : NULL;
         $empresa->id = isset($_POST['idEmpresa']) ? strtoupper(trim($_POST['idEmpresa'])) : NULL;
 
         if (is_uploaded_file($_FILES['logo']['tmp_name'])) {

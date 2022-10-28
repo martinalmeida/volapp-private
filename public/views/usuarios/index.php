@@ -14,7 +14,7 @@ $view->initializationView();
     <h1 class="subheader-title">
         <i class='fal fa-info-circle'></i> Usuarios
     </h1>
-    <button type="button" class="btn btn-info active" data-toggle="modal" data-target="#default-example-modal-lg">Agregar <i class="fa-solid fa-plus"></i></button>
+    <button type="button" class="btn btn-info active" onclick="showModalRegistro();">Agregar <i class="fa-solid fa-plus"></i></button>
 </div>
 
 <div class="row">
@@ -38,16 +38,18 @@ $view->initializationView();
                     <table id="tablaUsuarios" class="table table-bordered table-hover table-striped w-100">
                         <thead class="bg-primary-600">
                             <tr>
-                                <th>Id</th>
-                                <th>Identificación</th>
-                                <th>Nombres</th>
-                                <th>Apellidos</th>
+                                <th>Nit</th>
+                                <th>Digito</th>
+                                <th>Nombre</th>
+                                <th>Representante</th>
                                 <th>Telefono</th>
-                                <th>Correo</th>
-                                <th>RUC</th>
-                                <th>Nombre del Fiscal</th>
-                                <th>Dirección Fiscal</th>
-                                <th>Rol</th>
+                                <th>Direccion</th>
+                                <th>Correo Electronico</th>
+                                <th>Pais</th>
+                                <th>Ciudad</th>
+                                <th>Nmro. Contacto</th>
+                                <th>Correo Tecnico</th>
+                                <th>Correo Logistica</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
                             </tr>

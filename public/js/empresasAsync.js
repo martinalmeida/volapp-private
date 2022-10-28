@@ -356,6 +356,20 @@ function statusRegistro(nit, status) {
     success: function (result) {
       var estado = result.status;
       switch (estado) {
+        case "0":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error en el servidor</strong>",
+            html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
         case "1":
           Command: toastr["success"](
             "Estado de la empresa cambiado exitosamente.",
@@ -451,6 +465,20 @@ function eliminarRegistro(nit) {
         success: function (result) {
           var estado = result.status;
           switch (estado) {
+            case "0":
+              Swal.fire({
+                icon: "error",
+                title: "<strong>Error en el servidor</strong>",
+                html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
+                showCloseButton: true,
+                showConfirmButton: false,
+                cancelButtonText: "Cerrar",
+                cancelButtonColor: "#dc3545",
+                showCancelButton: true,
+                backdrop: true,
+              });
+              break;
+
             case "1":
               Command: toastr["success"](
                 "La empresa se ha eliminado satisfactoriamente.",

@@ -172,13 +172,14 @@ class Empresa
                 "defaultContent" => "
                                     <div class='btn-group'>
                                         <button type='button' class='btn btn-success text-white' data-toggle='tooltip' data-placement='top' title='Editar Empresa' onclick='editarRegistro(" . $row['nit'] . ");'>
-                                            <i class='fa-regular fa-pen-to-square'></i>
+                                            <i class='fal fa-edit'></i>
                                         </button>
                                         <button type='button' class='btn btn-danger text-white' data-toggle='tooltip' data-placement='top' title='Eliminar Empresa' onclick='eliminarRegistro(" . $row['nit'] . ");'>
-                                            <i class='fa-regular fa-trash-can'></i>
+                                            <i class='fal fa-trash'></i>
                                         </button>
                                         <button type='button' class='btn btn-" . $statusColor . " text-white' data-toggle='tooltip' data-placement='top' title='Estado de la Empresa' onclick='statusRegistro(" . $row['nit'] . ", " . $row['status'] . ");'>
-                                            <i class='fa-regular fa-eye'></i></button>
+                                            <i class='fal fa-eye'></i>
+                                        </button>
                                     </div>"
             );
         }
@@ -217,7 +218,7 @@ class Empresa
     public function dataEmpresa(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT nit, digito, nombre, representante, telefono, direccion, correo, contacto, email_tec, email_logis, content_type, base_64, status FROM $this->tableName WHERE nit=? ;";
+        $query = "SELECT nit, digito, nombre, representante, telefono, direccion, correo, contacto, email_tec, email_logis, content_type, base_64 FROM $this->tableName WHERE nit=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Almacenamos los valores--

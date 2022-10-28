@@ -14,7 +14,7 @@ $view->initializationView();
     <h1 class="subheader-title">
         <i class='fal fa-info-circle'></i> Empresas
     </h1>
-    <button type="button" class="btn btn-info active" onclick="showModalRegistro();">Agregar <i class="fa-solid fa-plus"></i></button>
+    <button type="button" class="btn btn-info active" onclick="showModalRegistro();">Agregar <i class="fal fa-plus-square"></i></button>
 </div>
 
 <div class="row">
