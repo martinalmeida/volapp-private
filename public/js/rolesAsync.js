@@ -174,6 +174,7 @@ function registrar(form) {
 }
 
 function editarRegistro(id) {
+  $("#inputsEditar").html("");
   edit = true;
   $.ajax({
     data: { idRol: id }, //datos a enviar a la url

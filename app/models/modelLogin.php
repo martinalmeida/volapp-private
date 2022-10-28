@@ -56,8 +56,7 @@ class Login
                     'usuario' => $data->nombres,
                     'email' => $data->email_user,
                     'permisos' => $permisos,
-                    'content' => $data->content_type,
-                    'base64' => $data->base_64,
+                    'imagenUser' => 'data: ' . $data->content_type . ';base64,' . $data->base_64,
                     'token' => "dqtQS2cBmGd8MbyMCHBj3Dq38Xm89vVyxxum4aySt9witAwBN9",
                 );
                 SesionTools::crearSesion($datosSesion);
@@ -78,7 +77,7 @@ class Login
     {
         // -- ↓↓ Preparamos la consulta ↓↓ --
         $query = "SELECT 
-                  (p2.rolid)rol, (p2.moduloid)id, (m.menu_id)idsubmodulo, (m.titulo)modulo, m.icono, (m.page)pagina, p2.r, p2.w, p2.u, p2.d
+                  (p2.rolid)rol, (p2.moduloid)id, (m.menu_id)idsubmodulo, (m.titulo)modulo, m.icono, (m.page)pagina
                   FROM $this->tableName p 
                   JOIN $this->tableRol r ON p.rolid = r.id 
                   JOIN $this->tablePermisos p2 ON p2.rolid = r.id 
@@ -108,10 +107,6 @@ class Login
                         "modulo" => $row["modulo"],
                         "icono" => $row["icono"],
                         "pagina" => $row["pagina"],
-                        "r" => $row["r"],
-                        "w" => $row["w"],
-                        "u" => $row["u"],
-                        "d" => $row["d"],
                     );
                 }
                 return $arrayPermisos;
