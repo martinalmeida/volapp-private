@@ -16,49 +16,45 @@
                 <form id="frmRegistro">
                     <div class="form-row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label" for="nit">NIT</label>
-                            <input type="number" onKeyPress="if(this.value.length==20)return false;" min="0" class="form-control" id="nit" name="nit" placeholder="Nit de empresa" required>
+                            <label class="form-label" for="identificacion">Identificacion</label>
+                            <input type="number" onKeyPress="if(this.value.length==50)return false;" min="0" class="form-control" id="identificacion" name="identificacion" placeholder="Identificación del usuario" required>
                         </div>
-                        <div class="col-md-2 mb-3">
-                            <label class="form-label" for="digito">Digito</label>
-                            <input type="number" onKeyPress="if(this.value.length==1)return false;" min="0" class="form-control" id="digito" name="digito" placeholder="Digito" required>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label" for="nombre">Nombre</label>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="nombres">Nombres</label>
                             <div class="input-group">
-                                <input type="text" onKeyPress="if(this.value.length==55)return false;" min="0" class="form-control" id="nombre" name="nombre" placeholder="Nombre de Empresa" required>
+                                <input type="text" onKeyPress="if(this.value.length==50)return false;" min="0" class="form-control" id="nombres" name="nombres" placeholder="Nombres del usuario" required>
                             </div>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label class="form-label" for="representante">Representante</label>
-                            <input type="text" onKeyPress="if(this.value.length==55)return false;" min="0" class="form-control" id="representante" name="representante" placeholder="Representante Legal" required>
+                            <label class="form-label" for="Apaterno">Apellido Paterno</label>
+                            <input type="text" onKeyPress="if(this.value.length==30)return false;" min="0" class="form-control" id="Apaterno" name="Apaterno" placeholder="Apellido Paterno" required>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label class="form-label" for="telefono">Numero de Telefono</label>
-                            <input type="number" onKeyPress="if(this.value.length==10)return false;" min="0" class="form-control" id="telefono" name="telefono" placeholder="Numero de contacto" required>
+                            <label class="form-label" for="Amaterno">Apellido Materno</label>
+                            <input type="text" onKeyPress="if(this.value.length==30)return false;" min="0" class="form-control" id="Amaterno" name="Amaterno" placeholder="Apellido Materno" required>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label class="form-label" for="direccion">Dirección</label>
-                            <input type="text" onKeyPress="if(this.value.length==100)return false;" min="0" class="form-control" id="direccion" name="direccion" placeholder="Dirección" required>
+                            <label class="form-label" for="telefono">Telefono</label>
+                            <input type="number" onKeyPress="if(this.value.length==10)return false;" min="0" class="form-control" id="telefono" name="telefono" placeholder="Telefono" required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="col-md-8 mb-3">
-                            <label class="form-label" for="correo">Correo Electronico</label>
-                            <input type="email" onKeyPress="if(this.value.length==100)return false;" min="0" class="form-control" id="correo" name="correo" placeholder="Correo Electronico de la empresa" required>
+                            <label class="form-label" for="emailUser">Correo Electronico</label>
+                            <input type="email" onKeyPress="if(this.value.length==100)return false;" min="0" class="form-control" id="emailUser" name="emailUser" placeholder="Correo Electronico del usuario" required>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label class="form-label" for="contacto">Numero de Contacto</label>
-                            <input type="number" onKeyPress="if(this.value.length==10)return false;" min="0" class="form-control" id="contacto" name="contacto" placeholder="Numero de contacto" required>
+                            <label class="form-label" for="pswd">Contraseña</label>
+                            <input type="text" onKeyPress="if(this.value.length==20)return false;" min="0" class="form-control" id="pswd" name="pswd" placeholder="Contraseña" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label" for="emailTec">Correo Electronico Tecnico</label>
-                            <input type="text" onKeyPress="if(this.value.length==100)return false;" min="0" class="form-control" id="emailTec" name="emailTec" placeholder="Correo Electronico Tecnico" required>
+                            <label class="form-label" for="nombreFiscal">Nombre Fiscal</label>
+                            <input type="text" onKeyPress="if(this.value.length==81)return false;" min="0" class="form-control" id="nombreFiscal" name="nombreFiscal" placeholder="Nombre fiscal del usuario" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label" for="emailLogis">Correo Electronico Logistica</label>
-                            <input type="text" onKeyPress="if(this.value.length==100)return false;" min="0" class="form-control" id="emailLogis" name="emailLogis" placeholder="Correo Electronico Logistica" required>
+                            <label class="form-label" for="direccionFiscal">Dirección Fiscal</label>
+                            <input type="text" onKeyPress="if(this.value.length==100)return false;" min="0" class="form-control" id="direccionFiscal" name="direccionFiscal" placeholder="Dirección fiscal del usuario" required>
                         </div>
                     </div>
                     <div class="form-group">
@@ -67,15 +63,15 @@
 
                         </div>
 
-                        <label class="form-label" for="logo">Logo de la empresa</label>
+                        <label class="form-label" for="logo">Foto de Usuario</label>
                         <div class="input-group">
 
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="logo" name="logo" required>
-                                <label class="custom-file-label" for="logo">Adjuntar Logo</label>
+                                <label class="custom-file-label" for="logo">Adjuntar Foto del Usuario</label>
                             </div>
                         </div>
-                        <span class="help-block">Foto del logo de la empresa en formato png.</span>
+                        <span class="help-block">Foto del usuario en formato png.</span>
                     </div>
                 </form>
             </div>

@@ -5,9 +5,9 @@ declare(strict_types=1);
 header('Content-type: application/json');
 
 include(LIBRARIES . 'validations.php');
-include(MODELS . 'modelEmpresas.php');
+include(MODELS . 'modelUsuarios.php');
 
-class EmpresasController
+class UsuariosController
 {
     public function create(): void
     {
@@ -15,19 +15,18 @@ class EmpresasController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $empresa = new Empresa($db);
+        $usuario = new Usuario($db);
 
         // --Seteo de valores existentes en el POST--
-        $empresa->nit = isset($_POST['nit']) ? strtoupper(trim($_POST['nit'])) : NULL;
-        $empresa->digito = isset($_POST['digito']) ? strtoupper(trim($_POST['digito'])) : NULL;
-        $empresa->nombre = isset($_POST['nombre']) ? strtoupper(trim($_POST['nombre'])) : NULL;
-        $empresa->representante = isset($_POST['representante']) ? strtoupper(trim($_POST['representante'])) : NULL;
-        $empresa->telefono = isset($_POST['telefono']) ? strtoupper(trim($_POST['telefono'])) : NULL;
-        $empresa->direccion = isset($_POST['direccion']) ? strtoupper(trim($_POST['direccion'])) : NULL;
-        $empresa->correo = isset($_POST['correo']) ? strtoupper(trim($_POST['correo'])) : NULL;
-        $empresa->contacto = isset($_POST['contacto']) ? strtoupper(trim($_POST['contacto'])) : NULL;
-        $empresa->emailTec = isset($_POST['emailTec']) ? strtoupper(trim($_POST['emailTec'])) : NULL;
-        $empresa->emailLogis = isset($_POST['emailLogis']) ? strtoupper(trim($_POST['emailLogis'])) : NULL;
+        $usuario->identificacion = isset($_POST['identificacion']) ? strtoupper(trim($_POST['identificacion'])) : NULL;
+        $usuario->nombres = isset($_POST['nombres']) ? strtoupper(trim($_POST['nombres'])) : NULL;
+        $usuario->Apaterno = isset($_POST['Apaterno']) ? strtoupper(trim($_POST['Apaterno'])) : NULL;
+        $usuario->Amaterno = isset($_POST['Amaterno']) ? strtoupper(trim($_POST['Amaterno'])) : NULL;
+        $usuario->telefono = isset($_POST['telefono']) ? strtoupper(trim($_POST['telefono'])) : NULL;
+        $usuario->emailUser = isset($_POST['emailUser']) ? strtoupper(trim($_POST['emailUser'])) : NULL;
+        $usuario->pswd = isset($_POST['pswd']) ? strtoupper(trim($_POST['pswd'])) : NULL;
+        $usuario->nombreFiscal = isset($_POST['nombreFiscal']) ? strtoupper(trim($_POST['nombreFiscal'])) : NULL;
+        $usuario->direccionFiscal = isset($_POST['direccionFiscal']) ? strtoupper(trim($_POST['direccionFiscal'])) : NULL;
 
         if (is_uploaded_file($_FILES['logo']['tmp_name'])) {
             // --Verificacion de Archivo--
@@ -36,15 +35,14 @@ class EmpresasController
                 echo json_encode(array('status' => '4', 'data' => NULL));
             } else {
                 if ($_FILES['logo']['size'] < 2242880) {
-                    $empresa->contenType = $_FILES['logo']['type'];
-                    $empresa->base64 = base64_encode(file_get_contents($_FILES['logo']['tmp_name']));
+                    $usuario->contenType = $_FILES['logo']['type'];
+                    $usuario->base64 = base64_encode(file_get_contents($_FILES['logo']['tmp_name']));
                     if (
-                        Validar::numeros($empresa->nit) && Validar::numeros($empresa->digito) && Validar::alfanumerico($empresa->nombre) &&
-                        Validar::alfanumerico($empresa->representante) && Validar::numeros($empresa->telefono) && Validar::alfanumerico($empresa->direccion) &&
-                        Validar::correo($empresa->correo) && Validar::numeros($empresa->contacto) && Validar::correo($empresa->emailTec) &&
-                        Validar::correo($empresa->emailLogis) && Validar::tipoarchivo($empresa->contenType, 7)
+                        Validar::numeros($usuario->identificacion) && Validar::alfanumerico($usuario->nombres) && Validar::alfanumerico($usuario->Apaterno) &&
+                        Validar::alfanumerico($usuario->Amaterno) && Validar::numeros($usuario->telefono) && Validar::correo($usuario->emailUser) &&
+                        Validar::password($usuario->pswd) && Validar::alfanumerico($usuario->nombreFiscal) && Validar::direccion($usuario->direccionFiscal) && Validar::tipoarchivo($usuario->contenType, 7)
                     ) {
-                        $empresa->createEmpresa();
+                        $usuario->createUsuario();
                     } else {
                         // --Error de validación--
                         echo json_encode(array('status' => '2', 'data' => NULL));
@@ -66,17 +64,17 @@ class EmpresasController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $empresa = new Empresa($db);
+        $usuario = new Usuario($db);
 
-        $empresa->draw = htmlspecialchars($_POST['draw']);
-        $empresa->row = htmlspecialchars($_POST['start']);
-        $empresa->rowperpage = htmlspecialchars($_POST['length']);
-        $empresa->columnIndex = htmlspecialchars($_POST['order'][0]['column']);
-        $empresa->columnName = htmlspecialchars($_POST['columns'][$empresa->columnIndex]['data']);
-        $empresa->columnSortOrder = htmlspecialchars($_POST['order'][0]['dir']);
-        $empresa->searchValue = htmlspecialchars($_POST['search']['value']);
+        $usuario->draw = htmlspecialchars($_POST['draw']);
+        $usuario->row = htmlspecialchars($_POST['start']);
+        $usuario->rowperpage = htmlspecialchars($_POST['length']);
+        $usuario->columnIndex = htmlspecialchars($_POST['order'][0]['column']);
+        $usuario->columnName = htmlspecialchars($_POST['columns'][$usuario->columnIndex]['data']);
+        $usuario->columnSortOrder = htmlspecialchars($_POST['order'][0]['dir']);
+        $usuario->searchValue = htmlspecialchars($_POST['search']['value']);
 
-        $empresa->readAllDaTableEmpresa();
+        $usuario->readAllDaTableUsario();
     }
 
     public function status(): void
@@ -85,14 +83,14 @@ class EmpresasController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $empresa = new Empresa($db);
+        $usuario = new Usuario($db);
 
         // --Seteo de valores existentes en el POST--
-        $empresa->nit = isset($_POST['nitEmpresa']) ? strtoupper(trim($_POST['nitEmpresa'])) : NULL;
-        $empresa->status = isset($_POST['status']) ? strtoupper(trim($_POST['status'])) : NULL;
+        $usuario->id = isset($_POST['idUser']) ? strtoupper(trim($_POST['idUser'])) : NULL;
+        $usuario->status = isset($_POST['status']) ? strtoupper(trim($_POST['status'])) : NULL;
 
-        if (Validar::numeros($empresa->nit) && Validar::numeros($empresa->status)) {
-            $empresa->statusEmpresa();
+        if (Validar::numeros($usuario->id) && Validar::numeros($usuario->status)) {
+            $usuario->statusUsuario();
         } else {
             echo json_encode(array('status' => '2', 'data' => NULL));
         }
@@ -104,14 +102,14 @@ class EmpresasController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $empresa = new Empresa($db);
+        $usuario = new Usuario($db);
 
         // --Seteo de valores existentes en el POST--
-        $empresa->nit = isset($_POST['nitEmpresa']) ? strtoupper(trim($_POST['nitEmpresa'])) : NULL;
+        $usuario->id = isset($_POST['idUser']) ? strtoupper(trim($_POST['idUser'])) : NULL;
 
         // --Validacion de datos a enviar al modelo--
-        if (Validar::numeros($empresa->nit)) {
-            $empresa->dataEmpresa();
+        if (Validar::numeros($usuario->id)) {
+            $usuario->dataUsuario();
         } else {
             echo json_encode(array('status' => '2', 'data' => NULL));
         }
@@ -123,22 +121,21 @@ class EmpresasController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $empresa = new Empresa($db);
+        $usuario = new Usuario($db);
 
         // --Seteo de valores existentes en el POST--
-        $empresa->nit = isset($_POST['nit']) ? strtoupper(trim($_POST['nit'])) : NULL;
-        $empresa->digito = isset($_POST['digito']) ? strtoupper(trim($_POST['digito'])) : NULL;
-        $empresa->nombre = isset($_POST['nombre']) ? strtoupper(trim($_POST['nombre'])) : NULL;
-        $empresa->representante = isset($_POST['representante']) ? strtoupper(trim($_POST['representante'])) : NULL;
-        $empresa->telefono = isset($_POST['telefono']) ? strtoupper(trim($_POST['telefono'])) : NULL;
-        $empresa->direccion = isset($_POST['direccion']) ? strtoupper(trim($_POST['direccion'])) : NULL;
-        $empresa->correo = isset($_POST['correo']) ? strtoupper(trim($_POST['correo'])) : NULL;
-        $empresa->contacto = isset($_POST['contacto']) ? strtoupper(trim($_POST['contacto'])) : NULL;
-        $empresa->emailTec = isset($_POST['emailTec']) ? strtoupper(trim($_POST['emailTec'])) : NULL;
-        $empresa->emailLogis = isset($_POST['emailLogis']) ? strtoupper(trim($_POST['emailLogis'])) : NULL;
-        $empresa->contenType = isset($_POST['contenType']) ? trim($_POST['contenType']) : NULL;
-        $empresa->base64 = isset($_POST['base64']) ? trim($_POST['base64']) : NULL;
-        $empresa->id = isset($_POST['idEmpresa']) ? strtoupper(trim($_POST['idEmpresa'])) : NULL;
+        $usuario->identificacion = isset($_POST['identificacion']) ? strtoupper(trim($_POST['identificacion'])) : NULL;
+        $usuario->nombres = isset($_POST['nombres']) ? strtoupper(trim($_POST['nombres'])) : NULL;
+        $usuario->Apaterno = isset($_POST['Apaterno']) ? strtoupper(trim($_POST['Apaterno'])) : NULL;
+        $usuario->Amaterno = isset($_POST['Amaterno']) ? strtoupper(trim($_POST['Amaterno'])) : NULL;
+        $usuario->telefono = isset($_POST['telefono']) ? strtoupper(trim($_POST['telefono'])) : NULL;
+        $usuario->emailUser = isset($_POST['emailUser']) ? strtoupper(trim($_POST['emailUser'])) : NULL;
+        $usuario->pswd = isset($_POST['pswd']) ? strtoupper(trim($_POST['pswd'])) : NULL;
+        $usuario->nombreFiscal = isset($_POST['nombreFiscal']) ? strtoupper(trim($_POST['nombreFiscal'])) : NULL;
+        $usuario->direccionFiscal = isset($_POST['direccionFiscal']) ? strtoupper(trim($_POST['direccionFiscal'])) : NULL;
+        $usuario->contenType = isset($_POST['contenType']) ? trim($_POST['contenType']) : NULL;
+        $usuario->base64 = isset($_POST['base64']) ? trim($_POST['base64']) : NULL;
+        $usuario->id = isset($_POST['idUser']) ? strtoupper(trim($_POST['idUser'])) : NULL;
 
         if (is_uploaded_file($_FILES['logo']['tmp_name'])) {
             // --Verificacion de Archivo--
@@ -147,15 +144,14 @@ class EmpresasController
                 echo json_encode(array('status' => '4', 'data' => NULL));
             } else {
                 if ($_FILES['logo']['size'] < 2242880) {
-                    $empresa->contenType = $_FILES['logo']['type'];
-                    $empresa->base64 = base64_encode(file_get_contents($_FILES['logo']['tmp_name']));
+                    $usuario->contenType = $_FILES['logo']['type'];
+                    $usuario->base64 = base64_encode(file_get_contents($_FILES['logo']['tmp_name']));
                     if (
-                        Validar::numeros($empresa->nit) && Validar::numeros($empresa->digito) && Validar::alfanumerico($empresa->nombre) &&
-                        Validar::alfanumerico($empresa->representante) && Validar::numeros($empresa->telefono) && Validar::alfanumerico($empresa->direccion) &&
-                        Validar::correo($empresa->correo) && Validar::numeros($empresa->contacto) && Validar::correo($empresa->emailTec) &&
-                        Validar::correo($empresa->emailLogis) && Validar::tipoarchivo($empresa->contenType, 7) && Validar::numeros($empresa->id)
+                        Validar::numeros($usuario->identificacion) && Validar::alfanumerico($usuario->nombres) && Validar::alfanumerico($usuario->Apaterno) &&
+                        Validar::alfanumerico($usuario->Amaterno) && Validar::numeros($usuario->telefono) && Validar::correo($usuario->emailUser) &&
+                        Validar::password($usuario->pswd) && Validar::alfanumerico($usuario->nombreFiscal) && Validar::direccion($usuario->direccionFiscal) && Validar::tipoarchivo($usuario->contenType, 7)
                     ) {
-                        $empresa->updateEmpresa();
+                        $usuario->updateUsuario();
                     } else {
                         // --Error de validación--
                         echo json_encode(array('status' => '2', 'data' => NULL));
@@ -168,11 +164,11 @@ class EmpresasController
         } else {
             // --No se adjunta un archivo nuevo--
             if (
-                Validar::numeros($empresa->nit) && Validar::numeros($empresa->digito) && Validar::alfanumerico($empresa->nombre) && Validar::alfanumerico($empresa->representante) &&
-                Validar::numeros($empresa->telefono) && Validar::alfanumerico($empresa->direccion) && Validar::correo($empresa->correo) &&
-                Validar::numeros($empresa->contacto) && Validar::correo($empresa->emailTec) && Validar::correo($empresa->emailLogis) && Validar::numeros($empresa->id)
+                Validar::numeros($usuario->identificacion) && Validar::alfanumerico($usuario->nombres) && Validar::alfanumerico($usuario->Apaterno) &&
+                Validar::alfanumerico($usuario->Amaterno) && Validar::numeros($usuario->telefono) && Validar::correo($usuario->emailUser) &&
+                Validar::password($usuario->pswd) && Validar::alfanumerico($usuario->nombreFiscal) && Validar::direccion($usuario->direccionFiscal)
             ) {
-                $empresa->updateEmpresa();
+                $usuario->updateUsuario();
             } else {
                 // --Error de validación--
                 echo json_encode(array('status' => '2', 'data' => NULL));
@@ -186,13 +182,13 @@ class EmpresasController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $empresa = new Empresa($db);
+        $usuario = new Usuario($db);
 
         // --Seteo de valores existentes en el POST--
-        $empresa->nit = isset($_POST['nitEmpresa']) ? strtoupper(trim($_POST['nitEmpresa'])) : NULL;
+        $usuario->id = isset($_POST['idUser']) ? strtoupper(trim($_POST['idUser'])) : NULL;
 
-        if (Validar::numeros($empresa->nit)) {
-            $empresa->deleteEmpresa();
+        if (Validar::numeros($usuario->id)) {
+            $usuario->deleteUsuario();
         } else {
             echo json_encode(array('status' => '2', 'data' => NULL));
         }

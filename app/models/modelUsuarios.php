@@ -2,25 +2,22 @@
 
 declare(strict_types=1);
 
-class Empresa
+class Usuario
 {
     // --Parametros Privados--
     private $conn;
-    private $tableName = "empresas";
+    private $tableName = "usuarios";
 
     // --Parametros Publicos--
-    public $nit;
-    public $digito;
-    public $nombre;
-    public $representante;
+    public $identificacion;
+    public $nombres;
+    public $Apaterno;
+    public $Amaterno;
     public $telefono;
-    public $direccion;
-    public $correo;
-    public $pais;
-    public $ciudad;
-    public $contacto;
-    public $emailTec;
-    public $emailLogis;
+    public $emailUser;
+    public $pswd;
+    public $nombreFiscal;
+    public $direccionFiscal;
     public $contenType;
     public $base64;
     public $status;
@@ -44,40 +41,38 @@ class Empresa
     }
 
     // -- ⊡ Funcion para crear una empresa ⊡ --
-    public function createEmpresa(): void
+    public function createUsuario(): void
     {
         // --Preparamos la consulta--
-        $query = "INSERT INTO $this->tableName SET nit=?, digito=?, nombre=?, representante=?, telefono=?, direccion=?, correo=?,
-        contacto=?, email_tec=?, email_logis=?, content_type=?, base_64=?";
+        $query = "INSERT INTO $this->tableName SET identificacion=?, nombres=?, a_paterno=?, a_materno=?, telefono=?, email_user=?, pswd=?,
+        nombrefiscal=?, direccionfiscal=?, content_type=?, base_64=?";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
-        $this->nit = htmlspecialchars(strip_tags($this->nit));
-        $this->digito = htmlspecialchars(strip_tags($this->digito));
-        $this->nombre = htmlspecialchars(strip_tags($this->nombre));
-        $this->representante = htmlspecialchars(strip_tags($this->representante));
+        $this->identificacion = htmlspecialchars(strip_tags($this->identificacion));
+        $this->nombres = htmlspecialchars(strip_tags($this->nombres));
+        $this->Apaterno = htmlspecialchars(strip_tags($this->Apaterno));
+        $this->Amaterno = htmlspecialchars(strip_tags($this->Amaterno));
         $this->telefono = htmlspecialchars(strip_tags($this->telefono));
-        $this->direccion = htmlspecialchars(strip_tags($this->direccion));
-        $this->correo = htmlspecialchars(strip_tags($this->correo));
-        $this->contacto = htmlspecialchars(strip_tags($this->contacto));
-        $this->emailTec = htmlspecialchars(strip_tags($this->emailTec));
-        $this->emailLogis = htmlspecialchars(strip_tags($this->emailLogis));
+        $this->emailUser = htmlspecialchars(strip_tags($this->emailUser));
+        $this->pswd = htmlspecialchars(strip_tags($this->pswd));
+        $this->nombreFiscal = htmlspecialchars(strip_tags($this->nombreFiscal));
+        $this->direccionFiscal = htmlspecialchars(strip_tags($this->direccionFiscal));
         $this->contenType = htmlspecialchars(strip_tags($this->contenType));
         $this->base64 = htmlspecialchars(strip_tags($this->base64));
 
         // --Almacenamos los valores--
-        $stmt->bindParam(1, $this->nit);
-        $stmt->bindParam(2, $this->digito);
-        $stmt->bindParam(3, $this->nombre);
-        $stmt->bindParam(4, $this->representante);
+        $stmt->bindParam(1, $this->identificacion);
+        $stmt->bindParam(2, $this->nombres);
+        $stmt->bindParam(3, $this->Apaterno);
+        $stmt->bindParam(4, $this->Amaterno);
         $stmt->bindParam(5, $this->telefono);
-        $stmt->bindParam(6, $this->direccion);
-        $stmt->bindParam(7, $this->correo);
-        $stmt->bindParam(8, $this->contacto);
-        $stmt->bindParam(9, $this->emailTec);
-        $stmt->bindParam(10, $this->emailLogis);
-        $stmt->bindParam(11, $this->contenType);
-        $stmt->bindParam(12, $this->base64);
+        $stmt->bindParam(6, $this->emailUser);
+        $stmt->bindParam(7, $this->pswd);
+        $stmt->bindParam(8, $this->nombreFiscal);
+        $stmt->bindParam(9, $this->direccionFiscal);
+        $stmt->bindParam(10, $this->contenType);
+        $stmt->bindParam(11, $this->base64);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
@@ -88,7 +83,7 @@ class Empresa
     }
 
     // -- ⊡ Funcion para dataTables Serverside ⊡ --
-    public function readAllDaTableEmpresa(): void
+    public function readAllDaTableUsario(): void
     {
         // --Read value--
         $draw = $this->draw = htmlspecialchars(strip_tags($this->draw));
@@ -102,32 +97,28 @@ class Empresa
         // --Search--
         $searchQuery = " ";
         if ($searchValue != '') {
-            $searchQuery = " AND (nit LIKE :nit OR 
-                            digito LIKE :digito OR
-                            nombre LIKE :nombre OR
-                            representante LIKE :representante OR 
+            $searchQuery = " AND (id LIKE :id OR 
+                            identificacion LIKE :identificacion OR
+                            nombres LIKE :nombres OR
+                            a_paterno LIKE :a_paterno OR 
+                            a_materno LIKE :a_materno OR
                             telefono LIKE :telefono OR
-                            direccion LIKE :direccion OR
-                            correo LIKE :correo OR
-                            pais LIKE :pais OR
-                            ciudad LIKE :ciudad OR
-                            contacto LIKE :contacto OR
-                            email_tec LIKE :email_tec OR
-                            email_logis LIKE :email_logis OR
+                            email_user LIKE :email_user OR
+                            pswd LIKE :pswd OR
+                            nombrefiscal LIKE :nombrefiscal OR
+                            direccionfiscal LIKE :direccionfiscal OR
                             status LIKE :status )";
             $searchArray = array(
-                'nit' => "%$searchValue%",
-                'digito' => "%$searchValue%",
-                'nombre' => "%$searchValue%",
-                'representante' => "%$searchValue%",
+                'id' => "%$searchValue%",
+                'identificacion' => "%$searchValue%",
+                'nombres' => "%$searchValue%",
+                'a_paterno' => "%$searchValue%",
+                'a_materno' => "%$searchValue%",
                 'telefono' => "%$searchValue%",
-                'direccion' => "%$searchValue%",
-                'correo' => "%$searchValue%",
-                'pais' => "%$searchValue%",
-                'ciudad' => "%$searchValue%",
-                'contacto' => "%$searchValue%",
-                'email_tec' => "%$searchValue%",
-                'email_logis' => "%$searchValue%",
+                'email_user' => "%$searchValue%",
+                'pswd' => "%$searchValue%",
+                'nombrefiscal' => "%$searchValue%",
+                'direccionfiscal' => "%$searchValue%",
                 'status' => "%$searchValue%"
             );
         }
@@ -142,7 +133,7 @@ class Empresa
         $records = $stmt->fetch();
         $totalRecordwithFilter = $records['allcount'];
         // --Fetch records--
-        $stmt = $this->conn->prepare("SELECT nit, digito, nombre, representante, telefono, direccion, correo, pais, ciudad, contacto, email_tec, email_logis, status FROM " . $this->tableName . " WHERE 1 " . $searchQuery . " AND status in(1, 2) ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
+        $stmt = $this->conn->prepare("SELECT id, identificacion, nombres, a_paterno, a_materno, telefono, email_user, pswd, nombrefiscal, direccionfiscal, status FROM " . $this->tableName . " WHERE 1 " . $searchQuery . " AND status in(1, 2) ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
         // --Bind values--
         foreach ($searchArray as $key => $search) {
             $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
@@ -156,29 +147,28 @@ class Empresa
             $estado = $row['status'] == '1' ? 'Activo' : 'Inactivo';
             $statusColor = $row['status'] == '1' ? 'info' : 'secondary';
             $data[] = array(
-                "nit" => $row['nit'],
-                "digito" => $row['digito'],
-                "nombre" => $row['nombre'],
-                "representante" => $row['representante'],
+                "id" => $row['id'],
+                "identificacion" => $row['identificacion'],
+                "nombres" => $row['nombres'],
+                "a_paterno" => $row['a_paterno'],
+                "a_materno" => $row['a_materno'],
                 "telefono" => $row['telefono'],
-                "direccion" => $row['direccion'],
-                "correo" => $row['correo'],
-                "pais" => $row['pais'],
-                "ciudad" => $row['ciudad'],
-                "contacto" => $row['contacto'],
-                "emailTec" => $row['email_tec'],
-                "emaiLogis" => $row['email_logis'],
+                "email_user" => $row['email_user'],
+                "pswd" => $row['pswd'],
+                "nombrefiscal" => $row['nombrefiscal'],
+                "direccionfiscal" => $row['direccionfiscal'],
                 "status" => $estado,
                 "defaultContent" => "
                                     <div class='btn-group'>
-                                        <button type='button' class='btn btn-success text-white' data-toggle='tooltip' data-placement='top' title='Editar Empresa' onclick='editarRegistro(" . $row['nit'] . ");'>
-                                            <i class='fa-regular fa-pen-to-square'></i>
+                                        <button type='button' class='btn btn-success text-white' data-toggle='tooltip' data-placement='top' title='Editar Empresa' onclick='editarRegistro(" . $row['id'] . ");'>
+                                            <i class='fal fa-edit'></i>
                                         </button>
-                                        <button type='button' class='btn btn-danger text-white' data-toggle='tooltip' data-placement='top' title='Eliminar Empresa' onclick='eliminarRegistro(" . $row['nit'] . ");'>
-                                            <i class='fa-regular fa-trash-can'></i>
+                                        <button type='button' class='btn btn-danger text-white' data-toggle='tooltip' data-placement='top' title='Eliminar Empresa' onclick='eliminarRegistro(" . $row['id'] . ");'>
+                                            <i class='fal fa-trash'></i>
                                         </button>
-                                        <button type='button' class='btn btn-" . $statusColor . " text-white' data-toggle='tooltip' data-placement='top' title='Estado de la Empresa' onclick='statusRegistro(" . $row['nit'] . ", " . $row['status'] . ");'>
-                                            <i class='fa-regular fa-eye'></i></button>
+                                        <button type='button' class='btn btn-" . $statusColor . " text-white' data-toggle='tooltip' data-placement='top' title='Estado de la Empresa' onclick='statusRegistro(" . $row['id'] . ", " . $row['status'] . ");'>
+                                            <i class='fal fa-eye'></i>
+                                        </button>
                                     </div>"
             );
         }
@@ -193,17 +183,17 @@ class Empresa
     }
 
     // -- ⊡ Funcion para cambiar el estado de la empresa ⊡ --
-    public function statusEmpresa(): void
+    public function statusUsuario(): void
     {
         // --Preparamos la consulta--
-        $query = "UPDATE $this->tableName SET status =? WHERE nit=?";
+        $query = "UPDATE $this->tableName SET status =? WHERE id=?";
         $stmt = $this->conn->prepare($query);
 
         $estado = $this->status == '1' ? '2' : '1';
 
         // --Almacenamos los valores--
         $stmt->bindParam(1, $estado);
-        $stmt->bindParam(2, $this->nit);
+        $stmt->bindParam(2, $this->id);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
@@ -214,14 +204,14 @@ class Empresa
     }
 
     // -- ⊡ Funcion para traer datos de la empresa segun nit ⊡ --
-    public function dataEmpresa(): void
+    public function dataUsuario(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT nit, digito, nombre, representante, telefono, direccion, correo, contacto, email_tec, email_logis, content_type, base_64, status FROM $this->tableName WHERE nit=? ;";
+        $query = "SELECT id, identificacion, nombres, a_paterno, a_materno, telefono, email_user, pswd, nombrefiscal, direccionfiscal, content_type, base_64 FROM $this->tableName WHERE id=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Almacenamos los valores--
-        $stmt->bindParam(1, $this->nit);
+        $stmt->bindParam(1, $this->id);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
@@ -233,16 +223,16 @@ class Empresa
                 $data = $stmt->fetch(PDO::FETCH_OBJ);
 
                 $datos = array(
-                    'nit' => $data->nit,
-                    'digito' => $data->digito,
-                    'nombre' => $data->nombre,
-                    'representante' => $data->representante,
+                    'id' => $data->id,
+                    'identificacion' => $data->identificacion,
+                    'nombres' => $data->nombres,
+                    'Apaterno' => $data->a_paterno,
+                    'Amaterno' => $data->a_materno,
                     'telefono' => $data->telefono,
-                    'direccion' => $data->direccion,
-                    'correo' => $data->correo,
-                    'contacto' => $data->contacto,
-                    'emailTec' => $data->email_tec,
-                    'emaiLogis' => $data->email_logis,
+                    'emailUser' => $data->email_user,
+                    'pswd' => $data->pswd,
+                    'nombreFiscal' => $data->nombrefiscal,
+                    'direccionFiscal' => $data->direccionfiscal,
                     'contenType' => $data->content_type,
                     'base64' => $data->base_64
                 );
@@ -259,39 +249,37 @@ class Empresa
     }
 
     // -- ⊡ Funcion para actualizar empresa ⊡ --
-    public function updateEmpresa(): void
+    public function updateUsuario(): void
     {
         // --Preparamos la consulta--
-        $query = "UPDATE $this->tableName SET nit=?, digito=?, nombre=?, representante=?, telefono=?, direccion=?, correo=?, contacto=?,
-        email_tec=?, email_logis=?, content_type=?, base_64=? WHERE nit=?";
+        $query = "UPDATE $this->tableName SET identificacion=?, nombres=?, a_paterno=?, a_materno=?, telefono=?, email_user=?, pswd=?, nombrefiscal=?,
+        direccionfiscal=?, content_type=?, base_64=? WHERE id=?";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
-        $this->nit = htmlspecialchars(strip_tags($this->nit));
-        $this->digito = htmlspecialchars(strip_tags($this->digito));
-        $this->nombre = htmlspecialchars(strip_tags($this->nombre));
-        $this->representante = htmlspecialchars(strip_tags($this->representante));
+        $this->identificacion = htmlspecialchars(strip_tags($this->identificacion));
+        $this->nombres = htmlspecialchars(strip_tags($this->nombres));
+        $this->Apaterno = htmlspecialchars(strip_tags($this->Apaterno));
+        $this->Amaterno = htmlspecialchars(strip_tags($this->Amaterno));
         $this->telefono = htmlspecialchars(strip_tags($this->telefono));
-        $this->direccion = htmlspecialchars(strip_tags($this->direccion));
-        $this->correo = htmlspecialchars(strip_tags($this->correo));
-        $this->contacto = htmlspecialchars(strip_tags($this->contacto));
-        $this->emailTec = htmlspecialchars(strip_tags($this->emailTec));
-        $this->emailLogis = htmlspecialchars(strip_tags($this->emailLogis));
+        $this->emailUser = htmlspecialchars(strip_tags($this->emailUser));
+        $this->pswd = htmlspecialchars(strip_tags($this->pswd));
+        $this->nombreFiscal = htmlspecialchars(strip_tags($this->nombreFiscal));
+        $this->direccionFiscal = htmlspecialchars(strip_tags($this->direccionFiscal));
 
         // --Almacenamos los valores--
-        $stmt->bindParam(1, $this->nit);
-        $stmt->bindParam(2, $this->digito);
-        $stmt->bindParam(3, $this->nombre);
-        $stmt->bindParam(4, $this->representante);
+        $stmt->bindParam(1, $this->identificacion);
+        $stmt->bindParam(2, $this->nombres);
+        $stmt->bindParam(3, $this->Apaterno);
+        $stmt->bindParam(4, $this->Amaterno);
         $stmt->bindParam(5, $this->telefono);
-        $stmt->bindParam(6, $this->direccion);
-        $stmt->bindParam(7, $this->correo);
-        $stmt->bindParam(8, $this->contacto);
-        $stmt->bindParam(9, $this->emailTec);
-        $stmt->bindParam(10, $this->emailLogis);
-        $stmt->bindParam(11, $this->contenType);
-        $stmt->bindParam(12, $this->base64);
-        $stmt->bindParam(13, $this->id);
+        $stmt->bindParam(6, $this->emailUser);
+        $stmt->bindParam(7, $this->pswd);
+        $stmt->bindParam(8, $this->nombreFiscal);
+        $stmt->bindParam(9, $this->direccionFiscal);
+        $stmt->bindParam(10, $this->contenType);
+        $stmt->bindParam(11, $this->base64);
+        $stmt->bindParam(12, $this->id);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
@@ -302,14 +290,14 @@ class Empresa
     }
 
     // -- ⊡ Funcion para eliminar empresa ⊡ --
-    public function deleteEmpresa(): void
+    public function deleteUsuario(): void
     {
         // --Preparamos la consulta--
-        $query = "UPDATE $this->tableName SET status = 3 WHERE nit=?";
+        $query = "UPDATE $this->tableName SET status = 3 WHERE id=?";
         $stmt = $this->conn->prepare($query);
 
         // --Almacenamos los valores--
-        $stmt->bindParam(1, $this->nit);
+        $stmt->bindParam(1, $this->id);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
