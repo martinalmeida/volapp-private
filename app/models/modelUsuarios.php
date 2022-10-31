@@ -7,6 +7,8 @@ class Usuario
     // --Parametros Privados--
     private $conn;
     private $tableName = "usuarios";
+    private $tableRol = "rol";
+    private $tableSucursal = "sucursal";
 
     // --Parametros Publicos--
     public $identificacion;
@@ -20,6 +22,8 @@ class Usuario
     public $direccionFiscal;
     public $contenType;
     public $base64;
+    public $rol;
+    public $sucursal;
     public $status;
     public $id;
 
@@ -45,7 +49,7 @@ class Usuario
     {
         // --Preparamos la consulta--
         $query = "INSERT INTO $this->tableName SET identificacion=?, nombres=?, a_paterno=?, a_materno=?, telefono=?, email_user=?, pswd=?,
-        nombrefiscal=?, direccionfiscal=?, content_type=?, base_64=?";
+        nombrefiscal=?, direccionfiscal=?, content_type=?, base_64=?, rolid =?, sucursalid =? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
@@ -60,6 +64,8 @@ class Usuario
         $this->direccionFiscal = htmlspecialchars(strip_tags($this->direccionFiscal));
         $this->contenType = htmlspecialchars(strip_tags($this->contenType));
         $this->base64 = htmlspecialchars(strip_tags($this->base64));
+        $this->rol = htmlspecialchars(strip_tags($this->rol));
+        $this->sucursal = htmlspecialchars(strip_tags($this->sucursal));
 
         // --Almacenamos los valores--
         $stmt->bindParam(1, $this->identificacion);
@@ -73,6 +79,8 @@ class Usuario
         $stmt->bindParam(9, $this->direccionFiscal);
         $stmt->bindParam(10, $this->contenType);
         $stmt->bindParam(11, $this->base64);
+        $stmt->bindParam(12, $this->rol);
+        $stmt->bindParam(13, $this->sucursal);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
@@ -97,43 +105,43 @@ class Usuario
         // --Search--
         $searchQuery = " ";
         if ($searchValue != '') {
-            $searchQuery = " AND (id LIKE :id OR 
-                            identificacion LIKE :identificacion OR
+            $searchQuery = " AND (identificacion LIKE :identificacion OR
                             nombres LIKE :nombres OR
                             a_paterno LIKE :a_paterno OR 
                             a_materno LIKE :a_materno OR
-                            telefono LIKE :telefono OR
                             email_user LIKE :email_user OR
                             pswd LIKE :pswd OR
                             nombrefiscal LIKE :nombrefiscal OR
-                            direccionfiscal LIKE :direccionfiscal OR
-                            status LIKE :status )";
+                            direccionfiscal LIKE :direccionfiscal  )";
             $searchArray = array(
-                'id' => "%$searchValue%",
                 'identificacion' => "%$searchValue%",
                 'nombres' => "%$searchValue%",
                 'a_paterno' => "%$searchValue%",
                 'a_materno' => "%$searchValue%",
-                'telefono' => "%$searchValue%",
                 'email_user' => "%$searchValue%",
                 'pswd' => "%$searchValue%",
                 'nombrefiscal' => "%$searchValue%",
-                'direccionfiscal' => "%$searchValue%",
-                'status' => "%$searchValue%"
+                'direccionfiscal' => "%$searchValue%"
             );
         }
         // --Total number of records without filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . "");
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM $this->tableName");
         $stmt->execute();
         $records = $stmt->fetch();
         $totalRecords = $records['allcount'];
         // --Total number of records with filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " WHERE 1 " . $searchQuery . "");
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM $this->tableName WHERE 1 $searchQuery");
         $stmt->execute($searchArray);
         $records = $stmt->fetch();
         $totalRecordwithFilter = $records['allcount'];
         // --Fetch records--
-        $stmt = $this->conn->prepare("SELECT id, identificacion, nombres, a_paterno, a_materno, telefono, email_user, pswd, nombrefiscal, direccionfiscal, status FROM " . $this->tableName . " WHERE 1 " . $searchQuery . " AND status in(1, 2) ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
+        $stmt = $this->conn->prepare("SELECT 
+                                      u.id, u.identificacion, u.nombres, u.a_paterno, u.a_materno, u.telefono, u.email_user, 
+                                      u.pswd, u.nombrefiscal, u.direccionfiscal, r.nombrerol, s.descripcion, u.status 
+                                      FROM $this->tableName u  
+                                      JOIN $this->tableRol r ON u.rolid = r.id 
+                                      JOIN $this->tableSucursal s ON u.sucursalid = s.id 
+                                      WHERE 1 $searchQuery AND u.status in(1, 2) ORDER BY $columnName $columnSortOrder LIMIT :limit,:offset ");
         // --Bind values--
         foreach ($searchArray as $key => $search) {
             $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
@@ -157,6 +165,8 @@ class Usuario
                 "pswd" => $row['pswd'],
                 "nombrefiscal" => $row['nombrefiscal'],
                 "direccionfiscal" => $row['direccionfiscal'],
+                "nombrerol" => $row['nombrerol'],
+                "descripcion" => $row['descripcion'],
                 "status" => $estado,
                 "defaultContent" => "
                                     <div class='btn-group'>
@@ -207,7 +217,7 @@ class Usuario
     public function dataUsuario(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT id, identificacion, nombres, a_paterno, a_materno, telefono, email_user, pswd, nombrefiscal, direccionfiscal, content_type, base_64 FROM $this->tableName WHERE id=? ;";
+        $query = "SELECT id, identificacion, nombres, a_paterno, a_materno, telefono, email_user, pswd, nombrefiscal, direccionfiscal, content_type, base_64, rolid, sucursalid FROM $this->tableName WHERE id=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Almacenamos los valores--
@@ -234,7 +244,9 @@ class Usuario
                     'nombreFiscal' => $data->nombrefiscal,
                     'direccionFiscal' => $data->direccionfiscal,
                     'contenType' => $data->content_type,
-                    'base64' => $data->base_64
+                    'base64' => $data->base_64,
+                    'rol' => $data->rolid,
+                    'sucursal' => $data->sucursalid
                 );
                 // --Retornamos las respuestas--
                 echo json_encode(array('status' => '1', 'data' => $datos));
@@ -253,7 +265,7 @@ class Usuario
     {
         // --Preparamos la consulta--
         $query = "UPDATE $this->tableName SET identificacion=?, nombres=?, a_paterno=?, a_materno=?, telefono=?, email_user=?, pswd=?, nombrefiscal=?,
-        direccionfiscal=?, content_type=?, base_64=? WHERE id=?";
+        direccionfiscal=?, content_type=?, base_64=?, rolid =?, sucursalid =? WHERE id=?";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
@@ -266,6 +278,8 @@ class Usuario
         $this->pswd = htmlspecialchars(strip_tags($this->pswd));
         $this->nombreFiscal = htmlspecialchars(strip_tags($this->nombreFiscal));
         $this->direccionFiscal = htmlspecialchars(strip_tags($this->direccionFiscal));
+        $this->rol = htmlspecialchars(strip_tags($this->rol));
+        $this->sucursal = htmlspecialchars(strip_tags($this->sucursal));
 
         // --Almacenamos los valores--
         $stmt->bindParam(1, $this->identificacion);
@@ -279,7 +293,9 @@ class Usuario
         $stmt->bindParam(9, $this->direccionFiscal);
         $stmt->bindParam(10, $this->contenType);
         $stmt->bindParam(11, $this->base64);
-        $stmt->bindParam(12, $this->id);
+        $stmt->bindParam(12, $this->rol);
+        $stmt->bindParam(13, $this->sucursal);
+        $stmt->bindParam(14, $this->id);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {

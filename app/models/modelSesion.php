@@ -28,12 +28,13 @@ class Sesion
         // -- ↓↓ Preparamos la consulta ↓↓ --
         $query = "SELECT m.id, m.titulo, m.descripcion, m.icono 
                   FROM $this->tableName m 
-                  JOIN $this->tablePermisos pe ON pe.moduloid = m.id 
-                  JOIN $this->tableRol r ON r.id = pe.rolid
-                  JOIN $this->tableUsuarios p ON p.rolid = r.id 
+                  JOIN $this->tablePermisos p ON p.moduloid = m.id 
+                  JOIN $this->tableRol r ON r.id = p.rolid
+                  JOIN $this->tableUsuarios u ON u.rolid = r.id 
                   WHERE ISNULL(m.menu_id) 
                   AND m.status = 1 
-                  AND p.id=?
+                  AND p.r = 1
+                  AND u.id=?
                   ORDER BY m.titulo ASC; ";
         $stmt = $this->conn->prepare($query);
 
@@ -78,12 +79,13 @@ class Sesion
         // -- ↓↓ Preparamos la consulta ↓↓ --
         $query = "SELECT m.id, m.page, m.titulo, m.descripcion 
                   FROM $this->tableName m 
-                  JOIN $this->tablePermisos pe ON pe.moduloid = m.id 
-                  JOIN $this->tableRol r ON r.id = pe.rolid
-                  JOIN $this->tableUsuarios p ON p.rolid = r.id 
+                  JOIN $this->tablePermisos p ON p.moduloid = m.id 
+                  JOIN $this->tableRol r ON r.id = p.rolid
+                  JOIN $this->tableUsuarios u ON u.rolid = r.id 
                   WHERE m.menu_id = ?
                   AND m.status = 1 
-                  AND p.id=?
+                  AND p.r = 1
+                  AND u.id=?
                   ORDER BY m.titulo ASC; ";
         $stmt = $this->conn->prepare($query);
 

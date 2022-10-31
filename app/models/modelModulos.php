@@ -208,7 +208,7 @@ class Modulo
     {
         // --Preparamos la consulta--
         $query = "SELECT (p.id)idpermiso, m.id, p.r, p.w, p.u, p.d FROM $this->tableName m JOIN $this->tablePermisos p ON p.moduloid = m.id 
-                  WHERE m.status = 1 AND p.rolid = ? AND p.moduloid = ? AND m.menu_id IS NOT NULL AND m.page IS NOT NULL ;";
+                  WHERE m.status = 1 AND p.rolid = ? AND p.moduloid = ? ;";
 
         $stmt = $this->conn->prepare($query);
 

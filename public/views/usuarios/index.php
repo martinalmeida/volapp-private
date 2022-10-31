@@ -48,6 +48,8 @@ $view->initializationView();
                                 <th>Contraseña</th>
                                 <th>Nombre Fiscal</th>
                                 <th>Dirección Fiscal</th>
+                                <th>Rol</th>
+                                <th>Sucursal</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
                             </tr>

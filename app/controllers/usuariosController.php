@@ -27,6 +27,8 @@ class UsuariosController
         $usuario->pswd = isset($_POST['pswd']) ? strtoupper(trim($_POST['pswd'])) : NULL;
         $usuario->nombreFiscal = isset($_POST['nombreFiscal']) ? strtoupper(trim($_POST['nombreFiscal'])) : NULL;
         $usuario->direccionFiscal = isset($_POST['direccionFiscal']) ? strtoupper(trim($_POST['direccionFiscal'])) : NULL;
+        $usuario->rol = isset($_POST['rol']) ? strtoupper(trim($_POST['rol'])) : NULL;
+        $usuario->sucursal = isset($_POST['sucursal']) ? strtoupper(trim($_POST['sucursal'])) : NULL;
 
         if (is_uploaded_file($_FILES['logo']['tmp_name'])) {
             // --Verificacion de Archivo--
@@ -40,7 +42,8 @@ class UsuariosController
                     if (
                         Validar::numeros($usuario->identificacion) && Validar::alfanumerico($usuario->nombres) && Validar::alfanumerico($usuario->Apaterno) &&
                         Validar::alfanumerico($usuario->Amaterno) && Validar::numeros($usuario->telefono) && Validar::correo($usuario->emailUser) &&
-                        Validar::password($usuario->pswd) && Validar::alfanumerico($usuario->nombreFiscal) && Validar::direccion($usuario->direccionFiscal) && Validar::tipoarchivo($usuario->contenType, 7)
+                        Validar::password($usuario->pswd) && Validar::alfanumerico($usuario->nombreFiscal) && Validar::direccion($usuario->direccionFiscal) &&
+                        Validar::numeros($usuario->rol) && Validar::numeros($usuario->sucursal) && Validar::tipoarchivo($usuario->contenType, 7)
                     ) {
                         $usuario->createUsuario();
                     } else {
@@ -135,6 +138,8 @@ class UsuariosController
         $usuario->direccionFiscal = isset($_POST['direccionFiscal']) ? strtoupper(trim($_POST['direccionFiscal'])) : NULL;
         $usuario->contenType = isset($_POST['contenType']) ? trim($_POST['contenType']) : NULL;
         $usuario->base64 = isset($_POST['base64']) ? trim($_POST['base64']) : NULL;
+        $usuario->rol = isset($_POST['rol']) ? strtoupper(trim($_POST['rol'])) : NULL;
+        $usuario->sucursal = isset($_POST['sucursal']) ? strtoupper(trim($_POST['sucursal'])) : NULL;
         $usuario->id = isset($_POST['idUser']) ? strtoupper(trim($_POST['idUser'])) : NULL;
 
         if (is_uploaded_file($_FILES['logo']['tmp_name'])) {
@@ -149,7 +154,8 @@ class UsuariosController
                     if (
                         Validar::numeros($usuario->identificacion) && Validar::alfanumerico($usuario->nombres) && Validar::alfanumerico($usuario->Apaterno) &&
                         Validar::alfanumerico($usuario->Amaterno) && Validar::numeros($usuario->telefono) && Validar::correo($usuario->emailUser) &&
-                        Validar::password($usuario->pswd) && Validar::alfanumerico($usuario->nombreFiscal) && Validar::direccion($usuario->direccionFiscal) && Validar::tipoarchivo($usuario->contenType, 7)
+                        Validar::password($usuario->pswd) && Validar::alfanumerico($usuario->nombreFiscal) && Validar::direccion($usuario->direccionFiscal) &&
+                        Validar::numeros($usuario->rol) && Validar::numeros($usuario->sucursal) && Validar::tipoarchivo($usuario->contenType, 7)
                     ) {
                         $usuario->updateUsuario();
                     } else {
@@ -166,7 +172,8 @@ class UsuariosController
             if (
                 Validar::numeros($usuario->identificacion) && Validar::alfanumerico($usuario->nombres) && Validar::alfanumerico($usuario->Apaterno) &&
                 Validar::alfanumerico($usuario->Amaterno) && Validar::numeros($usuario->telefono) && Validar::correo($usuario->emailUser) &&
-                Validar::password($usuario->pswd) && Validar::alfanumerico($usuario->nombreFiscal) && Validar::direccion($usuario->direccionFiscal)
+                Validar::password($usuario->pswd) && Validar::alfanumerico($usuario->nombreFiscal) && Validar::direccion($usuario->direccionFiscal) &&
+                Validar::numeros($usuario->rol) && Validar::numeros($usuario->sucursal)
             ) {
                 $usuario->updateUsuario();
             } else {

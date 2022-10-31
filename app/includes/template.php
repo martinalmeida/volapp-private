@@ -955,7 +955,6 @@ class Template
             <script src="<?= JS ?>app.bundle.js"></script>
             <script src="<?= JS ?>notifications/toastr/toastr.js"></script>
             <script src="<?= JS ?>formplugins/select2/select2.bundle.js"></script>
-            <script src="<?= JS ?>select2Custom.js"></script>
             <script src="<?= JS ?>notifications/sweetalert2/sweetalert2@9.js"></script>
             <script src="<?= JS ?>validaciones.js?v=<?= rand() ?>"></script>
             <script src="<?= JS ?>globales.js?v=<?= rand() ?>"></script>

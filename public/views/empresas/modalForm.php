@@ -1,5 +1,5 @@
 <div class="modal fade" id="ModalRegistro" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">
@@ -71,7 +71,7 @@
                         <div class="input-group">
 
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="logo" name="logo" required>
+                                <input type="file" class="custom-file-input" id="logo" name="logo" accept="image/png" required>
                                 <label class="custom-file-label" for="logo">Adjuntar Logo</label>
                             </div>
                         </div>
