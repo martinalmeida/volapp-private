@@ -480,11 +480,16 @@ function eliminarRegistro(id) {
 }
 
 function asignarModulos(id) {
+  asignacion = null;
   $("#workSpaceAsignar").html("");
   $("#ModalAsignarModulos").modal({
     backdrop: "static",
     keyboard: false,
   });
+  renderModulosAsignar(id);
+}
+
+function renderModulosAsignar(id) {
   setTimeout(function () {
     $.ajax({
       dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
@@ -655,7 +660,11 @@ function modulosAsignados(id, idModulo) {
 
             for (let i = 0; i < result.data.length; i++) {
               html +=
-                '<div class="p-1"><button type="button" class="btn btn-primary text-white">' +
+                '<div class="p-1"><button type="button" class="btn btn-primary text-white" onclick="cambioAsignacion(' +
+                result.data[i].id +
+                ", " +
+                id +
+                ', 0);" >' +
                 result.data[i].titulo +
                 "</button></div>";
             }
@@ -744,7 +753,11 @@ function modulosNoAsignados(id, idModulo) {
 
             for (let i = 0; i < result.data.length; i++) {
               html +=
-                '<div class="p-1"><button type="button" class="btn btn-primary text-white">' +
+                '<div class="p-1"><button type="button" class="btn btn-primary text-white" onclick="cambioAsignacion(' +
+                result.data[i].id +
+                ", " +
+                id +
+                ', 1);" >' +
                 result.data[i].titulo +
                 "</button></div>";
             }
@@ -794,7 +807,8 @@ function modulosNoAsignados(id, idModulo) {
   }, 500);
 }
 
-function cambioAsignacion(idModulo, idRol, asignacion) {
+function cambioAsignacion(idModulo, idRol, valAsignar) {
+  asignacion = valAsignar;
   $.ajax({
     data: {
       idModulo: idModulo,
@@ -802,7 +816,7 @@ function cambioAsignacion(idModulo, idRol, asignacion) {
       asignar: asignacion,
     },
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-    url: urlBase + "routes/modulos/status", //url a donde hacemos la peticion
+    url: urlBase + "routes/modulos/asignacion", //url a donde hacemos la peticion
     type: "POST",
     beforeSend: function () {
       // $("#overlayText").text("Cerrando Sesión...");
@@ -830,8 +844,8 @@ function cambioAsignacion(idModulo, idRol, asignacion) {
 
         case "1":
           Command: toastr["success"](
-            "Estado del rol cambiado exitosamente.",
-            "Estado Cambiado"
+            "El modulo se ha asignado exitosamente.",
+            "Modulo Asignado"
           );
 
           toastr.options = {
@@ -851,7 +865,7 @@ function cambioAsignacion(idModulo, idRol, asignacion) {
             showMethod: "fadeIn",
             hideMethod: "fadeOut",
           };
-          tablaRoles.clear().draw();
+          renderModulosAsignar(idRol);
           break;
 
         case "2":
@@ -903,6 +917,10 @@ function modulosPermisos(id) {
     backdrop: "static",
     keyboard: false,
   });
+  renderModulosPermisos(id);
+}
+
+function renderModulosPermisos(id) {
   setTimeout(function () {
     $.ajax({
       dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
@@ -1013,24 +1031,466 @@ function modulosPermisos(id) {
                           $("#permissions" + result.data[j].idModulo).html(
                             html
                           );
-                          $("#w" + result.data[j].idModulo).prop(
-                            "checked",
-                            true
-                          );
-                          $("#r" + result.data[j].idModulo).prop(
-                            "checked",
-                            true
-                          );
-                          $("#u" + result.data[j].idModulo).prop(
-                            "checked",
-                            true
-                          );
-                          $("#d" + result.data[j].idModulo).prop(
-                            "checked",
-                            true
-                          );
-                        }
+                          // --Read CheckBox--
+                          if (result.data[j].r == 1) {
+                            $("#r" + result.data[j].idModulo).prop(
+                              "checked",
+                              true
+                            );
+                          } else {
+                            $("#r" + result.data[j].idModulo).prop(
+                              "checked",
+                              false
+                            );
+                          }
+                          $("#r" + result.data[j].idModulo).change(function () {
+                            $.ajax({
+                              data: {
+                                idPermisos: result.data[j].idPermiso,
+                                permiso: result.data[j].r,
+                              },
+                              dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
+                              url: urlBase + "routes/modulos/permisosRead", //url a donde hacemos la peticion
+                              type: "POST",
+                              beforeSend: function () {
+                                // $("#overlayText").text("Cerrando Sesión...");
+                                // $(".overlayCargue").fadeOut("slow");
+                              },
+                              complete: function () {
+                                // $(".overlayCargue").fadeIn("slow");
+                              },
+                              success: function (result) {
+                                var estado = result.status;
+                                switch (estado) {
+                                  case "0":
+                                    Swal.fire({
+                                      icon: "error",
+                                      title:
+                                        "<strong>Error en el servidor</strong>",
+                                      html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
+                                      showCloseButton: true,
+                                      showConfirmButton: false,
+                                      cancelButtonText: "Cerrar",
+                                      cancelButtonColor: "#dc3545",
+                                      showCancelButton: true,
+                                      backdrop: true,
+                                    });
+                                    break;
 
+                                  case "1":
+                                    Command: toastr["success"](
+                                      "Permiso a mudulo cambiado exitosamente.",
+                                      "Permiso Cambiado"
+                                    );
+
+                                    toastr.options = {
+                                      closeButton: false,
+                                      debug: false,
+                                      newestOnTop: true,
+                                      progressBar: true,
+                                      positionClass: "toast-top-right",
+                                      preventDuplicates: true,
+                                      onclick: null,
+                                      showDuration: 300,
+                                      hideDuration: 100,
+                                      timeOut: 5000,
+                                      extendedTimeOut: 1000,
+                                      showEasing: "swing",
+                                      hideEasing: "linear",
+                                      showMethod: "fadeIn",
+                                      hideMethod: "fadeOut",
+                                    };
+                                    renderModulosPermisos(id);
+                                    break;
+
+                                  case "2":
+                                    Swal.fire({
+                                      icon: "error",
+                                      title:
+                                        "<strong>Error de Validacón</strong>",
+                                      html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
+                                      showCloseButton: true,
+                                      showConfirmButton: false,
+                                      cancelButtonText: "Cerrar",
+                                      cancelButtonColor: "#dc3545",
+                                      showCancelButton: true,
+                                      backdrop: true,
+                                    });
+                                    break;
+                                }
+                              },
+                              error: function (xhr) {
+                                console.log(xhr);
+                                Command: toastr["error"](
+                                  "Fallo la ejecucion de la acción, por favor comunicate con soporte.",
+                                  "Operación Fallida."
+                                );
+
+                                toastr.options = {
+                                  closeButton: false,
+                                  debug: false,
+                                  newestOnTop: true,
+                                  progressBar: true,
+                                  positionClass: "toast-top-right",
+                                  preventDuplicates: true,
+                                  onclick: null,
+                                  showDuration: 300,
+                                  hideDuration: 100,
+                                  timeOut: 5000,
+                                  extendedTimeOut: 1000,
+                                  showEasing: "swing",
+                                  hideEasing: "linear",
+                                  showMethod: "fadeIn",
+                                  hideMethod: "fadeOut",
+                                };
+                              },
+                            });
+                          });
+
+                          // --Write CheckBox--
+                          if (result.data[j].w == 1) {
+                            $("#w" + result.data[j].idModulo).prop(
+                              "checked",
+                              true
+                            );
+                          } else {
+                            $("#w" + result.data[j].idModulo).prop(
+                              "checked",
+                              false
+                            );
+                          }
+                          $("#w" + result.data[j].idModulo).change(function () {
+                            $.ajax({
+                              data: {
+                                idPermisos: result.data[j].idPermiso,
+                                permiso: result.data[j].w,
+                              },
+                              dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
+                              url: urlBase + "routes/modulos/permisosWrite", //url a donde hacemos la peticion
+                              type: "POST",
+                              beforeSend: function () {
+                                // $("#overlayText").text("Cerrando Sesión...");
+                                // $(".overlayCargue").fadeOut("slow");
+                              },
+                              complete: function () {
+                                // $(".overlayCargue").fadeIn("slow");
+                              },
+                              success: function (result) {
+                                var estado = result.status;
+                                switch (estado) {
+                                  case "0":
+                                    Swal.fire({
+                                      icon: "error",
+                                      title:
+                                        "<strong>Error en el servidor</strong>",
+                                      html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
+                                      showCloseButton: true,
+                                      showConfirmButton: false,
+                                      cancelButtonText: "Cerrar",
+                                      cancelButtonColor: "#dc3545",
+                                      showCancelButton: true,
+                                      backdrop: true,
+                                    });
+                                    break;
+
+                                  case "1":
+                                    Command: toastr["success"](
+                                      "Permiso a mudulo cambiado exitosamente.",
+                                      "Permiso Cambiado"
+                                    );
+
+                                    toastr.options = {
+                                      closeButton: false,
+                                      debug: false,
+                                      newestOnTop: true,
+                                      progressBar: true,
+                                      positionClass: "toast-top-right",
+                                      preventDuplicates: true,
+                                      onclick: null,
+                                      showDuration: 300,
+                                      hideDuration: 100,
+                                      timeOut: 5000,
+                                      extendedTimeOut: 1000,
+                                      showEasing: "swing",
+                                      hideEasing: "linear",
+                                      showMethod: "fadeIn",
+                                      hideMethod: "fadeOut",
+                                    };
+                                    renderModulosPermisos(id);
+                                    break;
+
+                                  case "2":
+                                    Swal.fire({
+                                      icon: "error",
+                                      title:
+                                        "<strong>Error de Validacón</strong>",
+                                      html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
+                                      showCloseButton: true,
+                                      showConfirmButton: false,
+                                      cancelButtonText: "Cerrar",
+                                      cancelButtonColor: "#dc3545",
+                                      showCancelButton: true,
+                                      backdrop: true,
+                                    });
+                                    break;
+                                }
+                              },
+                              error: function (xhr) {
+                                console.log(xhr);
+                                Command: toastr["error"](
+                                  "Fallo la ejecucion de la acción, por favor comunicate con soporte.",
+                                  "Operación Fallida."
+                                );
+
+                                toastr.options = {
+                                  closeButton: false,
+                                  debug: false,
+                                  newestOnTop: true,
+                                  progressBar: true,
+                                  positionClass: "toast-top-right",
+                                  preventDuplicates: true,
+                                  onclick: null,
+                                  showDuration: 300,
+                                  hideDuration: 100,
+                                  timeOut: 5000,
+                                  extendedTimeOut: 1000,
+                                  showEasing: "swing",
+                                  hideEasing: "linear",
+                                  showMethod: "fadeIn",
+                                  hideMethod: "fadeOut",
+                                };
+                              },
+                            });
+                          });
+
+                          // --Update CheckBox--
+                          if (result.data[j].u == 1) {
+                            $("#u" + result.data[j].idModulo).prop(
+                              "checked",
+                              true
+                            );
+                          } else {
+                            $("#u" + result.data[j].idModulo).prop(
+                              "checked",
+                              false
+                            );
+                          }
+                          $("#u" + result.data[j].idModulo).change(function () {
+                            $.ajax({
+                              data: {
+                                idPermisos: result.data[j].idPermiso,
+                                permiso: result.data[j].u,
+                              },
+                              dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
+                              url: urlBase + "routes/modulos/permisosUpdate", //url a donde hacemos la peticion
+                              type: "POST",
+                              beforeSend: function () {
+                                // $("#overlayText").text("Cerrando Sesión...");
+                                // $(".overlayCargue").fadeOut("slow");
+                              },
+                              complete: function () {
+                                // $(".overlayCargue").fadeIn("slow");
+                              },
+                              success: function (result) {
+                                var estado = result.status;
+                                switch (estado) {
+                                  case "0":
+                                    Swal.fire({
+                                      icon: "error",
+                                      title:
+                                        "<strong>Error en el servidor</strong>",
+                                      html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
+                                      showCloseButton: true,
+                                      showConfirmButton: false,
+                                      cancelButtonText: "Cerrar",
+                                      cancelButtonColor: "#dc3545",
+                                      showCancelButton: true,
+                                      backdrop: true,
+                                    });
+                                    break;
+
+                                  case "1":
+                                    Command: toastr["success"](
+                                      "Permiso a mudulo cambiado exitosamente.",
+                                      "Permiso Cambiado"
+                                    );
+
+                                    toastr.options = {
+                                      closeButton: false,
+                                      debug: false,
+                                      newestOnTop: true,
+                                      progressBar: true,
+                                      positionClass: "toast-top-right",
+                                      preventDuplicates: true,
+                                      onclick: null,
+                                      showDuration: 300,
+                                      hideDuration: 100,
+                                      timeOut: 5000,
+                                      extendedTimeOut: 1000,
+                                      showEasing: "swing",
+                                      hideEasing: "linear",
+                                      showMethod: "fadeIn",
+                                      hideMethod: "fadeOut",
+                                    };
+                                    renderModulosPermisos(id);
+                                    break;
+
+                                  case "2":
+                                    Swal.fire({
+                                      icon: "error",
+                                      title:
+                                        "<strong>Error de Validacón</strong>",
+                                      html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
+                                      showCloseButton: true,
+                                      showConfirmButton: false,
+                                      cancelButtonText: "Cerrar",
+                                      cancelButtonColor: "#dc3545",
+                                      showCancelButton: true,
+                                      backdrop: true,
+                                    });
+                                    break;
+                                }
+                              },
+                              error: function (xhr) {
+                                console.log(xhr);
+                                Command: toastr["error"](
+                                  "Fallo la ejecucion de la acción, por favor comunicate con soporte.",
+                                  "Operación Fallida."
+                                );
+
+                                toastr.options = {
+                                  closeButton: false,
+                                  debug: false,
+                                  newestOnTop: true,
+                                  progressBar: true,
+                                  positionClass: "toast-top-right",
+                                  preventDuplicates: true,
+                                  onclick: null,
+                                  showDuration: 300,
+                                  hideDuration: 100,
+                                  timeOut: 5000,
+                                  extendedTimeOut: 1000,
+                                  showEasing: "swing",
+                                  hideEasing: "linear",
+                                  showMethod: "fadeIn",
+                                  hideMethod: "fadeOut",
+                                };
+                              },
+                            });
+                          });
+
+                          // --Delete CheckBox--
+                          if (result.data[j].d == 1) {
+                            $("#d" + result.data[j].idModulo).prop(
+                              "checked",
+                              true
+                            );
+                          } else {
+                            $("#d" + result.data[j].idModulo).prop(
+                              "checked",
+                              false
+                            );
+                          }
+                          $("#d" + result.data[j].idModulo).change(function () {
+                            $.ajax({
+                              data: {
+                                idPermisos: result.data[j].idPermiso,
+                                permiso: result.data[j].d,
+                              },
+                              dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
+                              url: urlBase + "routes/modulos/permisosDelete", //url a donde hacemos la peticion
+                              type: "POST",
+                              beforeSend: function () {
+                                // $("#overlayText").text("Cerrando Sesión...");
+                                // $(".overlayCargue").fadeOut("slow");
+                              },
+                              complete: function () {
+                                // $(".overlayCargue").fadeIn("slow");
+                              },
+                              success: function (result) {
+                                var estado = result.status;
+                                switch (estado) {
+                                  case "0":
+                                    Swal.fire({
+                                      icon: "error",
+                                      title:
+                                        "<strong>Error en el servidor</strong>",
+                                      html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
+                                      showCloseButton: true,
+                                      showConfirmButton: false,
+                                      cancelButtonText: "Cerrar",
+                                      cancelButtonColor: "#dc3545",
+                                      showCancelButton: true,
+                                      backdrop: true,
+                                    });
+                                    break;
+                                  case "1":
+                                    Command: toastr["success"](
+                                      "Permiso a mudulo cambiado exitosamente.",
+                                      "Permiso Cambiado"
+                                    );
+                                    toastr.options = {
+                                      closeButton: false,
+                                      debug: false,
+                                      newestOnTop: true,
+                                      progressBar: true,
+                                      positionClass: "toast-top-right",
+                                      preventDuplicates: true,
+                                      onclick: null,
+                                      showDuration: 300,
+                                      hideDuration: 100,
+                                      timeOut: 5000,
+                                      extendedTimeOut: 1000,
+                                      showEasing: "swing",
+                                      hideEasing: "linear",
+                                      showMethod: "fadeIn",
+                                      hideMethod: "fadeOut",
+                                    };
+                                    renderModulosPermisos(id);
+                                    break;
+                                  case "2":
+                                    Swal.fire({
+                                      icon: "error",
+                                      title:
+                                        "<strong>Error de Validacón</strong>",
+                                      html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
+                                      showCloseButton: true,
+                                      showConfirmButton: false,
+                                      cancelButtonText: "Cerrar",
+                                      cancelButtonColor: "#dc3545",
+                                      showCancelButton: true,
+                                      backdrop: true,
+                                    });
+                                    break;
+                                }
+                              },
+                              error: function (xhr) {
+                                console.log(xhr);
+                                Command: toastr["error"](
+                                  "Fallo la ejecucion de la acción, por favor comunicate con soporte.",
+                                  "Operación Fallida."
+                                );
+                                toastr.options = {
+                                  closeButton: false,
+                                  debug: false,
+                                  newestOnTop: true,
+                                  progressBar: true,
+                                  positionClass: "toast-top-right",
+                                  preventDuplicates: true,
+                                  onclick: null,
+                                  showDuration: 300,
+                                  hideDuration: 100,
+                                  timeOut: 5000,
+                                  extendedTimeOut: 1000,
+                                  showEasing: "swing",
+                                  hideEasing: "linear",
+                                  showMethod: "fadeIn",
+                                  hideMethod: "fadeOut",
+                                };
+                              },
+                            });
+                          });
+                        }
                         break;
 
                       case "2":
