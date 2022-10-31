@@ -100,7 +100,7 @@ class Modulo
     {
         // --Preparamos la consulta--
         $query = "SELECT m.id, m.titulo FROM $this->tableRol r JOIN $this->tablePermisos p ON p.rolid = r.id JOIN $this->tableName m ON p.moduloid = m.id 
-                  WHERE m.menu_id IS NOT NULL AND m.page IS NOT NULL AND m.status = 1 AND p.rolid =? AND m.menu_id =? GROUP BY m.id ; ";
+                  WHERE m.menu_id IS NOT NULL AND m.page IS NOT NULL AND m.status = 1 AND p.rolid =? AND m.menu_id =? AND p.r = 1 GROUP BY m.id ; ";
         $stmt = $this->conn->prepare($query);
 
         // --Almacenamos los valores--
@@ -139,8 +139,10 @@ class Modulo
     public function modulosNoAsiganados(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT m.id, m.titulo FROM $this->tableRol r JOIN $this->tablePermisos p ON p.rolid = r.id JOIN $this->tableName m ON p.moduloid = m.id 
-                  WHERE m.menu_id IS NOT NULL AND m.page IS NOT NULL AND m.status = 1 AND p.rolid =? AND m.menu_id =? GROUP BY m.id ; ";
+        $query = "SELECT m.id, m.titulo FROM modulo m 
+                  WHERE m.id IN (SELECT p2.moduloid FROM permisos p2 WHERE p2.r = 0 AND p2.w = 0 AND p2.u = 0 AND p2.d = 0 AND p2.rolid =?)
+                  AND m.menu_id =? AND m.status = 1; ";
+
         $stmt = $this->conn->prepare($query);
 
         // --Almacenamos los valores--
@@ -171,6 +173,38 @@ class Modulo
             }
         } else {
             // --Falla en la ejecución de la consulta--
+            echo json_encode(array('status' => '0', 'data' => NULL));
+        }
+    }
+
+    // -- ⊡ Funcion para actualizar empresa ⊡ --
+    public function asignacionModulus(): void
+    {
+        // --Preparamos la consulta--
+        $query = "UPDATE $this->tableName SET placa=?, nombresConductor=?, Apaterno=?, Amaterno=?, telefono=?, email=? WHERE id=?";
+        $stmt = $this->conn->prepare($query);
+
+        // --Escapamos los caracteres--
+        $this->placa = htmlspecialchars(strip_tags($this->placa));
+        $this->nombresConductor = htmlspecialchars(strip_tags($this->nombresConductor));
+        $this->Apaterno = htmlspecialchars(strip_tags($this->Apaterno));
+        $this->Amaterno = htmlspecialchars(strip_tags($this->Amaterno));
+        $this->telefono = htmlspecialchars(strip_tags($this->telefono));
+        $this->email = htmlspecialchars(strip_tags($this->email));
+
+        // --Almacenamos los valores--
+        $stmt->bindParam(1, $this->placa);
+        $stmt->bindParam(2, $this->nombresConductor);
+        $stmt->bindParam(3, $this->Apaterno);
+        $stmt->bindParam(4, $this->Amaterno);
+        $stmt->bindParam(5, $this->telefono);
+        $stmt->bindParam(6, $this->email);
+        $stmt->bindParam(7, $this->id);
+
+        // --Ejecutamos la consulta y validamos ejecucion--
+        if ($stmt->execute()) {
+            echo json_encode(array('status' => '1', 'data' => NULL));
+        } else {
             echo json_encode(array('status' => '0', 'data' => NULL));
         }
     }

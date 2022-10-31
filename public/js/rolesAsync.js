@@ -1,6 +1,7 @@
 let edit = false;
 var peticion = null;
 var tablaRoles = "";
+var asignacion = null;
 
 $(document).ready(function () {
   /* ---------  START Serverside Tabla ( tablaRoles ) ----------- */
@@ -529,7 +530,11 @@ function asignarModulos(id) {
                 id +
                 ", " +
                 result.data[i].id +
-                ')" class="card-title collapsed" data-toggle="collapse" data-target="#cardModulo' +
+                "); modulosNoAsignados(" +
+                id +
+                ", " +
+                result.data[i].id +
+                ');" class="card-title collapsed" data-toggle="collapse" data-target="#cardModulo' +
                 result.data[i].id +
                 'a" aria-expanded="false"><i class="' +
                 result.data[i].icono +
@@ -674,18 +679,9 @@ function modulosAsignados(id, idModulo) {
             break;
 
           case "3":
-            Swal.fire({
-              icon: "error",
-              title: "<strong>Modulos no Encontrados</strong>",
-              html: "<h5>No se han encontrado modulos.</h5>",
-              showCloseButton: true,
-              showConfirmButton: false,
-              cancelButtonText: "Cerrar",
-              cancelButtonColor: "#dc3545",
-              showCancelButton: true,
-              backdrop: true,
-            });
-            $("#ModalAsignarModulos").modal("hide");
+            var html = "";
+            html += '<h3 class="text-dark">No hay modulos Asignados</h3>';
+            $("#asignado" + idModulo).html(html);
             break;
         }
       },
@@ -710,10 +706,103 @@ function modulosAsignados(id, idModulo) {
 }
 
 function modulosNoAsignados(id, idModulo) {
+  $("#noAsignado" + idModulo).html("");
+  setTimeout(function () {
+    $.ajax({
+      data: { idRol: id, idModulo: idModulo },
+      dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
+      url: urlBase + "routes/modulos/getNoAsignados", //url a donde hacemos la peticion
+      type: "POST",
+      beforeSend: function () {
+        // $("#overlayText").text("Cerrando Sesión...");
+        // $(".overlayCargue").fadeOut("slow");
+      },
+      complete: function () {
+        // $(".overlayCargue").fadeIn("slow");
+      },
+      success: function (result) {
+        var estado = result.status;
+        switch (estado) {
+          case "0":
+            Swal.fire({
+              icon: "error",
+              title: "<strong>Error en el servidor</strong>",
+              html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
+              showCloseButton: true,
+              showConfirmButton: false,
+              cancelButtonText: "Cerrar",
+              cancelButtonColor: "#dc3545",
+              showCancelButton: true,
+              backdrop: true,
+            });
+            $("#ModalAsignarModulos").modal("hide");
+            break;
+
+          case "1":
+            // --Traemos los modulos de la plataforma--
+            var html = "";
+
+            for (let i = 0; i < result.data.length; i++) {
+              html +=
+                '<div class="p-1"><button type="button" class="btn btn-primary text-white">' +
+                result.data[i].titulo +
+                "</button></div>";
+            }
+
+            $("#noAsignado" + idModulo).html(html);
+            break;
+
+          case "2":
+            Swal.fire({
+              icon: "error",
+              title: "<strong>Error de Validacón</strong>",
+              html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
+              showCloseButton: true,
+              showConfirmButton: false,
+              cancelButtonText: "Cerrar",
+              cancelButtonColor: "#dc3545",
+              showCancelButton: true,
+              backdrop: true,
+            });
+            $("#ModalAsignarModulos").modal("hide");
+            break;
+
+          case "3":
+            var html = "";
+            html += '<h3 class="text-dark">Todos los modulos Asiganados</h3>';
+            $("#noAsignado" + idModulo).html(html);
+            break;
+        }
+      },
+      error: function (xhr) {
+        console.log(xhr);
+        Swal.fire({
+          icon: "error",
+          title: "<strong>Error!</strong>",
+          html: "<h5>Se ha presentado un error, por favor informar al area de Sistemas.</h5>",
+          showCloseButton: true,
+          showConfirmButton: false,
+          cancelButtonText: "Cerrar",
+          cancelButtonColor: "#dc3545",
+          showCancelButton: true,
+          backdrop: true,
+        });
+        $("#ModalAsignarModulos").modal("hide");
+      },
+    });
+    //modulosNoAsignados(id, idModulo);
+  }, 500);
+}
+
+function cambioAsignacion(idModulo, idRol, asignacion) {
   $.ajax({
-    data: { idRol: id, idModulo: idModulo },
+    data: {
+      idModulo: idModulo,
+      idRol: idRol,
+      asignar: asignacion,
+    },
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-    url: urlBase + "routes/modulos/getNoAsignados", //url a donde hacemos la peticion
+    url: urlBase + "routes/modulos/status", //url a donde hacemos la peticion
     type: "POST",
     beforeSend: function () {
       // $("#overlayText").text("Cerrando Sesión...");
@@ -737,21 +826,32 @@ function modulosNoAsignados(id, idModulo) {
             showCancelButton: true,
             backdrop: true,
           });
-          $("#ModalAsignarModulos").modal("hide");
           break;
 
         case "1":
-          // --Traemos los modulos de la plataforma--
-          var html = "";
+          Command: toastr["success"](
+            "Estado del rol cambiado exitosamente.",
+            "Estado Cambiado"
+          );
 
-          for (let i = 0; i < result.data.length; i++) {
-            html +=
-              '<button type="button" class="btn btn-primary text-white">' +
-              result.data[i].titulo +
-              "</button>";
-          }
-
-          $("#asignado" + idModulo).html(html);
+          toastr.options = {
+            closeButton: false,
+            debug: false,
+            newestOnTop: true,
+            progressBar: true,
+            positionClass: "toast-top-right",
+            preventDuplicates: true,
+            onclick: null,
+            showDuration: 300,
+            hideDuration: 100,
+            timeOut: 5000,
+            extendedTimeOut: 1000,
+            showEasing: "swing",
+            hideEasing: "linear",
+            showMethod: "fadeIn",
+            hideMethod: "fadeOut",
+          };
+          tablaRoles.clear().draw();
           break;
 
         case "2":
@@ -766,39 +866,33 @@ function modulosNoAsignados(id, idModulo) {
             showCancelButton: true,
             backdrop: true,
           });
-          $("#ModalAsignarModulos").modal("hide");
-          break;
-
-        case "3":
-          Swal.fire({
-            icon: "error",
-            title: "<strong>Modulos no Encontrados</strong>",
-            html: "<h5>No se han encontrado modulos.</h5>",
-            showCloseButton: true,
-            showConfirmButton: false,
-            cancelButtonText: "Cerrar",
-            cancelButtonColor: "#dc3545",
-            showCancelButton: true,
-            backdrop: true,
-          });
-          $("#ModalAsignarModulos").modal("hide");
           break;
       }
     },
     error: function (xhr) {
       console.log(xhr);
-      Swal.fire({
-        icon: "error",
-        title: "<strong>Error!</strong>",
-        html: "<h5>Se ha presentado un error, por favor informar al area de Sistemas.</h5>",
-        showCloseButton: true,
-        showConfirmButton: false,
-        cancelButtonText: "Cerrar",
-        cancelButtonColor: "#dc3545",
-        showCancelButton: true,
-        backdrop: true,
-      });
-      $("#ModalAsignarModulos").modal("hide");
+      Command: toastr["error"](
+        "Fallo la ejecucion de la acción, por favor comunicate con soporte.",
+        "Operación Fallida."
+      );
+
+      toastr.options = {
+        closeButton: false,
+        debug: false,
+        newestOnTop: true,
+        progressBar: true,
+        positionClass: "toast-top-right",
+        preventDuplicates: true,
+        onclick: null,
+        showDuration: 300,
+        hideDuration: 100,
+        timeOut: 5000,
+        extendedTimeOut: 1000,
+        showEasing: "swing",
+        hideEasing: "linear",
+        showMethod: "fadeIn",
+        hideMethod: "fadeOut",
+      };
     },
   });
 }

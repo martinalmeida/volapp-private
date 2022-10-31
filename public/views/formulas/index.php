@@ -4,7 +4,7 @@ include_once(VIEW_CONTROLLER);
 
 use View\ViewController;
 
-$view = new ViewController('placas');
+$view = new ViewController('formulas');
 
 $view->initializationView();
 ?>
@@ -12,7 +12,7 @@ $view->initializationView();
 <!-- ========== Inicio Componente de Vista ========== -->
 <div class="subheader">
     <h1 class="subheader-title">
-        <i class='fal fa-info-circle'></i> Placas
+        <i class='fal fa-info-circle'></i> Formulas
     </h1>
     <button type="button" class="btn btn-info active" onclick="showModalRegistro();">Agregar <i class="fal fa-plus-square"></i></button>
 </div>
@@ -22,7 +22,7 @@ $view->initializationView();
         <div id="panel-1" class="panel">
             <div class="panel-hdr">
                 <h2>
-                    Tabla de Placas
+                    Tabla de Formulas
                     <!-- Tabla <span class="fw-300"><i>Usuarios</i></span> -->
                 </h2>
                 <div class="panel-toolbar">
@@ -60,7 +60,7 @@ $view->initializationView();
 </div>
 
 <h3>
-    Pagina de Placas
+    Pagina de Formulas
 </h3>
 
 <?php

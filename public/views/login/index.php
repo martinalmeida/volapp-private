@@ -72,7 +72,7 @@ $view->initializationView();
                 </div>
                 <div class="row no-gutters">
                     <div class="col-lg-12 pr-lg-1 my-2">
-                        <a class="btn btn-info btn-block btn-lg text-white" id="btnLoginIngresar" onclick="login('frmLogin');">Iniciar Sesión <i class="fa-solid fa-right-to-bracket"></i></a>
+                        <a class="btn btn-info btn-block btn-lg text-white" id="btnLoginIngresar" onclick="login('frmLogin');">Iniciar Sesión <i class="fal fa-sign-in"></i></a>
                     </div>
                     <!-- <div class="col-lg-6 pl-lg-1 my-2">
                             <button id="js-login-btn" type="submit" class="btn btn-danger btn-block btn-lg">Iniciar sesión</button>

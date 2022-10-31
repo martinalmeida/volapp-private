@@ -4,7 +4,7 @@ include_once(VIEW_CONTROLLER);
 
 use View\ViewController;
 
-$view = new ViewController('placas');
+$view = new ViewController('materiales');
 
 $view->initializationView();
 ?>
@@ -12,7 +12,7 @@ $view->initializationView();
 <!-- ========== Inicio Componente de Vista ========== -->
 <div class="subheader">
     <h1 class="subheader-title">
-        <i class='fal fa-info-circle'></i> Placas
+        <i class='fal fa-info-circle'></i> Materiales
     </h1>
     <button type="button" class="btn btn-info active" onclick="showModalRegistro();">Agregar <i class="fal fa-plus-square"></i></button>
 </div>
@@ -22,7 +22,7 @@ $view->initializationView();
         <div id="panel-1" class="panel">
             <div class="panel-hdr">
                 <h2>
-                    Tabla de Placas
+                    Tabla de Materiales
                     <!-- Tabla <span class="fw-300"><i>Usuarios</i></span> -->
                 </h2>
                 <div class="panel-toolbar">
@@ -35,16 +35,12 @@ $view->initializationView();
                 <div class="panel-content">
                     <!-- <div class="panel-tag">
                     </div> -->
-                    <table id="tablaPlacas" class="table table-bordered table-hover table-striped w-100">
+                    <table id="tablaMateriales" class="table table-bordered table-hover table-striped w-100">
                         <thead class="bg-primary-600">
                             <tr>
                                 <th>id</th>
-                                <th>Placa</th>
-                                <th>Nombres del Conductor</th>
-                                <th>Apellido Paterno</th>
-                                <th>Apellido Materno</th>
-                                <th>Telefono</th>
-                                <th>Correo Electronico</th>
+                                <th>Nombre</th>
+                                <th>Descripcion</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
                             </tr>
@@ -60,9 +56,9 @@ $view->initializationView();
 </div>
 
 <h3>
-    Pagina de Placas
+    Pagina de Materiales
 </h3>
 
 <?php
-include_once(VIEW . 'placas/modalForm.php');
+include_once(VIEW . 'materiales/modalForm.php');
 $view->finalizeView();

@@ -182,7 +182,7 @@ class Template
                                         <div class="dropdown-divider m-0"></div>
                                         <a class="dropdown-item fw-500 pt-3 pb-3" onclick="cerrarSesion();">
                                             <span data-i18n="drpdwn.page-logout">Salir</span>
-                                            <span class="float-right fw-n">&commat;VolApp</span>
+                                            <span class="float-right fw-n">@<?= $_SESSION['usuario']; ?></span>
                                         </a>
                                     </div>
                                 </div>
