@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 31-10-2022 a las 17:56:35
+-- Tiempo de generación: 01-11-2022 a las 00:29:01
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.1.6
 
@@ -105,6 +105,7 @@ CREATE TABLE `modulo` (
   `titulo` varchar(50) COLLATE utf8mb4_spanish_ci NOT NULL,
   `icono` varchar(100) COLLATE utf8mb4_spanish_ci DEFAULT NULL,
   `descripcion` text COLLATE utf8mb4_spanish_ci DEFAULT NULL,
+  `tabla_bd` varchar(20) COLLATE utf8mb4_spanish_ci DEFAULT NULL,
   `status` int(11) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
@@ -112,23 +113,23 @@ CREATE TABLE `modulo` (
 -- Volcado de datos para la tabla `modulo`
 --
 
-INSERT INTO `modulo` (`id`, `menu_id`, `page`, `titulo`, `icono`, `descripcion`, `status`) VALUES
-(1, NULL, NULL, '⨇ Dashboard', NULL, 'PAGINA PRINCIPAL', 1),
-(2, 1, 'home', 'Home', NULL, 'PAGINA PRINCIPAL DE LA INTERFAZ', 1),
-(3, NULL, NULL, 'Usuarios', 'fal fa-users', 'PAGINA DE ADMINISTRACION DE USUARIOS', 1),
-(4, 3, 'usuarios', 'Usuarios', NULL, 'ADMINISTRACION DE USUARIOS MODULOS ROLES Y PERMISOS', 1),
-(5, 3, 'sucursales', 'Sucursales', NULL, 'PANEL ADMINISTRATIVO DE SUCURSALES PARA ROL GERENTE', 1),
-(6, NULL, NULL, 'Sistema', 'fal fa-sliders-h-square', 'MODULO DE SISTEMAS PARA ADMINISTRADOR DE LA PLATAFORMA', 1),
-(7, 6, 'empresas', 'Empresas', NULL, 'PANEL ADMINISTRATIVO DE EMPRESAS', 1),
-(8, 6, 'roles', 'Roles y Permisos', NULL, 'MODULO DE DEFINICION DE ROLES PARA PERMISOS A MODULOS', 1),
-(9, NULL, NULL, 'Vehiculos', 'fal fa-truck', 'todo lo que tenga que ver con los vehiculos', 1),
-(10, 9, 'placas', 'Placas', NULL, 'interfaz de las placas de los vehiculos', 1),
-(11, NULL, NULL, 'Facturacion', 'fal fa-money-bill-alt', 'modulo del sistema de facturacion a pronto pago por rutas y viajes', 1),
-(12, 11, 'formulas', 'Formulas', NULL, 'formulas de facturacion', 1),
-(13, 11, 'rutas', 'Rutas', NULL, 'rutas de viajes', 1),
-(14, 11, 'registros', 'Registros', NULL, 'registros de viajes hechos', 1),
-(15, 11, 'informes', 'Informes', NULL, 'pagina de informas a viajes', 1),
-(16, 11, 'materiales', 'Materiales', NULL, 'materiales a transportar', 1);
+INSERT INTO `modulo` (`id`, `menu_id`, `page`, `titulo`, `icono`, `descripcion`, `tabla_bd`, `status`) VALUES
+(1, NULL, NULL, '⨇ Dashboard', NULL, 'PAGINA PRINCIPAL', NULL, 1),
+(2, 1, 'home', 'Home', NULL, 'PAGINA PRINCIPAL DE LA INTERFAZ', '', 1),
+(3, NULL, NULL, 'Usuarios', 'fal fa-users', 'PAGINA DE ADMINISTRACION DE USUARIOS', NULL, 1),
+(4, 3, 'usuarios', 'Usuarios', NULL, 'ADMINISTRACION DE USUARIOS MODULOS ROLES Y PERMISOS', 'usuarios', 1),
+(5, 3, 'sucursales', 'Sucursales', NULL, 'PANEL ADMINISTRATIVO DE SUCURSALES PARA ROL GERENTE', 'sucursal', 1),
+(6, NULL, NULL, 'Sistema', 'fal fa-sliders-h-square', 'MODULO DE SISTEMAS PARA ADMINISTRADOR DE LA PLATAFORMA', NULL, 1),
+(7, 6, 'empresas', 'Empresas', NULL, 'PANEL ADMINISTRATIVO DE EMPRESAS', 'empresas', 1),
+(8, 6, 'roles', 'Roles y Permisos', NULL, 'MODULO DE DEFINICION DE ROLES PARA PERMISOS A MODULOS', 'rol', 1),
+(9, NULL, NULL, 'Vehiculos', 'fal fa-truck', 'todo lo que tenga que ver con los vehiculos', NULL, 1),
+(10, 9, 'placas', 'Placas', NULL, 'interfaz de las placas de los vehiculos', 'vehiculos', 1),
+(11, NULL, NULL, 'Facturacion', 'fal fa-money-bill-alt', 'modulo del sistema de facturacion a pronto pago por rutas y viajes', NULL, 1),
+(12, 11, 'formulas', 'Formulas', NULL, 'formulas de facturacion', '', 1),
+(13, 11, 'rutas', 'Rutas', NULL, 'rutas de viajes', 'rutas', 1),
+(14, 11, 'registros', 'Registros', NULL, 'registros de viajes hechos', '', 1),
+(15, 11, 'informes', 'Informes', NULL, 'pagina de informas a viajes', '', 1),
+(16, 11, 'materiales', 'Materiales', NULL, 'materiales a transportar', 'materiales', 1);
 
 -- --------------------------------------------------------
 
@@ -154,7 +155,7 @@ INSERT INTO `permisos` (`id`, `rolid`, `moduloid`, `r`, `w`, `u`, `d`) VALUES
 (1, 1, 1, 1, 0, 0, 0),
 (2, 1, 2, 1, 0, 0, 0),
 (3, 1, 3, 1, 0, 0, 0),
-(4, 1, 4, 1, 0, 0, 0),
+(4, 1, 4, 1, 1, 1, 1),
 (5, 1, 5, 1, 0, 0, 0),
 (6, 1, 6, 1, 0, 0, 0),
 (7, 1, 7, 1, 0, 0, 0),
