@@ -8,15 +8,6 @@ require_once(LIBRARIES . 'sesion.php');
 class Template
 {
 
-    static public function verificar($submodulo)
-    {
-        $respuesta = SesionController::verificar($submodulo);
-        if (!$respuesta) {
-            header('Location: ' . LOGIN, true);
-            exit();
-        }
-    }
-
     static public function verificarSesion()
     {
         $respuesta = SesionController::verificarUsuario();

@@ -15,6 +15,8 @@ class Sesion
 
     // --Parametros Publicos--
     public $idUser;
+    public $rol;
+    public $tabla;
 
     // --Constructor para la conexion de la BD--
     public function __construct($db)
@@ -109,6 +111,32 @@ class Sesion
         } else {
             // -- ↓↓ Falla en la ejecución de la consulta ↓↓ --
             print_r($stmt->errorInfo());
+        }
+    }
+
+    // -- ⊡ Funcion para traer datos de la empresa segun nit ⊡ --
+    public function permisoModulo()
+    {
+        // --Preparamos la consulta--
+        $query = "SELECT m.tabla_bd, p.r, p.w, p.u, p.d FROM $this->tablePermisos p JOIN $this->tableName m on p.moduloid = m.id WHERE p.rolid=? AND m.tabla_bd=? ;";
+        $stmt = $this->conn->prepare($query);
+
+        // --Almacenamos los valores--
+        $stmt->bindParam(1, $this->rol);
+        $stmt->bindParam(2, $this->tabla);
+
+        // --Ejecutamos la consulta y validamos ejecucion--
+        if ($stmt->execute()) {
+
+            // --Comprobamos que venga algun dato--
+            if ($stmt->rowCount() >= 1) {
+
+                // --Retornamos las respuestas--
+                return $stmt->fetch(PDO::FETCH_OBJ);
+            }
+        } else {
+            // --Falla en la ejecución de la consulta--
+            return NULL;
         }
     }
 }

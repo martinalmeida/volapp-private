@@ -9,6 +9,17 @@ include(MODELS . 'modelUsuarios.php');
 
 class UsuariosController
 {
+    public function beginModule(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $usuario = new Usuario($db);
+
+        $usuario->inializeHtml();
+    }
+
     public function create(): void
     {
         // --Importacion e inicializacion de conexion--
