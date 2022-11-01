@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-11-2022 a las 00:29:01
--- Versión del servidor: 10.4.24-MariaDB
--- Versión de PHP: 8.1.6
+-- Tiempo de generación: 01-11-2022 a las 19:10:18
+-- Versión del servidor: 10.4.25-MariaDB
+-- Versión de PHP: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -33,7 +33,7 @@ CREATE TABLE `contratos` (
   `descripcion` text COLLATE utf8mb4_spanish_ci DEFAULT NULL,
   `representante` varchar(70) COLLATE utf8mb4_spanish_ci DEFAULT NULL,
   `telefono` bigint(20) DEFAULT NULL,
-  `correo` varchar(100) COLLATE utf8mb4_spanish_ci DEFAULT NULL,
+  `email` varchar(100) COLLATE utf8mb4_spanish_ci DEFAULT NULL,
   `status` int(11) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
@@ -95,6 +95,20 @@ INSERT INTO `materiales` (`id`, `nombre`, `descripcion`, `status`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `materiales_contratos`
+--
+
+CREATE TABLE `materiales_contratos` (
+  `id` bigint(20) NOT NULL,
+  `tarifa` float DEFAULT NULL,
+  `idMaterial` bigint(20) NOT NULL,
+  `idContrato` bigint(20) NOT NULL,
+  `status` int(11) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `modulo`
 --
 
@@ -129,7 +143,8 @@ INSERT INTO `modulo` (`id`, `menu_id`, `page`, `titulo`, `icono`, `descripcion`,
 (13, 11, 'rutas', 'Rutas', NULL, 'rutas de viajes', 'rutas', 1),
 (14, 11, 'registros', 'Registros', NULL, 'registros de viajes hechos', '', 1),
 (15, 11, 'informes', 'Informes', NULL, 'pagina de informas a viajes', '', 1),
-(16, 11, 'materiales', 'Materiales', NULL, 'materiales a transportar', 'materiales', 1);
+(16, 11, 'materiales', 'Materiales', NULL, 'materiales a transportar', 'materiales', 1),
+(17, 11, 'contratos', 'Contratos', NULL, 'submodulo de gestion de contratos del sistema de facturacion', 'contratos', 1);
 
 -- --------------------------------------------------------
 
@@ -155,15 +170,15 @@ INSERT INTO `permisos` (`id`, `rolid`, `moduloid`, `r`, `w`, `u`, `d`) VALUES
 (1, 1, 1, 1, 0, 0, 0),
 (2, 1, 2, 1, 0, 0, 0),
 (3, 1, 3, 1, 0, 0, 0),
-(4, 1, 4, 1, 1, 1, 1),
-(5, 1, 5, 1, 0, 0, 0),
+(4, 1, 4, 1, 0, 0, 0),
+(5, 1, 5, 1, 1, 1, 1),
 (6, 1, 6, 1, 0, 0, 0),
 (7, 1, 7, 1, 0, 0, 0),
-(8, 1, 8, 1, 0, 0, 0),
+(8, 1, 8, 1, 1, 1, 1),
 (9, 1, 9, 1, 0, 0, 0),
 (10, 1, 10, 1, 0, 0, 0),
 (11, 1, 11, 1, 0, 0, 0),
-(12, 1, 12, 1, 0, 0, 0),
+(12, 1, 12, 0, 0, 0, 0),
 (13, 1, 13, 1, 0, 0, 0),
 (14, 1, 14, 1, 0, 0, 0),
 (15, 1, 15, 1, 0, 0, 0),
@@ -199,7 +214,10 @@ INSERT INTO `permisos` (`id`, `rolid`, `moduloid`, `r`, `w`, `u`, `d`) VALUES
 (45, 3, 13, 0, 0, 0, 0),
 (46, 3, 14, 0, 0, 0, 0),
 (47, 3, 15, 0, 0, 0, 0),
-(48, 3, 16, 0, 0, 0, 0);
+(48, 3, 16, 0, 0, 0, 0),
+(49, 1, 17, 1, 0, 0, 0),
+(50, 2, 17, 0, 0, 0, 0),
+(51, 3, 17, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -363,6 +381,14 @@ ALTER TABLE `materiales`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `materiales_contratos`
+--
+ALTER TABLE `materiales_contratos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idMaterial` (`idMaterial`),
+  ADD KEY `idContrato` (`idContrato`);
+
+--
 -- Indices de la tabla `modulo`
 --
 ALTER TABLE `modulo`
@@ -432,16 +458,22 @@ ALTER TABLE `materiales`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT de la tabla `materiales_contratos`
+--
+ALTER TABLE `materiales_contratos`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `modulo`
 --
 ALTER TABLE `modulo`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de la tabla `permisos`
 --
 ALTER TABLE `permisos`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT de la tabla `rol`
@@ -482,6 +514,13 @@ ALTER TABLE `vehiculos`
 --
 -- Restricciones para tablas volcadas
 --
+
+--
+-- Filtros para la tabla `materiales_contratos`
+--
+ALTER TABLE `materiales_contratos`
+  ADD CONSTRAINT `materiales_contratos_ibfk_2` FOREIGN KEY (`idContrato`) REFERENCES `contratos` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `materiales_contratos_ibfk_3` FOREIGN KEY (`idMaterial`) REFERENCES `materiales` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `permisos`

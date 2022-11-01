@@ -20,47 +20,10 @@ class Modulo
     public $delete;
     public $idPermiso;
 
-
     // --Constructor para la conexion de la BD--
     public function __construct($db)
     {
         $this->conn = $db;
-    }
-
-    // -- ⊡ Funcion para traer datos de los modulos ⊡ --
-    public function modulosPrincipales(): void
-    {
-        // --Preparamos la consulta--
-        $query = "SELECT id, icono, titulo FROM $this->tableName WHERE menu_id IS NULL AND page IS NULL AND status = 1 ;";
-        $stmt = $this->conn->prepare($query);
-
-        // -- ↓↓ Preparamos arreglo de modulos ↓↓ --
-        $arrayModulos = array();
-
-        // --Ejecutamos la consulta y validamos ejecucion--
-        if ($stmt->execute()) {
-
-            // --Comprobamos que venga algun dato--
-            if ($stmt->rowCount() >= 1) {
-
-                $data = $stmt->fetchAll();
-                foreach ($data as $row) {
-                    $arrayModulos[] = array(
-                        "id" => $row["id"],
-                        "icono" => $row["icono"],
-                        "titulo" => $row["titulo"]
-                    );
-                }
-                // --Retornamos las respuestas--
-                echo json_encode(array('status' => '1', 'data' => $arrayModulos));
-            } else {
-                // --Modulos no encontrado o inactivo--
-                echo json_encode(array('status' => '3', 'data' => NULL));
-            }
-        } else {
-            // --Falla en la ejecución de la consulta--
-            echo json_encode(array('status' => '0', 'data' => NULL));
-        }
     }
 
     // -- ⊡ Funcion para traer datos de los modulos ⊡ --
@@ -96,109 +59,6 @@ class Modulo
             }
         } else {
             // --Falla en la ejecución de la consulta--
-            echo json_encode(array('status' => '0', 'data' => NULL));
-        }
-    }
-
-    // -- ⊡ Funcion para traer modulos asiganados al rol⊡ --
-    public function modulosAsiganados(): void
-    {
-        // --Preparamos la consulta--
-        $query = "SELECT m.id, m.titulo FROM $this->tableRol r JOIN $this->tablePermisos p ON p.rolid = r.id JOIN $this->tableName m ON p.moduloid = m.id 
-                  WHERE m.menu_id IS NOT NULL AND m.page IS NOT NULL AND m.status = 1 AND p.rolid =? AND m.menu_id =? AND p.r = 1 GROUP BY m.id ORDER BY m.titulo ASC; ";
-        $stmt = $this->conn->prepare($query);
-
-        // --Almacenamos los valores--
-        $stmt->bindParam(1, $this->idRol);
-        $stmt->bindParam(2, $this->idModulo);
-
-        // -- ↓↓ Preparamos arreglo de modulos ↓↓ --
-        $arrayModulos = array();
-
-        // --Ejecutamos la consulta y validamos ejecucion--
-        if ($stmt->execute()) {
-
-            // --Comprobamos que venga algun dato--
-            if ($stmt->rowCount() >= 1) {
-
-                $data = $stmt->fetchAll();
-                foreach ($data as $row) {
-                    $arrayModulos[] = array(
-                        "id" => $row["id"],
-                        "titulo" => $row["titulo"],
-                    );
-                }
-                // --Retornamos las respuestas--
-                echo json_encode(array('status' => '1', 'data' => $arrayModulos));
-            } else {
-                // --Modulos no encontrado o inactivo--
-                echo json_encode(array('status' => '3', 'data' => NULL));
-            }
-        } else {
-            // --Falla en la ejecución de la consulta--
-            echo json_encode(array('status' => '0', 'data' => NULL));
-        }
-    }
-
-    // -- ⊡ Funcion para traer modulos no asiganados al rol⊡ --
-    public function modulosNoAsiganados(): void
-    {
-        // --Preparamos la consulta--
-        $query = "SELECT m.id, m.titulo FROM $this->tableName m 
-                  WHERE m.id IN (SELECT p.moduloid FROM $this->tablePermisos p WHERE p.r = 0 AND p.w = 0 AND p.u = 0 AND p.d = 0 AND p.rolid =?)
-                  AND m.menu_id =? AND m.status = 1 ORDER BY m.titulo ASC; ";
-
-        $stmt = $this->conn->prepare($query);
-
-        // --Almacenamos los valores--
-        $stmt->bindParam(1, $this->idRol);
-        $stmt->bindParam(2, $this->idModulo);
-
-        // -- ↓↓ Preparamos arreglo de modulos ↓↓ --
-        $arrayModulos = array();
-
-        // --Ejecutamos la consulta y validamos ejecucion--
-        if ($stmt->execute()) {
-
-            // --Comprobamos que venga algun dato--
-            if ($stmt->rowCount() >= 1) {
-
-                $data = $stmt->fetchAll();
-                foreach ($data as $row) {
-                    $arrayModulos[] = array(
-                        "id" => $row["id"],
-                        "titulo" => $row["titulo"],
-                    );
-                }
-                // --Retornamos las respuestas--
-                echo json_encode(array('status' => '1', 'data' => $arrayModulos));
-            } else {
-                // --Modulos no encontrado o inactivo--
-                echo json_encode(array('status' => '3', 'data' => NULL));
-            }
-        } else {
-            // --Falla en la ejecución de la consulta--
-            echo json_encode(array('status' => '0', 'data' => NULL));
-        }
-    }
-
-    // -- ⊡ Funcion para actualizar empresa ⊡ --
-    public function asignacionModulos(): void
-    {
-        // --Preparamos la consulta--
-        $query = "UPDATE $this->tablePermisos SET r=?, w = 0, u = 0, d = 0 
-                  WHERE rolid=? AND moduloid=?";
-        $stmt = $this->conn->prepare($query);
-
-        // --Almacenamos los valores--
-        $stmt->bindParam(1, $this->read);
-        $stmt->bindParam(2, $this->idRol);
-        $stmt->bindParam(3, $this->idModulo);
-
-        // --Ejecutamos la consulta y validamos ejecucion--
-        if ($stmt->execute()) {
-            echo json_encode(array('status' => '1', 'data' => NULL));
-        } else {
             echo json_encode(array('status' => '0', 'data' => NULL));
         }
     }

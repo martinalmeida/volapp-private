@@ -9,6 +9,28 @@ include(MODELS . 'modelPlacas.php');
 
 class PlacasController
 {
+    public function read(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $placas = new Placa($db);
+
+        $placas->getReadPermisos();
+    }
+
+    public function write(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $placas = new Placa($db);
+
+        $placas->getWritePermisos();
+    }
+
     public function create(): void
     {
         // --Importacion e inicializacion de conexion--

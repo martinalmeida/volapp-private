@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+include(MODELS . 'modelSesion.php');
+
 class Empresa
 {
     // --Parametros Privados--
@@ -41,6 +43,50 @@ class Empresa
     public function __construct($db)
     {
         $this->conn = $db;
+    }
+
+    // -- ⊡ Funcion para permiso de lectura ⊡ --
+    public function getReadPermisos(): void
+    {
+        $sesion = new Sesion($this->conn);
+        $sesion->rol = $_SESSION['rol'];
+        $sesion->tabla = $this->tableName;
+
+        $datos = $sesion->permisoModulo();
+
+        if ($datos->r === 1) {
+            echo json_encode(array('status' => NULL, 'data' => 1));
+        } else {
+            echo json_encode(array('status' => NULL, 'data' => 0));
+        }
+    }
+
+    // -- ⊡ Funcion para traer boton de insertar ⊡ --
+    public function getWritePermisos(): void
+    {
+        $sesion = new Sesion($this->conn);
+        $sesion->rol = $_SESSION['rol'];
+        $sesion->tabla = $this->tableName;
+
+        $datos = $sesion->permisoModulo();
+
+        if ($datos->w === 1) {
+
+            $html = "";
+            $html .= '<h1 class="subheader-title">';
+            $html .= '<i class="fal fa-info-circle"></i> Empresas</h1>';
+            $html .= '<button type="button" class="btn btn-info active" onclick="showModalRegistro();">Agregar <i class="fal fa-plus-square"></i></button>';
+
+            echo json_encode(array('status' => NULL, 'data' => $html));
+        } else {
+
+            $html = "";
+            $html .= '<h1 class="subheader-title">';
+            $html .= '<i class="fal fa-info-circle"></i> Empresas</h1>';
+            $html .= '<h3>No tienes permisos de escritura para este modulo.</h3>';
+
+            echo json_encode(array('status' => NULL, 'data' => $html));
+        }
     }
 
     // -- ⊡ Funcion para crear una empresa ⊡ --
@@ -90,6 +136,11 @@ class Empresa
     // -- ⊡ Funcion para dataTables Serverside ⊡ --
     public function readAllDaTableEmpresa(): void
     {
+        $sesion = new Sesion($this->conn);
+        $sesion->rol = $_SESSION['rol'];
+        $sesion->tabla = $this->tableName;
+        $datos = $sesion->permisoModulo();
+
         // --Read value--
         $draw = $this->draw = htmlspecialchars(strip_tags($this->draw));
         $row = $this->row = htmlspecialchars(strip_tags($this->row));
@@ -155,6 +206,20 @@ class Empresa
         foreach ($empRecords as $row) {
             $estado = $row['status'] == '1' ? 'Activo' : 'Inactivo';
             $statusColor = $row['status'] == '1' ? 'info' : 'secondary';
+
+            $botones = "<div class='btn-group'>";
+            if ($datos->u === 1) {
+                $botones .= "<button type='button' class='btn btn-success text-white' data-toggle='tooltip' data-placement='top' title='Editar Empresa' onclick='editarRegistro(" . $row['nit'] . ");'>";
+                $botones .= "<i class='fal fa-edit'></i></button>";
+                $botones .= "<button type='button' class='btn btn-" . $statusColor . " text-white' data-toggle='tooltip' data-placement='top' title='Estado de la Empresa' onclick='statusRegistro(" . $row['nit'] . ", " . $row['status'] . ");'>";
+                $botones .= "<i class='fal fa-eye'></i></button>";
+            }
+            if ($datos->d === 1) {
+                $botones .= "<button type='button' class='btn btn-danger text-white' data-toggle='tooltip' data-placement='top' title='Eliminar Empresa' onclick='eliminarRegistro(" . $row['nit'] . ");'>";
+                $botones .= "<i class='fal fa-trash'></i></button>";
+            }
+            $botones .= "</div>";
+
             $data[] = array(
                 "nit" => $row['nit'],
                 "digito" => $row['digito'],
@@ -169,18 +234,7 @@ class Empresa
                 "emailTec" => $row['email_tec'],
                 "emaiLogis" => $row['email_logis'],
                 "status" => $estado,
-                "defaultContent" => "
-                                    <div class='btn-group'>
-                                        <button type='button' class='btn btn-success text-white' data-toggle='tooltip' data-placement='top' title='Editar Empresa' onclick='editarRegistro(" . $row['nit'] . ");'>
-                                            <i class='fal fa-edit'></i>
-                                        </button>
-                                        <button type='button' class='btn btn-danger text-white' data-toggle='tooltip' data-placement='top' title='Eliminar Empresa' onclick='eliminarRegistro(" . $row['nit'] . ");'>
-                                            <i class='fal fa-trash'></i>
-                                        </button>
-                                        <button type='button' class='btn btn-" . $statusColor . " text-white' data-toggle='tooltip' data-placement='top' title='Estado de la Empresa' onclick='statusRegistro(" . $row['nit'] . ", " . $row['status'] . ");'>
-                                            <i class='fal fa-eye'></i>
-                                        </button>
-                                    </div>"
+                "defaultContent" => "$botones"
             );
         }
         // --Response--

@@ -46,8 +46,24 @@ class Usuario
         $this->conn = $db;
     }
 
-    // -- ⊡ Funcion para traer datos de la empresa segun nit ⊡ --
-    public function inializeHtml(): void
+    // -- ⊡ Funcion para permiso de lectura ⊡ --
+    public function getReadPermisos(): void
+    {
+        $sesion = new Sesion($this->conn);
+        $sesion->rol = $_SESSION['rol'];
+        $sesion->tabla = $this->tableName;
+
+        $datos = $sesion->permisoModulo();
+
+        if ($datos->r === 1) {
+            echo json_encode(array('status' => NULL, 'data' => 1));
+        } else {
+            echo json_encode(array('status' => NULL, 'data' => 0));
+        }
+    }
+
+    // -- ⊡ Funcion para traer boton de insertar ⊡ --
+    public function getWritePermisos(): void
     {
         $sesion = new Sesion($this->conn);
         $sesion->rol = $_SESSION['rol'];
@@ -62,7 +78,7 @@ class Usuario
             $html .= '<i class="fal fa-info-circle"></i> Usuarios</h1>';
             $html .= '<button type="button" class="btn btn-info active" onclick="showModalRegistro();">Agregar <i class="fal fa-plus-square"></i></button>';
 
-            echo json_encode(array('status' => '1', 'data' => $html));
+            echo json_encode(array('status' => NULL, 'data' => $html));
         } else {
 
             $html = "";
@@ -70,7 +86,7 @@ class Usuario
             $html .= '<i class="fal fa-info-circle"></i> Usuarios</h1>';
             $html .= '<h3>No tienes permisos de escritura para este modulo.</h3>';
 
-            echo json_encode(array('status' => '1', 'data' => $html));
+            echo json_encode(array('status' => NULL, 'data' => $html));
         }
     }
 
@@ -128,20 +144,19 @@ class Usuario
         $sesion->tabla = $this->tableName;
         $datos = $sesion->permisoModulo();
 
-        if ($datos->r == 1) {
-            // --Read value--
-            $draw = $this->draw = htmlspecialchars(strip_tags($this->draw));
-            $row = $this->row = htmlspecialchars(strip_tags($this->row));
-            $rowperpage = $this->rowperpage = htmlspecialchars(strip_tags($this->rowperpage));
-            $columnIndex = $this->columnIndex = htmlspecialchars(strip_tags($this->columnIndex));
-            $columnName = $this->columnName = htmlspecialchars(strip_tags($this->columnName));
-            $columnSortOrder = $this->columnSortOrder = htmlspecialchars(strip_tags($this->columnSortOrder));
-            $searchValue = $this->searchValue = htmlspecialchars(strip_tags($this->searchValue));
-            $searchArray = array();
-            // --Search--
-            $searchQuery = " ";
-            if ($searchValue != '') {
-                $searchQuery = " AND (identificacion LIKE :identificacion OR
+        // --Read value--
+        $draw = $this->draw = htmlspecialchars(strip_tags($this->draw));
+        $row = $this->row = htmlspecialchars(strip_tags($this->row));
+        $rowperpage = $this->rowperpage = htmlspecialchars(strip_tags($this->rowperpage));
+        $columnIndex = $this->columnIndex = htmlspecialchars(strip_tags($this->columnIndex));
+        $columnName = $this->columnName = htmlspecialchars(strip_tags($this->columnName));
+        $columnSortOrder = $this->columnSortOrder = htmlspecialchars(strip_tags($this->columnSortOrder));
+        $searchValue = $this->searchValue = htmlspecialchars(strip_tags($this->searchValue));
+        $searchArray = array();
+        // --Search--
+        $searchQuery = " ";
+        if ($searchValue != '') {
+            $searchQuery = " AND (identificacion LIKE :identificacion OR
                             nombres LIKE :nombres OR
                             a_paterno LIKE :a_paterno OR 
                             a_materno LIKE :a_materno OR
@@ -149,90 +164,87 @@ class Usuario
                             pswd LIKE :pswd OR
                             nombrefiscal LIKE :nombrefiscal OR
                             direccionfiscal LIKE :direccionfiscal  )";
-                $searchArray = array(
-                    'identificacion' => "%$searchValue%",
-                    'nombres' => "%$searchValue%",
-                    'a_paterno' => "%$searchValue%",
-                    'a_materno' => "%$searchValue%",
-                    'email_user' => "%$searchValue%",
-                    'pswd' => "%$searchValue%",
-                    'nombrefiscal' => "%$searchValue%",
-                    'direccionfiscal' => "%$searchValue%"
-                );
-            }
-            // --Total number of records without filtering--
-            $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM $this->tableName");
-            $stmt->execute();
-            $records = $stmt->fetch();
-            $totalRecords = $records['allcount'];
-            // --Total number of records with filtering--
-            $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM $this->tableName WHERE 1 $searchQuery");
-            $stmt->execute($searchArray);
-            $records = $stmt->fetch();
-            $totalRecordwithFilter = $records['allcount'];
-            // --Fetch records--
-            $stmt = $this->conn->prepare("SELECT 
+            $searchArray = array(
+                'identificacion' => "%$searchValue%",
+                'nombres' => "%$searchValue%",
+                'a_paterno' => "%$searchValue%",
+                'a_materno' => "%$searchValue%",
+                'email_user' => "%$searchValue%",
+                'pswd' => "%$searchValue%",
+                'nombrefiscal' => "%$searchValue%",
+                'direccionfiscal' => "%$searchValue%"
+            );
+        }
+        // --Total number of records without filtering--
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM $this->tableName");
+        $stmt->execute();
+        $records = $stmt->fetch();
+        $totalRecords = $records['allcount'];
+        // --Total number of records with filtering--
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM $this->tableName WHERE 1 $searchQuery");
+        $stmt->execute($searchArray);
+        $records = $stmt->fetch();
+        $totalRecordwithFilter = $records['allcount'];
+        // --Fetch records--
+        $stmt = $this->conn->prepare("SELECT 
                                       u.id, u.identificacion, u.nombres, u.a_paterno, u.a_materno, u.telefono, u.email_user, 
                                       u.pswd, u.nombrefiscal, u.direccionfiscal, r.nombrerol, s.descripcion, u.status 
                                       FROM $this->tableName u  
                                       JOIN $this->tableRol r ON u.rolid = r.id 
                                       JOIN $this->tableSucursal s ON u.sucursalid = s.id 
                                       WHERE 1 $searchQuery AND u.status in(1, 2) ORDER BY $columnName $columnSortOrder LIMIT :limit,:offset ");
-            // --Bind values--
-            foreach ($searchArray as $key => $search) {
-                $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
-            }
-            $stmt->bindValue(':limit', (int)$row, PDO::PARAM_INT);
-            $stmt->bindValue(':offset', (int)$rowperpage, PDO::PARAM_INT);
-            $stmt->execute();
-            $empRecords = $stmt->fetchAll();
-            $data = array();
-
-            foreach ($empRecords as $row) {
-                $estado = $row['status'] == '1' ? 'Activo' : 'Inactivo';
-                $statusColor = $row['status'] == '1' ? 'info' : 'secondary';
-
-                $botones = "<div class='btn-group'>";
-                if ($datos->u === 1) {
-                    $botones .= "<button type='button' class='btn btn-success text-white' data-toggle='tooltip' data-placement='top' title='Editar Empresa' onclick='editarRegistro(" . $row['id'] . ");'>";
-                    $botones .= "<i class='fal fa-edit'></i></button>";
-                    $botones .= "<button type='button' class='btn btn-" . $statusColor . " text-white' data-toggle='tooltip' data-placement='top' title='Estado de la Empresa' onclick='statusRegistro(" . $row['id'] . ", " . $row['status'] . ");'>";
-                    $botones .= "<i class='fal fa-eye'></i></button>";
-                }
-                if ($datos->d === 1) {
-                    $botones .= "<button type='button' class='btn btn-danger text-white' data-toggle='tooltip' data-placement='top' title='Eliminar Empresa' onclick='eliminarRegistro(" . $row['id'] . ");'>";
-                    $botones .= "<i class='fal fa-trash'></i></button>";
-                }
-                $botones .= "</div>";
-
-                $data[] = array(
-                    "id" => $row['id'],
-                    "identificacion" => $row['identificacion'],
-                    "nombres" => $row['nombres'],
-                    "a_paterno" => $row['a_paterno'],
-                    "a_materno" => $row['a_materno'],
-                    "telefono" => $row['telefono'],
-                    "email_user" => $row['email_user'],
-                    "pswd" => $row['pswd'],
-                    "nombrefiscal" => $row['nombrefiscal'],
-                    "direccionfiscal" => $row['direccionfiscal'],
-                    "nombrerol" => $row['nombrerol'],
-                    "descripcion" => $row['descripcion'],
-                    "status" => $estado,
-                    "defaultContent" => $botones
-                );
-            }
-            // --Response--
-            $response = array(
-                "draw" => intval($draw),
-                "iTotalRecords" => $totalRecords,
-                "iTotalDisplayRecords" => $totalRecordwithFilter,
-                "aaData" => $data
-            );
-            echo json_encode($response);
-        } else {
-            # code...
+        // --Bind values--
+        foreach ($searchArray as $key => $search) {
+            $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
         }
+        $stmt->bindValue(':limit', (int)$row, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', (int)$rowperpage, PDO::PARAM_INT);
+        $stmt->execute();
+        $empRecords = $stmt->fetchAll();
+        $data = array();
+
+        foreach ($empRecords as $row) {
+            $estado = $row['status'] == '1' ? 'Activo' : 'Inactivo';
+            $statusColor = $row['status'] == '1' ? 'info' : 'secondary';
+
+            $botones = "<div class='btn-group'>";
+            if ($datos->u === 1) {
+                $botones .= "<button type='button' class='btn btn-success text-white' data-toggle='tooltip' data-placement='top' title='Editar Empresa' onclick='editarRegistro(" . $row['id'] . ");'>";
+                $botones .= "<i class='fal fa-edit'></i></button>";
+                $botones .= "<button type='button' class='btn btn-" . $statusColor . " text-white' data-toggle='tooltip' data-placement='top' title='Estado de la Empresa' onclick='statusRegistro(" . $row['id'] . ", " . $row['status'] . ");'>";
+                $botones .= "<i class='fal fa-eye'></i></button>";
+            }
+            if ($datos->d === 1) {
+                $botones .= "<button type='button' class='btn btn-danger text-white' data-toggle='tooltip' data-placement='top' title='Eliminar Empresa' onclick='eliminarRegistro(" . $row['id'] . ");'>";
+                $botones .= "<i class='fal fa-trash'></i></button>";
+            }
+            $botones .= "</div>";
+
+            $data[] = array(
+                "id" => $row['id'],
+                "identificacion" => $row['identificacion'],
+                "nombres" => $row['nombres'],
+                "a_paterno" => $row['a_paterno'],
+                "a_materno" => $row['a_materno'],
+                "telefono" => $row['telefono'],
+                "email_user" => $row['email_user'],
+                "pswd" => $row['pswd'],
+                "nombrefiscal" => $row['nombrefiscal'],
+                "direccionfiscal" => $row['direccionfiscal'],
+                "nombrerol" => $row['nombrerol'],
+                "descripcion" => $row['descripcion'],
+                "status" => $estado,
+                "defaultContent" => $botones
+            );
+        }
+        // --Response--
+        $response = array(
+            "draw" => intval($draw),
+            "iTotalRecords" => $totalRecords,
+            "iTotalDisplayRecords" => $totalRecordwithFilter,
+            "aaData" => $data
+        );
+        echo json_encode($response);
     }
 
     // -- ⊡ Funcion para cambiar el estado de la empresa ⊡ --

@@ -9,6 +9,28 @@ include(MODELS . 'modelSucursales.php');
 
 class SucursalesController
 {
+    public function read(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $sucursal = new Sucursal($db);
+
+        $sucursal->getReadPermisos();
+    }
+
+    public function write(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $sucursal = new Sucursal($db);
+
+        $sucursal->getWritePermisos();
+    }
+
     public function create(): void
     {
         // --Importacion e inicializacion de conexion--

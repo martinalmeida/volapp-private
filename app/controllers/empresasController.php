@@ -9,6 +9,28 @@ include(MODELS . 'modelEmpresas.php');
 
 class EmpresasController
 {
+    public function read(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $empresa = new Empresa($db);
+
+        $empresa->getReadPermisos();
+    }
+
+    public function write(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $empresa = new Empresa($db);
+
+        $empresa->getWritePermisos();
+    }
+
     public function create(): void
     {
         // --Importacion e inicializacion de conexion--

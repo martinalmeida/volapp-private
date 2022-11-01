@@ -2,17 +2,15 @@
 
 declare(strict_types=1);
 
-include(MODELS . 'modelSesion.php');
-
-class Rol
+class Contrato
 {
     // --Parametros Privados--
     private $conn;
-    private $tableName = "rol";
+    private $tableName = "contratos";
 
     // --Parametros Publicos--
     public $id;
-    public $nombrerol;
+    public $nombre;
     public $descripcion;
     public $status;
 
@@ -33,63 +31,19 @@ class Rol
         $this->conn = $db;
     }
 
-    // -- ⊡ Funcion para permiso de lectura ⊡ --
-    public function getReadPermisos(): void
-    {
-        $sesion = new Sesion($this->conn);
-        $sesion->rol = $_SESSION['rol'];
-        $sesion->tabla = $this->tableName;
-
-        $datos = $sesion->permisoModulo();
-
-        if ($datos->r === 1) {
-            echo json_encode(array('status' => NULL, 'data' => 1));
-        } else {
-            echo json_encode(array('status' => NULL, 'data' => 0));
-        }
-    }
-
-    // -- ⊡ Funcion para traer boton de insertar ⊡ --
-    public function getWritePermisos(): void
-    {
-        $sesion = new Sesion($this->conn);
-        $sesion->rol = $_SESSION['rol'];
-        $sesion->tabla = $this->tableName;
-
-        $datos = $sesion->permisoModulo();
-
-        if ($datos->w === 1) {
-
-            $html = "";
-            $html .= '<h1 class="subheader-title">';
-            $html .= '<i class="fal fa-info-circle"></i> Roles y Permisos</h1>';
-            $html .= '<button type="button" class="btn btn-info active" onclick="showModalRegistro();">Agregar <i class="fal fa-plus-square"></i></button>';
-
-            echo json_encode(array('status' => NULL, 'data' => $html));
-        } else {
-
-            $html = "";
-            $html .= '<h1 class="subheader-title">';
-            $html .= '<i class="fal fa-info-circle"></i> Roles y Permisos</h1>';
-            $html .= '<h3>No tienes permisos de escritura para este modulo.</h3>';
-
-            echo json_encode(array('status' => NULL, 'data' => $html));
-        }
-    }
-
-    // -- ⊡ Funcion para crear un rol ⊡ --
-    public function createRol(): void
+    // -- ⊡ Funcion para crear un material ⊡ --
+    public function createMaterial(): void
     {
         // --Preparamos la consulta--
-        $query = "INSERT INTO $this->tableName SET nombrerol=?, descripcion	=?";
+        $query = "INSERT INTO $this->tableName SET nombre=?, descripcion=?";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
-        $this->nombrerol = htmlspecialchars(strip_tags($this->nombrerol));
+        $this->nombre = htmlspecialchars(strip_tags($this->nombre));
         $this->descripcion = htmlspecialchars(strip_tags($this->descripcion));
 
         // --Almacenamos los valores--
-        $stmt->bindParam(1, $this->nombrerol);
+        $stmt->bindParam(1, $this->nombre);
         $stmt->bindParam(2, $this->descripcion);
 
         // --Ejecutamos la consulta y validamos ejecucion--
@@ -101,13 +55,8 @@ class Rol
     }
 
     // -- ⊡ Funcion para dataTables Serverside ⊡ --
-    public function readAllDaTableRol(): void
+    public function readAllDaTableMateriales(): void
     {
-        $sesion = new Sesion($this->conn);
-        $sesion->rol = $_SESSION['rol'];
-        $sesion->tabla = $this->tableName;
-        $datos = $sesion->permisoModulo();
-
         // --Read value--
         $draw = $this->draw = htmlspecialchars(strip_tags($this->draw));
         $row = $this->row = htmlspecialchars(strip_tags($this->row));
@@ -121,12 +70,12 @@ class Rol
         $searchQuery = " ";
         if ($searchValue != '') {
             $searchQuery = " AND (id LIKE :id OR 
-                            nombrerol LIKE :nombrerol OR
+                            nombre LIKE :nombre OR
                             descripcion LIKE :descripcion OR
                             status LIKE :status )";
             $searchArray = array(
                 'id' => "%$searchValue%",
-                'nombrerol' => "%$searchValue%",
+                'nombre' => "%$searchValue%",
                 'descripcion' => "%$searchValue%",
                 'status' => "%$searchValue%"
             );
@@ -142,7 +91,7 @@ class Rol
         $records = $stmt->fetch();
         $totalRecordwithFilter = $records['allcount'];
         // --Fetch records--
-        $stmt = $this->conn->prepare("SELECT id, nombrerol, descripcion, status FROM " . $this->tableName . " WHERE 1 " . $searchQuery . " AND status in(1, 2) ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
+        $stmt = $this->conn->prepare("SELECT id, nombre, descripcion, status FROM " . $this->tableName . " WHERE 1 " . $searchQuery . " AND status in(1, 2) ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
         // --Bind values--
         foreach ($searchArray as $key => $search) {
             $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
@@ -155,28 +104,23 @@ class Rol
         foreach ($empRecords as $row) {
             $estado = $row['status'] == '1' ? 'Activo' : 'Inactivo';
             $statusColor = $row['status'] == '1' ? 'info' : 'secondary';
-
-            $botones = "<div class='btn-group'>";
-            if ($datos->u === 1) {
-                $botones .= "<button type='button' class='btn btn-success text-white' data-toggle='tooltip' data-placement='top' title='Editar Rol' onclick='editarRegistro(" . $row['id'] . ");'>";
-                $botones .= "<i class='fal fa-edit'></i></button>";
-                $botones .= "<button type='button' class='btn btn-" . $statusColor . " text-white' data-toggle='tooltip' data-placement='top' title='Estado del Rol' onclick='statusRegistro(" . $row['id'] . ", " . $row['status'] . ");'>";
-                $botones .= "<i class='fal fa-eye'></i></button>";
-                $botones .= "<button type='button' class='btn btn-warning text-white' data-toggle='tooltip' data-placement='top' title='Permisos a modulos' onclick='modulosPermisos(" . $row['id'] . ");'>";
-                $botones .= "<i class='fal fa-key'></i></button>";
-            }
-            if ($datos->d === 1) {
-                $botones .= "<button type='button' class='btn btn-danger text-white' data-toggle='tooltip' data-placement='top' title='Eliminar Rol' onclick='eliminarRegistro(" . $row['id'] . ");'>";
-                $botones .= "<i class='fal fa-trash'></i></button>";
-            }
-            $botones .= "</div>";
-
             $data[] = array(
                 "id" => $row['id'],
-                "nombrerol" => $row['nombrerol'],
+                "nombre" => $row['nombre'],
                 "descripcion" => $row['descripcion'],
                 "status" => $estado,
-                "defaultContent" => "$botones"
+                "defaultContent" => "
+                                    <div class='btn-group'>
+                                        <button type='button' class='btn btn-success text-white' data-toggle='tooltip' data-placement='top' title='Editar Rol' onclick='editarRegistro(" . $row['id'] . ");'>
+                                            <i class='fal fa-edit'></i>
+                                        </button>
+                                        <button type='button' class='btn btn-danger text-white' data-toggle='tooltip' data-placement='top' title='Eliminar Rol' onclick='eliminarRegistro(" . $row['id'] . ");'>
+                                            <i class='fal fa-trash'></i>
+                                        </button>
+                                        <button type='button' class='btn btn-" . $statusColor . " text-white' data-toggle='tooltip' data-placement='top' title='Estado del Rol' onclick='statusRegistro(" . $row['id'] . ", " . $row['status'] . ");'>
+                                            <i class='fal fa-eye'></i>
+                                        </button>
+                                    </div>"
             );
         }
         // --Response--
@@ -190,7 +134,7 @@ class Rol
     }
 
     // -- ⊡ Funcion para cambiar el estado del rol ⊡ --
-    public function statusRol(): void
+    public function statusMaterial(): void
     {
         // --Preparamos la consulta--
         $query = "UPDATE $this->tableName SET status =? WHERE id=?";
@@ -211,10 +155,10 @@ class Rol
     }
 
     // -- ⊡ Funcion para traer datos del rol ⊡ --
-    public function dataRol(): void
+    public function dataMaterial(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT id, nombrerol, descripcion FROM $this->tableName WHERE id=? ;";
+        $query = "SELECT id, nombre, descripcion FROM $this->tableName WHERE id=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Almacenamos los valores--
@@ -231,8 +175,8 @@ class Rol
 
                 $datos = array(
                     'id' => $data->id,
-                    'nombrerol' => $data->nombrerol,
-                    'descripcion' => $data->descripcion
+                    'nombre' => $data->nombre,
+                    'descripcion' => $data->descripcion,
                 );
                 // --Retornamos las respuestas--
                 echo json_encode(array('status' => '1', 'data' => $datos));
@@ -247,18 +191,18 @@ class Rol
     }
 
     // -- ⊡ Funcion para actualizar empresa ⊡ --
-    public function updateRol(): void
+    public function updateMaterial(): void
     {
         // --Preparamos la consulta--
-        $query = "UPDATE $this->tableName SET nombrerol=?, descripcion=? WHERE id=?";
+        $query = "UPDATE $this->tableName SET nombre=?, descripcion=? WHERE id=?";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
-        $this->nombrerol = htmlspecialchars(strip_tags($this->nombrerol));
+        $this->nombre = htmlspecialchars(strip_tags($this->nombre));
         $this->descripcion = htmlspecialchars(strip_tags($this->descripcion));
 
         // --Almacenamos los valores--
-        $stmt->bindParam(1, $this->nombrerol);
+        $stmt->bindParam(1, $this->nombre);
         $stmt->bindParam(2, $this->descripcion);
         $stmt->bindParam(3, $this->id);
 
@@ -271,7 +215,7 @@ class Rol
     }
 
     // -- ⊡ Funcion para eliminar rol ⊡ --
-    public function deleteRol(): void
+    public function deletePlaca(): void
     {
         // --Preparamos la consulta--
         $query = "UPDATE $this->tableName SET status = 3 WHERE id=?";

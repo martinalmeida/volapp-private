@@ -1,10 +1,10 @@
 let edit = false;
 var peticion = null;
-var tablaUsuarios = "";
+var tablaContratos = "";
 
 $(document).ready(function () {
-  /* ---------  START Serverside Tabla ( tablaUsuarios ) ----------- */
-  tablaUsuarios = $("#tablaUsuarios").DataTable({
+  /* ---------  START Serverside Tabla ( tablaContratos ) ----------- */
+  tablaContratos = $("#tablaContratos").DataTable({
     processing: true,
     orderClasses: true,
     deferRender: true,
@@ -14,7 +14,7 @@ $(document).ready(function () {
     pageLength: 30,
     ajax: {
       type: "POST",
-      url: urlBase + "routes/usuarios/readAllDaTable",
+      url: urlBase + "routes/contratos/readAllDaTable",
     },
     dom:
       "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
@@ -42,16 +42,7 @@ $(document).ready(function () {
     ],
     columns: [
       { data: "id" },
-      { data: "identificacion" },
-      { data: "nombres" },
-      { data: "a_paterno" },
-      { data: "a_materno" },
-      { data: "telefono" },
-      { data: "email_user" },
-      { data: "pswd" },
-      { data: "nombrefiscal" },
-      { data: "direccionfiscal" },
-      { data: "nombrerol" },
+      { data: "nombre" },
       { data: "descripcion" },
       { data: "status" },
       { data: "defaultContent" },
@@ -71,206 +62,16 @@ $(document).ready(function () {
       sProcessing: "Procesando...",
     },
   });
-  readPermisos();
-  writePermisos();
-  selects();
 });
-
-function readPermisos() {
-  $.ajax({
-    dataType: "json",
-    url: urlBase + "routes/usuarios/read",
-    type: "GET",
-    beforeSend: function () {},
-    success: function (result) {
-      if (result.data == 1) {
-        $("#panel-1").show();
-      } else {
-        $("#panel-1").hide();
-      }
-    },
-    complete: function () {},
-    error: function (xhr) {
-      console.log(xhr);
-    },
-  });
-}
-
-function writePermisos() {
-  $.ajax({
-    dataType: "json",
-    url: urlBase + "routes/usuarios/write",
-    type: "GET",
-    beforeSend: function () {},
-    success: function (result) {
-      $("#permisoSuperior").html(result.data);
-    },
-    complete: function () {},
-    error: function (xhr) {
-      console.log(xhr);
-    },
-  });
-}
-
-function selects() {
-  $.ajax({
-    dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-    url: urlBase + "routes/selects/getSucursal", //url a donde hacemos la peticion
-    type: "GET",
-    beforeSend: function () {
-      // $(".overlayCargue").fadeIn("slow");
-    },
-    success: function (result) {
-      var estado = result.status;
-      switch (estado) {
-        case "0":
-          Swal.fire({
-            icon: "error",
-            title: "<strong>Error en el servidor</strong>",
-            html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
-            showCloseButton: true,
-            showConfirmButton: false,
-            cancelButtonText: "Cerrar",
-            cancelButtonColor: "#dc3545",
-            showCancelButton: true,
-            backdrop: true,
-          });
-          break;
-
-        case "1":
-          var html = "";
-
-          html +=
-            '<option value="" disabled selected hidden>Seleccione la Sucursal</option>';
-          for (let i = 0; i < result.data.length; i++) {
-            html += result.data[i].html;
-          }
-
-          $("#sucursal").html(html);
-          break;
-
-        case "2":
-          Swal.fire({
-            icon: "error",
-            title: "<strong>Error de Validacón</strong>",
-            html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
-            showCloseButton: true,
-            showConfirmButton: false,
-            cancelButtonText: "Cerrar",
-            cancelButtonColor: "#dc3545",
-            showCancelButton: true,
-            backdrop: true,
-          });
-          break;
-
-        default:
-          break;
-      }
-    },
-    complete: function () {
-      // setTimeout(() => {
-      //   $(".overlayCargue").fadeOut("slow");
-      // }, 1000);
-    },
-    error: function (xhr) {
-      console.log(xhr);
-      Swal.fire({
-        icon: "error",
-        title: "<strong>Error!</strong>",
-        html: "<h5>Se ha presentado un error, por favor informar al area de Sistemas.</h5>",
-        showCloseButton: true,
-        showConfirmButton: false,
-        cancelButtonText: "Cerrar",
-        cancelButtonColor: "#dc3545",
-        showCancelButton: true,
-        backdrop: true,
-      });
-    },
-  });
-  $.ajax({
-    dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-    url: urlBase + "routes/selects/getRol", //url a donde hacemos la peticion
-    type: "GET",
-    beforeSend: function () {
-      // $(".overlayCargue").fadeIn("slow");
-    },
-    success: function (result) {
-      var estado = result.status;
-      switch (estado) {
-        case "0":
-          Swal.fire({
-            icon: "error",
-            title: "<strong>Error en el servidor</strong>",
-            html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
-            showCloseButton: true,
-            showConfirmButton: false,
-            cancelButtonText: "Cerrar",
-            cancelButtonColor: "#dc3545",
-            showCancelButton: true,
-            backdrop: true,
-          });
-          break;
-
-        case "1":
-          var html = "";
-
-          html +=
-            '<option value="" disabled selected hidden>Seleccione el Rol</option>';
-          for (let i = 0; i < result.data.length; i++) {
-            html += result.data[i].html;
-          }
-
-          $("#rol").html(html);
-          break;
-
-        case "2":
-          Swal.fire({
-            icon: "error",
-            title: "<strong>Error de Validacón</strong>",
-            html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
-            showCloseButton: true,
-            showConfirmButton: false,
-            cancelButtonText: "Cerrar",
-            cancelButtonColor: "#dc3545",
-            showCancelButton: true,
-            backdrop: true,
-          });
-          break;
-
-        default:
-          break;
-      }
-    },
-    complete: function () {
-      // setTimeout(() => {
-      //   $(".overlayCargue").fadeOut("slow");
-      // }, 1000);
-    },
-    error: function (xhr) {
-      console.log(xhr);
-      Swal.fire({
-        icon: "error",
-        title: "<strong>Error!</strong>",
-        html: "<h5>Se ha presentado un error, por favor informar al area de Sistemas.</h5>",
-        showCloseButton: true,
-        showConfirmButton: false,
-        cancelButtonText: "Cerrar",
-        cancelButtonColor: "#dc3545",
-        showCancelButton: true,
-        backdrop: true,
-      });
-    },
-  });
-}
 
 function registrar(form) {
   var respuestavalidacion = validarcampos("#" + form);
   if (respuestavalidacion) {
     var formData = new FormData(document.getElementById(form));
     if (edit == true) {
-      peticion = urlBase + "routes/usuarios/update";
+      peticion = urlBase + "routes/contratos/update";
     } else {
-      peticion = urlBase + "routes/usuarios/create";
+      peticion = urlBase + "routes/contratos/create";
     }
     $.ajax({
       cache: false, //necesario para enviar archivos
@@ -310,8 +111,8 @@ function registrar(form) {
             if (edit == false) {
               Swal.fire({
                 icon: "success",
-                title: "<strong>Empresa Creada</strong>",
-                html: "<h5>La Empresa se ha registrado exitosamente</h5>",
+                title: "<strong>Material Creado</strong>",
+                html: "<h5>El material se ha registrado exitosamente</h5>",
                 showCloseButton: false,
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#64a19d",
@@ -320,8 +121,8 @@ function registrar(form) {
             } else {
               Swal.fire({
                 icon: "success",
-                title: "<strong>Empresa Editada</strong>",
-                html: "<h5>La Empresa se ha editado exitosamente</h5>",
+                title: "<strong>Material Editado</strong>",
+                html: "<h5>El material se ha editado exitosamente</h5>",
                 showCloseButton: false,
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#64a19d",
@@ -330,7 +131,7 @@ function registrar(form) {
             }
             reset();
             $("#ModalRegistro").modal("hide");
-            tablaUsuarios.clear().draw();
+            tablaContratos.clear().draw();
             break;
 
           case "2":
@@ -338,51 +139,6 @@ function registrar(form) {
               icon: "error",
               title: "<strong>Error de Validacón</strong>",
               html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
-              showCloseButton: true,
-              showConfirmButton: false,
-              cancelButtonText: "Cerrar",
-              cancelButtonColor: "#dc3545",
-              showCancelButton: true,
-              backdrop: true,
-            });
-            $("#ModalRegistro").modal("hide");
-            break;
-
-          case "4":
-            Swal.fire({
-              icon: "warning",
-              title: "<strong>Archivo Dañado</strong>",
-              html: "<h5>El archivo esta corrupto.</h5>",
-              showCloseButton: true,
-              showConfirmButton: false,
-              cancelButtonText: "Cerrar",
-              cancelButtonColor: "#dc3545",
-              showCancelButton: true,
-              backdrop: true,
-            });
-            $("#ModalRegistro").modal("hide");
-            break;
-
-          case "5":
-            Swal.fire({
-              icon: "warning",
-              title: "<strong>Adjunte un Archivo</strong>",
-              html: "<h5>No se ha adjuntado un archivo.</h5>",
-              showCloseButton: true,
-              showConfirmButton: false,
-              cancelButtonText: "Cerrar",
-              cancelButtonColor: "#dc3545",
-              showCancelButton: true,
-              backdrop: true,
-            });
-            $("#ModalRegistro").modal("hide");
-            break;
-
-          case "6":
-            Swal.fire({
-              icon: "error",
-              title: "<strong>Tamaño execivo de Archivo</strong>",
-              html: "<h5>Adjunta un archivo de menor tamaño, el peso maximo es de 2MB.</h5>",
               showCloseButton: true,
               showConfirmButton: false,
               cancelButtonText: "Cerrar",
@@ -418,11 +174,12 @@ function registrar(form) {
 }
 
 function editarRegistro(id) {
+  $("#inputsEditar").html("");
   edit = true;
   $.ajax({
-    data: { idUser: id }, //datos a enviar a la url
+    data: { idMaterial: id }, //datos a enviar a la url
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-    url: urlBase + "routes/usuarios/getData", //url a donde hacemos la peticion
+    url: urlBase + "routes/contratos/getData", //url a donde hacemos la peticion
     type: "POST",
     beforeSend: function () {
       // $(".overlayCargue").fadeIn("slow");
@@ -445,41 +202,21 @@ function editarRegistro(id) {
           break;
 
         case "1":
-          $("#btnRegistro").text("Editar Usuario");
+          $("#btnRegistro").text("Editar Material");
           $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
           $("#btnRegistro").removeClass("btn btn-info");
           $("#btnRegistro").addClass("btn btn-success");
 
-          $("#identificacion").val(result.data.identificacion);
-          $("#nombres").val(result.data.nombres);
-          $("#Apaterno").val(result.data.Apaterno);
-          $("#Amaterno").val(result.data.Amaterno);
-          $("#telefono").val(result.data.telefono);
-          $("#emailUser").val(result.data.emailUser);
-          $("#pswd").val(result.data.pswd);
-          $("#nombreFiscal").val(result.data.nombreFiscal);
-          $("#direccionFiscal").val(result.data.direccionFiscal);
-          $("#rol").val(result.data.rol);
-          $("#sucursal").val(result.data.sucursal);
+          $("#nombre").val(result.data.nombre);
+          $("#descripcion").val(result.data.descripcion);
 
           var html = "";
           html +=
-            '<img class="rounded" src="data: ' +
-            result.data.contenType +
-            ";base64," +
-            result.data.base64 +
-            '" width="50" height="auto">' +
-            '<input type="hidden" id="idUser" name="idUser" value="' +
+            '<input type="hidden" id="idMaterial" name="idMaterial" value="' +
             result.data.id +
-            '">' +
-            '<input type="hidden" id="contenType" name="contenType" value="' +
-            result.data.contenType +
-            '">' +
-            '<input type="hidden" id="base64" name="base64" value="' +
-            result.data.base64 +
             '">';
 
-          $("#imagenBase64").html(html);
+          $("#inputsEditar").html(html);
 
           $("#ModalRegistro").modal({
             backdrop: "static",
@@ -530,11 +267,11 @@ function editarRegistro(id) {
 function statusRegistro(id, status) {
   $.ajax({
     data: {
-      idUser: id,
+      idMaterial: id,
       status: status,
     },
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-    url: urlBase + "routes/usuarios/status", //url a donde hacemos la peticion
+    url: urlBase + "routes/contratos/status", //url a donde hacemos la peticion
     type: "POST",
     beforeSend: function () {
       // $("#overlayText").text("Cerrando Sesión...");
@@ -562,7 +299,7 @@ function statusRegistro(id, status) {
 
         case "1":
           Command: toastr["success"](
-            "Estado de la empresa cambiado exitosamente.",
+            "Estado del material cambiado exitosamente.",
             "Estado Cambiado"
           );
 
@@ -583,7 +320,7 @@ function statusRegistro(id, status) {
             showMethod: "fadeIn",
             hideMethod: "fadeOut",
           };
-          tablaUsuarios.clear().draw();
+          tablaContratos.clear().draw();
           break;
 
         case "2":
@@ -633,17 +370,17 @@ function eliminarRegistro(id) {
   Swal.fire({
     icon: "warning",
     title: "Que deseas hacer?",
-    text: "Se eliminara al usuario del sistema!",
+    text: "Se eliminara el material del sistema!",
     type: "warning",
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Eliminar Usuario",
+    confirmButtonText: "Eliminar Material",
     preConfirm: function () {
       $.ajax({
-        data: { idUser: id },
+        data: { idMaterial: id },
         dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-        url: urlBase + "routes/usuarios/delete", //url a donde hacemos la peticion
+        url: urlBase + "routes/contratos/delete", //url a donde hacemos la peticion
         type: "POST",
         beforeSend: function () {
           // $("#overlayText").text("Cerrando Sesión...");
@@ -671,8 +408,8 @@ function eliminarRegistro(id) {
 
             case "1":
               Command: toastr["success"](
-                "El usuario se ha eliminado satisfactoriamente.",
-                "Usuario Eliminada"
+                "El material se ha eliminado satisfactoriamente.",
+                "Material Eliminada"
               );
 
               toastr.options = {
@@ -692,7 +429,7 @@ function eliminarRegistro(id) {
                 showMethod: "fadeIn",
                 hideMethod: "fadeOut",
               };
-              tablaUsuarios.clear().draw();
+              tablaContratos.clear().draw();
               break;
 
             case "2":
@@ -742,7 +479,7 @@ function eliminarRegistro(id) {
 
 function showModalRegistro() {
   reset();
-  $("#btnRegistro").text("Registrar Usuario");
+  $("#btnRegistro").text("Registrar Material");
   $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
   $("#ModalRegistro").modal({
     backdrop: "static",
@@ -754,11 +491,11 @@ function reset() {
   edit = false;
   vercampos("#frmRegistro", 1);
   limpiarcampos("#frmRegistro");
-  $("#imagenBase64").html("");
+  $("#inputsEditar").html("");
   $("#btnRegistro").removeClass("btn btn-success");
   $("#btnRegistro").addClass("btn btn-info");
 }
 
 function reajustDatatables() {
-  tablaUsuarios.columns.adjust().draw();
+  tablaContratos.columns.adjust().draw();
 }

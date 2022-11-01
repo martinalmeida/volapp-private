@@ -9,6 +9,28 @@ include(MODELS . 'modelRoles.php');
 
 class RolesController
 {
+    public function read(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $rol = new Rol($db);
+
+        $rol->getReadPermisos();
+    }
+
+    public function write(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $rol = new Rol($db);
+
+        $rol->getWritePermisos();
+    }
+
     public function create(): void
     {
         // --Importacion e inicializacion de conexion--

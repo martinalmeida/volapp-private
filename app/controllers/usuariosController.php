@@ -9,7 +9,7 @@ include(MODELS . 'modelUsuarios.php');
 
 class UsuariosController
 {
-    public function beginModule(): void
+    public function read(): void
     {
         // --Importacion e inicializacion de conexion--
         include_once(DB);
@@ -17,7 +17,18 @@ class UsuariosController
         $db = $database->getConnection();
         $usuario = new Usuario($db);
 
-        $usuario->inializeHtml();
+        $usuario->getReadPermisos();
+    }
+
+    public function write(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $usuario = new Usuario($db);
+
+        $usuario->getWritePermisos();
     }
 
     public function create(): void

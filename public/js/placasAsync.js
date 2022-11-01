@@ -66,7 +66,45 @@ $(document).ready(function () {
       sProcessing: "Procesando...",
     },
   });
+  readPermisos();
+  writePermisos();
 });
+
+function readPermisos() {
+  $.ajax({
+    dataType: "json",
+    url: urlBase + "routes/placas/read",
+    type: "GET",
+    beforeSend: function () {},
+    success: function (result) {
+      if (result.data == 1) {
+        $("#panel-1").show();
+      } else {
+        $("#panel-1").hide();
+      }
+    },
+    complete: function () {},
+    error: function (xhr) {
+      console.log(xhr);
+    },
+  });
+}
+
+function writePermisos() {
+  $.ajax({
+    dataType: "json",
+    url: urlBase + "routes/placas/write",
+    type: "GET",
+    beforeSend: function () {},
+    success: function (result) {
+      $("#permisoSuperior").html(result.data);
+    },
+    complete: function () {},
+    error: function (xhr) {
+      console.log(xhr);
+    },
+  });
+}
 
 function registrar(form) {
   var respuestavalidacion = validarcampos("#" + form);
