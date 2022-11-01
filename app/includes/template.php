@@ -617,8 +617,8 @@ class Template
                     <div class="modal-content">
                         <div class="dropdown-header bg-trans-gradient d-flex justify-content-center align-items-center w-100">
                             <h4 class="m-0 text-center color-white">
-                                Layout Settings
-                                <small class="mb-0 opacity-80">User Interface Settings</small>
+                                Opciones de diseño
+                                <small class="mb-0 opacity-80">Configuración de la interfaz de usuario</small>
                             </h4>
                             <button type="button" class="close text-white position-absolute pos-top pos-right p-2 m-1 mr-2" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true"><i class="fal fa-times"></i></span>
@@ -629,44 +629,44 @@ class Template
                                 <div class="mt-4 d-table w-100 px-5">
                                     <div class="d-table-cell align-middle">
                                         <h5 class="p-0">
-                                            App Layout
+                                            Diseño de la aplicación
                                         </h5>
                                     </div>
                                 </div>
                                 <div class="list" id="fh">
                                     <a href="#" onclick="return false;" class="btn btn-switch" data-action="toggle" data-class="header-function-fixed"></a>
-                                    <span class="onoffswitch-title">Fixed Header</span>
-                                    <span class="onoffswitch-title-desc">header is in a fixed at all times</span>
+                                    <span class="onoffswitch-title">Encabezado fijo</span>
+                                    <span class="onoffswitch-title-desc">el encabezado está en un fijo en todo momento</span>
                                 </div>
                                 <div class="list" id="nff">
                                     <a href="#" onclick="return false;" class="btn btn-switch" data-action="toggle" data-class="nav-function-fixed"></a>
-                                    <span class="onoffswitch-title">Fixed Navigation</span>
-                                    <span class="onoffswitch-title-desc">left panel is fixed</span>
+                                    <span class="onoffswitch-title">Navegación fija</span>
+                                    <span class="onoffswitch-title-desc">el panel izquierdo está fijo</span>
                                 </div>
                                 <div class="list" id="nfm">
                                     <a href="#" onclick="return false;" class="btn btn-switch" data-action="toggle" data-class="nav-function-minify"></a>
-                                    <span class="onoffswitch-title">Minify Navigation</span>
-                                    <span class="onoffswitch-title-desc">Skew nav to maximize space</span>
+                                    <span class="onoffswitch-title">Minimizar navegación</span>
+                                    <span class="onoffswitch-title-desc">navegación sesgada para maximizar el espacio</span>
                                 </div>
                                 <div class="list" id="nfh">
                                     <a href="#" onclick="return false;" class="btn btn-switch" data-action="toggle" data-class="nav-function-hidden"></a>
-                                    <span class="onoffswitch-title">Hide Navigation</span>
-                                    <span class="onoffswitch-title-desc">roll mouse on edge to reveal</span>
+                                    <span class="onoffswitch-title">Ocultar navegación</span>
+                                    <span class="onoffswitch-title-desc">haga rodar el mouse sobre el borde para revelar</span>
                                 </div>
                                 <div class="list" id="nft">
                                     <a href="#" onclick="return false;" class="btn btn-switch" data-action="toggle" data-class="nav-function-top"></a>
-                                    <span class="onoffswitch-title">Top Navigation</span>
-                                    <span class="onoffswitch-title-desc">Relocate left pane to top</span>
+                                    <span class="onoffswitch-title">Navegación superior</span>
+                                    <span class="onoffswitch-title-desc">reubicar el panel izquierdo en la parte superior</span>
                                 </div>
                                 <div class="list" id="fff">
                                     <a href="#" onclick="return false;" class="btn btn-switch" data-action="toggle" data-class="footer-function-fixed"></a>
-                                    <span class="onoffswitch-title">Fixed Footer</span>
-                                    <span class="onoffswitch-title-desc">page footer is fixed</span>
+                                    <span class="onoffswitch-title">Pie de página fijo</span>
+                                    <span class="onoffswitch-title-desc">el pie de página es fijo</span>
                                 </div>
                                 <div class="list" id="mmb">
                                     <a href="#" onclick="return false;" class="btn btn-switch" data-action="toggle" data-class="mod-main-boxed"></a>
-                                    <span class="onoffswitch-title">Boxed Layout</span>
-                                    <span class="onoffswitch-title-desc">Encapsulates to a container</span>
+                                    <span class="onoffswitch-title">Diseño en caja</span>
+                                    <span class="onoffswitch-title-desc">encapsula a un contenedorr</span>
                                 </div>
                                 <div class="expanded">
                                     <ul class="mb-3 mt-1">
@@ -688,110 +688,110 @@ class Template
                                     </ul>
                                     <div class="list" id="mbgf">
                                         <a href="#" onclick="return false;" class="btn btn-switch" data-action="toggle" data-class="mod-fixed-bg"></a>
-                                        <span class="onoffswitch-title">Fixed Background</span>
+                                        <span class="onoffswitch-title">fondo fijo</span>
                                     </div>
                                 </div>
                                 <div class="mt-4 d-table w-100 px-5">
                                     <div class="d-table-cell align-middle">
                                         <h5 class="p-0">
-                                            Mobile Menu
+                                            Menú móvil
                                         </h5>
                                     </div>
                                 </div>
                                 <div class="list" id="nmp">
                                     <a href="#" onclick="return false;" class="btn btn-switch" data-action="toggle" data-class="nav-mobile-push"></a>
-                                    <span class="onoffswitch-title">Push Content</span>
-                                    <span class="onoffswitch-title-desc">Content pushed on menu reveal</span>
+                                    <span class="onoffswitch-title">Empujar contenido</span>
+                                    <span class="onoffswitch-title-desc">Contenido empujado en el menú revelado</span>
                                 </div>
                                 <div class="list" id="nmno">
                                     <a href="#" onclick="return false;" class="btn btn-switch" data-action="toggle" data-class="nav-mobile-no-overlay"></a>
-                                    <span class="onoffswitch-title">No Overlay</span>
-                                    <span class="onoffswitch-title-desc">Removes mesh on menu reveal</span>
+                                    <span class="onoffswitch-title">Sin superposición</span>
+                                    <span class="onoffswitch-title-desc">elimina la malla en el menú revelado</span>
                                 </div>
                                 <div class="list" id="sldo">
                                     <a href="#" onclick="return false;" class="btn btn-switch" data-action="toggle" data-class="nav-mobile-slide-out"></a>
-                                    <span class="onoffswitch-title">Off-Canvas <sup>(beta)</sup></span>
-                                    <span class="onoffswitch-title-desc">Content overlaps menu</span>
+                                    <span class="onoffswitch-title">fuera del lienzo <sup>(beta)</sup></span>
+                                    <span class="onoffswitch-title-desc">Menú de superposición de contenido</span>
                                 </div>
                                 <div class="mt-4 d-table w-100 px-5">
                                     <div class="d-table-cell align-middle">
                                         <h5 class="p-0">
-                                            Accessibility
+                                        Accesibilidad
                                         </h5>
                                     </div>
                                 </div>
                                 <div class="list" id="mbf">
                                     <a href="#" onclick="return false;" class="btn btn-switch" data-action="toggle" data-class="mod-bigger-font"></a>
-                                    <span class="onoffswitch-title">Bigger Content Font</span>
-                                    <span class="onoffswitch-title-desc">content fonts are bigger for readability</span>
+                                    <span class="onoffswitch-title">Fuente de contenido más grande</span>
+                                    <span class="onoffswitch-title-desc">las fuentes de contenido son más grandes para facilitar la lectura</span>
                                 </div>
                                 <div class="list" id="mhc">
                                     <a href="#" onclick="return false;" class="btn btn-switch" data-action="toggle" data-class="mod-high-contrast"></a>
-                                    <span class="onoffswitch-title">High Contrast Text (WCAG 2 AA)</span>
-                                    <span class="onoffswitch-title-desc">4.5:1 text contrast ratio</span>
+                                    <span class="onoffswitch-title">Texto de alto contraste (WCAG 2 AA)</span>
+                                    <span class="onoffswitch-title-desc">4.5:1 relación de contraste de texto</span>
                                 </div>
                                 <div class="list" id="mcb">
                                     <a href="#" onclick="return false;" class="btn btn-switch" data-action="toggle" data-class="mod-color-blind"></a>
-                                    <span class="onoffswitch-title">Daltonism <sup>(beta)</sup> </span>
-                                    <span class="onoffswitch-title-desc">color vision deficiency</span>
+                                    <span class="onoffswitch-title">Daltonismo <sup>(beta)</sup> </span>
+                                    <span class="onoffswitch-title-desc">deficiencia de la visión del color</span>
                                 </div>
                                 <div class="list" id="mpc">
                                     <a href="#" onclick="return false;" class="btn btn-switch" data-action="toggle" data-class="mod-pace-custom"></a>
-                                    <span class="onoffswitch-title">Preloader Inside</span>
-                                    <span class="onoffswitch-title-desc">preloader will be inside content</span>
+                                    <span class="onoffswitch-title">Precargador interior</span>
+                                    <span class="onoffswitch-title-desc">el precargador estará dentro del contenido</span>
                                 </div>
                                 <div class="list" id="mpi">
                                     <a href="#" onclick="return false;" class="btn btn-switch" data-action="toggle" data-class="mod-panel-icon"></a>
-                                    <span class="onoffswitch-title">SmartPanel Icons (not Panels)</span>
-                                    <span class="onoffswitch-title-desc">smartpanel buttons will appear as icons</span>
+                                    <span class="onoffswitch-title">Iconos de SmartPanel (no paneles)</span>
+                                    <span class="onoffswitch-title-desc">los botones del panel inteligente aparecerán como iconos</span>
                                 </div>
                                 <div class="mt-4 d-table w-100 px-5">
                                     <div class="d-table-cell align-middle">
                                         <h5 class="p-0">
-                                            Global Modifications
+                                        Modificaciones globales
                                         </h5>
                                     </div>
                                 </div>
                                 <div class="list" id="mcbg">
                                     <a href="#" onclick="return false;" class="btn btn-switch" data-action="toggle" data-class="mod-clean-page-bg"></a>
-                                    <span class="onoffswitch-title">Clean Page Background</span>
-                                    <span class="onoffswitch-title-desc">adds more whitespace</span>
+                                    <span class="onoffswitch-title">Limpiar el fondo de la página</span>
+                                    <span class="onoffswitch-title-desc">agrega más espacios en blanco</span>
                                 </div>
                                 <div class="list" id="mhni">
                                     <a href="#" onclick="return false;" class="btn btn-switch" data-action="toggle" data-class="mod-hide-nav-icons"></a>
-                                    <span class="onoffswitch-title">Hide Navigation Icons</span>
-                                    <span class="onoffswitch-title-desc">invisible navigation icons</span>
+                                    <span class="onoffswitch-title">Ocultar iconos de navegación</span>
+                                    <span class="onoffswitch-title-desc">iconos de navegación invisibles</span>
                                 </div>
                                 <div class="list" id="dan">
                                     <a href="#" onclick="return false;" class="btn btn-switch" data-action="toggle" data-class="mod-disable-animation"></a>
-                                    <span class="onoffswitch-title">Disable CSS Animation</span>
-                                    <span class="onoffswitch-title-desc">Disables CSS based animations</span>
+                                    <span class="onoffswitch-title">Deshabilitar animación CSS</span>
+                                    <span class="onoffswitch-title-desc">Animaciones basadas en CSS deshabilitadas</span>
                                 </div>
                                 <div class="list" id="mhic">
                                     <a href="#" onclick="return false;" class="btn btn-switch" data-action="toggle" data-class="mod-hide-info-card"></a>
-                                    <span class="onoffswitch-title">Hide Info Card</span>
-                                    <span class="onoffswitch-title-desc">Hides info card from left panel</span>
+                                    <span class="onoffswitch-title">Ocultar tarjeta de información</span>
+                                    <span class="onoffswitch-title-desc">oculta la tarjeta de información del panel izquierdo</span>
                                 </div>
                                 <div class="list" id="mlph">
                                     <a href="#" onclick="return false;" class="btn btn-switch" data-action="toggle" data-class="mod-lean-subheader"></a>
-                                    <span class="onoffswitch-title">Lean Subheader</span>
-                                    <span class="onoffswitch-title-desc">distinguished page header</span>
+                                    <span class="onoffswitch-title">Subheader magro</span>
+                                    <span class="onoffswitch-title-desc">encabezado de página distinguido</span>
                                 </div>
                                 <div class="list" id="mnl">
                                     <a href="#" onclick="return false;" class="btn btn-switch" data-action="toggle" data-class="mod-nav-link"></a>
-                                    <span class="onoffswitch-title">Hierarchical Navigation</span>
-                                    <span class="onoffswitch-title-desc">Clear breakdown of nav links</span>
+                                    <span class="onoffswitch-title">Navegación jerárquica</span>
+                                    <span class="onoffswitch-title-desc">Desglose claro de enlaces de navegación</span>
                                 </div>
                                 <div class="list" id="mdn">
                                     <a href="#" onclick="return false;" class="btn btn-switch" data-action="toggle" data-class="mod-nav-dark"></a>
-                                    <span class="onoffswitch-title">Dark Navigation</span>
-                                    <span class="onoffswitch-title-desc">Navigation background is darkend</span>
+                                    <span class="onoffswitch-title">Navegación oscura</span>
+                                    <span class="onoffswitch-title-desc">El fondo de navegación está oscuro</span>
                                 </div>
                                 <hr class="mb-0 mt-4">
                                 <div class="mt-4 d-table w-100 pl-5 pr-3">
                                     <div class="d-table-cell align-middle">
                                         <h5 class="p-0">
-                                            Global Font Size
+                                            Tamaño de fuente global
                                         </h5>
                                     </div>
                                 </div>
@@ -810,14 +810,14 @@ class Template
                                             <input type="radio" name="changeFrontSize"> XL
                                         </label>
                                     </div>
-                                    <span class="onoffswitch-title-desc d-block mb-0">Change <strong>root</strong> font size to effect rem
-                                        values (resets on page refresh)</span>
+                                    <span class="onoffswitch-title-desc d-block mb-0">Cambio <strong>root</strong> tamaño de fuente para efecto rem
+                                        valores (se restablece al actualizar la página)</span>
                                 </div>
                                 <hr class="mb-0 mt-4">
                                 <div class="mt-4 d-table w-100 pl-5 pr-3">
                                     <div class="d-table-cell align-middle">
                                         <h5 class="p-0 pr-2 d-flex">
-                                            Theme colors
+                                            colores del tema
                                         </h5>
                                     </div>
                                 </div>
@@ -877,14 +877,14 @@ class Template
                                 <div class="mt-4 d-table w-100 pl-5 pr-3">
                                     <div class="d-table-cell align-middle">
                                         <h5 class="p-0 pr-2 d-flex">
-                                            Theme Modes
+                                            Modos de tema
                                         </h5>
                                     </div>
                                 </div>
                                 <div class="pl-5 pr-3 py-3">
                                     <div class="ie-only alert alert-warning d-none">
-                                        <h6>Internet Explorer Issue</h6>
-                                        This particular component may not work as expected in Internet Explorer. Please use with caution.
+                                        <h6>Problema de Internet Explorer</h6>
+                                        Es posible que este componente en particular no funcione como se esperaba en Internet Explorer. Úselo con precaución.
                                     </div>
                                     <div class="row no-gutters">
                                         <div class="col-4 pr-2 text-center">
@@ -897,7 +897,7 @@ class Template
                                                     </div>
                                                 </div>
                                             </div>
-                                            Default
+                                            Normal
                                         </div>
                                         <div class="col-4 px-1 text-center">
                                             <div id="skin-light" data-action="toggle-replace" data-replaceclass="mod-skin-dark" data-class="mod-skin-light" data-toggle="tooltip" data-placement="top" title="" class="d-flex bg-white border border-secondary rounded overflow-hidden text-success js-waves-on" data-original-title="Light Mode" style="height: 80px">
@@ -909,7 +909,7 @@ class Template
                                                     </div>
                                                 </div>
                                             </div>
-                                            Light
+                                            Blanco
                                         </div>
                                         <div class="col-4 pl-2 text-center">
                                             <div id="skin-dark" data-action="toggle-replace" data-replaceclass="mod-skin-light" data-class="mod-skin-dark" data-toggle="tooltip" data-placement="top" title="" class="d-flex bg-white border border-dark rounded overflow-hidden text-success js-waves-on" data-original-title="Dark Mode" style="height: 80px">
@@ -921,7 +921,7 @@ class Template
                                                     </div>
                                                 </div>
                                             </div>
-                                            Dark
+                                            Negro
                                         </div>
                                     </div>
                                 </div>
@@ -929,10 +929,10 @@ class Template
                                 <div class="pl-5 pr-3 py-3 bg-faded">
                                     <div class="row no-gutters">
                                         <div class="col-6 pr-1">
-                                            <a href="#" class="btn btn-outline-danger fw-500 btn-block" data-action="app-reset">Reset Settings</a>
+                                            <a href="#" class="btn btn-outline-danger fw-500 btn-block" data-action="app-reset">Reiniciar ajustes</a>
                                         </div>
                                         <div class="col-6 pl-1">
-                                            <a href="#" class="btn btn-danger fw-500 btn-block" data-action="factory-reset">Factory Reset</a>
+                                            <a href="#" class="btn btn-danger fw-500 btn-block" data-action="factory-reset">Restablecimiento</a>
                                         </div>
                                     </div>
                                 </div>
