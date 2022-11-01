@@ -17,15 +17,19 @@
                     <div class="form-row">
                         <div class="col-md-12 mb-3">
                             <label class="form-label" for="nombre">Nombres del Contrato</label>
-                            <input type="text" onKeyPress="if(this.value.length==50)return false;" class="form-control" id="nombre" name="nombre" placeholder="Nombres del material" required>
+                            <input type="text" onKeyPress="if(this.value.length==50)return false;" class="form-control" id="nombre" name="nombre" placeholder="Nombres del contrato" required>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label" for="representante">Representante del Contrato</label>
+                            <input type="text" onKeyPress="if(this.value.length==70)return false;" class="form-control" id="representante" name="representante" placeholder="Represente del contrato" required>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="telefono">Telefono del Contrato</label>
-                            <input type="tel" onKeyPress="if(this.value.length==10)return false;" class="form-control" id="telefono" name="telefono" placeholder="Nombres del material" required>
+                            <input type="number" onKeyPress="if(this.value.length==10)return false;" class="form-control" id="telefono" name="telefono" placeholder="Telefono del contrato" required>
                         </div>
                         <div class="col-md-8 mb-3">
-                            <label class="form-label" for="email"> del Contrato</label>
-                            <input type="email" onKeyPress="if(this.value.length==100)return false;" class="form-control" id="email" name="email" placeholder="Nombres del material" required>
+                            <label class="form-label" for="email">Correo del Contrato</label>
+                            <input type="email" onKeyPress="if(this.value.length==100)return false;" class="form-control" id="email" name="email" placeholder="Correo del contrato" required>
                         </div>
                         <div class="col-md-12 mb-3">
                             <label class="form-label" for="descripcion">Descripción del Contrato</label>

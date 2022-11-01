@@ -44,6 +44,9 @@ $(document).ready(function () {
       { data: "id" },
       { data: "nombre" },
       { data: "descripcion" },
+      { data: "representante" },
+      { data: "telefono" },
+      { data: "email" },
       { data: "status" },
       { data: "defaultContent" },
     ],
@@ -62,7 +65,45 @@ $(document).ready(function () {
       sProcessing: "Procesando...",
     },
   });
+  readPermisos();
+  writePermisos();
 });
+
+function readPermisos() {
+  $.ajax({
+    dataType: "json",
+    url: urlBase + "routes/contratos/read",
+    type: "GET",
+    beforeSend: function () {},
+    success: function (result) {
+      if (result.data == 1) {
+        $("#panel-1").show();
+      } else {
+        $("#panel-1").hide();
+      }
+    },
+    complete: function () {},
+    error: function (xhr) {
+      console.log(xhr);
+    },
+  });
+}
+
+function writePermisos() {
+  $.ajax({
+    dataType: "json",
+    url: urlBase + "routes/contratos/write",
+    type: "GET",
+    beforeSend: function () {},
+    success: function (result) {
+      $("#permisoSuperior").html(result.data);
+    },
+    complete: function () {},
+    error: function (xhr) {
+      console.log(xhr);
+    },
+  });
+}
 
 function registrar(form) {
   var respuestavalidacion = validarcampos("#" + form);
@@ -111,8 +152,8 @@ function registrar(form) {
             if (edit == false) {
               Swal.fire({
                 icon: "success",
-                title: "<strong>Material Creado</strong>",
-                html: "<h5>El material se ha registrado exitosamente</h5>",
+                title: "<strong>Contrato Creado</strong>",
+                html: "<h5>El contrato se ha registrado exitosamente</h5>",
                 showCloseButton: false,
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#64a19d",
@@ -121,8 +162,8 @@ function registrar(form) {
             } else {
               Swal.fire({
                 icon: "success",
-                title: "<strong>Material Editado</strong>",
-                html: "<h5>El material se ha editado exitosamente</h5>",
+                title: "<strong>Contrato Editado</strong>",
+                html: "<h5>El contrato se ha editado exitosamente</h5>",
                 showCloseButton: false,
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#64a19d",
@@ -177,7 +218,7 @@ function editarRegistro(id) {
   $("#inputsEditar").html("");
   edit = true;
   $.ajax({
-    data: { idMaterial: id }, //datos a enviar a la url
+    data: { idContrato: id }, //datos a enviar a la url
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
     url: urlBase + "routes/contratos/getData", //url a donde hacemos la peticion
     type: "POST",
@@ -209,10 +250,13 @@ function editarRegistro(id) {
 
           $("#nombre").val(result.data.nombre);
           $("#descripcion").val(result.data.descripcion);
+          $("#representante").val(result.data.representante);
+          $("#telefono").val(result.data.telefono);
+          $("#email").val(result.data.email);
 
           var html = "";
           html +=
-            '<input type="hidden" id="idMaterial" name="idMaterial" value="' +
+            '<input type="hidden" id="idContrato" name="idContrato" value="' +
             result.data.id +
             '">';
 
@@ -267,7 +311,7 @@ function editarRegistro(id) {
 function statusRegistro(id, status) {
   $.ajax({
     data: {
-      idMaterial: id,
+      idContrato: id,
       status: status,
     },
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
@@ -299,7 +343,7 @@ function statusRegistro(id, status) {
 
         case "1":
           Command: toastr["success"](
-            "Estado del material cambiado exitosamente.",
+            "Estado del contrato cambiado exitosamente.",
             "Estado Cambiado"
           );
 
@@ -375,10 +419,10 @@ function eliminarRegistro(id) {
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Eliminar Material",
+    confirmButtonText: "Eliminar Contrato",
     preConfirm: function () {
       $.ajax({
-        data: { idMaterial: id },
+        data: { idContrato: id },
         dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
         url: urlBase + "routes/contratos/delete", //url a donde hacemos la peticion
         type: "POST",
@@ -408,8 +452,8 @@ function eliminarRegistro(id) {
 
             case "1":
               Command: toastr["success"](
-                "El material se ha eliminado satisfactoriamente.",
-                "Material Eliminada"
+                "El contrato se ha eliminado satisfactoriamente.",
+                "Contrato Eliminada"
               );
 
               toastr.options = {

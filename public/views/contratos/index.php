@@ -10,11 +10,8 @@ $view->initializationView();
 ?>
 
 <!-- ========== Inicio Componente de Vista ========== -->
-<div class="subheader">
-    <h1 class="subheader-title">
-        <i class='fal fa-info-circle'></i> Contratos
-    </h1>
-    <button type="button" class="btn btn-info active" onclick="showModalRegistro();">Agregar <i class="fal fa-plus-square"></i></button>
+<div class="subheader" id="permisoSuperior">
+
 </div>
 
 <div class="row">
@@ -41,6 +38,9 @@ $view->initializationView();
                                 <th>id</th>
                                 <th>Nombre</th>
                                 <th>Descripcion</th>
+                                <th>Representante</th>
+                                <th>Telefono</th>
+                                <th>Correo</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
                             </tr>
