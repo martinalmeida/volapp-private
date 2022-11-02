@@ -4,16 +4,23 @@ declare(strict_types=1);
 
 include(MODELS . 'modelSesion.php');
 
-class Material
+class Registro
 {
     // --Parametros Privados--
     private $conn;
-    private $tableName = "materiales";
+    private $tableName = "registros";
+    private $tablePlaca = "vehiculos";
+    private $tableRuta = "rutas";
+    private $tableMaterial = "materiales";
+    private $tableUser = "usuarios";
+    private $fechaActual;
 
     // --Parametros Publicos--
     public $id;
-    public $nombre;
-    public $descripcion;
+    public $placa;
+    public $ruta;
+    public $material;
+    public $nota;
     public $status;
 
     /* Propiedades de los objetos de Datatables para utilizar (Serverside) 
@@ -62,7 +69,7 @@ class Material
 
             $html = "";
             $html .= '<h1 class="subheader-title">';
-            $html .= '<i class="fal fa-info-circle"></i> Materiales</h1>';
+            $html .= '<i class="fal fa-info-circle"></i> Registros</h1>';
             $html .= '<button type="button" class="btn btn-info active" onclick="showModalRegistro();">Agregar <i class="fal fa-plus-square"></i></button>';
 
             echo json_encode(array('status' => NULL, 'data' => $html));
@@ -70,27 +77,34 @@ class Material
 
             $html = "";
             $html .= '<h1 class="subheader-title">';
-            $html .= '<i class="fal fa-info-circle"></i> Materiales</h1>';
+            $html .= '<i class="fal fa-info-circle"></i> Registros</h1>';
             $html .= '<h3>No tienes permisos de escritura para este modulo.</h3>';
 
             echo json_encode(array('status' => NULL, 'data' => $html));
         }
     }
 
-    // -- ⊡ Funcion para crear un material ⊡ --
-    public function createMaterial(): void
+    // -- ⊡ Funcion para crear un registro ⊡ --
+    public function createRegistro(): void
     {
         // --Preparamos la consulta--
-        $query = "INSERT INTO $this->tableName SET nombre=?, descripcion=?";
+        $query = "INSERT INTO $this->tableName SET idVehiculo=?, idRuta=?, idMaterial=?, nota=?, datecreated=?, idUsuario=?";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
-        $this->nombre = htmlspecialchars(strip_tags($this->nombre));
-        $this->descripcion = htmlspecialchars(strip_tags($this->descripcion));
+        $this->placa = htmlspecialchars(strip_tags($this->placa));
+        $this->ruta = htmlspecialchars(strip_tags($this->ruta));
+        $this->material = htmlspecialchars(strip_tags($this->material));
+        $this->nota = htmlspecialchars(strip_tags($this->nota));
+        $this->fechaActual = Utilidades::getFecha();
 
         // --Almacenamos los valores--
-        $stmt->bindParam(1, $this->nombre);
-        $stmt->bindParam(2, $this->descripcion);
+        $stmt->bindParam(1, $this->placa);
+        $stmt->bindParam(2, $this->ruta);
+        $stmt->bindParam(3, $this->material);
+        $stmt->bindParam(4, $this->nota);
+        $stmt->bindParam(5, $this->fechaActual);
+        $stmt->bindParam(6, $_SESSION['id']);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
@@ -101,7 +115,7 @@ class Material
     }
 
     // -- ⊡ Funcion para dataTables Serverside ⊡ --
-    public function readAllDaTableMateriales(): void
+    public function readAllDaTableRegistro(): void
     {
         $sesion = new Sesion($this->conn);
         $sesion->rol = $_SESSION['rol'];
@@ -120,15 +134,9 @@ class Material
         // --Search--
         $searchQuery = " ";
         if ($searchValue != '') {
-            $searchQuery = " AND (id LIKE :id OR 
-                            nombre LIKE :nombre OR
-                            descripcion LIKE :descripcion OR
-                            status LIKE :status )";
+            $searchQuery = " AND (nota LIKE :nota)";
             $searchArray = array(
-                'id' => "%$searchValue%",
-                'nombre' => "%$searchValue%",
-                'descripcion' => "%$searchValue%",
-                'status' => "%$searchValue%"
+                'nota' => "%$searchValue%",
             );
         }
         // --Total number of records without filtering--
@@ -142,7 +150,16 @@ class Material
         $records = $stmt->fetch();
         $totalRecordwithFilter = $records['allcount'];
         // --Fetch records--
-        $stmt = $this->conn->prepare("SELECT id, nombre, descripcion, status FROM " . $this->tableName . " WHERE 1 " . $searchQuery . " AND status in(1, 2) ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
+        $stmt = $this->conn->prepare("SELECT 
+                                      r.id, v.placa, (ru.nombre)ruta, (m.nombre)material, r.nota, 
+                                      (r.datecreated)creado, (r.dateupdate)actualizado, (u.nombres)usuario, r.status 
+                                      FROM $this->tableName r 
+                                      JOIN $this->tablePlaca v ON r.idVehiculo = v.id
+                                      JOIN $this->tableRuta ru ON r.idRuta = ru.id
+                                      JOIN $this->tableMaterial m ON r.idMaterial = m.id
+                                      JOIN $this->tableUser u ON r.idUsuario = u.id
+                                      WHERE 1 $searchQuery 
+                                      AND r.status in(1, 2) ORDER BY $columnName $columnSortOrder LIMIT :limit,:offset ");
         // --Bind values--
         foreach ($searchArray as $key => $search) {
             $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
@@ -158,23 +175,28 @@ class Material
 
             $botones = "<div class='btn-group'>";
             if ($datos->u === 1) {
-                $botones .= "<button type='button' class='btn btn-success text-white' data-toggle='tooltip' data-placement='top' title='Editar Material' onclick='editarRegistro(" . $row['id'] . ");'>";
+                $botones .= "<button type='button' class='btn btn-success text-white' data-toggle='tooltip' data-placement='top' title='Editar Registro' onclick='editarRegistro(" . $row['id'] . ");'>";
                 $botones .= "<i class='fal fa-edit'></i></button>";
-                $botones .= "<button type='button' class='btn btn-" . $statusColor . " text-white' data-toggle='tooltip' data-placement='top' title='Estado del Material' onclick='statusRegistro(" . $row['id'] . ", " . $row['status'] . ");'>";
+                $botones .= "<button type='button' class='btn btn-" . $statusColor . " text-white' data-toggle='tooltip' data-placement='top' title='Estado del Registro' onclick='statusRegistro(" . $row['id'] . ", " . $row['status'] . ");'>";
                 $botones .= "<i class='fal fa-eye'></i></button>";
-                $botones .= "<button type='button' class='btn btn-primary text-white' data-toggle='tooltip' data-placement='top' title='Asignar Tarifa a Material' onclick='asignarTarifa(" . $row['id'] . ");'>";
+                $botones .= "<button type='button' class='btn btn-primary text-white' data-toggle='tooltip' data-placement='top' title='Agregar Descontables' onclick='agregarDescontable(" . $row['id'] . ");'>";
                 $botones .= "<i class='fal fa-file-invoice-dollar'></i></button>";
             }
             if ($datos->d === 1) {
-                $botones .= "<button type='button' class='btn btn-danger text-white' data-toggle='tooltip' data-placement='top' title='Eliminar Material' onclick='eliminarRegistro(" . $row['id'] . ");'>";
+                $botones .= "<button type='button' class='btn btn-danger text-white' data-toggle='tooltip' data-placement='top' title='Eliminar Registro' onclick='eliminarRegistro(" . $row['id'] . ");'>";
                 $botones .= "<i class='fal fa-trash'></i></button>";
             }
             $botones .= "</div>";
 
             $data[] = array(
                 "id" => $row['id'],
-                "nombre" => $row['nombre'],
-                "descripcion" => $row['descripcion'],
+                "placa" => $row['placa'],
+                "ruta" => $row['ruta'],
+                "material" => $row['material'],
+                "nota" => $row['nota'],
+                "creado" => $row['creado'],
+                "actualizado" => $row['actualizado'],
+                "usuario" => $row['usuario'],
                 "status" => $estado,
                 "defaultContent" => "$botones"
             );
@@ -190,7 +212,7 @@ class Material
     }
 
     // -- ⊡ Funcion para cambiar el estado del rol ⊡ --
-    public function statusMaterial(): void
+    public function statusRegistro(): void
     {
         // --Preparamos la consulta--
         $query = "UPDATE $this->tableName SET status =? WHERE id=?";
@@ -211,10 +233,10 @@ class Material
     }
 
     // -- ⊡ Funcion para traer datos del rol ⊡ --
-    public function dataMaterial(): void
+    public function dataRegistro(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT id, nombre, descripcion FROM $this->tableName WHERE id=? ;";
+        $query = "SELECT id, idVehiculo, idRuta, idMaterial, nota FROM $this->tableName WHERE id=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Almacenamos los valores--
@@ -231,8 +253,10 @@ class Material
 
                 $datos = array(
                     'id' => $data->id,
-                    'nombre' => $data->nombre,
-                    'descripcion' => $data->descripcion,
+                    'placa' => $data->idVehiculo,
+                    'ruta' => $data->idRuta,
+                    'material' => $data->idMaterial,
+                    'nota' => $data->nota
                 );
                 // --Retornamos las respuestas--
                 echo json_encode(array('status' => '1', 'data' => $datos));
@@ -247,20 +271,27 @@ class Material
     }
 
     // -- ⊡ Funcion para actualizar empresa ⊡ --
-    public function updateMaterial(): void
+    public function updateRegistro(): void
     {
         // --Preparamos la consulta--
-        $query = "UPDATE $this->tableName SET nombre=?, descripcion=? WHERE id=?";
+        $query = "UPDATE $this->tableName SET idVehiculo=?, idRuta=?, idMaterial=?, nota=?, dateupdate=?, idUsuario=? WHERE id=?";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
-        $this->nombre = htmlspecialchars(strip_tags($this->nombre));
-        $this->descripcion = htmlspecialchars(strip_tags($this->descripcion));
+        $this->placa = htmlspecialchars(strip_tags($this->placa));
+        $this->ruta = htmlspecialchars(strip_tags($this->ruta));
+        $this->material = htmlspecialchars(strip_tags($this->material));
+        $this->nota = htmlspecialchars(strip_tags($this->nota));
+        $this->fechaActual = Utilidades::getFecha();
 
         // --Almacenamos los valores--
-        $stmt->bindParam(1, $this->nombre);
-        $stmt->bindParam(2, $this->descripcion);
-        $stmt->bindParam(3, $this->id);
+        $stmt->bindParam(1, $this->placa);
+        $stmt->bindParam(2, $this->ruta);
+        $stmt->bindParam(3, $this->material);
+        $stmt->bindParam(4, $this->nota);
+        $stmt->bindParam(5, $this->fechaActual);
+        $stmt->bindParam(6, $_SESSION['id']);
+        $stmt->bindParam(7, $this->id);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
@@ -271,14 +302,18 @@ class Material
     }
 
     // -- ⊡ Funcion para eliminar rol ⊡ --
-    public function deletePlaca(): void
+    public function deleteRegistro(): void
     {
         // --Preparamos la consulta--
-        $query = "UPDATE $this->tableName SET status = 3 WHERE id=?";
+        $query = "UPDATE $this->tableName SET datedelete=?, status = 3 WHERE id=?";
         $stmt = $this->conn->prepare($query);
 
+        // --Escapamos los caracteres--
+        $this->fechaActual = Utilidades::getFecha();
+
         // --Almacenamos los valores--
-        $stmt->bindParam(1, $this->id);
+        $stmt->bindParam(1, $this->fechaActual);
+        $stmt->bindParam(2, $this->id);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {

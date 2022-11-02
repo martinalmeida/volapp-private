@@ -31,4 +31,48 @@ class selectsController
 
         $select->selectRol();
     }
+
+    public function getPlaca(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $select = new Select($db);
+
+        $select->selectPlaca();
+    }
+
+    public function getRuta(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $select = new Select($db);
+
+        $select->selectRuta();
+    }
+
+    public function getMaterial(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $select = new Select($db);
+
+        $select->selectMaterial();
+    }
+
+    public function getContrato(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $select = new Select($db);
+
+        $select->selectContrato();
+    }
 }

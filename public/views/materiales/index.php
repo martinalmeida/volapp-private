@@ -10,11 +10,8 @@ $view->initializationView();
 ?>
 
 <!-- ========== Inicio Componente de Vista ========== -->
-<div class="subheader">
-    <h1 class="subheader-title">
-        <i class='fal fa-info-circle'></i> Materiales
-    </h1>
-    <button type="button" class="btn btn-info active" onclick="showModalRegistro();">Agregar <i class="fal fa-plus-square"></i></button>
+<div class="subheader" id="permisoSuperior">
+
 </div>
 
 <div class="row">
@@ -61,4 +58,5 @@ $view->initializationView();
 
 <?php
 include_once(VIEW . 'materiales/modalForm.php');
+include_once(VIEW . 'materiales/modalAsignar.php');
 $view->finalizeView();

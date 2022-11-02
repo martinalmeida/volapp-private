@@ -9,9 +9,6 @@ class Login
     // --Parametros Privados--
     private $conn;
     private $tableName = "usuarios";
-    private $tableRol = "rol";
-    private $tablePermisos = "permisos";
-    private $tableModulo = "modulo";
     private const URLDEFAULT = 'public/views/home/';
 
     // --Parametros Publicos--

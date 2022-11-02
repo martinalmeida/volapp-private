@@ -5,9 +5,9 @@ declare(strict_types=1);
 header('Content-type: application/json');
 
 include(LIBRARIES . 'validations.php');
-include(MODELS . 'modelMateriales.php');
+include(MODELS . 'modelRutas.php');
 
-class MaterialesController
+class RutasController
 {
     public function read(): void
     {
@@ -15,9 +15,9 @@ class MaterialesController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $material = new Material($db);
+        $rutas = new Ruta($db);
 
-        $material->getReadPermisos();
+        $rutas->getReadPermisos();
     }
 
     public function write(): void
@@ -26,9 +26,9 @@ class MaterialesController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $material = new Material($db);
+        $rutas = new Ruta($db);
 
-        $material->getWritePermisos();
+        $rutas->getWritePermisos();
     }
 
     public function create(): void
@@ -37,14 +37,14 @@ class MaterialesController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $material = new Material($db);
+        $rutas = new Ruta($db);
 
         // --Seteo de valores existentes en el POST--
-        $material->nombre = isset($_POST['nombre']) ? strtoupper(trim($_POST['nombre'])) : NULL;
-        $material->descripcion = isset($_POST['descripcion']) ? strtoupper(trim($_POST['descripcion'])) : NULL;
+        $rutas->nombre = isset($_POST['nombre']) ? strtoupper(trim($_POST['nombre'])) : NULL;
+        $rutas->descripcion = isset($_POST['descripcion']) ? strtoupper(trim($_POST['descripcion'])) : NULL;
 
-        if (Validar::alfanumerico($material->nombre) && Validar::alfanumerico($material->descripcion)) {
-            $material->createMaterial();
+        if (Validar::alfanumerico($rutas->nombre) && Validar::alfanumerico($rutas->descripcion)) {
+            $rutas->createRuta();
         } else {
             echo json_encode(array('status' => '2', 'data' => NULL));
         }
@@ -56,17 +56,17 @@ class MaterialesController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $material = new Material($db);
+        $rutas = new Ruta($db);
 
-        $material->draw = htmlspecialchars($_POST['draw']);
-        $material->row = htmlspecialchars($_POST['start']);
-        $material->rowperpage = htmlspecialchars($_POST['length']);
-        $material->columnIndex = htmlspecialchars($_POST['order'][0]['column']);
-        $material->columnName = htmlspecialchars($_POST['columns'][$material->columnIndex]['data']);
-        $material->columnSortOrder = htmlspecialchars($_POST['order'][0]['dir']);
-        $material->searchValue = htmlspecialchars($_POST['search']['value']);
+        $rutas->draw = htmlspecialchars($_POST['draw']);
+        $rutas->row = htmlspecialchars($_POST['start']);
+        $rutas->rowperpage = htmlspecialchars($_POST['length']);
+        $rutas->columnIndex = htmlspecialchars($_POST['order'][0]['column']);
+        $rutas->columnName = htmlspecialchars($_POST['columns'][$rutas->columnIndex]['data']);
+        $rutas->columnSortOrder = htmlspecialchars($_POST['order'][0]['dir']);
+        $rutas->searchValue = htmlspecialchars($_POST['search']['value']);
 
-        $material->readAllDaTableMateriales();
+        $rutas->readAllDaTableRutas();
     }
 
     public function status(): void
@@ -75,14 +75,14 @@ class MaterialesController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $material = new Material($db);
+        $rutas = new Ruta($db);
 
         // --Seteo de valores existentes en el POST--
-        $material->id = isset($_POST['idMaterial']) ? strtoupper(trim($_POST['idMaterial'])) : NULL;
-        $material->status = isset($_POST['status']) ? strtoupper(trim($_POST['status'])) : NULL;
+        $rutas->id = isset($_POST['idRuta']) ? strtoupper(trim($_POST['idRuta'])) : NULL;
+        $rutas->status = isset($_POST['status']) ? strtoupper(trim($_POST['status'])) : NULL;
 
-        if (Validar::numeros($material->id) && Validar::numeros($material->status)) {
-            $material->statusMaterial();
+        if (Validar::numeros($rutas->id) && Validar::numeros($rutas->status)) {
+            $rutas->statusRuta();
         } else {
             echo json_encode(array('status' => '2', 'data' => NULL));
         }
@@ -94,14 +94,14 @@ class MaterialesController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $material = new Material($db);
+        $rutas = new Ruta($db);
 
         // --Seteo de valores existentes en el POST--
-        $material->id = isset($_POST['idMaterial']) ? strtoupper(trim($_POST['idMaterial'])) : NULL;
+        $rutas->id = isset($_POST['idRuta']) ? strtoupper(trim($_POST['idRuta'])) : NULL;
 
         // --Validacion de datos a enviar al modelo--
-        if (Validar::numeros($material->id)) {
-            $material->dataMaterial();
+        if (Validar::numeros($rutas->id)) {
+            $rutas->dataRuta();
         } else {
             echo json_encode(array('status' => '2', 'data' => NULL));
         }
@@ -113,16 +113,16 @@ class MaterialesController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $material = new Material($db);
+        $rutas = new Ruta($db);
 
         // --Seteo de valores existentes en el POST--
-        $material->id = isset($_POST['idMaterial']) ? strtoupper(trim($_POST['idMaterial'])) : NULL;
-        $material->nombre = isset($_POST['nombre']) ? strtoupper(trim($_POST['nombre'])) : NULL;
-        $material->descripcion = isset($_POST['descripcion']) ? strtoupper(trim($_POST['descripcion'])) : NULL;
+        $rutas->id = isset($_POST['idRuta']) ? strtoupper(trim($_POST['idRuta'])) : NULL;
+        $rutas->nombre = isset($_POST['nombre']) ? strtoupper(trim($_POST['nombre'])) : NULL;
+        $rutas->descripcion = isset($_POST['descripcion']) ? strtoupper(trim($_POST['descripcion'])) : NULL;
 
 
-        if (Validar::alfanumerico($material->nombre) && Validar::alfanumerico($material->descripcion)) {
-            $material->updateMaterial();
+        if (Validar::alfanumerico($rutas->nombre) && Validar::alfanumerico($rutas->descripcion)) {
+            $rutas->updateRuta();
         } else {
             echo json_encode(array('status' => '2', 'data' => NULL));
         }
@@ -134,13 +134,13 @@ class MaterialesController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $material = new Material($db);
+        $rutas = new Ruta($db);
 
         // --Seteo de valores existentes en el POST--
-        $material->id = isset($_POST['idMaterial']) ? strtoupper(trim($_POST['idMaterial'])) : NULL;
+        $rutas->id = isset($_POST['idRuta']) ? strtoupper(trim($_POST['idRuta'])) : NULL;
 
-        if (Validar::numeros($material->id)) {
-            $material->deletePlaca();
+        if (Validar::numeros($rutas->id)) {
+            $rutas->deleteRuta();
         } else {
             echo json_encode(array('status' => '2', 'data' => NULL));
         }

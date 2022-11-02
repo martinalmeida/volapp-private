@@ -4,7 +4,7 @@ include_once(VIEW_CONTROLLER);
 
 use View\ViewController;
 
-$view = new ViewController('rutas');
+$view = new ViewController('registros');
 
 $view->initializationView();
 ?>
@@ -19,7 +19,7 @@ $view->initializationView();
         <div id="panel-1" class="panel">
             <div class="panel-hdr">
                 <h2>
-                    Tabla de Rutas
+                    Tabla de Registros
                     <!-- Tabla <span class="fw-300"><i>Usuarios</i></span> -->
                 </h2>
                 <div class="panel-toolbar">
@@ -32,12 +32,17 @@ $view->initializationView();
                 <div class="panel-content">
                     <!-- <div class="panel-tag">
                     </div> -->
-                    <table id="tablaRutas" class="table table-bordered table-hover table-striped w-100">
+                    <table id="tablaRegistros" class="table table-bordered table-hover table-striped w-100">
                         <thead class="bg-primary-600">
                             <tr>
                                 <th>id</th>
-                                <th>Nombre de Ruta</th>
-                                <th>Descripcion</th>
+                                <th>Placa</th>
+                                <th>Ruta</th>
+                                <th>Material</th>
+                                <th>Nota</th>
+                                <th>Fecha Creación</th>
+                                <th>Fecha Modificación</th>
+                                <th>Usuario</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
                             </tr>
@@ -53,10 +58,10 @@ $view->initializationView();
 </div>
 
 <h3>
-    Pagina de Rutas
+    Pagina de Registros
 </h3>
 
 <?php
-include_once(VIEW . 'rutas/modalForm.php');
-include_once(VIEW . 'rutas/modalAsignar.php');
+include_once(VIEW . 'registros/modalForm.php');
+include_once(VIEW . 'registros/modalDescontables.php');
 $view->finalizeView();

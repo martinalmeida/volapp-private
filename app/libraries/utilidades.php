@@ -5,6 +5,12 @@
  */
 class Utilidades
 {
+	public static function getFecha()
+	{
+		date_default_timezone_set('America/Bogota');
+		$date = date('Y-m-d H:i:s');
+		return $date;
+	}
 
 	public static function conversion($tipo, $valor)
 	{
@@ -40,7 +46,7 @@ class Utilidades
 		return $texto;
 	}*/
 
-	public static function format_money($number, $fractional = false)
+	public static function formatMoney($number, $fractional = false)
 	{
 		if ($fractional) {
 			$number = sprintf('%.2f', $number);

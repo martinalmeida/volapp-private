@@ -8,7 +8,6 @@ class Modulo
     private $conn;
     private $tableName = "modulo";
     private $tablePermisos = "permisos";
-    private $tableRol = "rol";
 
     // --Parametros Publicos--
     public $id;
@@ -30,7 +29,7 @@ class Modulo
     public function dataModulo(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT id, menu_id, titulo, descripcion FROM $this->tableName WHERE menu_id IS NOT NULL AND page IS NOT NULL AND status = 1 ;";
+        $query = "SELECT id, menu_id, titulo, descripcion FROM $this->tableName WHERE menu_id IS NOT NULL AND page IS NOT NULL AND status = 1 ORDER BY titulo ASC ;";
         $stmt = $this->conn->prepare($query);
 
         // -- ↓↓ Preparamos arreglo de modulos ↓↓ --

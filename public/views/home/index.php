@@ -25,7 +25,7 @@ $view->initializationView();
                     <div class="d-flex flex-column align-items-center justify-content-center p-4">
                         <img src="<?= $_SESSION['imagenUser']; ?>" class="rounded-circle shadow-2 img-thumbnail" alt="">
                         <h5 class="mb-0 fw-700 text-center mt-3">
-                            Bienvenido a VOLAPP <?= $_SESSION['usuario']; ?>
+                            BIENVENIDO A VOLAPP <?= $_SESSION['usuario']; ?>
                             <small class="text-muted mb-0">Colombia Barrancabermeja</small>
 
                         </h5>

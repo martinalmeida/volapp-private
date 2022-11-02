@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 include(MODELS . 'modelSesion.php');
 
-class Material
+class Ruta
 {
     // --Parametros Privados--
     private $conn;
-    private $tableName = "materiales";
+    private $tableName = "rutas";
 
     // --Parametros Publicos--
     public $id;
@@ -62,7 +62,7 @@ class Material
 
             $html = "";
             $html .= '<h1 class="subheader-title">';
-            $html .= '<i class="fal fa-info-circle"></i> Materiales</h1>';
+            $html .= '<i class="fal fa-info-circle"></i> Rutas</h1>';
             $html .= '<button type="button" class="btn btn-info active" onclick="showModalRegistro();">Agregar <i class="fal fa-plus-square"></i></button>';
 
             echo json_encode(array('status' => NULL, 'data' => $html));
@@ -70,7 +70,7 @@ class Material
 
             $html = "";
             $html .= '<h1 class="subheader-title">';
-            $html .= '<i class="fal fa-info-circle"></i> Materiales</h1>';
+            $html .= '<i class="fal fa-info-circle"></i> Rutas</h1>';
             $html .= '<h3>No tienes permisos de escritura para este modulo.</h3>';
 
             echo json_encode(array('status' => NULL, 'data' => $html));
@@ -78,7 +78,7 @@ class Material
     }
 
     // -- ⊡ Funcion para crear un material ⊡ --
-    public function createMaterial(): void
+    public function createRuta(): void
     {
         // --Preparamos la consulta--
         $query = "INSERT INTO $this->tableName SET nombre=?, descripcion=?";
@@ -101,7 +101,7 @@ class Material
     }
 
     // -- ⊡ Funcion para dataTables Serverside ⊡ --
-    public function readAllDaTableMateriales(): void
+    public function readAllDaTableRutas(): void
     {
         $sesion = new Sesion($this->conn);
         $sesion->rol = $_SESSION['rol'];
@@ -162,8 +162,8 @@ class Material
                 $botones .= "<i class='fal fa-edit'></i></button>";
                 $botones .= "<button type='button' class='btn btn-" . $statusColor . " text-white' data-toggle='tooltip' data-placement='top' title='Estado del Material' onclick='statusRegistro(" . $row['id'] . ", " . $row['status'] . ");'>";
                 $botones .= "<i class='fal fa-eye'></i></button>";
-                $botones .= "<button type='button' class='btn btn-primary text-white' data-toggle='tooltip' data-placement='top' title='Asignar Tarifa a Material' onclick='asignarTarifa(" . $row['id'] . ");'>";
-                $botones .= "<i class='fal fa-file-invoice-dollar'></i></button>";
+                $botones .= "<button type='button' class='btn btn-primary text-white' data-toggle='tooltip' data-placement='top' title='Asignar Kilometraje a la ruta por contratos' onclick='asignarTarifa(" . $row['id'] . ");'>";
+                $botones .= "<i class='fal fa-route'></i></button>";
             }
             if ($datos->d === 1) {
                 $botones .= "<button type='button' class='btn btn-danger text-white' data-toggle='tooltip' data-placement='top' title='Eliminar Material' onclick='eliminarRegistro(" . $row['id'] . ");'>";
@@ -190,7 +190,7 @@ class Material
     }
 
     // -- ⊡ Funcion para cambiar el estado del rol ⊡ --
-    public function statusMaterial(): void
+    public function statusRuta(): void
     {
         // --Preparamos la consulta--
         $query = "UPDATE $this->tableName SET status =? WHERE id=?";
@@ -211,7 +211,7 @@ class Material
     }
 
     // -- ⊡ Funcion para traer datos del rol ⊡ --
-    public function dataMaterial(): void
+    public function dataRuta(): void
     {
         // --Preparamos la consulta--
         $query = "SELECT id, nombre, descripcion FROM $this->tableName WHERE id=? ;";
@@ -247,7 +247,7 @@ class Material
     }
 
     // -- ⊡ Funcion para actualizar empresa ⊡ --
-    public function updateMaterial(): void
+    public function updateRuta(): void
     {
         // --Preparamos la consulta--
         $query = "UPDATE $this->tableName SET nombre=?, descripcion=? WHERE id=?";
@@ -271,7 +271,7 @@ class Material
     }
 
     // -- ⊡ Funcion para eliminar rol ⊡ --
-    public function deletePlaca(): void
+    public function deleteRuta(): void
     {
         // --Preparamos la consulta--
         $query = "UPDATE $this->tableName SET status = 3 WHERE id=?";

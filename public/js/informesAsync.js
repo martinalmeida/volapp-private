@@ -1,10 +1,10 @@
 let edit = false;
 var peticion = null;
-var tablaMateriales = "";
+var tablaRegistros = "";
 
 $(document).ready(function () {
-  /* ---------  START Serverside Tabla ( tablaMateriales ) ----------- */
-  tablaMateriales = $("#tablaMateriales").DataTable({
+  /* ---------  START Serverside Tabla ( tablaRegistros ) ----------- */
+  tablaRegistros = $("#tablaRegistros").DataTable({
     processing: true,
     orderClasses: true,
     deferRender: true,
@@ -14,7 +14,7 @@ $(document).ready(function () {
     pageLength: 30,
     ajax: {
       type: "POST",
-      url: urlBase + "routes/materiales/readAllDaTable",
+      url: urlBase + "routes/informes/readAllDaTable",
     },
     dom:
       "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
@@ -42,8 +42,13 @@ $(document).ready(function () {
     ],
     columns: [
       { data: "id" },
-      { data: "nombre" },
-      { data: "descripcion" },
+      { data: "placa" },
+      { data: "ruta" },
+      { data: "material" },
+      { data: "nota" },
+      { data: "creado" },
+      { data: "actualizado" },
+      { data: "usuario" },
       { data: "status" },
       { data: "defaultContent" },
     ],
@@ -70,7 +75,7 @@ $(document).ready(function () {
 function readPermisos() {
   $.ajax({
     dataType: "json",
-    url: urlBase + "routes/materiales/read",
+    url: urlBase + "routes/informes/read",
     type: "GET",
     beforeSend: function () {},
     success: function (result) {
@@ -90,7 +95,7 @@ function readPermisos() {
 function writePermisos() {
   $.ajax({
     dataType: "json",
-    url: urlBase + "routes/materiales/write",
+    url: urlBase + "routes/informes/write",
     type: "GET",
     beforeSend: function () {},
     success: function (result) {
@@ -106,7 +111,7 @@ function writePermisos() {
 function selects() {
   $.ajax({
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-    url: urlBase + "routes/selects/getContrato", //url a donde hacemos la peticion
+    url: urlBase + "routes/selects/getPlaca", //url a donde hacemos la peticion
     type: "GET",
     beforeSend: function () {
       // $(".overlayCargue").fadeIn("slow");
@@ -132,12 +137,160 @@ function selects() {
           var html = "";
 
           html +=
-            '<option value="" disabled selected hidden>Seleccione el Contrato</option>';
+            '<option value="" disabled selected hidden>Seleccione la Placa</option>';
           for (let i = 0; i < result.data.length; i++) {
             html += result.data[i].html;
           }
 
-          $("#contrato").html(html);
+          $("#placa").html(html);
+          break;
+
+        case "2":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error de Validacón</strong>",
+            html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        default:
+          break;
+      }
+    },
+    complete: function () {
+      // setTimeout(() => {
+      //   $(".overlayCargue").fadeOut("slow");
+      // }, 1000);
+    },
+    error: function (xhr) {
+      console.log(xhr);
+      Swal.fire({
+        icon: "error",
+        title: "<strong>Error!</strong>",
+        html: "<h5>Se ha presentado un error, por favor informar al area de Sistemas.</h5>",
+        showCloseButton: true,
+        showConfirmButton: false,
+        cancelButtonText: "Cerrar",
+        cancelButtonColor: "#dc3545",
+        showCancelButton: true,
+        backdrop: true,
+      });
+    },
+  });
+  $.ajax({
+    dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
+    url: urlBase + "routes/selects/getRuta", //url a donde hacemos la peticion
+    type: "GET",
+    beforeSend: function () {
+      // $(".overlayCargue").fadeIn("slow");
+    },
+    success: function (result) {
+      var estado = result.status;
+      switch (estado) {
+        case "0":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error en el servidor</strong>",
+            html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        case "1":
+          var html = "";
+
+          html +=
+            '<option value="" disabled selected hidden>Seleccione la Ruta</option>';
+          for (let i = 0; i < result.data.length; i++) {
+            html += result.data[i].html;
+          }
+
+          $("#ruta").html(html);
+          break;
+
+        case "2":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error de Validacón</strong>",
+            html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        default:
+          break;
+      }
+    },
+    complete: function () {
+      // setTimeout(() => {
+      //   $(".overlayCargue").fadeOut("slow");
+      // }, 1000);
+    },
+    error: function (xhr) {
+      console.log(xhr);
+      Swal.fire({
+        icon: "error",
+        title: "<strong>Error!</strong>",
+        html: "<h5>Se ha presentado un error, por favor informar al area de Sistemas.</h5>",
+        showCloseButton: true,
+        showConfirmButton: false,
+        cancelButtonText: "Cerrar",
+        cancelButtonColor: "#dc3545",
+        showCancelButton: true,
+        backdrop: true,
+      });
+    },
+  });
+  $.ajax({
+    dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
+    url: urlBase + "routes/selects/getMaterial", //url a donde hacemos la peticion
+    type: "GET",
+    beforeSend: function () {
+      // $(".overlayCargue").fadeIn("slow");
+    },
+    success: function (result) {
+      var estado = result.status;
+      switch (estado) {
+        case "0":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error en el servidor</strong>",
+            html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        case "1":
+          var html = "";
+
+          html +=
+            '<option value="" disabled selected hidden>Seleccione el Material</option>';
+          for (let i = 0; i < result.data.length; i++) {
+            html += result.data[i].html;
+          }
+
+          $("#material").html(html);
           break;
 
         case "2":
@@ -185,9 +338,9 @@ function registrar(form) {
   if (respuestavalidacion) {
     var formData = new FormData(document.getElementById(form));
     if (edit == true) {
-      peticion = urlBase + "routes/materiales/update";
+      peticion = urlBase + "routes/informes/update";
     } else {
-      peticion = urlBase + "routes/materiales/create";
+      peticion = urlBase + "routes/informes/create";
     }
     $.ajax({
       cache: false, //necesario para enviar archivos
@@ -227,8 +380,8 @@ function registrar(form) {
             if (edit == false) {
               Swal.fire({
                 icon: "success",
-                title: "<strong>Material Creado</strong>",
-                html: "<h5>El material se ha registrado exitosamente</h5>",
+                title: "<strong>Registro Creado</strong>",
+                html: "<h5>El registro se ha creado exitosamente</h5>",
                 showCloseButton: false,
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#64a19d",
@@ -237,8 +390,8 @@ function registrar(form) {
             } else {
               Swal.fire({
                 icon: "success",
-                title: "<strong>Material Editado</strong>",
-                html: "<h5>El material se ha editado exitosamente</h5>",
+                title: "<strong>Registro Editado</strong>",
+                html: "<h5>El registro se ha editado exitosamente</h5>",
                 showCloseButton: false,
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#64a19d",
@@ -247,7 +400,7 @@ function registrar(form) {
             }
             reset();
             $("#ModalRegistro").modal("hide");
-            tablaMateriales.clear().draw();
+            tablaRegistros.clear().draw();
             break;
 
           case "2":
@@ -293,9 +446,9 @@ function editarRegistro(id) {
   $("#inputsEditar").html("");
   edit = true;
   $.ajax({
-    data: { idMaterial: id }, //datos a enviar a la url
+    data: { idRegistro: id }, //datos a enviar a la url
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-    url: urlBase + "routes/materiales/getData", //url a donde hacemos la peticion
+    url: urlBase + "routes/informes/getData", //url a donde hacemos la peticion
     type: "POST",
     beforeSend: function () {
       // $(".overlayCargue").fadeIn("slow");
@@ -318,17 +471,19 @@ function editarRegistro(id) {
           break;
 
         case "1":
-          $("#btnRegistro").text("Editar Material");
+          $("#btnRegistro").text("Editar Placa");
           $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
           $("#btnRegistro").removeClass("btn btn-info");
           $("#btnRegistro").addClass("btn btn-success");
 
-          $("#nombre").val(result.data.nombre);
-          $("#descripcion").val(result.data.descripcion);
+          $("#placa").val(result.data.placa);
+          $("#ruta").val(result.data.ruta);
+          $("#material").val(result.data.material);
+          $("#nota").val(result.data.nota);
 
           var html = "";
           html +=
-            '<input type="hidden" id="idMaterial" name="idMaterial" value="' +
+            '<input type="hidden" id="idRegistro" name="idRegistro" value="' +
             result.data.id +
             '">';
 
@@ -383,11 +538,11 @@ function editarRegistro(id) {
 function statusRegistro(id, status) {
   $.ajax({
     data: {
-      idMaterial: id,
+      idRegistro: id,
       status: status,
     },
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-    url: urlBase + "routes/materiales/status", //url a donde hacemos la peticion
+    url: urlBase + "routes/informes/status", //url a donde hacemos la peticion
     type: "POST",
     beforeSend: function () {
       // $("#overlayText").text("Cerrando Sesión...");
@@ -415,7 +570,7 @@ function statusRegistro(id, status) {
 
         case "1":
           Command: toastr["success"](
-            "Estado del material cambiado exitosamente.",
+            "Estado del registro cambiado exitosamente.",
             "Estado Cambiado"
           );
 
@@ -436,7 +591,7 @@ function statusRegistro(id, status) {
             showMethod: "fadeIn",
             hideMethod: "fadeOut",
           };
-          tablaMateriales.clear().draw();
+          tablaRegistros.clear().draw();
           break;
 
         case "2":
@@ -486,17 +641,17 @@ function eliminarRegistro(id) {
   Swal.fire({
     icon: "warning",
     title: "Que deseas hacer?",
-    text: "Se eliminara el material del sistema!",
+    text: "Se eliminara el registro del sistema!",
     type: "warning",
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Eliminar Material",
+    confirmButtonText: "Eliminar Registro",
     preConfirm: function () {
       $.ajax({
-        data: { idMaterial: id },
+        data: { idRegistro: id },
         dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-        url: urlBase + "routes/materiales/delete", //url a donde hacemos la peticion
+        url: urlBase + "routes/informes/delete", //url a donde hacemos la peticion
         type: "POST",
         beforeSend: function () {
           // $("#overlayText").text("Cerrando Sesión...");
@@ -524,8 +679,8 @@ function eliminarRegistro(id) {
 
             case "1":
               Command: toastr["success"](
-                "El material se ha eliminado satisfactoriamente.",
-                "Material Eliminado"
+                "El registro se ha eliminado satisfactoriamente.",
+                "Registro Eliminado"
               );
 
               toastr.options = {
@@ -545,7 +700,7 @@ function eliminarRegistro(id) {
                 showMethod: "fadeIn",
                 hideMethod: "fadeOut",
               };
-              tablaMateriales.clear().draw();
+              tablaRegistros.clear().draw();
               break;
 
             case "2":
@@ -593,20 +748,102 @@ function eliminarRegistro(id) {
   });
 }
 
-function asignarTarifa() {
-  $("#btnRegistroAsignar").text("Asignar Tarifa");
-  $("#btnRegistroAsignar").addClass("btn btn-primary");
-  $("#btnRegistroAsignar").attr("onclick", "registrar('frmRegistroAsignar');");
-  $("#ModalAsignarTarifa").modal({
+function agregarDescontable(id) {
+  $("#btnRegistroDescontable").text("Agregar Descontable");
+  $("#btnRegistroDescontable").addClass("btn btn-primary");
+  $("#btnRegistroDescontable").attr(
+    "onclick",
+    "registrar('frmRegistroDescontable');"
+  );
+  $("#ModalDescontables").modal({
     backdrop: "static",
     keyboard: false,
   });
-  $("#inputsEditarAsignar").html("");
+  $("#inputsEditarDescontables").html("");
+  $.ajax({
+    data: { idRegistro: id }, //datos a enviar a la url
+    dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
+    url: urlBase + "routes/informes/getData", //url a donde hacemos la peticion
+    type: "POST",
+    beforeSend: function () {
+      // $(".overlayCargue").fadeIn("slow");
+    },
+    success: function (result) {
+      var estado = result.status;
+      switch (estado) {
+        case "0":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error en el servidor</strong>",
+            html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        case "1":
+          $("#placa").val(result.data.placa);
+          $("#ruta").val(result.data.ruta);
+          $("#material").val(result.data.material);
+          $("#nota").val(result.data.nota);
+
+          var html = "";
+          html +=
+            '<input type="hidden" id="idRegistro" name="idRegistro" value="' +
+            result.data.id +
+            '">';
+
+          $("#inputsEditarDescontables").html(html);
+
+          break;
+
+        case "2":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error de Validacón</strong>",
+            html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        default:
+          break;
+      }
+    },
+    complete: function () {
+      // setTimeout(() => {
+      //   $(".overlayCargue").fadeOut("slow");
+      // }, 1000);
+    },
+    error: function (xhr) {
+      console.log(xhr);
+      Swal.fire({
+        icon: "error",
+        title: "<strong>Error!</strong>",
+        html: "<h5>Se ha presentado un error, por favor informar al area de Sistemas.</h5>",
+        showCloseButton: true,
+        showConfirmButton: false,
+        cancelButtonText: "Cerrar",
+        cancelButtonColor: "#dc3545",
+        showCancelButton: true,
+        backdrop: true,
+      });
+    },
+  });
 }
 
 function showModalRegistro() {
   reset();
-  $("#btnRegistro").text("Registrar Material");
+  $("#btnRegistro").text("Nuevo Registro");
   $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
   $("#ModalRegistro").modal({
     backdrop: "static",
@@ -624,5 +861,5 @@ function reset() {
 }
 
 function reajustDatatables() {
-  tablaMateriales.columns.adjust().draw();
+  tablaRegistros.columns.adjust().draw();
 }

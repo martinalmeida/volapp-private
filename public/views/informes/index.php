@@ -4,17 +4,14 @@ include_once(VIEW_CONTROLLER);
 
 use View\ViewController;
 
-$view = new ViewController('formulas');
+$view = new ViewController('informes');
 
 $view->initializationView();
 ?>
 
 <!-- ========== Inicio Componente de Vista ========== -->
-<div class="subheader">
-    <h1 class="subheader-title">
-        <i class='fal fa-info-circle'></i> Formulas
-    </h1>
-    <button type="button" class="btn btn-info active" onclick="showModalRegistro();">Agregar <i class="fal fa-plus-square"></i></button>
+<div class="subheader" id="permisoSuperior">
+
 </div>
 
 <div class="row">
@@ -22,7 +19,7 @@ $view->initializationView();
         <div id="panel-1" class="panel">
             <div class="panel-hdr">
                 <h2>
-                    Tabla de Formulas
+                    Tabla de Informes
                     <!-- Tabla <span class="fw-300"><i>Usuarios</i></span> -->
                 </h2>
                 <div class="panel-toolbar">
@@ -35,16 +32,17 @@ $view->initializationView();
                 <div class="panel-content">
                     <!-- <div class="panel-tag">
                     </div> -->
-                    <table id="tablaPlacas" class="table table-bordered table-hover table-striped w-100">
+                    <table id="tablaRegistros" class="table table-bordered table-hover table-striped w-100">
                         <thead class="bg-primary-600">
                             <tr>
                                 <th>id</th>
                                 <th>Placa</th>
-                                <th>Nombres del Conductor</th>
-                                <th>Apellido Paterno</th>
-                                <th>Apellido Materno</th>
-                                <th>Telefono</th>
-                                <th>Correo Electronico</th>
+                                <th>Ruta</th>
+                                <th>Material</th>
+                                <th>Nota</th>
+                                <th>Fecha Creación</th>
+                                <th>Fecha Modificación</th>
+                                <th>Usuario</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
                             </tr>
@@ -60,9 +58,10 @@ $view->initializationView();
 </div>
 
 <h3>
-    Pagina de Formulas
+    Pagina de Informes
 </h3>
 
 <?php
-include_once(VIEW . 'placas/modalForm.php');
+include_once(VIEW . 'informes/modalForm.php');
+include_once(VIEW . 'informes/modalDescontables.php');
 $view->finalizeView();
