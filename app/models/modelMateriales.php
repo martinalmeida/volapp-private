@@ -9,6 +9,7 @@ class Material
     // --Parametros Privados--
     private $conn;
     private $tableName = "materiales";
+    private $nit;
 
     // --Parametros Publicos--
     public $id;
@@ -81,16 +82,18 @@ class Material
     public function createMaterial(): void
     {
         // --Preparamos la consulta--
-        $query = "INSERT INTO $this->tableName SET nombre=?, descripcion=?";
+        $query = "INSERT INTO $this->tableName SET nombre=?, descripcion=?, nit=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
         $this->nombre = htmlspecialchars(strip_tags($this->nombre));
         $this->descripcion = htmlspecialchars(strip_tags($this->descripcion));
+        $this->nit = $_SESSION['nit'];
 
         // --Almacenamos los valores--
         $stmt->bindParam(1, $this->nombre);
         $stmt->bindParam(2, $this->descripcion);
+        $stmt->bindParam(3, $this->nit);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
@@ -250,17 +253,19 @@ class Material
     public function updateMaterial(): void
     {
         // --Preparamos la consulta--
-        $query = "UPDATE $this->tableName SET nombre=?, descripcion=? WHERE id=?";
+        $query = "UPDATE $this->tableName SET nombre=?, descripcion=?, nit=? WHERE id=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
         $this->nombre = htmlspecialchars(strip_tags($this->nombre));
         $this->descripcion = htmlspecialchars(strip_tags($this->descripcion));
+        $this->nit = $_SESSION['nit'];
 
         // --Almacenamos los valores--
         $stmt->bindParam(1, $this->nombre);
         $stmt->bindParam(2, $this->descripcion);
-        $stmt->bindParam(3, $this->id);
+        $stmt->bindParam(3, $this->nit);
+        $stmt->bindParam(4, $this->id);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {

@@ -1,10 +1,10 @@
 let edit = false;
 var peticion = null;
-var tablaPlacas = "";
+var tablaVehiculos = "";
 
 $(document).ready(function () {
-  /* ---------  START Serverside Tabla ( tablaPlacas ) ----------- */
-  tablaPlacas = $("#tablaPlacas").DataTable({
+  /* ---------  START Serverside Tabla ( tablaVehiculos ) ----------- */
+  tablaVehiculos = $("#tablaVehiculos").DataTable({
     processing: true,
     orderClasses: true,
     deferRender: true,
@@ -14,7 +14,7 @@ $(document).ready(function () {
     pageLength: 30,
     ajax: {
       type: "POST",
-      url: urlBase + "routes/placas/readAllDaTable",
+      url: urlBase + "routes/vehiculos/readAllDaTable",
     },
     dom:
       "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
@@ -73,7 +73,7 @@ $(document).ready(function () {
 function readPermisos() {
   $.ajax({
     dataType: "json",
-    url: urlBase + "routes/placas/read",
+    url: urlBase + "routes/vehiculos/read",
     type: "GET",
     beforeSend: function () {},
     success: function (result) {
@@ -93,7 +93,7 @@ function readPermisos() {
 function writePermisos() {
   $.ajax({
     dataType: "json",
-    url: urlBase + "routes/placas/write",
+    url: urlBase + "routes/vehiculos/write",
     type: "GET",
     beforeSend: function () {},
     success: function (result) {
@@ -111,9 +111,9 @@ function registrar(form) {
   if (respuestavalidacion) {
     var formData = new FormData(document.getElementById(form));
     if (edit == true) {
-      peticion = urlBase + "routes/placas/update";
+      peticion = urlBase + "routes/vehiculos/update";
     } else {
-      peticion = urlBase + "routes/placas/create";
+      peticion = urlBase + "routes/vehiculos/create";
     }
     $.ajax({
       cache: false, //necesario para enviar archivos
@@ -173,7 +173,7 @@ function registrar(form) {
             }
             reset();
             $("#ModalRegistro").modal("hide");
-            tablaPlacas.clear().draw();
+            tablaVehiculos.clear().draw();
             break;
 
           case "2":
@@ -221,7 +221,7 @@ function editarRegistro(id) {
   $.ajax({
     data: { idPlaca: id }, //datos a enviar a la url
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-    url: urlBase + "routes/placas/getData", //url a donde hacemos la peticion
+    url: urlBase + "routes/vehiculos/getData", //url a donde hacemos la peticion
     type: "POST",
     beforeSend: function () {
       // $(".overlayCargue").fadeIn("slow");
@@ -317,7 +317,7 @@ function statusRegistro(id, status) {
       status: status,
     },
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-    url: urlBase + "routes/placas/status", //url a donde hacemos la peticion
+    url: urlBase + "routes/vehiculos/status", //url a donde hacemos la peticion
     type: "POST",
     beforeSend: function () {
       // $("#overlayText").text("Cerrando Sesión...");
@@ -366,7 +366,7 @@ function statusRegistro(id, status) {
             showMethod: "fadeIn",
             hideMethod: "fadeOut",
           };
-          tablaPlacas.clear().draw();
+          tablaVehiculos.clear().draw();
           break;
 
         case "2":
@@ -426,7 +426,7 @@ function eliminarRegistro(id) {
       $.ajax({
         data: { idPlaca: id },
         dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-        url: urlBase + "routes/placas/delete", //url a donde hacemos la peticion
+        url: urlBase + "routes/vehiculos/delete", //url a donde hacemos la peticion
         type: "POST",
         beforeSend: function () {
           // $("#overlayText").text("Cerrando Sesión...");
@@ -475,7 +475,7 @@ function eliminarRegistro(id) {
                 showMethod: "fadeIn",
                 hideMethod: "fadeOut",
               };
-              tablaPlacas.clear().draw();
+              tablaVehiculos.clear().draw();
               break;
 
             case "2":
@@ -543,5 +543,5 @@ function reset() {
 }
 
 function reajustDatatables() {
-  tablaPlacas.columns.adjust().draw();
+  tablaVehiculos.columns.adjust().draw();
 }

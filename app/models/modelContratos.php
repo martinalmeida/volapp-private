@@ -9,6 +9,7 @@ class Contrato
     // --Parametros Privados--
     private $conn;
     private $tableName = "contratos";
+    private $nit;
 
     // --Parametros Publicos--
     public $id;
@@ -84,7 +85,7 @@ class Contrato
     public function createContrato(): void
     {
         // --Preparamos la consulta--
-        $query = "INSERT INTO $this->tableName SET nombre=?, descripcion=?, representante=?, telefono=?, email=? ;";
+        $query = "INSERT INTO $this->tableName SET nombre=?, descripcion=?, representante=?, telefono=?, email=?, nit=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
@@ -93,6 +94,7 @@ class Contrato
         $this->representante = htmlspecialchars(strip_tags($this->representante));
         $this->telefono = htmlspecialchars(strip_tags($this->telefono));
         $this->email = htmlspecialchars(strip_tags($this->email));
+        $this->nit = $_SESSION['nit'];
 
         // --Almacenamos los valores--
         $stmt->bindParam(1, $this->nombre);
@@ -100,6 +102,7 @@ class Contrato
         $stmt->bindParam(3, $this->representante);
         $stmt->bindParam(4, $this->telefono);
         $stmt->bindParam(5, $this->email);
+        $stmt->bindParam(6, $this->nit);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
@@ -269,7 +272,7 @@ class Contrato
     public function updateMaterial(): void
     {
         // --Preparamos la consulta--
-        $query = "UPDATE $this->tableName SET nombre=?, descripcion=?, representante=?, telefono=?, email=? WHERE id=? ;";
+        $query = "UPDATE $this->tableName SET nombre=?, descripcion=?, representante=?, telefono=?, email=?, nit=? WHERE id=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
@@ -278,6 +281,7 @@ class Contrato
         $this->representante = htmlspecialchars(strip_tags($this->representante));
         $this->telefono = htmlspecialchars(strip_tags($this->telefono));
         $this->email = htmlspecialchars(strip_tags($this->email));
+        $this->nit = $_SESSION['nit'];
 
         // --Almacenamos los valores--
         $stmt->bindParam(1, $this->nombre);
@@ -285,7 +289,8 @@ class Contrato
         $stmt->bindParam(3, $this->representante);
         $stmt->bindParam(4, $this->telefono);
         $stmt->bindParam(5, $this->email);
-        $stmt->bindParam(6, $this->id);
+        $stmt->bindParam(6, $this->nit);
+        $stmt->bindParam(7, $this->id);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {

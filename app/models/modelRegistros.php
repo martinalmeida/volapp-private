@@ -14,6 +14,7 @@ class Registro
     private $tableMaterial = "materiales";
     private $tableUser = "usuarios";
     private $fechaActual;
+    private $nit;
 
     // --Parametros Publicos--
     public $id;
@@ -88,7 +89,7 @@ class Registro
     public function createRegistro(): void
     {
         // --Preparamos la consulta--
-        $query = "INSERT INTO $this->tableName SET idVehiculo=?, idRuta=?, idMaterial=?, nota=?, datecreated=?, idUsuario=?";
+        $query = "INSERT INTO $this->tableName SET idVehiculo=?, idRuta=?, idMaterial=?, nota=?, datecreated=?, idUsuario=?, nit=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
@@ -97,6 +98,7 @@ class Registro
         $this->material = htmlspecialchars(strip_tags($this->material));
         $this->nota = htmlspecialchars(strip_tags($this->nota));
         $this->fechaActual = Utilidades::getFecha();
+        $this->nit = $_SESSION['nit'];
 
         // --Almacenamos los valores--
         $stmt->bindParam(1, $this->placa);
@@ -105,6 +107,7 @@ class Registro
         $stmt->bindParam(4, $this->nota);
         $stmt->bindParam(5, $this->fechaActual);
         $stmt->bindParam(6, $_SESSION['id']);
+        $stmt->bindParam(7, $this->nit);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
@@ -274,7 +277,7 @@ class Registro
     public function updateRegistro(): void
     {
         // --Preparamos la consulta--
-        $query = "UPDATE $this->tableName SET idVehiculo=?, idRuta=?, idMaterial=?, nota=?, dateupdate=?, idUsuario=? WHERE id=?";
+        $query = "UPDATE $this->tableName SET idVehiculo=?, idRuta=?, idMaterial=?, nota=?, dateupdate=?, idUsuario=?, nit=? WHERE id=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
@@ -283,6 +286,7 @@ class Registro
         $this->material = htmlspecialchars(strip_tags($this->material));
         $this->nota = htmlspecialchars(strip_tags($this->nota));
         $this->fechaActual = Utilidades::getFecha();
+        $this->nit = $_SESSION['nit'];
 
         // --Almacenamos los valores--
         $stmt->bindParam(1, $this->placa);
@@ -291,7 +295,8 @@ class Registro
         $stmt->bindParam(4, $this->nota);
         $stmt->bindParam(5, $this->fechaActual);
         $stmt->bindParam(6, $_SESSION['id']);
-        $stmt->bindParam(7, $this->id);
+        $stmt->bindParam(7, $this->nit);
+        $stmt->bindParam(8, $this->id);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {

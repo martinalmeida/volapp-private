@@ -5,9 +5,9 @@ declare(strict_types=1);
 header('Content-type: application/json');
 
 include(LIBRARIES . 'validations.php');
-include(MODELS . 'modelPlacas.php');
+include(MODELS . 'modelVehiculos.php');
 
-class PlacasController
+class VehiculosController
 {
     public function read(): void
     {

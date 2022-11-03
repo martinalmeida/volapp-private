@@ -9,6 +9,7 @@ class Placa
     // --Parametros Privados--
     private $conn;
     private $tableName = "vehiculos";
+    private $nit;
 
     // --Parametros Publicos--
     public $id;
@@ -66,7 +67,7 @@ class Placa
 
             $html = "";
             $html .= '<h1 class="subheader-title">';
-            $html .= '<i class="fal fa-info-circle"></i> Placas</h1>';
+            $html .= '<i class="fal fa-info-circle"></i> Vehiculos</h1>';
             $html .= '<button type="button" class="btn btn-info active" onclick="showModalRegistro();">Agregar <i class="fal fa-plus-square"></i></button>';
 
             echo json_encode(array('status' => NULL, 'data' => $html));
@@ -74,7 +75,7 @@ class Placa
 
             $html = "";
             $html .= '<h1 class="subheader-title">';
-            $html .= '<i class="fal fa-info-circle"></i> Placas</h1>';
+            $html .= '<i class="fal fa-info-circle"></i> Vehiculos</h1>';
             $html .= '<h3>No tienes permisos de escritura para este modulo.</h3>';
 
             echo json_encode(array('status' => NULL, 'data' => $html));
@@ -85,7 +86,7 @@ class Placa
     public function createPlaca(): void
     {
         // --Preparamos la consulta--
-        $query = "INSERT INTO $this->tableName SET placa=?, nombresConductor=?, Apaterno=?, Amaterno=?, telefono=?, email=?";
+        $query = "INSERT INTO $this->tableName SET placa=?, nombresConductor=?, Apaterno=?, Amaterno=?, telefono=?, email=?, nit=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
@@ -95,6 +96,7 @@ class Placa
         $this->Amaterno = htmlspecialchars(strip_tags($this->Amaterno));
         $this->telefono = htmlspecialchars(strip_tags($this->telefono));
         $this->email = htmlspecialchars(strip_tags($this->email));
+        $this->nit = $_SESSION['nit'];
 
         // --Almacenamos los valores--
         $stmt->bindParam(1, $this->placa);
@@ -103,6 +105,7 @@ class Placa
         $stmt->bindParam(4, $this->Amaterno);
         $stmt->bindParam(5, $this->telefono);
         $stmt->bindParam(6, $this->email);
+        $stmt->bindParam(7, $this->nit);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
@@ -276,7 +279,7 @@ class Placa
     public function updatePlaca(): void
     {
         // --Preparamos la consulta--
-        $query = "UPDATE $this->tableName SET placa=?, nombresConductor=?, Apaterno=?, Amaterno=?, telefono=?, email=? WHERE id=?";
+        $query = "UPDATE $this->tableName SET placa=?, nombresConductor=?, Apaterno=?, Amaterno=?, telefono=?, email=?, nit=? WHERE id=?";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
@@ -286,6 +289,7 @@ class Placa
         $this->Amaterno = htmlspecialchars(strip_tags($this->Amaterno));
         $this->telefono = htmlspecialchars(strip_tags($this->telefono));
         $this->email = htmlspecialchars(strip_tags($this->email));
+        $this->nit = $_SESSION['nit'];
 
         // --Almacenamos los valores--
         $stmt->bindParam(1, $this->placa);
@@ -294,7 +298,8 @@ class Placa
         $stmt->bindParam(4, $this->Amaterno);
         $stmt->bindParam(5, $this->telefono);
         $stmt->bindParam(6, $this->email);
-        $stmt->bindParam(7, $this->id);
+        $stmt->bindParam(7, $this->nit);
+        $stmt->bindParam(8, $this->id);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {

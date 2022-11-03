@@ -26,7 +26,7 @@ $view->initializationView();
                         <img src="<?= $_SESSION['imagenUser']; ?>" class="rounded-circle shadow-2 img-thumbnail" alt="">
                         <h5 class="mb-0 fw-700 text-center mt-3">
                             BIENVENIDO A VOLAPP <?= $_SESSION['usuario']; ?>
-                            <small class="text-muted mb-0">Colombia Barrancabermeja</small>
+                            <small class="text-muted mb-0"><?= $_SESSION['empresa']; ?> nit: <?= $_SESSION['nit']; ?></small>
 
                         </h5>
                         <!-- <div class="mt-4 text-center demo">

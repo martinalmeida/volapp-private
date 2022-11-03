@@ -9,6 +9,7 @@ class Login
     // --Parametros Privados--
     private $conn;
     private $tableName = "usuarios";
+    private $tableEmpresa = "empresas";
     private const URLDEFAULT = 'public/views/home/';
 
     // --Parametros Publicos--
@@ -25,7 +26,10 @@ class Login
     public function validatedUser(): void
     {
         // -- ↓↓ Preparamos la consulta ↓↓ --
-        $query = "SELECT id, nombres, email_user, content_type, base_64, rolid FROM $this->tableName WHERE email_user=? AND pswd=? AND status = 1 ;";
+        $query = "SELECT u.id, u.nit, (e.nombre)empresa, u.nombres, u.email_user, u.content_type, u.base_64, u.rolid 
+                  FROM $this->tableName u
+                  JOIN $this->tableEmpresa e ON u.nit = e.nit
+                  WHERE u.email_user=? AND u.pswd=? AND u.status = 1 AND e.status = 1 ;";
         $stmt = $this->conn->prepare($query);
 
         // -- ↓↓ Escapamos los caracteres ↓↓ --
@@ -48,6 +52,8 @@ class Login
                 // -- ↓↓ Creamos la sesion y le pasamos todos los datos del usuario ↓↓ --
                 $datosSesion = array(
                     'id' => $data->id,
+                    'nit' => $data->nit,
+                    'empresa' => $data->empresa,
                     'usuario' => $data->nombres,
                     'email' => $data->email_user,
                     'imagenUser' => 'data: ' . $data->content_type . ';base64,' . $data->base_64,

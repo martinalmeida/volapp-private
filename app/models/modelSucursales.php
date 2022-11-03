@@ -9,6 +9,7 @@ class Sucursal
     // --Parametros Privados--
     private $conn;
     private $tableName = "sucursal";
+    private $nit;
 
     // --Parametros Publicos--
     public $id;
@@ -83,7 +84,7 @@ class Sucursal
     public function createSucursal(): void
     {
         // --Preparamos la consulta--
-        $query = "INSERT INTO $this->tableName SET descripcion=?, direccion	=?, telefono=?, email=?";
+        $query = "INSERT INTO $this->tableName SET descripcion=?, direccion	=?, telefono=?, email=?, nit=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
@@ -91,12 +92,14 @@ class Sucursal
         $this->direccion = htmlspecialchars(strip_tags($this->direccion));
         $this->telefono = htmlspecialchars(strip_tags($this->telefono));
         $this->email = htmlspecialchars(strip_tags($this->email));
+        $this->nit = $_SESSION['nit'];
 
         // --Almacenamos los valores--
         $stmt->bindParam(1, $this->descripcion);
         $stmt->bindParam(2, $this->direccion);
         $stmt->bindParam(3, $this->telefono);
         $stmt->bindParam(4, $this->email);
+        $stmt->bindParam(5, $this->nit);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
@@ -262,7 +265,7 @@ class Sucursal
     public function updateSucursal(): void
     {
         // --Preparamos la consulta--
-        $query = "UPDATE $this->tableName SET descripcion=?, direccion	=?, telefono=?, email=? WHERE id=?";
+        $query = "UPDATE $this->tableName SET descripcion=?, direccion	=?, telefono=?, email=?, nit=? WHERE id=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
@@ -270,13 +273,15 @@ class Sucursal
         $this->direccion = htmlspecialchars(strip_tags($this->direccion));
         $this->telefono = htmlspecialchars(strip_tags($this->telefono));
         $this->email = htmlspecialchars(strip_tags($this->email));
+        $this->nit = $_SESSION['nit'];
 
         // --Almacenamos los valores--
         $stmt->bindParam(1, $this->descripcion);
         $stmt->bindParam(2, $this->direccion);
         $stmt->bindParam(3, $this->telefono);
         $stmt->bindParam(4, $this->email);
-        $stmt->bindParam(5, $this->id);
+        $stmt->bindParam(5, $this->nit);
+        $stmt->bindParam(6, $this->id);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
