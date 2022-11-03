@@ -160,7 +160,7 @@ class EmpresasController
         $empresa->emailLogis = isset($_POST['emailLogis']) ? strtoupper(trim($_POST['emailLogis'])) : NULL;
         $empresa->contenType = isset($_POST['contenType']) ? trim($_POST['contenType']) : NULL;
         $empresa->base64 = isset($_POST['base64']) ? trim($_POST['base64']) : NULL;
-        $empresa->id = isset($_POST['idEmpresa']) ? strtoupper(trim($_POST['idEmpresa'])) : NULL;
+        $empresa->id = isset($_POST['idEmpresa']) ? trim($_POST['idEmpresa']) : NULL;
 
         if (is_uploaded_file($_FILES['logo']['tmp_name'])) {
             // --Verificacion de Archivo--

@@ -1,6 +1,27 @@
 let edit = false;
 var peticion = null;
 var tablaVehiculos = "";
+var controls = {
+  leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',
+  rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>',
+};
+var runDatePicker = function () {
+  $("#fechaSoat").datepicker({
+    orientation: "top left",
+    todayHighlight: true,
+    templates: controls,
+  });
+  $("#fechaLicencia").datepicker({
+    orientation: "top left",
+    todayHighlight: true,
+    templates: controls,
+  });
+  $("#fecchaTdr").datepicker({
+    orientation: "top left",
+    todayHighlight: true,
+    templates: controls,
+  });
+};
 
 $(document).ready(function () {
   /* ---------  START Serverside Tabla ( tablaVehiculos ) ----------- */
@@ -68,6 +89,8 @@ $(document).ready(function () {
   });
   readPermisos();
   writePermisos();
+  runDatePicker();
+  $(":input").inputmask();
 });
 
 function readPermisos() {
@@ -107,12 +130,14 @@ function writePermisos() {
 }
 
 function registrar(form) {
+  $("#alertaForm").html("");
   var respuestavalidacion = validarcampos("#" + form);
   if (respuestavalidacion) {
     var formData = new FormData(document.getElementById(form));
     if (edit == true) {
       peticion = urlBase + "routes/vehiculos/update";
     } else {
+      $("#archivoBase64").html("");
       peticion = urlBase + "routes/vehiculos/create";
     }
     $.ajax({
@@ -133,6 +158,7 @@ function registrar(form) {
       },
       success: function (result) {
         var estado = result.status;
+        var html = "";
         switch (estado) {
           case "0":
             Swal.fire({
@@ -153,8 +179,8 @@ function registrar(form) {
             if (edit == false) {
               Swal.fire({
                 icon: "success",
-                title: "<strong>Placa Creada</strong>",
-                html: "<h5>La placa se ha registrado exitosamente</h5>",
+                title: "<strong>Vehiculo Creado</strong>",
+                html: "<h5>El vehiculo se ha registrado exitosamente</h5>",
                 showCloseButton: false,
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#64a19d",
@@ -163,8 +189,8 @@ function registrar(form) {
             } else {
               Swal.fire({
                 icon: "success",
-                title: "<strong>Placa Editada</strong>",
-                html: "<h5>La placa se ha editado exitosamente</h5>",
+                title: "<strong>Vehiculo Editado</strong>",
+                html: "<h5>El vehiculo se ha editado exitosamente</h5>",
                 showCloseButton: false,
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#64a19d",
@@ -177,10 +203,49 @@ function registrar(form) {
             break;
 
           case "2":
+            html +=
+              '<div class="alert border-danger bg-transparent text-info fade show" role="alert">' +
+              '<div class="d-flex align-items-center"><div class="alert-icon text-danger">' +
+              '<i class="fal fa-exclamation-triangle"></i></div>' +
+              '<div class="flex-1 text-danger"><span class="h5 m-0 fw-700">Error de Validación </span></div>' +
+              '<button type="button" class="btn btn-danger btn-pills btn-sm btn-w-m waves-effect waves-themed" data-dismiss="alert" aria-label="Close">' +
+              "Cerrar</button></div></div>";
+
+            $("#alertaForm").html(html);
+            break;
+
+          case "4":
+            Swal.fire({
+              icon: "warning",
+              title: "<strong>Archivo Dañado</strong>",
+              html: "<h5>El archivo esta corrupto.</h5>",
+              showCloseButton: true,
+              showConfirmButton: false,
+              cancelButtonText: "Cerrar",
+              cancelButtonColor: "#dc3545",
+              showCancelButton: true,
+              backdrop: true,
+            });
+            $("#ModalRegistro").modal("hide");
+            break;
+
+          case "5":
+            html +=
+              '<div class="alert border-warning bg-transparent text-info fade show" role="alert">' +
+              '<div class="d-flex align-items-center"><div class="alert-icon text-warning">' +
+              '<i class="fal fa-exclamation-triangle"></i></div>' +
+              '<div class="flex-1 text-warning"><span class="h5 m-0 fw-700">Adjunte el Archivo de Documentación del Vehiculo </span></div>' +
+              '<button type="button" class="btn btn-warning btn-pills btn-sm btn-w-m waves-effect waves-themed" data-dismiss="alert" aria-label="Close">' +
+              "Cerrar</button></div></div>";
+
+            $("#archivoBase64").html(html);
+            break;
+
+          case "6":
             Swal.fire({
               icon: "error",
-              title: "<strong>Error de Validacón</strong>",
-              html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
+              title: "<strong>Tamaño execivo de Archivo</strong>",
+              html: "<h5>Adjunta un archivo de menor tamaño, el peso maximo es de 2MB.</h5>",
               showCloseButton: true,
               showConfirmButton: false,
               cancelButtonText: "Cerrar",
@@ -216,10 +281,11 @@ function registrar(form) {
 }
 
 function editarRegistro(id) {
+  $("#alertaForm").html("");
   $("#inputsEditar").html("");
   edit = true;
   $.ajax({
-    data: { idPlaca: id }, //datos a enviar a la url
+    data: { idVehiculo: id }, //datos a enviar a la url
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
     url: urlBase + "routes/vehiculos/getData", //url a donde hacemos la peticion
     type: "POST",
@@ -244,7 +310,7 @@ function editarRegistro(id) {
           break;
 
         case "1":
-          $("#btnRegistro").text("Editar Placa");
+          $("#btnRegistro").text("Editar Vehiculo");
           $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
           $("#btnRegistro").removeClass("btn btn-info");
           $("#btnRegistro").addClass("btn btn-success");
@@ -258,17 +324,22 @@ function editarRegistro(id) {
 
           var html = "";
           html +=
-            '<input type="hidden" id="idPlaca" name="idPlaca" value="' +
+            '<img class="rounded" src="data: ' +
+            result.data.contenType +
+            ";base64," +
+            result.data.base64 +
+            '" width="50" height="auto">' +
+            '<input type="hidden" id="idUser" name="idUser" value="' +
             result.data.id +
+            '">' +
+            '<input type="hidden" id="contenType" name="contenType" value="' +
+            result.data.contenType +
+            '">' +
+            '<input type="hidden" id="base64" name="base64" value="' +
+            result.data.base64 +
             '">';
 
-          $("#inputsEditar").html(html);
-
-          $("#ModalRegistro").modal({
-            backdrop: "static",
-            keyboard: false,
-          });
-          break;
+          $("#archivoBase64").html(html);
 
         case "2":
           Swal.fire({
@@ -313,7 +384,7 @@ function editarRegistro(id) {
 function statusRegistro(id, status) {
   $.ajax({
     data: {
-      idPlaca: id,
+      idVehiculo: id,
       status: status,
     },
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
@@ -424,7 +495,7 @@ function eliminarRegistro(id) {
     confirmButtonText: "Eliminar Placa",
     preConfirm: function () {
       $.ajax({
-        data: { idPlaca: id },
+        data: { idVehiculo: id },
         dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
         url: urlBase + "routes/vehiculos/delete", //url a donde hacemos la peticion
         type: "POST",
@@ -525,7 +596,8 @@ function eliminarRegistro(id) {
 
 function showModalRegistro() {
   reset();
-  $("#btnRegistro").text("Registrar Placa");
+  $("#alertaForm").html("");
+  $("#btnRegistro").text("Registrar Vehiculo");
   $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
   $("#ModalRegistro").modal({
     backdrop: "static",

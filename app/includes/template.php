@@ -44,6 +44,7 @@ class Template
             <link rel='stylesheet' media='screen, print' href="<?= CSS ?>datagrid/datatables/datatables.bundle.css">
             <link rel='stylesheet' media='screen, print' href="<?= CSS ?>fa-solid.css">
             <link rel='stylesheet' media='screen, print' href="<?= CSS ?>formplugins/select2/select2.bundle.css">
+            <link rel="stylesheet" media="screen, print" href="<?= CSS ?>formplugins/bootstrap-datepicker/bootstrap-datepicker.css">
             <link rel="stylesheet" media="screen, print" href="<?= CSS ?>notifications/toastr/toastr.css">
         </head>
     <?php
@@ -716,7 +717,7 @@ class Template
                                 <div class="mt-4 d-table w-100 px-5">
                                     <div class="d-table-cell align-middle">
                                         <h5 class="p-0">
-                                        Accesibilidad
+                                            Accesibilidad
                                         </h5>
                                     </div>
                                 </div>
@@ -748,7 +749,7 @@ class Template
                                 <div class="mt-4 d-table w-100 px-5">
                                     <div class="d-table-cell align-middle">
                                         <h5 class="p-0">
-                                        Modificaciones globales
+                                            Modificaciones globales
                                         </h5>
                                     </div>
                                 </div>
@@ -946,6 +947,8 @@ class Template
             <script src="<?= JS ?>app.bundle.js"></script>
             <script src="<?= JS ?>notifications/toastr/toastr.js"></script>
             <script src="<?= JS ?>formplugins/select2/select2.bundle.js"></script>
+            <script src="<?= JS ?>formplugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+            <script src="<?= JS ?>formplugins/inputmask/inputmask.bundle.js"></script>
             <script src="<?= JS ?>notifications/sweetalert2/sweetalert2@9.js"></script>
             <script src="<?= JS ?>validaciones.js?v=<?= rand() ?>"></script>
             <script src="<?= JS ?>globales.js?v=<?= rand() ?>"></script>

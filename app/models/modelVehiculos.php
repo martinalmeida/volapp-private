@@ -19,6 +19,11 @@ class Placa
     public $Amaterno;
     public $telefono;
     public $email;
+    public $fechaSoat;
+    public $fechaLicencia;
+    public $fecchaTdr;
+    public $contenType;
+    public $base64;
     public $status;
 
     /* Propiedades de los objetos de Datatables para utilizar (Serverside) 
@@ -86,26 +91,37 @@ class Placa
     public function createPlaca(): void
     {
         // --Preparamos la consulta--
-        $query = "INSERT INTO $this->tableName SET placa=?, nombresConductor=?, Apaterno=?, Amaterno=?, telefono=?, email=?, nit=? ;";
+        $query = "INSERT INTO $this->tableName SET 
+                  placa=?, nombresConductor=?, telefono=?, email=?, fechaSoat=?, fechaLicencia=?, fecchaTdr=?, content_type=?, base_64=?, nit=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
         $this->placa = htmlspecialchars(strip_tags($this->placa));
         $this->nombresConductor = htmlspecialchars(strip_tags($this->nombresConductor));
-        $this->Apaterno = htmlspecialchars(strip_tags($this->Apaterno));
-        $this->Amaterno = htmlspecialchars(strip_tags($this->Amaterno));
+        // $this->Apaterno = htmlspecialchars(strip_tags($this->Apaterno));
+        // $this->Amaterno = htmlspecialchars(strip_tags($this->Amaterno));
         $this->telefono = htmlspecialchars(strip_tags($this->telefono));
         $this->email = htmlspecialchars(strip_tags($this->email));
+        $this->fechaSoat = htmlspecialchars(strip_tags($this->fechaSoat));
+        $this->fechaLicencia = htmlspecialchars(strip_tags($this->fechaLicencia));
+        $this->fecchaTdr = htmlspecialchars(strip_tags($this->fecchaTdr));
+        $this->contenType = htmlspecialchars(strip_tags($this->contenType));
+        $this->base64 = htmlspecialchars(strip_tags($this->base64));
         $this->nit = $_SESSION['nit'];
 
         // --Almacenamos los valores--
         $stmt->bindParam(1, $this->placa);
         $stmt->bindParam(2, $this->nombresConductor);
-        $stmt->bindParam(3, $this->Apaterno);
-        $stmt->bindParam(4, $this->Amaterno);
-        $stmt->bindParam(5, $this->telefono);
-        $stmt->bindParam(6, $this->email);
-        $stmt->bindParam(7, $this->nit);
+        // $stmt->bindParam(3, $this->Apaterno);
+        // $stmt->bindParam(4, $this->Amaterno);
+        $stmt->bindParam(3, $this->telefono);
+        $stmt->bindParam(4, $this->email);
+        $stmt->bindParam(5, $this->fechaSoat);
+        $stmt->bindParam(6, $this->fechaLicencia);
+        $stmt->bindParam(7, $this->fecchaTdr);
+        $stmt->bindParam(8, $this->contenType);
+        $stmt->bindParam(9, $this->base64);
+        $stmt->bindParam(10, $this->nit);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
@@ -279,27 +295,39 @@ class Placa
     public function updatePlaca(): void
     {
         // --Preparamos la consulta--
-        $query = "UPDATE $this->tableName SET placa=?, nombresConductor=?, Apaterno=?, Amaterno=?, telefono=?, email=?, nit=? WHERE id=?";
+        $query = "UPDATE $this->tableName SET 
+                  placa=?, nombresConductor=?, telefono=?, email=?, fechaSoat=?, fechaLicencia=?, fecchaTdr=?, content_type=?, base_64=?, nit=? 
+                  WHERE id=?";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
         $this->placa = htmlspecialchars(strip_tags($this->placa));
         $this->nombresConductor = htmlspecialchars(strip_tags($this->nombresConductor));
-        $this->Apaterno = htmlspecialchars(strip_tags($this->Apaterno));
-        $this->Amaterno = htmlspecialchars(strip_tags($this->Amaterno));
+        // $this->Apaterno = htmlspecialchars(strip_tags($this->Apaterno));
+        // $this->Amaterno = htmlspecialchars(strip_tags($this->Amaterno));
         $this->telefono = htmlspecialchars(strip_tags($this->telefono));
         $this->email = htmlspecialchars(strip_tags($this->email));
+        $this->fechaSoat = htmlspecialchars(strip_tags($this->fechaSoat));
+        $this->fechaLicencia = htmlspecialchars(strip_tags($this->fechaLicencia));
+        $this->fecchaTdr = htmlspecialchars(strip_tags($this->fecchaTdr));
+        $this->contenType = htmlspecialchars(strip_tags($this->contenType));
+        $this->base64 = htmlspecialchars(strip_tags($this->base64));
         $this->nit = $_SESSION['nit'];
 
         // --Almacenamos los valores--
         $stmt->bindParam(1, $this->placa);
         $stmt->bindParam(2, $this->nombresConductor);
-        $stmt->bindParam(3, $this->Apaterno);
-        $stmt->bindParam(4, $this->Amaterno);
-        $stmt->bindParam(5, $this->telefono);
-        $stmt->bindParam(6, $this->email);
-        $stmt->bindParam(7, $this->nit);
-        $stmt->bindParam(8, $this->id);
+        // $stmt->bindParam(3, $this->Apaterno);
+        // $stmt->bindParam(4, $this->Amaterno);
+        $stmt->bindParam(3, $this->telefono);
+        $stmt->bindParam(4, $this->email);
+        $stmt->bindParam(5, $this->fechaSoat);
+        $stmt->bindParam(6, $this->fechaLicencia);
+        $stmt->bindParam(7, $this->fecchaTdr);
+        $stmt->bindParam(8, $this->contenType);
+        $stmt->bindParam(9, $this->base64);
+        $stmt->bindParam(10, $this->nit);
+        $stmt->bindParam(11, $this->id);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {

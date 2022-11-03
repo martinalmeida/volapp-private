@@ -62,14 +62,9 @@
                         </div>
                     </div>
                     <div class="form-group">
-
-                        <div id="imagenBase64">
-
-                        </div>
-
+                        <div id="imagenBase64"></div>
                         <label class="form-label" for="logo">Logo de la empresa</label>
                         <div class="input-group">
-
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="logo" name="logo" accept="image/png" required>
                                 <label class="custom-file-label" for="logo">Adjuntar Logo</label>
@@ -77,6 +72,7 @@
                         </div>
                         <span class="help-block">Foto del logo de la empresa en formato png.</span>
                     </div>
+
                 </form>
             </div>
             <div class="modal-footer">
