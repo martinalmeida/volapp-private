@@ -26,10 +26,11 @@ class Login
     public function validatedUser(): void
     {
         // -- ↓↓ Preparamos la consulta ↓↓ --
-        $query = "SELECT u.id, u.nit, (e.nombre)empresa, u.nombres, u.email_user, u.content_type, u.base_64, u.rolid 
+        $query = "SELECT 
+                  u.id, u.nit, (e.nombre)empresa, u.nombres, u.email_user, u.content_type, u.base_64, u.rolid, (u.status)sUser, (e.status)sEmpre
                   FROM $this->tableName u
                   JOIN $this->tableEmpresa e ON u.nit = e.nit
-                  WHERE u.email_user=? AND u.pswd=? AND u.status = 1 AND e.status = 1 ;";
+                  WHERE u.email_user=? AND u.pswd=? ;";
         $stmt = $this->conn->prepare($query);
 
         // -- ↓↓ Escapamos los caracteres ↓↓ --
@@ -49,22 +50,33 @@ class Login
                 // -- ↓↓ Usuario encontrado y activo ↓↓ --
                 $data = $stmt->fetch(PDO::FETCH_OBJ);
 
-                // -- ↓↓ Creamos la sesion y le pasamos todos los datos del usuario ↓↓ --
-                $datosSesion = array(
-                    'id' => $data->id,
-                    'nit' => $data->nit,
-                    'empresa' => $data->empresa,
-                    'usuario' => $data->nombres,
-                    'email' => $data->email_user,
-                    'imagenUser' => 'data: ' . $data->content_type . ';base64,' . $data->base_64,
-                    'rol' => $data->rolid,
-                    'token' => "dqtQS2cBmGd8MbyMCHBj3Dq38Xm89vVyxxum4aySt9witAwBN9",
-                );
-                SesionTools::crearSesion($datosSesion);
-                // -- ↓↓ Retornamos las respuestas con la urldefault ↓↓ --
-                echo json_encode(array('status' => '1', 'data' => $data, 'url' => self::URLDEFAULT));
+                if ($data->sUser === 1) {
+
+                    if ($data->sEmpre === 1) {
+                        // -- ↓↓ Creamos la sesion y le pasamos todos los datos del usuario ↓↓ --
+                        $datosSesion = array(
+                            'id' => $data->id,
+                            'nit' => $data->nit,
+                            'empresa' => $data->empresa,
+                            'usuario' => $data->nombres,
+                            'email' => $data->email_user,
+                            'imagenUser' => 'data: ' . $data->content_type . ';base64,' . $data->base_64,
+                            'rol' => $data->rolid,
+                            'token' => "dqtQS2cBmGd8MbyMCHBj3Dq38Xm89vVyxxum4aySt9witAwBN9",
+                        );
+                        SesionTools::crearSesion($datosSesion);
+                        // -- ↓↓ Retornamos las respuestas con la urldefault ↓↓ --
+                        echo json_encode(array('status' => '1', 'data' => $data, 'url' => self::URLDEFAULT));
+                    } else {
+                        // -- ↓↓ Empresa inactiva ↓↓ --
+                        echo json_encode(array('status' => '9', 'data' => NULL));
+                    }
+                } else {
+                    // -- ↓↓ Usuario inactivo ↓↓ --
+                    echo json_encode(array('status' => '8', 'data' => NULL));
+                }
             } else {
-                // -- ↓↓ Usuario no encontrado o inactivo ↓↓ --
+                // -- ↓↓ Usuario no encontrado ↓↓ --
                 echo json_encode(array('status' => '3', 'data' => NULL));
             }
         } else {

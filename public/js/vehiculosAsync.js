@@ -282,7 +282,7 @@ function registrar(form) {
 
 function editarRegistro(id) {
   $("#alertaForm").html("");
-  $("#inputsEditar").html("");
+  $("#archivoBase64").html("");
   edit = true;
   $.ajax({
     data: { idVehiculo: id }, //datos a enviar a la url
@@ -294,6 +294,7 @@ function editarRegistro(id) {
     },
     success: function (result) {
       var estado = result.status;
+      var html = "";
       switch (estado) {
         case "0":
           Swal.fire({
@@ -310,25 +311,19 @@ function editarRegistro(id) {
           break;
 
         case "1":
-          $("#btnRegistro").text("Editar Vehiculo");
-          $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
-          $("#btnRegistro").removeClass("btn btn-info");
-          $("#btnRegistro").addClass("btn btn-success");
-
           $("#placa").val(result.data.placa);
           $("#nombresConductor").val(result.data.nombresConductor);
-          $("#Apaterno").val(result.data.Apaterno);
-          $("#Amaterno").val(result.data.Amaterno);
+          //$("#Apaterno").val(result.data.Apaterno);
+          //$("#Amaterno").val(result.data.Amaterno);
           $("#telefono").val(result.data.telefono);
           $("#email").val(result.data.email);
 
-          var html = "";
           html +=
-            '<img class="rounded" src="data: ' +
+            '<a src="data: ' +
             result.data.contenType +
             ";base64," +
             result.data.base64 +
-            '" width="50" height="auto">' +
+            '"></a>' +
             '<input type="hidden" id="idUser" name="idUser" value="' +
             result.data.id +
             '">' +
@@ -340,6 +335,16 @@ function editarRegistro(id) {
             '">';
 
           $("#archivoBase64").html(html);
+
+          $("#btnRegistro").text("Editar Vehiculo");
+          $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
+          $("#btnRegistro").removeClass("btn btn-info");
+          $("#btnRegistro").addClass("btn btn-success");
+          $("#ModalRegistro").modal({
+            backdrop: "static",
+            keyboard: false,
+          });
+          break;
 
         case "2":
           Swal.fire({

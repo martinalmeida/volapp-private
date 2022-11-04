@@ -70,7 +70,37 @@ function login(form) {
             Swal.fire({
               icon: "info",
               title: "<strong>Credenciales Incorrectas</strong>",
-              html: "<h5>Las credenciales son incorrectas o el usuario se encuantra inactivo.</h5>",
+              html: "<h5>Las credenciales son incorrectas.</h5>",
+              showCloseButton: true,
+              showConfirmButton: false,
+              cancelButtonText: "Cerrar",
+              cancelButtonColor: "#dc3545",
+              showCancelButton: true,
+              backdrop: true,
+            });
+            $("#spinnerLogin").html("");
+            break;
+
+          case "8":
+            Swal.fire({
+              icon: "info",
+              title: "<strong>Usuario Inactivo</strong>",
+              html: "<h5>El usuario se encuentra inactivo actualmente.</h5>",
+              showCloseButton: true,
+              showConfirmButton: false,
+              cancelButtonText: "Cerrar",
+              cancelButtonColor: "#dc3545",
+              showCancelButton: true,
+              backdrop: true,
+            });
+            $("#spinnerLogin").html("");
+            break;
+
+          case "9":
+            Swal.fire({
+              icon: "info",
+              title: "<strong>Empresa Inactiva</strong>",
+              html: "<h5>La empresa se encuentra inactiva actualmente.</h5>",
               showCloseButton: true,
               showConfirmButton: false,
               cancelButtonText: "Cerrar",

@@ -35,14 +35,14 @@ class InitRouting
                     $router = new Routing;
                     $router->run();
                 } else {
-                    echo json_encode(array('status' => '8', 'data' => NULL));
+                    echo json_encode(array('status' => '10', 'data' => NULL));
                 }
             } else {
-                echo json_encode(array('status' => '9', 'data' => NULL));
+                echo json_encode(array('status' => '11', 'data' => NULL));
                 exit;
             }
         } else {
-            echo json_encode(array('status' => '10', 'data' => NULL));
+            echo json_encode(array('status' => '12', 'data' => NULL));
             exit;
         }
     }

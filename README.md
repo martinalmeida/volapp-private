@@ -18,6 +18,8 @@ status->4 == Archivo Dañado <br>
 status->5 == falta el Archivo <br>
 status->6 == Error de validacion Archivos <br>
 status->7 == Usuario no tiene permisos ni modulos asignados <br>
-status->8 == Falla la ejecucion del metodo desde el routing <br>
-status->9 == Metodo no admitidod por el routing <br>
-status->10 == No es una peticion httprequest
+status->8 == Usuario inactivo <br>
+status->9 == Empresa inactiva <br>
+status->10 == Falla la ejecucion del metodo desde el routing <br>
+status->11 == Metodo no admitidod por el routing <br>
+status->12 == No es una peticion httprequest
