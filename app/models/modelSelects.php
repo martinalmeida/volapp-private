@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+include(MODELS . 'modelSesion.php');
+
 class Select
 {
     // --Parametros Privados--
@@ -12,6 +14,7 @@ class Select
     private $tableRuta = "rutas";
     private $tableMaterial = "materiales";
     private $tableContrato = "contratos";
+    private $tableTpvehiculo = "contratos";
 
 
     // --Constructor para la conexion de la BD--
@@ -191,6 +194,39 @@ class Select
     }
 
     public function selectContrato(): void
+    {
+        // --Preparamos la consulta--
+        $query = "SELECT * FROM $this->tableContrato WHERE status = 1 ORDER BY nombre ASC ;";
+        $stmt = $this->conn->prepare($query);
+
+        // -- ↓↓ Preparamos arreglo de modulos ↓↓ --
+        $selctHtml = array();
+
+        // --Ejecutamos la consulta y validamos ejecucion--
+        if ($stmt->execute()) {
+
+            // --Comprobamos que venga algun dato--
+            if ($stmt->rowCount() >= 1) {
+
+                $data = $stmt->fetchAll();
+                foreach ($data as $row) {
+                    $selctHtml[] = array(
+                        "html" => '<option value="' . $row["id"] . '">' . $row["nombre"] . '</option>',
+                    );
+                }
+                // --Retornamos las respuestas--
+                echo json_encode(array('status' => '1', 'data' => $selctHtml));
+            } else {
+                // --Modulos no encontrado o inactivo--
+                echo json_encode(array('status' => '3', 'data' => NULL));
+            }
+        } else {
+            // --Falla en la ejecución de la consulta--
+            echo json_encode(array('status' => '0', 'data' => NULL));
+        }
+    }
+
+    public function selectVehiculoTipo(): void
     {
         // --Preparamos la consulta--
         $query = "SELECT * FROM $this->tableContrato WHERE status = 1 ORDER BY nombre ASC ;";

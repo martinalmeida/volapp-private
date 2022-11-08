@@ -255,7 +255,7 @@ class Placa
     public function dataPlaca(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT id, placa, nombresConductor, Apaterno, Amaterno, telefono, email FROM $this->tableName WHERE id=? ;";
+        $query = "SELECT id, placa, nombresConductor, Apaterno, Amaterno, telefono, email, content_type, base_64 FROM $this->tableName WHERE id=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Almacenamos los valores--
@@ -277,7 +277,9 @@ class Placa
                     'Apaterno' => $data->Apaterno,
                     'Amaterno' => $data->Amaterno,
                     'telefono' => $data->telefono,
-                    'email' => $data->email
+                    'email' => $data->email,
+                    'contenType' => $data->content_type,
+                    'base64' => $data->base_64
                 );
                 // --Retornamos las respuestas--
                 echo json_encode(array('status' => '1', 'data' => $datos));

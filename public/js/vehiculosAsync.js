@@ -129,6 +129,83 @@ function writePermisos() {
   });
 }
 
+function selects() {
+  $.ajax({
+    dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
+    url: urlBase + "routes/selects/getTpVehiculo", //url a donde hacemos la peticion
+    type: "GET",
+    beforeSend: function () {
+      // $(".overlayCargue").fadeIn("slow");
+    },
+    success: function (result) {
+      var estado = result.status;
+      switch (estado) {
+        case "0":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error en el servidor</strong>",
+            html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        case "1":
+          var html = "";
+
+          html +=
+            '<option value="" disabled selected hidden>Seleccione la Sucursal</option>';
+          for (let i = 0; i < result.data.length; i++) {
+            html += result.data[i].html;
+          }
+
+          $("#sucursal").html(html);
+          break;
+
+        case "2":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error de Validacón</strong>",
+            html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        default:
+          break;
+      }
+    },
+    complete: function () {
+      // setTimeout(() => {
+      //   $(".overlayCargue").fadeOut("slow");
+      // }, 1000);
+    },
+    error: function (xhr) {
+      console.log(xhr);
+      Swal.fire({
+        icon: "error",
+        title: "<strong>Error!</strong>",
+        html: "<h5>Se ha presentado un error, por favor informar al area de Sistemas.</h5>",
+        showCloseButton: true,
+        showConfirmButton: false,
+        cancelButtonText: "Cerrar",
+        cancelButtonColor: "#dc3545",
+        showCancelButton: true,
+        backdrop: true,
+      });
+    },
+  });
+}
+
 function registrar(form) {
   $("#alertaForm").html("");
   var respuestavalidacion = validarcampos("#" + form);
@@ -319,11 +396,13 @@ function editarRegistro(id) {
           $("#email").val(result.data.email);
 
           html +=
-            '<a src="data: ' +
+            '<button type="button" class="btn btn-outline-danger" onclick="visualizarPDF(' +
+            "'" +
             result.data.contenType +
-            ";base64," +
+            "', '" +
             result.data.base64 +
-            '"></a>' +
+            "'" +
+            ');" >Ver Documentación del Vehiculo <i class="fal fa-file-pdf"></i></button>' +
             '<input type="hidden" id="idUser" name="idUser" value="' +
             result.data.id +
             '">' +
@@ -384,6 +463,26 @@ function editarRegistro(id) {
       });
     },
   });
+}
+
+function visualizarPDF(content, base) {
+  var base64 = base;
+  const blob = base64ToBlob(base64, content);
+  const url = URL.createObjectURL(blob);
+  const pdfWindow = window.open("");
+  pdfWindow.document.write(
+    "<iframe width='100%' height='100%' src='" + url + "'></iframe>"
+  );
+
+  function base64ToBlob(base64, type = "application/octet-stream") {
+    const binStr = atob(base64);
+    const len = binStr.length;
+    const arr = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      arr[i] = binStr.charCodeAt(i);
+    }
+    return new Blob([arr], { type: type });
+  }
 }
 
 function statusRegistro(id, status) {

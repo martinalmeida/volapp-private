@@ -75,4 +75,15 @@ class selectsController
 
         $select->selectContrato();
     }
+
+    public function getTpVehiculo(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $select = new Select($db);
+
+        $select->selectVehiculoTipo();
+    }
 }

@@ -32,7 +32,7 @@
                             <label class="form-label" for="Amaterno">Apellido Materno</label>
                             <input type="text" onKeyPress="if(this.value.length==30)return false;" class="form-control" id="Amaterno" name="Amaterno" placeholder="Apellidos maternos" required>
                         </div> -->
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-3 mb-3">
                             <label class="form-label" for="telefono">Telefono</label>
                             <input type="number" onKeyPress="if(this.value.length==10)return false;" class="form-control" id="telefono" name="telefono" placeholder="Numero Telefonico" required>
                         </div>
@@ -40,41 +40,47 @@
                             <label class="form-label" for="email">Correo Electronico</label>
                             <input type="email" onKeyPress="if(this.value.length==100)return false;" class="form-control" id="email" name="email" placeholder="Correo electronico" required>
                         </div>
-                    </div>
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="fechaSoat" name="fechaSoat" placeholder="Fecha de vencimiento del SOAT" data-inputmask="'mask': '99/99/9999'" im-insert="true">
-                        <div class="input-group-append">
-                            <span class="input-group-text fs-xl">
-                                <i class="fal fa-calendar-check"></i>
-                            </span>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Tipo de Vehiculo</label>
+                            <select class="custom-select form-control" id="tpVehiculo" name="tpVehiculo">
+                            </select>
                         </div>
-                    </div>
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="fechaLicencia" name="fechaLicencia" placeholder="Fecha de vencimiento de Licencia" data-inputmask="'mask': '99/99/9999'" im-insert="true">
-                        <div class="input-group-append">
-                            <span class="input-group-text fs-xl">
-                                <i class="fal fa-calendar-check"></i>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="fecchaTdr" name="fecchaTdr" placeholder="Fecha de vencimiento del Seguro Todo Riesgo" data-inputmask="'mask': '99/99/9999'" im-insert="true">
-                        <div class="input-group-append">
-                            <span class="input-group-text fs-xl">
-                                <i class="fal fa-calendar-check"></i>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div id="archivoBase64"></div>
-                        <label class="form-label" for="archivo">Documentación del Vehiculo</label>
-                        <div class="input-group">
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="archivo" name="archivo" accept=".pdf" required>
-                                <label class="custom-file-label" for="archivo">Adjuntar Archido de Documentacón</label>
+
+                        <div class="input-group col-md-4 mb-3">
+                            <input type="text" class="form-control" id="fechaSoat" name="fechaSoat" placeholder="Fecha de vencimiento del SOAT" data-inputmask="'mask': '99/99/9999'" im-insert="true">
+                            <div class="input-group-append">
+                                <span class="input-group-text fs-xl">
+                                    <i class="fal fa-calendar-check"></i>
+                                </span>
                             </div>
                         </div>
-                        <span class="help-block">Archivo de documentación formato pdf.</span>
+                        <div class="input-group col-md-4 mb-3">
+                            <input type="text" class="form-control" id="fechaLicencia" name="fechaLicencia" placeholder="Fecha de vencimiento de Licencia" data-inputmask="'mask': '99/99/9999'" im-insert="true">
+                            <div class="input-group-append">
+                                <span class="input-group-text fs-xl">
+                                    <i class="fal fa-calendar-check"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="input-group col-md-4 mb-3">
+                            <input type="text" class="form-control" id="fecchaTdr" name="fecchaTdr" placeholder="Fecha de vencimiento del Seguro Todo Riesgo" data-inputmask="'mask': '99/99/9999'" im-insert="true">
+                            <div class="input-group-append">
+                                <span class="input-group-text fs-xl">
+                                    <i class="fal fa-calendar-check"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div id="archivoBase64"></div>
+                            <label class="form-label" for="archivo">Documentación del Vehiculo</label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="archivo" name="archivo" accept=".pdf" required>
+                                    <label class="custom-file-label" for="archivo">Adjuntar Archido de Documentacón</label>
+                                </div>
+                            </div>
+                            <span class="help-block">Archivo de documentación formato pdf.</span>
+                        </div>
                     </div>
 
                 </form>

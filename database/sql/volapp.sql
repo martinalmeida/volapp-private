@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 04-11-2022 a las 00:36:00
--- Versión del servidor: 10.4.25-MariaDB
--- Versión de PHP: 8.1.10
+-- Tiempo de generación: 08-11-2022 a las 15:52:01
+-- Versión del servidor: 10.4.24-MariaDB
+-- Versión de PHP: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -389,6 +389,29 @@ INSERT INTO `sucursal` (`id`, `descripcion`, `direccion`, `telefono`, `email`, `
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `tipo_vehiculo`
+--
+
+CREATE TABLE `tipo_vehiculo` (
+  `id` bigint(20) NOT NULL,
+  `tipo` varchar(30) COLLATE utf8mb4_spanish_ci NOT NULL,
+  `descripcion` text COLLATE utf8mb4_spanish_ci DEFAULT NULL,
+  `idUsuario` bigint(20) DEFAULT NULL,
+  `nit` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `tipo_vehiculo`
+--
+
+INSERT INTO `tipo_vehiculo` (`id`, `tipo`, `descripcion`, `idUsuario`, `nit`) VALUES
+(1, 'DOBLE TROQUE', NULL, NULL, 0),
+(2, 'VOLQUETA', NULL, NULL, 0),
+(3, 'TRACTOMULA', NULL, NULL, 0);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `usuarios`
 --
 
@@ -556,6 +579,14 @@ ALTER TABLE `sucursal`
   ADD KEY `nit` (`nit`);
 
 --
+-- Indices de la tabla `tipo_vehiculo`
+--
+ALTER TABLE `tipo_vehiculo`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idUsuario` (`idUsuario`),
+  ADD KEY `nit` (`nit`);
+
+--
 -- Indices de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
@@ -646,6 +677,12 @@ ALTER TABLE `status`
 --
 ALTER TABLE `sucursal`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT de la tabla `tipo_vehiculo`
+--
+ALTER TABLE `tipo_vehiculo`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
