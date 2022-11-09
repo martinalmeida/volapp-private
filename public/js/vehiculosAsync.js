@@ -32,7 +32,7 @@ $(document).ready(function () {
     serverSide: true,
     responsive: true,
     lengthChange: false,
-    pageLength: 30,
+    pageLength: 10,
     ajax: {
       type: "POST",
       url: urlBase + "routes/vehiculos/readAllDaTable",
@@ -65,10 +65,12 @@ $(document).ready(function () {
       { data: "id" },
       { data: "placa" },
       { data: "nombresConductor" },
-      { data: "Apaterno" },
-      { data: "Amaterno" },
       { data: "telefono" },
       { data: "email" },
+      { data: "tipo" },
+      { data: "fechaSoat" },
+      { data: "fechaLicencia" },
+      { data: "fecchaTdr" },
       { data: "status" },
       { data: "defaultContent" },
     ],
@@ -90,6 +92,7 @@ $(document).ready(function () {
   readPermisos();
   writePermisos();
   runDatePicker();
+  selects();
   $(":input").inputmask();
 });
 
@@ -158,26 +161,21 @@ function selects() {
           var html = "";
 
           html +=
-            '<option value="" disabled selected hidden>Seleccione la Sucursal</option>';
+            '<option value="" disabled selected hidden>Seleccione tipo de Vehiculo</option>';
           for (let i = 0; i < result.data.length; i++) {
             html += result.data[i].html;
           }
 
-          $("#sucursal").html(html);
+          $("#tpVehiculo").html(html);
           break;
 
-        case "2":
-          Swal.fire({
-            icon: "error",
-            title: "<strong>Error de Validacón</strong>",
-            html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
-            showCloseButton: true,
-            showConfirmButton: false,
-            cancelButtonText: "Cerrar",
-            cancelButtonColor: "#dc3545",
-            showCancelButton: true,
-            backdrop: true,
-          });
+        case "3":
+          var html = "";
+
+          html =
+            '<option value="" disabled selected hidden>No hay tipos de Vehiculos</option>';
+
+          $("#tpVehiculo").html(html);
           break;
 
         default:
@@ -358,6 +356,7 @@ function registrar(form) {
 }
 
 function editarRegistro(id) {
+  reset();
   $("#alertaForm").html("");
   $("#archivoBase64").html("");
   edit = true;
@@ -394,6 +393,10 @@ function editarRegistro(id) {
           //$("#Amaterno").val(result.data.Amaterno);
           $("#telefono").val(result.data.telefono);
           $("#email").val(result.data.email);
+          $("#tpVehiculo").val(result.data.tpVehiculo);
+          $("#fechaSoat").val(result.data.fechaSoat);
+          $("#fechaLicencia").val(result.data.fechaLicencia);
+          $("#fecchaTdr").val(result.data.fecchaTdr);
 
           html +=
             '<button type="button" class="btn btn-outline-danger" onclick="visualizarPDF(' +
@@ -403,7 +406,7 @@ function editarRegistro(id) {
             result.data.base64 +
             "'" +
             ');" >Ver Documentación del Vehiculo <i class="fal fa-file-pdf"></i></button>' +
-            '<input type="hidden" id="idUser" name="idUser" value="' +
+            '<input type="hidden" id="idVehiculo" name="idVehiculo" value="' +
             result.data.id +
             '">' +
             '<input type="hidden" id="contenType" name="contenType" value="' +

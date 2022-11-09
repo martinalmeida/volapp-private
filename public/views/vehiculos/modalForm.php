@@ -36,11 +36,11 @@
                             <label class="form-label" for="telefono">Telefono</label>
                             <input type="number" onKeyPress="if(this.value.length==10)return false;" class="form-control" id="telefono" name="telefono" placeholder="Numero Telefonico" required>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-5 mb-3">
                             <label class="form-label" for="email">Correo Electronico</label>
                             <input type="email" onKeyPress="if(this.value.length==100)return false;" class="form-control" id="email" name="email" placeholder="Correo electronico" required>
                         </div>
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label class="form-label">Tipo de Vehiculo</label>
                             <select class="custom-select form-control" id="tpVehiculo" name="tpVehiculo">
                             </select>

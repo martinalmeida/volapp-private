@@ -37,11 +37,13 @@ $view->initializationView();
                             <tr>
                                 <th>id</th>
                                 <th>Placa</th>
-                                <th>Nombres del Conductor</th>
-                                <th>Apellido Paterno</th>
-                                <th>Apellido Materno</th>
+                                <th>Nombre Completo del Conductor</th>
                                 <th>Telefono</th>
                                 <th>Correo Electronico</th>
+                                <th>Tipo Vehiculo</th>
+                                <th>Vencimiento del SOAT</th>
+                                <th>Vencimiento de Licencia</th>
+                                <th>V. Seguro todo Riezgo</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
                             </tr>

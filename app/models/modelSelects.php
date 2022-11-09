@@ -14,7 +14,7 @@ class Select
     private $tableRuta = "rutas";
     private $tableMaterial = "materiales";
     private $tableContrato = "contratos";
-    private $tableTpvehiculo = "contratos";
+    private $tableTpvehiculo = "tipo_vehiculo";
 
 
     // --Constructor para la conexion de la BD--
@@ -229,7 +229,7 @@ class Select
     public function selectVehiculoTipo(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT * FROM $this->tableContrato WHERE status = 1 ORDER BY nombre ASC ;";
+        $query = "SELECT * FROM $this->tableTpvehiculo ORDER BY tipo ASC ;";
         $stmt = $this->conn->prepare($query);
 
         // -- ↓↓ Preparamos arreglo de modulos ↓↓ --
@@ -244,7 +244,7 @@ class Select
                 $data = $stmt->fetchAll();
                 foreach ($data as $row) {
                     $selctHtml[] = array(
-                        "html" => '<option value="' . $row["id"] . '">' . $row["nombre"] . '</option>',
+                        "html" => '<option value="' . $row["id"] . '">' . $row["tipo"] . '</option>',
                     );
                 }
                 // --Retornamos las respuestas--

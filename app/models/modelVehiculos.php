@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 include(MODELS . 'modelSesion.php');
 
-class Placa
+class Vehiculo
 {
     // --Parametros Privados--
     private $conn;
     private $tableName = "vehiculos";
+    private $tableTpvehiculo = "tipo_vehiculo";
     private $nit;
 
     // --Parametros Publicos--
@@ -19,6 +20,7 @@ class Placa
     public $Amaterno;
     public $telefono;
     public $email;
+    public $tpVehiculo;
     public $fechaSoat;
     public $fechaLicencia;
     public $fecchaTdr;
@@ -92,7 +94,7 @@ class Placa
     {
         // --Preparamos la consulta--
         $query = "INSERT INTO $this->tableName SET 
-                  placa=?, nombresConductor=?, telefono=?, email=?, fechaSoat=?, fechaLicencia=?, fecchaTdr=?, content_type=?, base_64=?, nit=? ;";
+                  placa=?, nombresConductor=?, telefono=?, email=?, fechaSoat=?, fechaLicencia=?, fecchaTdr=?, content_type=?, base_64=?, tp_vehiculoId=?, nit=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
@@ -107,6 +109,7 @@ class Placa
         $this->fecchaTdr = htmlspecialchars(strip_tags($this->fecchaTdr));
         $this->contenType = htmlspecialchars(strip_tags($this->contenType));
         $this->base64 = htmlspecialchars(strip_tags($this->base64));
+        $this->tpVehiculo = htmlspecialchars(strip_tags($this->tpVehiculo));
         $this->nit = $_SESSION['nit'];
 
         // --Almacenamos los valores--
@@ -121,7 +124,8 @@ class Placa
         $stmt->bindParam(7, $this->fecchaTdr);
         $stmt->bindParam(8, $this->contenType);
         $stmt->bindParam(9, $this->base64);
-        $stmt->bindParam(10, $this->nit);
+        $stmt->bindParam(10, $this->tpVehiculo);
+        $stmt->bindParam(11, $this->nit);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
@@ -151,37 +155,41 @@ class Placa
         // --Search--
         $searchQuery = " ";
         if ($searchValue != '') {
-            $searchQuery = " AND (id LIKE :id OR 
-                            placa LIKE :placa OR
-                            nombresConductor LIKE :nombresConductor OR
-                            Apaterno LIKE :Apaterno OR
-                            Amaterno LIKE :Amaterno OR
-                            telefono LIKE :telefono OR
-                            email LIKE :email OR
-                            status LIKE :status )";
+            $searchQuery = " AND (v.id LIKE :id OR
+                            v.placa LIKE :placa OR
+                            v.nombresConductor LIKE :nombresConductor OR
+                            v.telefono LIKE :telefono OR
+                            v.email LIKE :email OR
+                            t.tipo LIKE :tipo OR
+                            v.fechaSoat LIKE :fechaSoat OR
+                            v.fechaLicencia LIKE :fechaLicencia OR
+                            v.fecchaTdr LIKE :fecchaTdr OR
+                            v.status LIKE :status )";
             $searchArray = array(
                 'id' => "%$searchValue%",
                 'placa' => "%$searchValue%",
                 'nombresConductor' => "%$searchValue%",
-                'Apaterno' => "%$searchValue%",
-                'Amaterno' => "%$searchValue%",
                 'telefono' => "%$searchValue%",
                 'email' => "%$searchValue%",
+                'tipo' => "%$searchValue%",
+                'fechaSoat' => "%$searchValue%",
+                'fechaLicencia' => "%$searchValue%",
+                'fecchaTdr' => "%$searchValue%",
                 'status' => "%$searchValue%"
             );
         }
         // --Total number of records without filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . "");
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " v JOIN " . $this->tableTpvehiculo . " t ON v.tp_vehiculoId = t.id ");
         $stmt->execute();
         $records = $stmt->fetch();
         $totalRecords = $records['allcount'];
         // --Total number of records with filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " WHERE 1 " . $searchQuery . "");
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " v JOIN " . $this->tableTpvehiculo . " t ON v.tp_vehiculoId = t.id  WHERE 1 " . $searchQuery . "");
         $stmt->execute($searchArray);
         $records = $stmt->fetch();
         $totalRecordwithFilter = $records['allcount'];
         // --Fetch records--
-        $stmt = $this->conn->prepare("SELECT id, placa, nombresConductor, Apaterno, Amaterno, telefono, email, status FROM " . $this->tableName . " WHERE 1 " . $searchQuery . " AND status in(1, 2) ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
+        $stmt = $this->conn->prepare("SELECT v.id, v.placa, v.nombresConductor, v.telefono, v.email, t.tipo, v.fechaSoat, v.fechaLicencia, v.fecchaTdr, v.content_type, v.base_64, v.status FROM " . $this->tableName . " v JOIN " . $this->tableTpvehiculo . " t ON v.tp_vehiculoId = t.id  WHERE 1 " . $searchQuery . " AND v.status in(1, 2) ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
         // --Bind values--
         foreach ($searchArray as $key => $search) {
             $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
@@ -197,6 +205,9 @@ class Placa
 
             $botones = "<div class='btn-group'>";
             if ($datos->u === 1) {
+                $botones .= '<button type="button" class="btn btn-outline-danger" data-toggle="tooltip" data-placement="top" title="Ver PDF" onclick="visualizarPDF(';
+                $botones .= "'" . $row['content_type'] . "', '" . $row['base_64'] . "'); ";
+                $botones .= '"><i class="fal fa-file-pdf"></i></button>';
                 $botones .= "<button type='button' class='btn btn-success text-white' data-toggle='tooltip' data-placement='top' title='Editar Rol' onclick='editarRegistro(" . $row['id'] . ");'>";
                 $botones .= "<i class='fal fa-edit'></i></button>";
                 $botones .= "<button type='button' class='btn btn-" . $statusColor . " text-white' data-toggle='tooltip' data-placement='top' title='Estado del Rol' onclick='statusRegistro(" . $row['id'] . ", " . $row['status'] . ");'>";
@@ -212,10 +223,12 @@ class Placa
                 "id" => $row['id'],
                 "placa" => $row['placa'],
                 "nombresConductor" => $row['nombresConductor'],
-                "Apaterno" => $row['Apaterno'],
-                "Amaterno" => $row['Amaterno'],
                 "telefono" => $row['telefono'],
                 "email" => $row['email'],
+                "tipo" => $row['tipo'],
+                "fechaSoat" => $row['fechaSoat'],
+                "fechaLicencia" => $row['fechaLicencia'],
+                "fecchaTdr" => $row['fecchaTdr'],
                 "status" => $estado,
                 "defaultContent" => "$botones"
             );
@@ -255,7 +268,7 @@ class Placa
     public function dataPlaca(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT id, placa, nombresConductor, Apaterno, Amaterno, telefono, email, content_type, base_64 FROM $this->tableName WHERE id=? ;";
+        $query = "SELECT id, placa, nombresConductor, Apaterno, Amaterno, telefono, email, fechaSoat, fechaLicencia, fecchaTdr, content_type, base_64, tp_vehiculoId FROM $this->tableName WHERE id=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Almacenamos los valores--
@@ -278,8 +291,12 @@ class Placa
                     'Amaterno' => $data->Amaterno,
                     'telefono' => $data->telefono,
                     'email' => $data->email,
+                    'fechaSoat' => $data->fechaSoat,
+                    'fechaLicencia' => $data->fechaLicencia,
+                    'fecchaTdr' => $data->fecchaTdr,
                     'contenType' => $data->content_type,
-                    'base64' => $data->base_64
+                    'base64' => $data->base_64,
+                    'tpVehiculo' => $data->tp_vehiculoId
                 );
                 // --Retornamos las respuestas--
                 echo json_encode(array('status' => '1', 'data' => $datos));
@@ -298,7 +315,7 @@ class Placa
     {
         // --Preparamos la consulta--
         $query = "UPDATE $this->tableName SET 
-                  placa=?, nombresConductor=?, telefono=?, email=?, fechaSoat=?, fechaLicencia=?, fecchaTdr=?, content_type=?, base_64=?, nit=? 
+                  placa=?, nombresConductor=?, telefono=?, email=?, fechaSoat=?, fechaLicencia=?, fecchaTdr=?, content_type=?, base_64=?, tp_vehiculoId=?, nit=? 
                   WHERE id=?";
         $stmt = $this->conn->prepare($query);
 
@@ -314,6 +331,7 @@ class Placa
         $this->fecchaTdr = htmlspecialchars(strip_tags($this->fecchaTdr));
         $this->contenType = htmlspecialchars(strip_tags($this->contenType));
         $this->base64 = htmlspecialchars(strip_tags($this->base64));
+        $this->tpVehiculo = htmlspecialchars(strip_tags($this->tpVehiculo));
         $this->nit = $_SESSION['nit'];
 
         // --Almacenamos los valores--
@@ -328,8 +346,9 @@ class Placa
         $stmt->bindParam(7, $this->fecchaTdr);
         $stmt->bindParam(8, $this->contenType);
         $stmt->bindParam(9, $this->base64);
-        $stmt->bindParam(10, $this->nit);
-        $stmt->bindParam(11, $this->id);
+        $stmt->bindParam(11, $this->tpVehiculo);
+        $stmt->bindParam(12, $this->nit);
+        $stmt->bindParam(13, $this->id);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
