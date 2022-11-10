@@ -1,26 +1,10 @@
 let edit = null;
 var peticion = null;
-var tablaContratos = "";
-var controls = {
-  leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',
-  rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>',
-};
-var runDatePicker = function () {
-  $("#fechaInicio").datepicker({
-    orientation: "buttom left",
-    todayHighlight: true,
-    templates: controls,
-  });
-  $("#fechaFin").datepicker({
-    orientation: "buttom left",
-    todayHighlight: true,
-    templates: controls,
-  });
-};
+var tablaSocios = "";
 
 $(document).ready(function () {
-  /* ---------  START Serverside Tabla ( tablaContratos ) ----------- */
-  tablaContratos = $("#tablaContratos").DataTable({
+  /* ---------  START Serverside Tabla ( tablaSocios ) ----------- */
+  tablaSocios = $("#tablaSocios").DataTable({
     processing: true,
     orderClasses: true,
     deferRender: true,
@@ -30,7 +14,7 @@ $(document).ready(function () {
     pageLength: 30,
     ajax: {
       type: "POST",
-      url: urlBase + "routes/contratos/readAllDaTable",
+      url: urlBase + "routes/socios/readAllDaTable",
     },
     dom:
       "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
@@ -58,12 +42,10 @@ $(document).ready(function () {
     ],
     columns: [
       { data: "id" },
-      { data: "fechaInicio" },
-      { data: "fechaFin" },
-      { data: "titulo" },
-      { data: "representante" },
-      { data: "telefono" },
-      { data: "email" },
+      { data: "ruta" },
+      { data: "placa" },
+      { data: "kilometraje" },
+      { data: "tarifa" },
       { data: "status" },
       { data: "defaultContent" },
     ],
@@ -84,14 +66,13 @@ $(document).ready(function () {
   });
   readPermisos();
   writePermisos();
-  runDatePicker();
-  $(":input").inputmask();
+  selects();
 });
 
 function readPermisos() {
   $.ajax({
     dataType: "json",
-    url: urlBase + "routes/contratos/read",
+    url: urlBase + "routes/socios/read",
     type: "GET",
     beforeSend: function () {},
     success: function (result) {
@@ -111,7 +92,7 @@ function readPermisos() {
 function writePermisos() {
   $.ajax({
     dataType: "json",
-    url: urlBase + "routes/contratos/write",
+    url: urlBase + "routes/socios/write",
     type: "GET",
     beforeSend: function () {},
     success: function (result) {
@@ -124,16 +105,167 @@ function writePermisos() {
   });
 }
 
+function selects() {
+  $.ajax({
+    dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
+    url: urlBase + "routes/selects/getVehiculo", //url a donde hacemos la peticion
+    type: "GET",
+    beforeSend: function () {
+      // $(".overlayCargue").fadeIn("slow");
+    },
+    success: function (result) {
+      var estado = result.status;
+      switch (estado) {
+        case "0":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error en el servidor</strong>",
+            html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        case "1":
+          var html = "";
+
+          html +=
+            '<option value="" disabled selected hidden>Seleccione el Vehiculo</option>';
+          for (let i = 0; i < result.data.length; i++) {
+            html += result.data[i].html;
+          }
+
+          $("#vehiculo").html(html);
+          break;
+
+        case "2":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error de Validacón</strong>",
+            html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        default:
+          break;
+      }
+    },
+    complete: function () {
+      // setTimeout(() => {
+      //   $(".overlayCargue").fadeOut("slow");
+      // }, 1000);
+    },
+    error: function (xhr) {
+      console.log(xhr);
+      Swal.fire({
+        icon: "error",
+        title: "<strong>Error!</strong>",
+        html: "<h5>Se ha presentado un error, por favor informar al area de Sistemas.</h5>",
+        showCloseButton: true,
+        showConfirmButton: false,
+        cancelButtonText: "Cerrar",
+        cancelButtonColor: "#dc3545",
+        showCancelButton: true,
+        backdrop: true,
+      });
+    },
+  });
+  $.ajax({
+    dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
+    url: urlBase + "routes/selects/getRuta", //url a donde hacemos la peticion
+    type: "GET",
+    beforeSend: function () {
+      // $(".overlayCargue").fadeIn("slow");
+    },
+    success: function (result) {
+      var estado = result.status;
+      switch (estado) {
+        case "0":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error en el servidor</strong>",
+            html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        case "1":
+          var html = "";
+
+          html +=
+            '<option value="" disabled selected hidden>Seleccione la ruta</option>';
+          for (let i = 0; i < result.data.length; i++) {
+            html += result.data[i].html;
+          }
+
+          $("#ruta").html(html);
+          break;
+
+        case "2":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error de Validacón</strong>",
+            html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        default:
+          break;
+      }
+    },
+    complete: function () {
+      // setTimeout(() => {
+      //   $(".overlayCargue").fadeOut("slow");
+      // }, 1000);
+    },
+    error: function (xhr) {
+      console.log(xhr);
+      Swal.fire({
+        icon: "error",
+        title: "<strong>Error!</strong>",
+        html: "<h5>Se ha presentado un error, por favor informar al area de Sistemas.</h5>",
+        showCloseButton: true,
+        showConfirmButton: false,
+        cancelButtonText: "Cerrar",
+        cancelButtonColor: "#dc3545",
+        showCancelButton: true,
+        backdrop: true,
+      });
+    },
+  });
+}
+
 function registrar(form) {
   $("#alertaForm").html("");
   var respuestavalidacion = validarcampos("#" + form);
   if (respuestavalidacion) {
     var formData = new FormData(document.getElementById(form));
     if (edit == true) {
-      peticion = urlBase + "routes/contratos/update";
+      peticion = urlBase + "routes/socios/update";
     } else if (edit == false) {
       $("#archivoBase64").html("");
-      peticion = urlBase + "routes/contratos/create";
+      peticion = urlBase + "routes/socios/create";
     } else if (edit == null) {
       return false;
     }
@@ -176,8 +308,8 @@ function registrar(form) {
             if (edit == false) {
               Swal.fire({
                 icon: "success",
-                title: "<strong>Contrato Creado</strong>",
-                html: "<h5>El contrato se ha registrado exitosamente</h5>",
+                title: "<strong>Socio Creado</strong>",
+                html: "<h5>El socio se ha registrado exitosamente</h5>",
                 showCloseButton: false,
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#64a19d",
@@ -186,8 +318,8 @@ function registrar(form) {
             } else {
               Swal.fire({
                 icon: "success",
-                title: "<strong>Contrato Editado</strong>",
-                html: "<h5>El contrato se ha editado exitosamente</h5>",
+                title: "<strong>Socio Editado</strong>",
+                html: "<h5>El socio se ha editado exitosamente</h5>",
                 showCloseButton: false,
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#64a19d",
@@ -195,7 +327,7 @@ function registrar(form) {
               });
             }
             $("#ModalRegistro").modal("hide");
-            tablaContratos.clear().draw();
+            tablaSocios.clear().draw();
             reset();
             break;
 
@@ -209,48 +341,6 @@ function registrar(form) {
               "Cerrar</button></div></div>";
 
             $("#alertaForm").html(html);
-            break;
-
-          case "4":
-            Swal.fire({
-              icon: "warning",
-              title: "<strong>Archivo Dañado</strong>",
-              html: "<h5>El archivo esta corrupto.</h5>",
-              showCloseButton: true,
-              showConfirmButton: false,
-              cancelButtonText: "Cerrar",
-              cancelButtonColor: "#dc3545",
-              showCancelButton: true,
-              backdrop: true,
-            });
-            $("#ModalRegistro").modal("hide");
-            break;
-
-          case "5":
-            html +=
-              '<div class="alert border-warning bg-transparent text-info fade show" role="alert">' +
-              '<div class="d-flex align-items-center"><div class="alert-icon text-warning">' +
-              '<i class="fal fa-exclamation-triangle"></i></div>' +
-              '<div class="flex-1 text-warning"><span class="h5 m-0 fw-700">Adjunte el Archivo de Documentación del Contrato </span></div>' +
-              '<button type="button" class="btn btn-warning btn-pills btn-sm btn-w-m waves-effect waves-themed" data-dismiss="alert" aria-label="Close">' +
-              "Cerrar</button></div></div>";
-
-            $("#archivoBase64").html(html);
-            break;
-
-          case "6":
-            Swal.fire({
-              icon: "error",
-              title: "<strong>Tamaño excesivo de Archivo</strong>",
-              html: "<h5>Adjunta un archivo de menor tamaño, el peso maximo es de 10MB.</h5>",
-              showCloseButton: true,
-              showConfirmButton: false,
-              cancelButtonText: "Cerrar",
-              cancelButtonColor: "#dc3545",
-              showCancelButton: true,
-              backdrop: true,
-            });
-            $("#ModalRegistro").modal("hide");
             break;
 
           default:
@@ -279,13 +369,11 @@ function registrar(form) {
 
 function editarRegistro(id) {
   $("#alertaForm").html("");
-  $("#archivoBase64").html("");
-  $(':input[type="file"]').val("");
   edit = true;
   $.ajax({
-    data: { idContrato: id }, //datos a enviar a la url
+    data: { idSocio: id }, //datos a enviar a la url
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-    url: urlBase + "routes/contratos/getData", //url a donde hacemos la peticion
+    url: urlBase + "routes/socios/getData", //url a donde hacemos la peticion
     type: "POST",
     beforeSend: function () {
       // $(".overlayCargue").fadeIn("slow");
@@ -309,34 +397,19 @@ function editarRegistro(id) {
           break;
 
         case "1":
-          $("#fechaInicio").val(result.data.fechaInicio);
-          $("#fechaFin").val(result.data.fechaFin);
-          $("#titulo").val(result.data.titulo);
-          $("#representante").val(result.data.representante);
-          $("#telefono").val(result.data.telefono);
-          $("#email").val(result.data.email);
+          $("#vehiculo").val(result.data.idVehiculo);
+          $("#ruta").val(result.data.idRuta);
+          $("#kilometraje").val(result.data.kilometraje);
+          $("#tarifa").val(result.data.tarifa);
 
           html +=
-            '<button type="button" class="btn btn-outline-danger" onclick="visualizarPDF(' +
-            "'" +
-            result.data.contenType +
-            "', '" +
-            result.data.base64 +
-            "'" +
-            ');" >Ver Documentación del Vehiculo <i class="fal fa-file-pdf"></i></button>' +
-            '<input type="hidden" id="idContrato" name="idContrato" value="' +
+            '<input type="hidden" id="idSocio" name="idSocio" value="' +
             result.data.id +
-            '">' +
-            '<input type="hidden" id="contenType" name="contenType" value="' +
-            result.data.contenType +
-            '">' +
-            '<input type="hidden" id="base64" name="base64" value="' +
-            result.data.base64 +
             '">';
 
-          $("#archivoBase64").html(html);
+          $("#inputsEditar").html(html);
 
-          $("#btnRegistro").text("Editar Contrato");
+          $("#btnRegistro").text("Editar Socio");
           $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
           $("#btnRegistro").removeClass("btn btn-info");
           $("#btnRegistro").addClass("btn btn-success");
@@ -386,34 +459,14 @@ function editarRegistro(id) {
   });
 }
 
-function visualizarPDF(content, base) {
-  var base64 = base;
-  const blob = base64ToBlob(base64, content);
-  const url = URL.createObjectURL(blob);
-  const pdfWindow = window.open("");
-  pdfWindow.document.write(
-    "<iframe width='100%' height='100%' src='" + url + "'></iframe>"
-  );
-
-  function base64ToBlob(base64, type = "application/octet-stream") {
-    const binStr = atob(base64);
-    const len = binStr.length;
-    const arr = new Uint8Array(len);
-    for (let i = 0; i < len; i++) {
-      arr[i] = binStr.charCodeAt(i);
-    }
-    return new Blob([arr], { type: type });
-  }
-}
-
 function statusRegistro(id, status) {
   $.ajax({
     data: {
-      idContrato: id,
+      idSocio: id,
       status: status,
     },
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-    url: urlBase + "routes/contratos/status", //url a donde hacemos la peticion
+    url: urlBase + "routes/socios/status", //url a donde hacemos la peticion
     type: "POST",
     beforeSend: function () {
       // $("#overlayText").text("Cerrando Sesión...");
@@ -441,7 +494,7 @@ function statusRegistro(id, status) {
 
         case "1":
           Command: toastr["success"](
-            "Estado del Contrato cambiado exitosamente.",
+            "Estado del socio cambiado exitosamente.",
             "Estado Cambiado"
           );
 
@@ -462,7 +515,7 @@ function statusRegistro(id, status) {
             showMethod: "fadeIn",
             hideMethod: "fadeOut",
           };
-          tablaContratos.clear().draw();
+          tablaSocios.clear().draw();
           break;
 
         case "2":
@@ -512,17 +565,17 @@ function eliminarRegistro(id) {
   Swal.fire({
     icon: "warning",
     title: "Que deseas hacer?",
-    text: "Se eliminara el Contrato del sistema!",
+    text: "Se eliminara el socio del sistema!",
     type: "warning",
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Eliminar Contrato",
+    confirmButtonText: "Eliminar Socio",
     preConfirm: function () {
       $.ajax({
-        data: { idContrato: id },
+        data: { idSocio: id },
         dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-        url: urlBase + "routes/contratos/delete", //url a donde hacemos la peticion
+        url: urlBase + "routes/socios/delete", //url a donde hacemos la peticion
         type: "POST",
         beforeSend: function () {
           // $("#overlayText").text("Cerrando Sesión...");
@@ -550,8 +603,8 @@ function eliminarRegistro(id) {
 
             case "1":
               Command: toastr["success"](
-                "El contrato se ha eliminado satisfactoriamente.",
-                "Contrato Eliminado"
+                "El socio se ha eliminado satisfactoriamente.",
+                "Socio Eliminado"
               );
 
               toastr.options = {
@@ -571,7 +624,7 @@ function eliminarRegistro(id) {
                 showMethod: "fadeIn",
                 hideMethod: "fadeOut",
               };
-              tablaContratos.clear().draw();
+              tablaSocios.clear().draw();
               break;
 
             case "2":
@@ -622,7 +675,7 @@ function eliminarRegistro(id) {
 function showModalRegistro() {
   reset();
   $("#alertaForm").html("");
-  $("#btnRegistro").text("Registrar Contrato");
+  $("#btnRegistro").text("Registrar Socio");
   $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
   $("#ModalRegistro").modal({
     backdrop: "static",
@@ -634,12 +687,10 @@ function showModalRegistro() {
 function reset() {
   vercampos("#frmRegistro", 1);
   limpiarcampos("#frmRegistro");
-  $("#archivoBase64").html("");
   $("#btnRegistro").removeClass("btn btn-success");
   $("#btnRegistro").addClass("btn btn-info");
-  $(':input[type="file"]').val("");
 }
 
 function reajustDatatables() {
-  tablaContratos.columns.adjust().draw();
+  tablaSocios.columns.adjust().draw();
 }

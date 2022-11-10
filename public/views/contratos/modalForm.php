@@ -14,6 +14,7 @@
             </div>
             <div class="modal-body">
                 <form id="frmRegistro">
+                    <div id="alertaForm"></div>
                     <div class="form-row">
                         <div class="input-group col-md-6 mb-3">
                             <input type="text" class="form-control" id="fechaInicio" name="fechaInicio" placeholder="Fecha de inicio del Contrato" data-inputmask="'mask': '99/99/9999'" im-insert="true">

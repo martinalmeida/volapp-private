@@ -92,7 +92,7 @@ class Select
     }
 
     // -- ⊡ Funcion para traer html del select Placa ⊡ --
-    public function selectPlaca(): void
+    public function selectVehiculo(): void
     {
         // --Preparamos la consulta--
         $query = "SELECT * FROM $this->tablePlaca WHERE status = 1 ORDER BY placa ASC ;";
@@ -144,7 +144,7 @@ class Select
                 $data = $stmt->fetchAll();
                 foreach ($data as $row) {
                     $selctHtml[] = array(
-                        "html" => '<option value="' . $row["id"] . '">' . $row["nombre"] . '</option>',
+                        "html" => '<option value="' . $row["id"] . '">' . $row["nombre"] . '  (' . $row["origen"] . ' - ' . $row["destino"] . ' )</option>',
                     );
                 }
                 // --Retornamos las respuestas--
@@ -196,7 +196,7 @@ class Select
     public function selectContrato(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT * FROM $this->tableContrato WHERE status = 1 ORDER BY nombre ASC ;";
+        $query = "SELECT * FROM $this->tableContrato WHERE status = 1 AND nit = " . $_SESSION['nit'] . " ORDER BY titulo ASC ;";
         $stmt = $this->conn->prepare($query);
 
         // -- ↓↓ Preparamos arreglo de modulos ↓↓ --
@@ -211,7 +211,7 @@ class Select
                 $data = $stmt->fetchAll();
                 foreach ($data as $row) {
                     $selctHtml[] = array(
-                        "html" => '<option value="' . $row["id"] . '">' . $row["nombre"] . '</option>',
+                        "html" => '<option value="' . $row["id"] . '">' . $row["titulo"] . '</option>',
                     );
                 }
                 // --Retornamos las respuestas--

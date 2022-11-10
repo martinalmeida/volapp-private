@@ -40,7 +40,7 @@ class selectsController
         $db = $database->getConnection();
         $select = new Select($db);
 
-        $select->selectPlaca();
+        $select->selectVehiculo();
     }
 
     public function getRuta(): void
@@ -85,5 +85,16 @@ class selectsController
         $select = new Select($db);
 
         $select->selectVehiculoTipo();
+    }
+
+    public function getVehiculo(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $select = new Select($db);
+
+        $select->selectVehiculo();
     }
 }

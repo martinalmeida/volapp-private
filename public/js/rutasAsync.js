@@ -1,4 +1,4 @@
-let edit = false;
+let edit = null;
 var peticion = null;
 var tablaRutas = "";
 
@@ -43,7 +43,10 @@ $(document).ready(function () {
     columns: [
       { data: "id" },
       { data: "nombre" },
-      { data: "descripcion" },
+      { data: "origen" },
+      { data: "destino" },
+      { data: "kilometraje" },
+      { data: "tarifa" },
       { data: "status" },
       { data: "defaultContent" },
     ],
@@ -132,7 +135,7 @@ function selects() {
           var html = "";
 
           html +=
-            '<option value="" disabled selected hidden>Seleccione el Contrato</option>';
+            '<option value="" disabled selected hidden>Seleccione el Contrato para esta ruta</option>';
           for (let i = 0; i < result.data.length; i++) {
             html += result.data[i].html;
           }
@@ -181,13 +184,17 @@ function selects() {
 }
 
 function registrar(form) {
+  $("#alertaForm").html("");
   var respuestavalidacion = validarcampos("#" + form);
   if (respuestavalidacion) {
     var formData = new FormData(document.getElementById(form));
     if (edit == true) {
       peticion = urlBase + "routes/rutas/update";
-    } else {
+    } else if (edit == false) {
+      $("#archivoBase64").html("");
       peticion = urlBase + "routes/rutas/create";
+    } else if (edit == null) {
+      return false;
     }
     $.ajax({
       cache: false, //necesario para enviar archivos
@@ -207,6 +214,7 @@ function registrar(form) {
       },
       success: function (result) {
         var estado = result.status;
+        var html = "";
         switch (estado) {
           case "0":
             Swal.fire({
@@ -227,8 +235,8 @@ function registrar(form) {
             if (edit == false) {
               Swal.fire({
                 icon: "success",
-                title: "<strong>Ruta Creada</strong>",
-                html: "<h5>La ruta se ha registrado exitosamente</h5>",
+                title: "<strong>Contrato Creado</strong>",
+                html: "<h5>El contrato se ha registrado exitosamente</h5>",
                 showCloseButton: false,
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#64a19d",
@@ -237,32 +245,29 @@ function registrar(form) {
             } else {
               Swal.fire({
                 icon: "success",
-                title: "<strong>Ruta Editada</strong>",
-                html: "<h5>La ruta se ha editado exitosamente</h5>",
+                title: "<strong>Contrato Editado</strong>",
+                html: "<h5>El contrato se ha editado exitosamente</h5>",
                 showCloseButton: false,
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#64a19d",
                 backdrop: true,
               });
             }
-            reset();
             $("#ModalRegistro").modal("hide");
             tablaRutas.clear().draw();
+            reset();
             break;
 
           case "2":
-            Swal.fire({
-              icon: "error",
-              title: "<strong>Error de Validacón</strong>",
-              html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
-              showCloseButton: true,
-              showConfirmButton: false,
-              cancelButtonText: "Cerrar",
-              cancelButtonColor: "#dc3545",
-              showCancelButton: true,
-              backdrop: true,
-            });
-            $("#ModalRegistro").modal("hide");
+            html +=
+              '<div class="alert border-danger bg-transparent text-info fade show" role="alert">' +
+              '<div class="d-flex align-items-center"><div class="alert-icon text-danger">' +
+              '<i class="fal fa-exclamation-triangle"></i></div>' +
+              '<div class="flex-1 text-danger"><span class="h5 m-0 fw-700">Error de Validación </span></div>' +
+              '<button type="button" class="btn btn-danger btn-pills btn-sm btn-w-m waves-effect waves-themed" data-dismiss="alert" aria-label="Close">' +
+              "Cerrar</button></div></div>";
+
+            $("#alertaForm").html(html);
             break;
 
           default:
@@ -290,7 +295,7 @@ function registrar(form) {
 }
 
 function editarRegistro(id) {
-  $("#inputsEditar").html("");
+  $("#alertaForm").html("");
   edit = true;
   $.ajax({
     data: { idRuta: id }, //datos a enviar a la url
@@ -302,6 +307,7 @@ function editarRegistro(id) {
     },
     success: function (result) {
       var estado = result.status;
+      var html = "";
       switch (estado) {
         case "0":
           Swal.fire({
@@ -318,22 +324,27 @@ function editarRegistro(id) {
           break;
 
         case "1":
-          $("#btnRegistro").text("Editar Ruta");
-          $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
-          $("#btnRegistro").removeClass("btn btn-info");
-          $("#btnRegistro").addClass("btn btn-success");
-
           $("#nombre").val(result.data.nombre);
-          $("#descripcion").val(result.data.descripcion);
+          $("#origen").val(result.data.origen);
+          $("#destino").val(result.data.destino);
+          $("#kilometraje").val(result.data.kilometraje);
+          $("#tarifa").val(result.data.tarifa);
+          $("#contrato").val(result.data.contrato);
 
-          var html = "";
           html +=
             '<input type="hidden" id="idRuta" name="idRuta" value="' +
             result.data.id +
+            '">' +
+            '<input type="hidden" id="idRuC" name="idRuC" value="' +
+            result.data.idRuC +
             '">';
 
           $("#inputsEditar").html(html);
 
+          $("#btnRegistro").text("Editar Contrato");
+          $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
+          $("#btnRegistro").removeClass("btn btn-info");
+          $("#btnRegistro").addClass("btn btn-success");
           $("#ModalRegistro").modal({
             backdrop: "static",
             keyboard: false,
@@ -415,7 +426,7 @@ function statusRegistro(id, status) {
 
         case "1":
           Command: toastr["success"](
-            "Estado de la ruta cambiada exitosamente.",
+            "Estado del Contrato cambiado exitosamente.",
             "Estado Cambiado"
           );
 
@@ -486,12 +497,12 @@ function eliminarRegistro(id) {
   Swal.fire({
     icon: "warning",
     title: "Que deseas hacer?",
-    text: "Se eliminara la ruta del sistema!",
+    text: "Se eliminara el Contrato del sistema!",
     type: "warning",
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Eliminar Material",
+    confirmButtonText: "Eliminar Contrato",
     preConfirm: function () {
       $.ajax({
         data: { idRuta: id },
@@ -524,8 +535,8 @@ function eliminarRegistro(id) {
 
             case "1":
               Command: toastr["success"](
-                "La ruta se ha eliminado satisfactoriamente.",
-                "Ruta Eliminada"
+                "El contrato se ha eliminado satisfactoriamente.",
+                "Contrato Eliminado"
               );
 
               toastr.options = {
@@ -593,34 +604,58 @@ function eliminarRegistro(id) {
   });
 }
 
-function asignarTarifa() {
-  $("#btnRegistroAsignar").text("Asignar Kilometraje");
-  $("#btnRegistroAsignar").addClass("btn btn-primary");
-  $("#btnRegistroAsignar").attr("onclick", "registrar('frmRegistroAsignar');");
-  $("#ModalAsignarTarifa").modal({
-    backdrop: "static",
-    keyboard: false,
-  });
-  $("#inputsEditarAsignar").html("");
-}
-
 function showModalRegistro() {
   reset();
-  $("#btnRegistro").text("Registrar Ruta");
+  $("#alertaForm").html("");
+  $("#btnRegistro").text("Registrar Contrato");
   $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
   $("#ModalRegistro").modal({
     backdrop: "static",
     keyboard: false,
   });
+  edit = false;
 }
 
 function reset() {
-  edit = false;
   vercampos("#frmRegistro", 1);
   limpiarcampos("#frmRegistro");
-  $("#inputsEditar").html("");
   $("#btnRegistro").removeClass("btn btn-success");
   $("#btnRegistro").addClass("btn btn-info");
+}
+
+function filterFloat(evt, input) {
+  // Backspace = 8, Enter = 13, ‘0′ = 48, ‘9′ = 57, ‘.’ = 46, ‘-’ = 43
+  var key = window.Event ? evt.which : evt.keyCode;
+  var chark = String.fromCharCode(key);
+  var tempValue = input.value + chark;
+  if (key >= 48 && key <= 57) {
+    if (filter(tempValue) === false) {
+      return false;
+    } else {
+      return true;
+    }
+  } else {
+    if (key == 8 || key == 13 || key == 0) {
+      return true;
+    } else if (key == 46) {
+      if (filter(tempValue) === false) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
+  }
+}
+
+function filter(__val__) {
+  var preg = /^([0-9]+\.?[0-9]{0,2})$/;
+  if (preg.test(__val__) === true) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function reajustDatatables() {
