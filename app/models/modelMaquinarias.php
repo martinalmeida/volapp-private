@@ -4,24 +4,17 @@ declare(strict_types=1);
 
 include(MODELS . 'modelSesion.php');
 
-class Vehiculo
+class Maquinaria
 {
     // --Parametros Privados--
     private $conn;
-    private $tableName = "vehiculos";
-    private $tableTpvehiculo = "tipo_vehiculo";
+    private $tableName = "maquinarias";
     private $nit;
     private $idUser;
 
     // --Parametros Publicos--
     public $id;
-    public $placa;
-    public $nombresConductor;
-    public $Apaterno;
-    public $Amaterno;
-    public $telefono;
-    public $email;
-    public $tpVehiculo;
+    public $nombre;
     public $fechaSoat;
     public $fechaLicencia;
     public $fecchaTdr;
@@ -75,7 +68,7 @@ class Vehiculo
 
             $html = "";
             $html .= '<h1 class="subheader-title">';
-            $html .= '<i class="fal fa-info-circle"></i> Vehiculos</h1>';
+            $html .= '<i class="fal fa-info-circle"></i> Maquinarias</h1>';
             $html .= '<button type="button" class="btn btn-info active" onclick="showModalRegistro();">Agregar <i class="fal fa-plus-square"></i></button>';
 
             echo json_encode(array('status' => NULL, 'data' => $html));
@@ -83,7 +76,7 @@ class Vehiculo
 
             $html = "";
             $html .= '<h1 class="subheader-title">';
-            $html .= '<i class="fal fa-info-circle"></i> Vehiculos</h1>';
+            $html .= '<i class="fal fa-info-circle"></i> Maquinarias</h1>';
             $html .= '<h3>No tienes permisos de escritura para este modulo.</h3>';
 
             echo json_encode(array('status' => NULL, 'data' => $html));
@@ -91,44 +84,32 @@ class Vehiculo
     }
 
     // -- ⊡ Funcion para crear un rol ⊡ --
-    public function createPlaca(): void
+    public function createMaquinaria(): void
     {
         // --Preparamos la consulta--
         $query = "INSERT INTO $this->tableName SET 
-                  placa=?, nombresConductor=?, telefono=?, email=?, fechaSoat=?, fechaLicencia=?, fecchaTdr=?, content_type=?, base_64=?, tp_vehiculoId=?, idUsuario=?, nit=? ;";
+                  nombre=?, fechaSoat=?, fechaLicencia=?, fecchaTdr=?, content_type=?, base_64=?, idUsuario=?, nit=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
-        $this->placa = htmlspecialchars(strip_tags($this->placa));
-        $this->nombresConductor = htmlspecialchars(strip_tags($this->nombresConductor));
-        // $this->Apaterno = htmlspecialchars(strip_tags($this->Apaterno));
-        // $this->Amaterno = htmlspecialchars(strip_tags($this->Amaterno));
-        $this->telefono = htmlspecialchars(strip_tags($this->telefono));
-        $this->email = htmlspecialchars(strip_tags($this->email));
+        $this->nombre = htmlspecialchars(strip_tags($this->nombre));
         $this->fechaSoat = htmlspecialchars(strip_tags($this->fechaSoat));
         $this->fechaLicencia = htmlspecialchars(strip_tags($this->fechaLicencia));
         $this->fecchaTdr = htmlspecialchars(strip_tags($this->fecchaTdr));
         $this->contenType = htmlspecialchars(strip_tags($this->contenType));
         $this->base64 = htmlspecialchars(strip_tags($this->base64));
-        $this->tpVehiculo = htmlspecialchars(strip_tags($this->tpVehiculo));
         $this->idUser = $_SESSION['id'];
         $this->nit = $_SESSION['nit'];
 
         // --Almacenamos los valores--
-        $stmt->bindParam(1, $this->placa);
-        $stmt->bindParam(2, $this->nombresConductor);
-        // $stmt->bindParam(3, $this->Apaterno);
-        // $stmt->bindParam(4, $this->Amaterno);
-        $stmt->bindParam(3, $this->telefono);
-        $stmt->bindParam(4, $this->email);
-        $stmt->bindParam(5, $this->fechaSoat);
-        $stmt->bindParam(6, $this->fechaLicencia);
-        $stmt->bindParam(7, $this->fecchaTdr);
-        $stmt->bindParam(8, $this->contenType);
-        $stmt->bindParam(9, $this->base64);
-        $stmt->bindParam(10, $this->tpVehiculo);
-        $stmt->bindParam(11, $this->idUser);
-        $stmt->bindParam(12, $this->nit);
+        $stmt->bindParam(1, $this->nombre);
+        $stmt->bindParam(2, $this->fechaSoat);
+        $stmt->bindParam(3, $this->fechaLicencia);
+        $stmt->bindParam(4, $this->fecchaTdr);
+        $stmt->bindParam(5, $this->contenType);
+        $stmt->bindParam(6, $this->base64);
+        $stmt->bindParam(7, $this->idUser);
+        $stmt->bindParam(8, $this->nit);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
@@ -139,7 +120,7 @@ class Vehiculo
     }
 
     // -- ⊡ Funcion para dataTables Serverside ⊡ --
-    public function readAllDaTablePlacas(): void
+    public function readAllDaTableMaquinarias(): void
     {
         $sesion = new Sesion($this->conn);
         $sesion->rol = $_SESSION['rol'];
@@ -158,23 +139,15 @@ class Vehiculo
         // --Search--
         $searchQuery = " ";
         if ($searchValue != '') {
-            $searchQuery = " AND (v.id LIKE :id OR
-                            v.placa LIKE :placa OR
-                            v.nombresConductor LIKE :nombresConductor OR
-                            v.telefono LIKE :telefono OR
-                            v.email LIKE :email OR
-                            t.tipo LIKE :tipo OR
-                            v.fechaSoat LIKE :fechaSoat OR
-                            v.fechaLicencia LIKE :fechaLicencia OR
-                            v.fecchaTdr LIKE :fecchaTdr OR
-                            v.status LIKE :status )";
+            $searchQuery = " AND (id LIKE :id OR
+                            nombre LIKE :nombre OR
+                            fechaSoat LIKE :fechaSoat OR
+                            fechaLicencia LIKE :fechaLicencia OR
+                            fecchaTdr LIKE :fecchaTdr OR
+                            status LIKE :status )";
             $searchArray = array(
                 'id' => "%$searchValue%",
-                'placa' => "%$searchValue%",
-                'nombresConductor' => "%$searchValue%",
-                'telefono' => "%$searchValue%",
-                'email' => "%$searchValue%",
-                'tipo' => "%$searchValue%",
+                'nombre' => "%$searchValue%",
                 'fechaSoat' => "%$searchValue%",
                 'fechaLicencia' => "%$searchValue%",
                 'fecchaTdr' => "%$searchValue%",
@@ -182,17 +155,17 @@ class Vehiculo
             );
         }
         // --Total number of records without filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " v JOIN " . $this->tableTpvehiculo . " t ON v.tp_vehiculoId = t.id ");
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . "");
         $stmt->execute();
         $records = $stmt->fetch();
         $totalRecords = $records['allcount'];
         // --Total number of records with filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " v JOIN " . $this->tableTpvehiculo . " t ON v.tp_vehiculoId = t.id  WHERE 1 " . $searchQuery . "");
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " WHERE 1 " . $searchQuery . "");
         $stmt->execute($searchArray);
         $records = $stmt->fetch();
         $totalRecordwithFilter = $records['allcount'];
         // --Fetch records--
-        $stmt = $this->conn->prepare("SELECT v.id, v.placa, v.nombresConductor, v.telefono, v.email, t.tipo, v.fechaSoat, v.fechaLicencia, v.fecchaTdr, v.content_type, v.base_64, v.status FROM " . $this->tableName . " v JOIN " . $this->tableTpvehiculo . " t ON v.tp_vehiculoId = t.id  WHERE 1 " . $searchQuery . " AND v.status in(1, 2) ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
+        $stmt = $this->conn->prepare("SELECT id, nombre, fechaSoat, fechaLicencia, fecchaTdr, content_type, base_64, status FROM " . $this->tableName . " WHERE 1 " . $searchQuery . " AND status in(1, 2) ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
         // --Bind values--
         foreach ($searchArray as $key => $search) {
             $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
@@ -208,7 +181,7 @@ class Vehiculo
 
             $botones = "<div class='btn-group'>";
             if ($datos->r === 1) {
-                $botones .= '<button type="button" class="btn btn-outline-danger" data-toggle="tooltip" data-placement="top" title="Ver docuemntación del vehiculo en PDF" onclick="visualizarPDF(';
+                $botones .= '<button type="button" class="btn btn-outline-danger" data-toggle="tooltip" data-placement="top" title="Ver docuemntación de la maquinaria en PDF" onclick="visualizarPDF(';
                 $botones .= "'" . $row['content_type'] . "', '" . $row['base_64'] . "'); ";
                 $botones .= '"><i class="fal fa-file-pdf"></i></button>';
             }
@@ -226,11 +199,7 @@ class Vehiculo
 
             $data[] = array(
                 "id" => $row['id'],
-                "placa" => $row['placa'],
-                "nombresConductor" => $row['nombresConductor'],
-                "telefono" => $row['telefono'],
-                "email" => $row['email'],
-                "tipo" => $row['tipo'],
+                "nombre" => $row['nombre'],
                 "fechaSoat" => $row['fechaSoat'],
                 "fechaLicencia" => $row['fechaLicencia'],
                 "fecchaTdr" => $row['fecchaTdr'],
@@ -249,7 +218,7 @@ class Vehiculo
     }
 
     // -- ⊡ Funcion para cambiar el estado del rol ⊡ --
-    public function statusPLaca(): void
+    public function statusMaquinaria(): void
     {
         // --Preparamos la consulta--
         $query = "UPDATE $this->tableName SET status =? WHERE id=?";
@@ -270,10 +239,10 @@ class Vehiculo
     }
 
     // -- ⊡ Funcion para traer datos del rol ⊡ --
-    public function dataPlaca(): void
+    public function dataMaquinaria(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT id, placa, nombresConductor, Apaterno, Amaterno, telefono, email, fechaSoat, fechaLicencia, fecchaTdr, content_type, base_64, tp_vehiculoId FROM $this->tableName WHERE id=? ;";
+        $query = "SELECT id, nombre, fechaSoat, fechaLicencia, fecchaTdr, content_type, base_64 FROM $this->tableName WHERE id=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Almacenamos los valores--
@@ -290,18 +259,12 @@ class Vehiculo
 
                 $datos = array(
                     'id' => $data->id,
-                    'placa' => $data->placa,
-                    'nombresConductor' => $data->nombresConductor,
-                    'Apaterno' => $data->Apaterno,
-                    'Amaterno' => $data->Amaterno,
-                    'telefono' => $data->telefono,
-                    'email' => $data->email,
+                    'nombre' => $data->nombre,
                     'fechaSoat' => $data->fechaSoat,
                     'fechaLicencia' => $data->fechaLicencia,
                     'fecchaTdr' => $data->fecchaTdr,
                     'contenType' => $data->content_type,
-                    'base64' => $data->base_64,
-                    'tpVehiculo' => $data->tp_vehiculoId
+                    'base64' => $data->base_64
                 );
                 // --Retornamos las respuestas--
                 echo json_encode(array('status' => '1', 'data' => $datos));
@@ -316,44 +279,32 @@ class Vehiculo
     }
 
     // -- ⊡ Funcion para actualizar empresa ⊡ --
-    public function updatePlaca(): void
+    public function updateMaquinaria(): void
     {
         // --Preparamos la consulta--
-        $query = "UPDATE $this->tableName SET placa=?, nombresConductor=?, telefono=?, email=?, fechaSoat=?, fechaLicencia=?, fecchaTdr=?, content_type=?, base_64=?, tp_vehiculoId=?, idUsuario=?, nit=? WHERE id=?";
+        $query = "UPDATE $this->tableName SET nombre=?, fechaSoat=?, fechaLicencia=?, fecchaTdr=?, content_type=?, base_64=?, idUsuario=?, nit=? WHERE id=?";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
-        $this->placa = htmlspecialchars(strip_tags($this->placa));
-        $this->nombresConductor = htmlspecialchars(strip_tags($this->nombresConductor));
-        // $this->Apaterno = htmlspecialchars(strip_tags($this->Apaterno));
-        // $this->Amaterno = htmlspecialchars(strip_tags($this->Amaterno));
-        $this->telefono = htmlspecialchars(strip_tags($this->telefono));
-        $this->email = htmlspecialchars(strip_tags($this->email));
+        $this->nombre = htmlspecialchars(strip_tags($this->nombre));
         $this->fechaSoat = htmlspecialchars(strip_tags($this->fechaSoat));
         $this->fechaLicencia = htmlspecialchars(strip_tags($this->fechaLicencia));
         $this->fecchaTdr = htmlspecialchars(strip_tags($this->fecchaTdr));
         $this->contenType = htmlspecialchars(strip_tags($this->contenType));
         $this->base64 = htmlspecialchars(strip_tags($this->base64));
-        $this->tpVehiculo = htmlspecialchars(strip_tags($this->tpVehiculo));
         $this->idUser = $_SESSION['id'];
         $this->nit = $_SESSION['nit'];
 
         // --Almacenamos los valores--
-        $stmt->bindParam(1, $this->placa);
-        $stmt->bindParam(2, $this->nombresConductor);
-        // $stmt->bindParam(3, $this->Apaterno);
-        // $stmt->bindParam(4, $this->Amaterno);
-        $stmt->bindParam(3, $this->telefono);
-        $stmt->bindParam(4, $this->email);
-        $stmt->bindParam(5, $this->fechaSoat);
-        $stmt->bindParam(6, $this->fechaLicencia);
-        $stmt->bindParam(7, $this->fecchaTdr);
-        $stmt->bindParam(8, $this->contenType);
-        $stmt->bindParam(9, $this->base64);
-        $stmt->bindParam(10, $this->tpVehiculo);
-        $stmt->bindParam(11, $this->idUser);
-        $stmt->bindParam(12, $this->nit);
-        $stmt->bindParam(13, $this->id);
+        $stmt->bindParam(1, $this->nombre);
+        $stmt->bindParam(2, $this->fechaSoat);
+        $stmt->bindParam(3, $this->fechaLicencia);
+        $stmt->bindParam(4, $this->fecchaTdr);
+        $stmt->bindParam(5, $this->contenType);
+        $stmt->bindParam(6, $this->base64);
+        $stmt->bindParam(7, $this->idUser);
+        $stmt->bindParam(8, $this->nit);
+        $stmt->bindParam(9, $this->id);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
@@ -364,7 +315,7 @@ class Vehiculo
     }
 
     // -- ⊡ Funcion para eliminar rol ⊡ --
-    public function deletePlaca(): void
+    public function deleteMaquinaria(): void
     {
         // --Preparamos la consulta--
         $query = "UPDATE $this->tableName SET status = 3 WHERE id=?";

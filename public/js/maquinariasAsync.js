@@ -1,6 +1,6 @@
 var edit = null;
 var peticion = null;
-var tablaVehiculos = "";
+var tablaMaquinarias = "";
 var controls = {
   leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',
   rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>',
@@ -24,8 +24,8 @@ var runDatePicker = function () {
 };
 
 $(document).ready(function () {
-  /* ---------  START Serverside Tabla ( tablaVehiculos ) ----------- */
-  tablaVehiculos = $("#tablaVehiculos").DataTable({
+  /* ---------  START Serverside Tabla ( tablaMaquinarias ) ----------- */
+  tablaMaquinarias = $("#tablaMaquinarias").DataTable({
     processing: true,
     orderClasses: true,
     deferRender: true,
@@ -35,7 +35,7 @@ $(document).ready(function () {
     pageLength: 10,
     ajax: {
       type: "POST",
-      url: urlBase + "routes/vehiculos/readAllDaTable",
+      url: urlBase + "routes/maquinarias/readAllDaTable",
     },
     dom:
       "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
@@ -63,11 +63,7 @@ $(document).ready(function () {
     ],
     columns: [
       { data: "id" },
-      { data: "placa" },
-      { data: "nombresConductor" },
-      { data: "telefono" },
-      { data: "email" },
-      { data: "tipo" },
+      { data: "nombre" },
       { data: "fechaSoat" },
       { data: "fechaLicencia" },
       { data: "fecchaTdr" },
@@ -92,14 +88,13 @@ $(document).ready(function () {
   readPermisos();
   writePermisos();
   runDatePicker();
-  selects();
   $(":input").inputmask();
 });
 
 function readPermisos() {
   $.ajax({
     dataType: "json",
-    url: urlBase + "routes/vehiculos/read",
+    url: urlBase + "routes/maquinarias/read",
     type: "GET",
     beforeSend: function () {},
     success: function (result) {
@@ -119,7 +114,7 @@ function readPermisos() {
 function writePermisos() {
   $.ajax({
     dataType: "json",
-    url: urlBase + "routes/vehiculos/write",
+    url: urlBase + "routes/maquinarias/write",
     type: "GET",
     beforeSend: function () {},
     success: function (result) {
@@ -132,88 +127,16 @@ function writePermisos() {
   });
 }
 
-function selects() {
-  $.ajax({
-    dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-    url: urlBase + "routes/selects/getTpVehiculo", //url a donde hacemos la peticion
-    type: "GET",
-    beforeSend: function () {
-      // $(".overlayCargue").fadeIn("slow");
-    },
-    success: function (result) {
-      var estado = result.status;
-      switch (estado) {
-        case "0":
-          Swal.fire({
-            icon: "error",
-            title: "<strong>Error en el servidor</strong>",
-            html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
-            showCloseButton: true,
-            showConfirmButton: false,
-            cancelButtonText: "Cerrar",
-            cancelButtonColor: "#dc3545",
-            showCancelButton: true,
-            backdrop: true,
-          });
-          break;
-
-        case "1":
-          var html = "";
-
-          html +=
-            '<option value="" disabled selected hidden>Seleccione tipo de Vehiculo</option>';
-          for (let i = 0; i < result.data.length; i++) {
-            html += result.data[i].html;
-          }
-
-          $("#tpVehiculo").html(html);
-          break;
-
-        case "3":
-          var html = "";
-
-          html =
-            '<option value="" disabled selected hidden>No hay tipos de Vehiculos</option>';
-
-          $("#tpVehiculo").html(html);
-          break;
-
-        default:
-          break;
-      }
-    },
-    complete: function () {
-      // setTimeout(() => {
-      //   $(".overlayCargue").fadeOut("slow");
-      // }, 1000);
-    },
-    error: function (xhr) {
-      console.log(xhr);
-      Swal.fire({
-        icon: "error",
-        title: "<strong>Error!</strong>",
-        html: "<h5>Se ha presentado un error, por favor informar al area de Sistemas.</h5>",
-        showCloseButton: true,
-        showConfirmButton: false,
-        cancelButtonText: "Cerrar",
-        cancelButtonColor: "#dc3545",
-        showCancelButton: true,
-        backdrop: true,
-      });
-    },
-  });
-}
-
 function registrar(form) {
   $("#alertaForm").html("");
   var respuestavalidacion = validarcampos("#" + form);
   if (respuestavalidacion) {
     var formData = new FormData(document.getElementById(form));
     if (edit == true) {
-      peticion = urlBase + "routes/vehiculos/update";
+      peticion = urlBase + "routes/maquinarias/update";
     } else if (edit == false) {
       $("#archivoBase64").html("");
-      peticion = urlBase + "routes/vehiculos/create";
+      peticion = urlBase + "routes/maquinarias/create";
     } else if (edit == null) {
       return false;
     }
@@ -256,8 +179,8 @@ function registrar(form) {
             if (edit == false) {
               Swal.fire({
                 icon: "success",
-                title: "<strong>Vehiculo Creado</strong>",
-                html: "<h5>El vehiculo se ha registrado exitosamente</h5>",
+                title: "<strong>Maquinaria Creada</strong>",
+                html: "<h5>La maquinaria se ha registrado exitosamente</h5>",
                 showCloseButton: false,
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#64a19d",
@@ -266,8 +189,8 @@ function registrar(form) {
             } else {
               Swal.fire({
                 icon: "success",
-                title: "<strong>Vehiculo Editado</strong>",
-                html: "<h5>El vehiculo se ha editado exitosamente</h5>",
+                title: "<strong>Maquinaria Editada</strong>",
+                html: "<h5>La maquinaria se ha editado exitosamente</h5>",
                 showCloseButton: false,
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#64a19d",
@@ -275,7 +198,7 @@ function registrar(form) {
               });
             }
             $("#ModalRegistro").modal("hide");
-            tablaVehiculos.clear().draw();
+            tablaMaquinarias.clear().draw();
             reset();
             break;
 
@@ -363,9 +286,9 @@ function editarRegistro(id) {
   $(':input[type="file"]').val("");
   edit = true;
   $.ajax({
-    data: { idVehiculo: id }, //datos a enviar a la url
+    data: { idMaquinaria: id }, //datos a enviar a la url
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-    url: urlBase + "routes/vehiculos/getData", //url a donde hacemos la peticion
+    url: urlBase + "routes/maquinarias/getData", //url a donde hacemos la peticion
     type: "POST",
     beforeSend: function () {
       // $(".overlayCargue").fadeIn("slow");
@@ -389,13 +312,7 @@ function editarRegistro(id) {
           break;
 
         case "1":
-          $("#placa").val(result.data.placa);
-          $("#nombresConductor").val(result.data.nombresConductor);
-          //$("#Apaterno").val(result.data.Apaterno);
-          //$("#Amaterno").val(result.data.Amaterno);
-          $("#telefono").val(result.data.telefono);
-          $("#email").val(result.data.email);
-          $("#tpVehiculo").val(result.data.tpVehiculo);
+          $("#nombre").val(result.data.nombre);
           $("#fechaSoat").val(result.data.fechaSoat);
           $("#fechaLicencia").val(result.data.fechaLicencia);
           $("#fecchaTdr").val(result.data.fecchaTdr);
@@ -408,7 +325,7 @@ function editarRegistro(id) {
             result.data.base64 +
             "'" +
             ');" >Ver Documentación del Vehiculo <i class="fal fa-file-pdf"></i></button>' +
-            '<input type="hidden" id="idVehiculo" name="idVehiculo" value="' +
+            '<input type="hidden" id="idMaquinaria" name="idMaquinaria" value="' +
             result.data.id +
             '">' +
             '<input type="hidden" id="contenType" name="contenType" value="' +
@@ -420,7 +337,7 @@ function editarRegistro(id) {
 
           $("#archivoBase64").html(html);
 
-          $("#btnRegistro").text("Editar Vehiculo");
+          $("#btnRegistro").text("Editar Maquinaria");
           $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
           $("#btnRegistro").removeClass("btn btn-info");
           $("#btnRegistro").addClass("btn btn-success");
@@ -493,11 +410,11 @@ function visualizarPDF(content, base) {
 function statusRegistro(id, status) {
   $.ajax({
     data: {
-      idVehiculo: id,
+      idMaquinaria: id,
       status: status,
     },
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-    url: urlBase + "routes/vehiculos/status", //url a donde hacemos la peticion
+    url: urlBase + "routes/maquinarias/status", //url a donde hacemos la peticion
     type: "POST",
     beforeSend: function () {
       // $("#overlayText").text("Cerrando Sesión...");
@@ -525,7 +442,7 @@ function statusRegistro(id, status) {
 
         case "1":
           Command: toastr["success"](
-            "Estado del vehiculo cambiado exitosamente.",
+            "Estado de la Maquinaria cambiado exitosamente.",
             "Estado Cambiado"
           );
 
@@ -546,7 +463,7 @@ function statusRegistro(id, status) {
             showMethod: "fadeIn",
             hideMethod: "fadeOut",
           };
-          tablaVehiculos.clear().draw();
+          tablaMaquinarias.clear().draw();
           break;
 
         case "2":
@@ -596,17 +513,17 @@ function eliminarRegistro(id) {
   Swal.fire({
     icon: "warning",
     title: "Que deseas hacer?",
-    text: "Se eliminara el vehiculo del sistema!",
+    text: "Se eliminara la Maquinaria del sistema!",
     type: "warning",
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Eliminar Vehiculo",
+    confirmButtonText: "Eliminar Maquinaria",
     preConfirm: function () {
       $.ajax({
-        data: { idVehiculo: id },
+        data: { idMaquinaria: id },
         dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-        url: urlBase + "routes/vehiculos/delete", //url a donde hacemos la peticion
+        url: urlBase + "routes/maquinarias/delete", //url a donde hacemos la peticion
         type: "POST",
         beforeSend: function () {
           // $("#overlayText").text("Cerrando Sesión...");
@@ -634,8 +551,8 @@ function eliminarRegistro(id) {
 
             case "1":
               Command: toastr["success"](
-                "El vehiculo se ha eliminado satisfactoriamente.",
-                "Placa Vehiculo"
+                "La Maquinaria se ha eliminado satisfactoriamente.",
+                "Maquinaria Eliminada"
               );
 
               toastr.options = {
@@ -655,7 +572,7 @@ function eliminarRegistro(id) {
                 showMethod: "fadeIn",
                 hideMethod: "fadeOut",
               };
-              tablaVehiculos.clear().draw();
+              tablaMaquinarias.clear().draw();
               break;
 
             case "2":
@@ -706,7 +623,7 @@ function eliminarRegistro(id) {
 function showModalRegistro() {
   reset();
   $("#alertaForm").html("");
-  $("#btnRegistro").text("Registrar Vehiculo");
+  $("#btnRegistro").text("Registrar Maquinaria");
   $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
   $("#ModalRegistro").modal({
     backdrop: "static",
@@ -725,5 +642,5 @@ function reset() {
 }
 
 function reajustDatatables() {
-  tablaVehiculos.columns.adjust().draw();
+  tablaMaquinarias.columns.adjust().draw();
 }
