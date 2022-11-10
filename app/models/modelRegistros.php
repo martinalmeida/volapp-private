@@ -98,6 +98,7 @@ class Registro
         $this->material = htmlspecialchars(strip_tags($this->material));
         $this->nota = htmlspecialchars(strip_tags($this->nota));
         $this->fechaActual = Utilidades::getFecha();
+        $this->idUser = $_SESSION['id'];
         $this->nit = $_SESSION['nit'];
 
         // --Almacenamos los valores--
@@ -106,7 +107,7 @@ class Registro
         $stmt->bindParam(3, $this->material);
         $stmt->bindParam(4, $this->nota);
         $stmt->bindParam(5, $this->fechaActual);
-        $stmt->bindParam(6, $_SESSION['id']);
+        $stmt->bindParam(6, $this->idUser);
         $stmt->bindParam(7, $this->nit);
 
         // --Ejecutamos la consulta y validamos ejecucion--
@@ -286,6 +287,7 @@ class Registro
         $this->material = htmlspecialchars(strip_tags($this->material));
         $this->nota = htmlspecialchars(strip_tags($this->nota));
         $this->fechaActual = Utilidades::getFecha();
+        $this->idUser = $_SESSION['id'];
         $this->nit = $_SESSION['nit'];
 
         // --Almacenamos los valores--
@@ -294,7 +296,7 @@ class Registro
         $stmt->bindParam(3, $this->material);
         $stmt->bindParam(4, $this->nota);
         $stmt->bindParam(5, $this->fechaActual);
-        $stmt->bindParam(6, $_SESSION['id']);
+        $stmt->bindParam(6, $this->idUser);
         $stmt->bindParam(7, $this->nit);
         $stmt->bindParam(8, $this->id);
 

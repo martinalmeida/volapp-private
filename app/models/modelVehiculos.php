@@ -94,7 +94,7 @@ class Vehiculo
     {
         // --Preparamos la consulta--
         $query = "INSERT INTO $this->tableName SET 
-                  placa=?, nombresConductor=?, telefono=?, email=?, fechaSoat=?, fechaLicencia=?, fecchaTdr=?, content_type=?, base_64=?, tp_vehiculoId=?, nit=? ;";
+                  placa=?, nombresConductor=?, telefono=?, email=?, fechaSoat=?, fechaLicencia=?, fecchaTdr=?, content_type=?, base_64=?, tp_vehiculoId=?, idUsuario=?, nit=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
@@ -110,6 +110,7 @@ class Vehiculo
         $this->contenType = htmlspecialchars(strip_tags($this->contenType));
         $this->base64 = htmlspecialchars(strip_tags($this->base64));
         $this->tpVehiculo = htmlspecialchars(strip_tags($this->tpVehiculo));
+        $this->idUser = $_SESSION['id'];
         $this->nit = $_SESSION['nit'];
 
         // --Almacenamos los valores--
@@ -125,7 +126,8 @@ class Vehiculo
         $stmt->bindParam(8, $this->contenType);
         $stmt->bindParam(9, $this->base64);
         $stmt->bindParam(10, $this->tpVehiculo);
-        $stmt->bindParam(11, $this->nit);
+        $stmt->bindParam(11, $this->idUser);
+        $stmt->bindParam(12, $this->nit);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
@@ -204,17 +206,19 @@ class Vehiculo
             $statusColor = $row['status'] == '1' ? 'info' : 'secondary';
 
             $botones = "<div class='btn-group'>";
-            if ($datos->u === 1) {
-                $botones .= '<button type="button" class="btn btn-outline-danger" data-toggle="tooltip" data-placement="top" title="Ver PDF" onclick="visualizarPDF(';
+            if ($datos->r === 1) {
+                $botones .= '<button type="button" class="btn btn-outline-danger" data-toggle="tooltip" data-placement="top" title="Ver docuemntación del vehiculo en PDF" onclick="visualizarPDF(';
                 $botones .= "'" . $row['content_type'] . "', '" . $row['base_64'] . "'); ";
                 $botones .= '"><i class="fal fa-file-pdf"></i></button>';
-                $botones .= "<button type='button' class='btn btn-success text-white' data-toggle='tooltip' data-placement='top' title='Editar Rol' onclick='editarRegistro(" . $row['id'] . ");'>";
+            }
+            if ($datos->u === 1) {
+                $botones .= "<button type='button' class='btn btn-success text-white' data-toggle='tooltip' data-placement='top' title='Editar Vehiculo' onclick='editarRegistro(" . $row['id'] . ");'>";
                 $botones .= "<i class='fal fa-edit'></i></button>";
-                $botones .= "<button type='button' class='btn btn-" . $statusColor . " text-white' data-toggle='tooltip' data-placement='top' title='Estado del Rol' onclick='statusRegistro(" . $row['id'] . ", " . $row['status'] . ");'>";
+                $botones .= "<button type='button' class='btn btn-" . $statusColor . " text-white' data-toggle='tooltip' data-placement='top' title='Estado del Vehiculo' onclick='statusRegistro(" . $row['id'] . ", " . $row['status'] . ");'>";
                 $botones .= "<i class='fal fa-eye'></i></button>";
             }
             if ($datos->d === 1) {
-                $botones .= "<button type='button' class='btn btn-danger text-white' data-toggle='tooltip' data-placement='top' title='Eliminar Rol' onclick='eliminarRegistro(" . $row['id'] . ");'>";
+                $botones .= "<button type='button' class='btn btn-danger text-white' data-toggle='tooltip' data-placement='top' title='Eliminar Vehiculo' onclick='eliminarRegistro(" . $row['id'] . ");'>";
                 $botones .= "<i class='fal fa-trash'></i></button>";
             }
             $botones .= "</div>";
@@ -314,9 +318,7 @@ class Vehiculo
     public function updatePlaca(): void
     {
         // --Preparamos la consulta--
-        $query = "UPDATE $this->tableName SET 
-                  placa=?, nombresConductor=?, telefono=?, email=?, fechaSoat=?, fechaLicencia=?, fecchaTdr=?, content_type=?, base_64=?, tp_vehiculoId=?, nit=? 
-                  WHERE id=?";
+        $query = "UPDATE $this->tableName SET placa=?, nombresConductor=?, telefono=?, email=?, fechaSoat=?, fechaLicencia=?, fecchaTdr=?, content_type=?, base_64=?, tp_vehiculoId=?, idUsuario=?, nit=? WHERE id=?";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
@@ -332,6 +334,7 @@ class Vehiculo
         $this->contenType = htmlspecialchars(strip_tags($this->contenType));
         $this->base64 = htmlspecialchars(strip_tags($this->base64));
         $this->tpVehiculo = htmlspecialchars(strip_tags($this->tpVehiculo));
+        $this->idUser = $_SESSION['id'];
         $this->nit = $_SESSION['nit'];
 
         // --Almacenamos los valores--
@@ -346,7 +349,8 @@ class Vehiculo
         $stmt->bindParam(7, $this->fecchaTdr);
         $stmt->bindParam(8, $this->contenType);
         $stmt->bindParam(9, $this->base64);
-        $stmt->bindParam(11, $this->tpVehiculo);
+        $stmt->bindParam(10, $this->tpVehiculo);
+        $stmt->bindParam(11, $this->idUser);
         $stmt->bindParam(12, $this->nit);
         $stmt->bindParam(13, $this->id);
 

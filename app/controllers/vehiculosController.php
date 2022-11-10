@@ -62,8 +62,8 @@ class VehiculosController
                     $vehiculo->base64 = base64_encode(file_get_contents($_FILES['archivo']['tmp_name']));
                     if (
                         Validar::patronalfanumerico1($vehiculo->placa) && Validar::alfanumerico($vehiculo->nombresConductor) && Validar::numeros($vehiculo->telefono) &&
-                        Validar::correo($vehiculo->email) && Validar::numeros($vehiculo->tpVehiculo) && Validar::fecha($vehiculo->fechaSoat, '/', 'dma') &&
-                        Validar::fecha($vehiculo->fechaLicencia, '/', 'dma') && Validar::fecha($vehiculo->fecchaTdr, '/', 'dma') && Validar::tipoarchivo($vehiculo->contenType, 1)
+                        Validar::correo($vehiculo->email) && Validar::numeros($vehiculo->tpVehiculo) && Validar::fecha($vehiculo->fechaSoat, '/', 'mda') &&
+                        Validar::fecha($vehiculo->fechaLicencia, '/', 'mda') && Validar::fecha($vehiculo->fecchaTdr, '/', 'mda') && Validar::tipoarchivo($vehiculo->contenType, 1)
                     ) {
                         $vehiculo->createPlaca();
                     } else {
@@ -172,10 +172,10 @@ class VehiculosController
                     $vehiculo->base64 = base64_encode(file_get_contents($_FILES['archivo']['tmp_name']));
                     if (
                         Validar::patronalfanumerico1($vehiculo->placa) && Validar::alfanumerico($vehiculo->nombresConductor) && Validar::numeros($vehiculo->telefono) &&
-                        Validar::correo($vehiculo->email) && Validar::numeros($vehiculo->tpVehiculo) && Validar::fecha($vehiculo->fechaSoat, '/', 'dma') && Validar::fecha($vehiculo->fechaLicencia, '/', 'dma') &&
-                        Validar::fecha($vehiculo->fecchaTdr, '/', 'dma') && Validar::tipoarchivo($vehiculo->contenType, 1) && Validar::numeros($vehiculo->id)
+                        Validar::correo($vehiculo->email) && Validar::numeros($vehiculo->tpVehiculo) && Validar::fecha($vehiculo->fechaSoat, '/', 'mda') && Validar::fecha($vehiculo->fechaLicencia, '/', 'mda') &&
+                        Validar::fecha($vehiculo->fecchaTdr, '/', 'mda') && Validar::tipoarchivo($vehiculo->contenType, 1) && Validar::numeros($vehiculo->id)
                     ) {
-                        $vehiculo->createPlaca();
+                        $vehiculo->updatePlaca();
                     } else {
                         // --Error de validación--
                         echo json_encode(array('status' => '2', 'data' => NULL));
@@ -189,10 +189,10 @@ class VehiculosController
             // --No se adjunta un archivo nuevo--
             if (
                 Validar::patronalfanumerico1($vehiculo->placa) && Validar::alfanumerico($vehiculo->nombresConductor) && Validar::numeros($vehiculo->telefono) &&
-                Validar::correo($vehiculo->email) && Validar::fecha($vehiculo->fechaSoat, '/', 'dma') && Validar::fecha($vehiculo->fechaLicencia, '/', 'dma') &&
-                Validar::fecha($vehiculo->fecchaTdr, '/', 'dma') && Validar::numeros($vehiculo->id)
+                Validar::correo($vehiculo->email) && Validar::numeros($vehiculo->tpVehiculo) && Validar::fecha($vehiculo->fechaSoat, '/', 'mda') &&
+                Validar::fecha($vehiculo->fechaLicencia, '/', 'mda') && Validar::fecha($vehiculo->fecchaTdr, '/', 'mda') && Validar::numeros($vehiculo->id)
             ) {
-                $vehiculo->createPlaca();
+                $vehiculo->updatePlaca();
             } else {
                 // --Error de validación--
                 echo json_encode(array('status' => '2', 'data' => NULL));

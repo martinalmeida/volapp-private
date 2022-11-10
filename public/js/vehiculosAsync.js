@@ -1,4 +1,4 @@
-let edit = false;
+var edit = null;
 var peticion = null;
 var tablaVehiculos = "";
 var controls = {
@@ -211,9 +211,11 @@ function registrar(form) {
     var formData = new FormData(document.getElementById(form));
     if (edit == true) {
       peticion = urlBase + "routes/vehiculos/update";
-    } else {
+    } else if (edit == false) {
       $("#archivoBase64").html("");
       peticion = urlBase + "routes/vehiculos/create";
+    } else if (edit == false) {
+      return false;
     }
     $.ajax({
       cache: false, //necesario para enviar archivos
@@ -272,9 +274,9 @@ function registrar(form) {
                 backdrop: true,
               });
             }
-            reset();
             $("#ModalRegistro").modal("hide");
             tablaVehiculos.clear().draw();
+            reset();
             break;
 
           case "2":
@@ -319,8 +321,8 @@ function registrar(form) {
           case "6":
             Swal.fire({
               icon: "error",
-              title: "<strong>Tamaño execivo de Archivo</strong>",
-              html: "<h5>Adjunta un archivo de menor tamaño, el peso maximo es de 2MB.</h5>",
+              title: "<strong>Tamaño excesivo de Archivo</strong>",
+              html: "<h5>Adjunta un archivo de menor tamaño, el peso maximo es de 10MB.</h5>",
               showCloseButton: true,
               showConfirmButton: false,
               cancelButtonText: "Cerrar",
@@ -356,9 +358,9 @@ function registrar(form) {
 }
 
 function editarRegistro(id) {
-  reset();
   $("#alertaForm").html("");
   $("#archivoBase64").html("");
+  $(':input[type="file"]').val("");
   edit = true;
   $.ajax({
     data: { idVehiculo: id }, //datos a enviar a la url
@@ -710,15 +712,16 @@ function showModalRegistro() {
     backdrop: "static",
     keyboard: false,
   });
+  edit = false;
 }
 
 function reset() {
-  edit = false;
   vercampos("#frmRegistro", 1);
   limpiarcampos("#frmRegistro");
-  $("#inputsEditar").html("");
+  $("#archivoBase64").html("");
   $("#btnRegistro").removeClass("btn btn-success");
   $("#btnRegistro").addClass("btn btn-info");
+  $(':input[type="file"]').val("");
 }
 
 function reajustDatatables() {
