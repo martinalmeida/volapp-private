@@ -5,7 +5,7 @@
                 <h4 class="modal-title">
                     Agregar Contratos
                     <small class="m-0 text-muted">
-                        Un contrato es la alianza que hace un tercero con la empresa prestadora del servicio de carga pesada.
+                        Un contrato es la alianza que hace un tercero con la empresa.
                     </small>
                 </h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -15,28 +15,48 @@
             <div class="modal-body">
                 <form id="frmRegistro">
                     <div class="form-row">
-                        <div class="col-md-12 mb-3">
-                            <label class="form-label" for="nombre">Nombres del Contrato</label>
-                            <input type="text" onKeyPress="if(this.value.length==50)return false;" class="form-control" id="nombre" name="nombre" placeholder="Nombres del contrato" required>
+                        <div class="input-group col-md-6 mb-3">
+                            <input type="text" class="form-control" id="fechaInicio" name="fechaInicio" placeholder="Fecha de inicio del Contrato" data-inputmask="'mask': '99/99/9999'" im-insert="true">
+                            <div class="input-group-append">
+                                <span class="input-group-text fs-xl">
+                                    <i class="fal fa-calendar-check"></i>
+                                </span>
+                            </div>
                         </div>
-                        <div class="col-md-12 mb-3">
+                        <div class="input-group col-md-6 mb-3">
+                            <input type="text" class="form-control" id="fechaFin" name="fechaFin" placeholder="Fecha de vencimiento del Contrato" data-inputmask="'mask': '99/99/9999'" im-insert="true">
+                            <div class="input-group-append">
+                                <span class="input-group-text fs-xl">
+                                    <i class="fal fa-calendar-check"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="titulo">Titulo del Contrato</label>
+                            <input type="text" onKeyPress="if(this.value.length==50)return false;" class="form-control" id="titulo" name="titulo" placeholder="Nombres del contrato" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
                             <label class="form-label" for="representante">Representante del Contrato</label>
                             <input type="text" onKeyPress="if(this.value.length==70)return false;" class="form-control" id="representante" name="representante" placeholder="Represente del contrato" required>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label" for="telefono">Telefono del Contrato</label>
-                            <input type="number" onKeyPress="if(this.value.length==10)return false;" class="form-control" id="telefono" name="telefono" placeholder="Telefono del contrato" required>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="telefono">Telefono de Contacto</label>
+                            <input type="number" onKeyPress="if(this.value.length==10)return false;" class="form-control" id="telefono" name="telefono" placeholder="Telefono de Contacto" required>
                         </div>
-                        <div class="col-md-8 mb-3">
-                            <label class="form-label" for="email">Correo del Contrato</label>
-                            <input type="email" onKeyPress="if(this.value.length==100)return false;" class="form-control" id="email" name="email" placeholder="Correo del contrato" required>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="email">Correo de Contacto</label>
+                            <input type="email" onKeyPress="if(this.value.length==100)return false;" class="form-control" id="email" name="email" placeholder="Correo de Contacto del contrato" required>
                         </div>
                         <div class="col-md-12 mb-3">
-                            <label class="form-label" for="descripcion">Descripción del Contrato</label>
-                            <textarea onKeyPress="if(this.value.length==1000)return false;" class="form-control" id="descripcion" name="descripcion" rows="5" style="height: 77px;" required></textarea>
-                        </div>
-
-                        <div id="inputsEditar">
+                            <div id="archivoBase64"></div>
+                            <label class="form-label" for="archivo">Documentación del Contrato</label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="archivo" name="archivo" accept=".pdf" required>
+                                    <label class="custom-file-label" for="archivo">Adjuntar Archido de Documentacón</label>
+                                </div>
+                            </div>
+                            <span class="help-block">Archivo de documentación formato pdf.</span>
                         </div>
                     </div>
                 </form>

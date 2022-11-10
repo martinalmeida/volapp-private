@@ -36,11 +36,12 @@ $view->initializationView();
                         <thead class="bg-primary-600">
                             <tr>
                                 <th>id</th>
-                                <th>Nombre</th>
-                                <th>Descripcion</th>
+                                <th>Fecha de Inicio</th>
+                                <th>Fecha de Finalización</th>
+                                <th>Titulo del Contrato</th>
                                 <th>Representante</th>
                                 <th>Telefono</th>
-                                <th>Correo</th>
+                                <th>Correo Electronico</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
                             </tr>

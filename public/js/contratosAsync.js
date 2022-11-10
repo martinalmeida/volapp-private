@@ -1,6 +1,22 @@
 let edit = false;
 var peticion = null;
 var tablaContratos = "";
+var controls = {
+  leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',
+  rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>',
+};
+var runDatePicker = function () {
+  $("#fechaInicio").datepicker({
+    orientation: "buttom left",
+    todayHighlight: true,
+    templates: controls,
+  });
+  $("#fechaFin").datepicker({
+    orientation: "buttom left",
+    todayHighlight: true,
+    templates: controls,
+  });
+};
 
 $(document).ready(function () {
   /* ---------  START Serverside Tabla ( tablaContratos ) ----------- */
@@ -42,8 +58,9 @@ $(document).ready(function () {
     ],
     columns: [
       { data: "id" },
-      { data: "nombre" },
-      { data: "descripcion" },
+      { data: "fechaInicio" },
+      { data: "fechaFin" },
+      { data: "titulo" },
       { data: "representante" },
       { data: "telefono" },
       { data: "email" },
@@ -67,6 +84,8 @@ $(document).ready(function () {
   });
   readPermisos();
   writePermisos();
+  runDatePicker();
+  $(":input").inputmask();
 });
 
 function readPermisos() {
@@ -106,13 +125,17 @@ function writePermisos() {
 }
 
 function registrar(form) {
+  $("#alertaForm").html("");
   var respuestavalidacion = validarcampos("#" + form);
   if (respuestavalidacion) {
     var formData = new FormData(document.getElementById(form));
     if (edit == true) {
       peticion = urlBase + "routes/contratos/update";
-    } else {
+    } else if (edit == false) {
+      $("#archivoBase64").html("");
       peticion = urlBase + "routes/contratos/create";
+    } else if (edit == null) {
+      return false;
     }
     $.ajax({
       cache: false, //necesario para enviar archivos
@@ -132,6 +155,7 @@ function registrar(form) {
       },
       success: function (result) {
         var estado = result.status;
+        var html = "";
         switch (estado) {
           case "0":
             Swal.fire({
@@ -170,16 +194,55 @@ function registrar(form) {
                 backdrop: true,
               });
             }
-            reset();
             $("#ModalRegistro").modal("hide");
             tablaContratos.clear().draw();
+            reset();
             break;
 
           case "2":
+            html +=
+              '<div class="alert border-danger bg-transparent text-info fade show" role="alert">' +
+              '<div class="d-flex align-items-center"><div class="alert-icon text-danger">' +
+              '<i class="fal fa-exclamation-triangle"></i></div>' +
+              '<div class="flex-1 text-danger"><span class="h5 m-0 fw-700">Error de Validación </span></div>' +
+              '<button type="button" class="btn btn-danger btn-pills btn-sm btn-w-m waves-effect waves-themed" data-dismiss="alert" aria-label="Close">' +
+              "Cerrar</button></div></div>";
+
+            $("#alertaForm").html(html);
+            break;
+
+          case "4":
+            Swal.fire({
+              icon: "warning",
+              title: "<strong>Archivo Dañado</strong>",
+              html: "<h5>El archivo esta corrupto.</h5>",
+              showCloseButton: true,
+              showConfirmButton: false,
+              cancelButtonText: "Cerrar",
+              cancelButtonColor: "#dc3545",
+              showCancelButton: true,
+              backdrop: true,
+            });
+            $("#ModalRegistro").modal("hide");
+            break;
+
+          case "5":
+            html +=
+              '<div class="alert border-warning bg-transparent text-info fade show" role="alert">' +
+              '<div class="d-flex align-items-center"><div class="alert-icon text-warning">' +
+              '<i class="fal fa-exclamation-triangle"></i></div>' +
+              '<div class="flex-1 text-warning"><span class="h5 m-0 fw-700">Adjunte el Archivo de Documentación del Contrato </span></div>' +
+              '<button type="button" class="btn btn-warning btn-pills btn-sm btn-w-m waves-effect waves-themed" data-dismiss="alert" aria-label="Close">' +
+              "Cerrar</button></div></div>";
+
+            $("#archivoBase64").html(html);
+            break;
+
+          case "6":
             Swal.fire({
               icon: "error",
-              title: "<strong>Error de Validacón</strong>",
-              html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
+              title: "<strong>Tamaño excesivo de Archivo</strong>",
+              html: "<h5>Adjunta un archivo de menor tamaño, el peso maximo es de 10MB.</h5>",
               showCloseButton: true,
               showConfirmButton: false,
               cancelButtonText: "Cerrar",
@@ -215,7 +278,9 @@ function registrar(form) {
 }
 
 function editarRegistro(id) {
-  $("#inputsEditar").html("");
+  $("#alertaForm").html("");
+  $("#archivoBase64").html("");
+  $(':input[type="file"]').val("");
   edit = true;
   $.ajax({
     data: { idContrato: id }, //datos a enviar a la url
@@ -227,6 +292,7 @@ function editarRegistro(id) {
     },
     success: function (result) {
       var estado = result.status;
+      var html = "";
       switch (estado) {
         case "0":
           Swal.fire({
@@ -243,25 +309,37 @@ function editarRegistro(id) {
           break;
 
         case "1":
-          $("#btnRegistro").text("Editar Material");
-          $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
-          $("#btnRegistro").removeClass("btn btn-info");
-          $("#btnRegistro").addClass("btn btn-success");
-
-          $("#nombre").val(result.data.nombre);
-          $("#descripcion").val(result.data.descripcion);
+          $("#fechaInicio").val(result.data.fechaInicio);
+          $("#fechaFin").val(result.data.fechaFin);
+          $("#titulo").val(result.data.titulo);
           $("#representante").val(result.data.representante);
           $("#telefono").val(result.data.telefono);
           $("#email").val(result.data.email);
 
-          var html = "";
           html +=
+            '<button type="button" class="btn btn-outline-danger" onclick="visualizarPDF(' +
+            "'" +
+            result.data.contenType +
+            "', '" +
+            result.data.base64 +
+            "'" +
+            ');" >Ver Documentación del Vehiculo <i class="fal fa-file-pdf"></i></button>' +
             '<input type="hidden" id="idContrato" name="idContrato" value="' +
             result.data.id +
+            '">' +
+            '<input type="hidden" id="contenType" name="contenType" value="' +
+            result.data.contenType +
+            '">' +
+            '<input type="hidden" id="base64" name="base64" value="' +
+            result.data.base64 +
             '">';
 
-          $("#inputsEditar").html(html);
+          $("#archivoBase64").html(html);
 
+          $("#btnRegistro").text("Editar Contrato");
+          $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
+          $("#btnRegistro").removeClass("btn btn-info");
+          $("#btnRegistro").addClass("btn btn-success");
           $("#ModalRegistro").modal({
             backdrop: "static",
             keyboard: false,
@@ -308,6 +386,26 @@ function editarRegistro(id) {
   });
 }
 
+function visualizarPDF(content, base) {
+  var base64 = base;
+  const blob = base64ToBlob(base64, content);
+  const url = URL.createObjectURL(blob);
+  const pdfWindow = window.open("");
+  pdfWindow.document.write(
+    "<iframe width='100%' height='100%' src='" + url + "'></iframe>"
+  );
+
+  function base64ToBlob(base64, type = "application/octet-stream") {
+    const binStr = atob(base64);
+    const len = binStr.length;
+    const arr = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      arr[i] = binStr.charCodeAt(i);
+    }
+    return new Blob([arr], { type: type });
+  }
+}
+
 function statusRegistro(id, status) {
   $.ajax({
     data: {
@@ -343,7 +441,7 @@ function statusRegistro(id, status) {
 
         case "1":
           Command: toastr["success"](
-            "Estado del contrato cambiado exitosamente.",
+            "Estado del Contrato cambiado exitosamente.",
             "Estado Cambiado"
           );
 
@@ -414,7 +512,7 @@ function eliminarRegistro(id) {
   Swal.fire({
     icon: "warning",
     title: "Que deseas hacer?",
-    text: "Se eliminara el material del sistema!",
+    text: "Se eliminara el Contrato del sistema!",
     type: "warning",
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
@@ -453,7 +551,7 @@ function eliminarRegistro(id) {
             case "1":
               Command: toastr["success"](
                 "El contrato se ha eliminado satisfactoriamente.",
-                "Contrato Eliminada"
+                "Contrato Eliminado"
               );
 
               toastr.options = {
@@ -523,21 +621,23 @@ function eliminarRegistro(id) {
 
 function showModalRegistro() {
   reset();
-  $("#btnRegistro").text("Registrar Material");
+  $("#alertaForm").html("");
+  $("#btnRegistro").text("Registrar Contrato");
   $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
   $("#ModalRegistro").modal({
     backdrop: "static",
     keyboard: false,
   });
+  edit = false;
 }
 
 function reset() {
-  edit = false;
   vercampos("#frmRegistro", 1);
   limpiarcampos("#frmRegistro");
-  $("#inputsEditar").html("");
+  $("#archivoBase64").html("");
   $("#btnRegistro").removeClass("btn btn-success");
   $("#btnRegistro").addClass("btn btn-info");
+  $(':input[type="file"]').val("");
 }
 
 function reajustDatatables() {

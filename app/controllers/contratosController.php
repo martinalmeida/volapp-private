@@ -40,19 +40,40 @@ class ContratosController
         $contrato = new Contrato($db);
 
         // --Seteo de valores existentes en el POST--
-        $contrato->nombre = isset($_POST['nombre']) ? strtoupper(trim($_POST['nombre'])) : NULL;
-        $contrato->descripcion = isset($_POST['descripcion']) ? strtoupper(trim($_POST['descripcion'])) : NULL;
+        $contrato->fechaInicio = isset($_POST['fechaInicio']) ? trim($_POST['fechaInicio']) : NULL;
+        $contrato->fechaFin = isset($_POST['fechaFin']) ? trim($_POST['fechaFin']) : NULL;
+        $contrato->titulo = isset($_POST['titulo']) ? strtoupper(trim($_POST['titulo'])) : NULL;
         $contrato->representante = isset($_POST['representante']) ? strtoupper(trim($_POST['representante'])) : NULL;
         $contrato->telefono = isset($_POST['telefono']) ? strtoupper(trim($_POST['telefono'])) : NULL;
         $contrato->email = isset($_POST['email']) ? strtoupper(trim($_POST['email'])) : NULL;
 
-        if (
-            Validar::alfanumerico($contrato->nombre) && Validar::patronalfanumerico1($contrato->descripcion) && Validar::alfanumerico($contrato->representante) &&
-            Validar::numeros($contrato->telefono) && Validar::correo($contrato->email)
-        ) {
-            $contrato->createContrato();
+        if (is_uploaded_file($_FILES['archivo']['tmp_name'])) {
+            // --Verificacion de Archivo--
+            if ($_FILES['archivo']['error'] != 0) {
+                // --Archivo Corrupto--
+                echo json_encode(array('status' => '4', 'data' => NULL));
+            } else {
+                if ($_FILES['archivo']['size'] < 10242880) {
+                    $contrato->contenType = $_FILES['archivo']['type'];
+                    $contrato->base64 = base64_encode(file_get_contents($_FILES['archivo']['tmp_name']));
+                    if (
+                        Validar::fecha($contrato->fechaInicio, '/', 'mda') && Validar::fecha($contrato->fechaFin, '/', 'mda') && Validar::patronalfanumerico1($contrato->titulo) &&
+                        Validar::patronalfanumerico1($contrato->representante) && Validar::numeros($contrato->telefono) && Validar::correo($contrato->email) &&
+                        Validar::tipoarchivo($contrato->contenType, 1)
+                    ) {
+                        $contrato->createContrato();
+                    } else {
+                        // --Error de validación--
+                        echo json_encode(array('status' => '2', 'data' => NULL));
+                    }
+                } else {
+                    // --Error de validacion de tipo Archivo-- 
+                    echo json_encode(array('status' => '6', 'data' => NULL));
+                }
+            }
         } else {
-            echo json_encode(array('status' => '2', 'data' => NULL));
+            // --Falta Archivo--
+            echo json_encode(array('status' => '5', 'data' => NULL));
         }
     }
 
@@ -122,21 +143,52 @@ class ContratosController
         $contrato = new Contrato($db);
 
         // --Seteo de valores existentes en el POST--
-        $contrato->id = isset($_POST['idContrato']) ? strtoupper(trim($_POST['idContrato'])) : NULL;
-        $contrato->nombre = isset($_POST['nombre']) ? strtoupper(trim($_POST['nombre'])) : NULL;
-        $contrato->descripcion = isset($_POST['descripcion']) ? strtoupper(trim($_POST['descripcion'])) : NULL;
+        $contrato->id = isset($_POST['idContrato']) ? trim($_POST['idContrato']) : NULL;
+        $contrato->fechaInicio = isset($_POST['fechaInicio']) ? trim($_POST['fechaInicio']) : NULL;
+        $contrato->fechaFin = isset($_POST['fechaFin']) ? trim($_POST['fechaFin']) : NULL;
+        $contrato->titulo = isset($_POST['titulo']) ? strtoupper(trim($_POST['titulo'])) : NULL;
         $contrato->representante = isset($_POST['representante']) ? strtoupper(trim($_POST['representante'])) : NULL;
         $contrato->telefono = isset($_POST['telefono']) ? strtoupper(trim($_POST['telefono'])) : NULL;
         $contrato->email = isset($_POST['email']) ? strtoupper(trim($_POST['email'])) : NULL;
+        $contrato->contenType = isset($_POST['contenType']) ? trim($_POST['contenType']) : NULL;
+        $contrato->base64 = isset($_POST['base64']) ? trim($_POST['base64']) : NULL;
 
-
-        if (
-            Validar::numeros($contrato->id) && Validar::alfanumerico($contrato->nombre) && Validar::patronalfanumerico1($contrato->descripcion) &&
-            Validar::alfanumerico($contrato->representante) && Validar::numeros($contrato->telefono) && Validar::correo($contrato->email)
-        ) {
-            $contrato->updateMaterial();
+        if (is_uploaded_file($_FILES['archivo']['tmp_name'])) {
+            // --Verificacion de Archivo--
+            if ($_FILES['archivo']['error'] != 0) {
+                // --Archivo Corrupto--
+                echo json_encode(array('status' => '4', 'data' => NULL));
+            } else {
+                if ($_FILES['archivo']['size'] < 10242880) {
+                    $contrato->contenType = $_FILES['archivo']['type'];
+                    $contrato->base64 = base64_encode(file_get_contents($_FILES['archivo']['tmp_name']));
+                    if (
+                        Validar::fecha($contrato->fechaInicio, '/', 'mda') && Validar::fecha($contrato->fechaFin, '/', 'mda') && Validar::patronalfanumerico1($contrato->titulo) &&
+                        Validar::patronalfanumerico1($contrato->representante) && Validar::numeros($contrato->telefono) && Validar::correo($contrato->email) &&
+                        Validar::tipoarchivo($contrato->contenType, 1) && Validar::numeros($contrato->id)
+                    ) {
+                        $contrato->updateContrato();
+                    } else {
+                        // --Error de validación--
+                        echo json_encode(array('status' => '2', 'data' => NULL));
+                    }
+                } else {
+                    // --Error de validacion de tipo Archivo-- 
+                    echo json_encode(array('status' => '6', 'data' => NULL));
+                }
+            }
         } else {
-            echo json_encode(array('status' => '2', 'data' => NULL));
+            // --No se adjunta un archivo nuevo--
+            if (
+                Validar::fecha($contrato->fechaInicio, '/', 'mda') && Validar::fecha($contrato->fechaFin, '/', 'mda') && Validar::patronalfanumerico1($contrato->titulo) &&
+                Validar::patronalfanumerico1($contrato->representante) && Validar::numeros($contrato->telefono) && Validar::correo($contrato->email) &&
+                Validar::numeros($contrato->id)
+            ) {
+                $contrato->updateContrato();
+            } else {
+                // --Error de validación--
+                echo json_encode(array('status' => '2', 'data' => NULL));
+            }
         }
     }
 

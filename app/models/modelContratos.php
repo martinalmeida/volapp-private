@@ -10,14 +10,18 @@ class Contrato
     private $conn;
     private $tableName = "contratos";
     private $nit;
+    private $idUser;
 
     // --Parametros Publicos--
     public $id;
-    public $nombre;
-    public $descripcion;
+    public $fechaInicio;
+    public $fechaFin;
+    public $titulo;
     public $representante;
     public $telefono;
     public $email;
+    public $contenType;
+    public $base64;
     public $status;
 
     /* Propiedades de los objetos de Datatables para utilizar (Serverside) 
@@ -85,24 +89,32 @@ class Contrato
     public function createContrato(): void
     {
         // --Preparamos la consulta--
-        $query = "INSERT INTO $this->tableName SET nombre=?, descripcion=?, representante=?, telefono=?, email=?, nit=? ;";
+        $query = "INSERT INTO $this->tableName SET fechaInicio=?, fechaFin=?, titulo=?, representante=?, telefono=?, email=?, content_type=?, base_64=?, idUsuario=?, nit=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
-        $this->nombre = htmlspecialchars(strip_tags($this->nombre));
-        $this->descripcion = htmlspecialchars(strip_tags($this->descripcion));
+        $this->fechaInicio = htmlspecialchars(strip_tags($this->fechaInicio));
+        $this->fechaFin = htmlspecialchars(strip_tags($this->fechaFin));
+        $this->titulo = htmlspecialchars(strip_tags($this->titulo));
         $this->representante = htmlspecialchars(strip_tags($this->representante));
         $this->telefono = htmlspecialchars(strip_tags($this->telefono));
         $this->email = htmlspecialchars(strip_tags($this->email));
+        $this->contenType = htmlspecialchars(strip_tags($this->contenType));
+        $this->base64 = htmlspecialchars(strip_tags($this->base64));
+        $this->idUser = $_SESSION['id'];
         $this->nit = $_SESSION['nit'];
 
         // --Almacenamos los valores--
-        $stmt->bindParam(1, $this->nombre);
-        $stmt->bindParam(2, $this->descripcion);
-        $stmt->bindParam(3, $this->representante);
-        $stmt->bindParam(4, $this->telefono);
-        $stmt->bindParam(5, $this->email);
-        $stmt->bindParam(6, $this->nit);
+        $stmt->bindParam(1, $this->fechaInicio);
+        $stmt->bindParam(2, $this->fechaFin);
+        $stmt->bindParam(3, $this->titulo);
+        $stmt->bindParam(4, $this->representante);
+        $stmt->bindParam(5, $this->telefono);
+        $stmt->bindParam(6, $this->email);
+        $stmt->bindParam(7, $this->contenType);
+        $stmt->bindParam(8, $this->base64);
+        $stmt->bindParam(9, $this->idUser);
+        $stmt->bindParam(10, $this->nit);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
@@ -133,16 +145,18 @@ class Contrato
         $searchQuery = " ";
         if ($searchValue != '') {
             $searchQuery = " AND (id LIKE :id OR 
-                            nombre LIKE :nombre OR
-                            descripcion LIKE :descripcion OR
+                            fechaInicio LIKE :fechaInicio OR
+                            fechaFin LIKE :fechaFin OR
+                            titulo LIKE :titulo OR
                             representante LIKE :representante OR
                             telefono LIKE :telefono OR
                             email LIKE :email OR
                             status LIKE :status )";
             $searchArray = array(
                 'id' => "%$searchValue%",
-                'nombre' => "%$searchValue%",
-                'descripcion' => "%$searchValue%",
+                'fechaInicio' => "%$searchValue%",
+                'fechaFin' => "%$searchValue%",
+                'titulo' => "%$searchValue%",
                 'representante' => "%$searchValue%",
                 'telefono' => "%$searchValue%",
                 'email' => "%$searchValue%",
@@ -160,7 +174,7 @@ class Contrato
         $records = $stmt->fetch();
         $totalRecordwithFilter = $records['allcount'];
         // --Fetch records--
-        $stmt = $this->conn->prepare("SELECT id, nombre, descripcion, representante, telefono, email, status FROM " . $this->tableName . " WHERE 1 " . $searchQuery . " AND status in(1, 2) ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
+        $stmt = $this->conn->prepare("SELECT id, fechaInicio, fechaFin, titulo, representante, telefono, email, content_type, base_64, status FROM " . $this->tableName . " WHERE 1 " . $searchQuery . " AND status in(1, 2) ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
         // --Bind values--
         foreach ($searchArray as $key => $search) {
             $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
@@ -175,6 +189,11 @@ class Contrato
             $statusColor = $row['status'] == '1' ? 'info' : 'secondary';
 
             $botones = "<div class='btn-group'>";
+            if ($datos->r === 1) {
+                $botones .= '<button type="button" class="btn btn-outline-danger" data-toggle="tooltip" data-placement="top" title="Ver docuemntación del contrato en PDF" onclick="visualizarPDF(';
+                $botones .= "'" . $row['content_type'] . "', '" . $row['base_64'] . "'); ";
+                $botones .= '"><i class="fal fa-file-pdf"></i></button>';
+            }
             if ($datos->u === 1) {
                 $botones .= "<button type='button' class='btn btn-success text-white' data-toggle='tooltip' data-placement='top' title='Editar Contrato' onclick='editarRegistro(" . $row['id'] . ");'>";
                 $botones .= "<i class='fal fa-edit'></i></button>";
@@ -189,13 +208,14 @@ class Contrato
 
             $data[] = array(
                 "id" => $row['id'],
-                "nombre" => $row['nombre'],
-                "descripcion" => $row['descripcion'],
+                "fechaInicio" => $row['fechaInicio'],
+                "fechaFin" => $row['fechaFin'],
+                "titulo" => $row['titulo'],
                 "representante" => $row['representante'],
                 "telefono" => $row['telefono'],
                 "email" => $row['email'],
                 "status" => $estado,
-                "defaultContent" => "$botones"
+                "defaultContent" => "$botones",
             );
         }
         // --Response--
@@ -233,7 +253,7 @@ class Contrato
     public function dataContrato(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT id, nombre, descripcion, representante, telefono, email FROM $this->tableName WHERE id=? ;";
+        $query = "SELECT id, fechaInicio, fechaFin, titulo, representante, telefono, email, content_type, base_64 FROM $this->tableName WHERE id=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Almacenamos los valores--
@@ -250,11 +270,14 @@ class Contrato
 
                 $datos = array(
                     'id' => $data->id,
-                    'nombre' => $data->nombre,
-                    'descripcion' => $data->descripcion,
+                    'fechaInicio' => $data->fechaInicio,
+                    'fechaFin' => $data->fechaFin,
+                    'titulo' => $data->titulo,
                     'representante' => $data->representante,
                     'telefono' => $data->telefono,
-                    'email' => $data->email
+                    'email' => $data->email,
+                    'contenType' => $data->content_type,
+                    'base64' => $data->base_64
                 );
                 // --Retornamos las respuestas--
                 echo json_encode(array('status' => '1', 'data' => $datos));
@@ -269,28 +292,36 @@ class Contrato
     }
 
     // -- ⊡ Funcion para actualizar empresa ⊡ --
-    public function updateMaterial(): void
+    public function updateContrato(): void
     {
         // --Preparamos la consulta--
-        $query = "UPDATE $this->tableName SET nombre=?, descripcion=?, representante=?, telefono=?, email=?, nit=? WHERE id=? ;";
+        $query = "UPDATE $this->tableName SET fechaInicio=?, fechaFin=?, titulo=?, representante=?, telefono=?, email=?, content_type=?, base_64=?, idUsuario=?, nit=? WHERE id=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
-        $this->nombre = htmlspecialchars(strip_tags($this->nombre));
-        $this->descripcion = htmlspecialchars(strip_tags($this->descripcion));
+        $this->fechaInicio = htmlspecialchars(strip_tags($this->fechaInicio));
+        $this->fechaFin = htmlspecialchars(strip_tags($this->fechaFin));
+        $this->titulo = htmlspecialchars(strip_tags($this->titulo));
         $this->representante = htmlspecialchars(strip_tags($this->representante));
         $this->telefono = htmlspecialchars(strip_tags($this->telefono));
         $this->email = htmlspecialchars(strip_tags($this->email));
+        $this->contenType = htmlspecialchars(strip_tags($this->contenType));
+        $this->base64 = htmlspecialchars(strip_tags($this->base64));
+        $this->idUser = $_SESSION['id'];
         $this->nit = $_SESSION['nit'];
 
         // --Almacenamos los valores--
-        $stmt->bindParam(1, $this->nombre);
-        $stmt->bindParam(2, $this->descripcion);
-        $stmt->bindParam(3, $this->representante);
-        $stmt->bindParam(4, $this->telefono);
-        $stmt->bindParam(5, $this->email);
-        $stmt->bindParam(6, $this->nit);
-        $stmt->bindParam(7, $this->id);
+        $stmt->bindParam(1, $this->fechaInicio);
+        $stmt->bindParam(2, $this->fechaFin);
+        $stmt->bindParam(3, $this->titulo);
+        $stmt->bindParam(4, $this->representante);
+        $stmt->bindParam(5, $this->telefono);
+        $stmt->bindParam(6, $this->email);
+        $stmt->bindParam(7, $this->contenType);
+        $stmt->bindParam(8, $this->base64);
+        $stmt->bindParam(9, $this->idUser);
+        $stmt->bindParam(10, $this->nit);
+        $stmt->bindParam(11, $this->id);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
