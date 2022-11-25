@@ -79,4 +79,5 @@ $view->initializationView();
 
 <?php
 include_once(VIEW . 'maquinarias/modalForm.php');
+include_once(VIEW . 'maquinarias/asignarAcuerdo.php');
 $view->finalizeView();

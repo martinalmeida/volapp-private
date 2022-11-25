@@ -229,7 +229,7 @@ class Select
     public function selectTipoMaquinaria(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT * FROM $this->tableTipoMaquinaria WHERE nit = " . $_SESSION['nit'] . " ORDER BY tipo ASC ;";
+        $query = "SELECT * FROM $this->tableTipoMaquinaria ORDER BY tipo ASC ;";
         $stmt = $this->conn->prepare($query);
 
         // -- ↓↓ Preparamos arreglo de modulos ↓↓ --

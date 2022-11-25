@@ -156,11 +156,11 @@ class Ruta
         // --Search--
         $searchQuery = " ";
         if ($searchValue != '') {
-            $searchQuery = " AND (id LIKE :id OR 
-                            nombre LIKE :nombre OR
-                            origen LIKE :origen OR
-                            destino LIKE :destino OR
-                            status LIKE :status )";
+            $searchQuery = " AND (r.id LIKE :id OR 
+                            r.nombre LIKE :nombre OR
+                            r.origen LIKE :origen OR
+                            r.destino LIKE :destino OR
+                            r.status LIKE :status )";
             $searchArray = array(
                 'id' => "%$searchValue%",
                 'nombre' => "%$searchValue%",
@@ -170,17 +170,17 @@ class Ruta
             );
         }
         // --Total number of records without filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . "");
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " r JOIN " . $this->tableRutasContratos . " rc ON rc.idRuta = r.id");
         $stmt->execute();
         $records = $stmt->fetch();
         $totalRecords = $records['allcount'];
         // --Total number of records with filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " WHERE 1 " . $searchQuery . "");
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " r JOIN " . $this->tableRutasContratos . " rc ON rc.idRuta = r.id WHERE 1 " . $searchQuery . "");
         $stmt->execute($searchArray);
         $records = $stmt->fetch();
         $totalRecordwithFilter = $records['allcount'];
         // --Fetch records--
-        $stmt = $this->conn->prepare("SELECT r.id, r.nombre, r.origen, r.destino, max(rc.id), CONCAT(rc.kilometraje, ' KM')kilometraje, CONCAT(rc.tarifa, ' $')tarifa, r.status FROM " . $this->tableName . " r JOIN " . $this->tableRutasContratos . " rc ON rc.idRuta = r.id WHERE 1 " . $searchQuery . " AND r.status in(1, 2) AND rc.status = 1 ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
+        $stmt = $this->conn->prepare("SELECT r.id, r.nombre, r.origen, r.destino, CONCAT(rc.kilometraje, ' KM')kilometraje, CONCAT(rc.tarifa, ' $')tarifa, r.status FROM " . $this->tableName . " r JOIN " . $this->tableRutasContratos . " rc ON rc.idRuta = r.id WHERE 1 " . $searchQuery . " AND r.status in(1, 2) AND rc.status = 1 ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
         // --Bind values--
         foreach ($searchArray as $key => $search) {
             $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
@@ -253,7 +253,7 @@ class Ruta
     public function dataRuta(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT r.id, r.nombre, r.origen, r.destino, (max(rc.id))idRuC, rc.kilometraje, rc.tarifa, rc.idContrato FROM $this->tableName r JOIN $this->tableRutasContratos rc ON r.id = rc.idRuta WHERE r.id=? ;";
+        $query = "SELECT r.id, r.nombre, r.origen, r.destino, (rc.id)idRuC, rc.kilometraje, rc.tarifa, rc.idContrato FROM $this->tableName r JOIN $this->tableRutasContratos rc ON r.id = rc.idRuta WHERE r.id=? AND rc.status = 1;";
         $stmt = $this->conn->prepare($query);
 
         // --Almacenamos los valores--

@@ -743,6 +743,140 @@ function showModalRegistro() {
   edit = false;
 }
 
+function showModalAsignar(id) {
+  $("#workSpace").html("");
+  edit = true;
+  $.ajax({
+    data: { idMaquinaria: id }, //datos a enviar a la url
+    dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
+    url: urlBase + "routes/maquinarias/checkAcuerdo", //url a donde hacemos la peticion
+    type: "POST",
+    beforeSend: function () {
+      // $(".overlayCargue").fadeIn("slow");
+    },
+    success: function (result) {
+      var estado = result.status;
+      var html = "";
+      switch (estado) {
+        case "0":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error en el servidor</strong>",
+            html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        case "1":
+          Swal.fire({
+            icon: "warning",
+            title: "<strong>Maquinaria Asociada</strong>",
+            html: "<h5>Esta maquinaria ya se encuentra asociada a un acuerdo</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        case "2":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error de Validacón</strong>",
+            html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        case "3":
+          // $("#placa").val(result.data[0].placa);
+          // $("#marca").val(result.data[0].marca);
+          // $("#referencia").val(result.data[0].referencia);
+          // $("#modelo").val(result.data[0].modelo);
+          // $("#color").val(result.data[0].color);
+          // $("#capacidad").val(result.data[0].capacidad);
+          // $("#nroSerie").val(result.data[0].nroSerie);
+          // $("#nroSerieChasis").val(result.data[0].nroSerieChasis);
+          // $("#nroMotor").val(result.data[0].nroMotor);
+          // $("#rodaje").val(result.data[0].rodaje);
+          // $("#rut").val(result.data[0].rut);
+          // $("#gps").val(result.data[0].gps);
+          // $("#fechaSoat").val(result.data[0].fechaSoat);
+          // $("#fechaTecno").val(result.data[0].fechaTecno);
+          // $("#propietario").val(result.data[0].propietario);
+          // $("#documentoPropietario").val(result.data[0].documentoPropietario);
+          // $("#telefonoPropietario").val(result.data[0].telefonoPropietario);
+          // $("#correoPropietario").val(result.data[0].correoPropietario);
+          // $("#operador").val(result.data[0].operador);
+          // $("#documentOperador").val(result.data[0].documentOperador);
+          // $("#telefonOperador").val(result.data[0].telefonOperador);
+          // $("#correOperador").val(result.data[0].correOperador);
+          // $("#tpMaquinaria").val(result.data[0].idMaquinaria);
+
+          // html +=
+          //   '<button type="button" class="btn btn-outline-danger" onclick="visualizarPDF(' +
+          //   "'" +
+          //   result.data[0].contenType +
+          //   "', '" +
+          //   result.data[0].base64 +
+          //   "'" +
+          //   ');" >Ver Documentación del Maquinaria <i class="fal fa-file-pdf"></i></button>' +
+          //   '<input type="hidden" id="idMaquinaria" name="idMaquinaria" value="' +
+          //   result.data[0].id +
+          //   '">' +
+          //   '<input type="hidden" id="contenType" name="contenType" value="' +
+          //   result.data[0].contenType +
+          //   '">' +
+          //   '<input type="hidden" id="base64" name="base64" value="' +
+          //   result.data[0].base64 +
+          //   '">';
+
+          // $("#archivoBase64").html(html);
+
+          $("#ModalAsignar").modal({
+            backdrop: "static",
+            keyboard: false,
+          });
+          break;
+
+        default:
+          break;
+      }
+    },
+    complete: function () {
+      // setTimeout(() => {
+      //   $(".overlayCargue").fadeOut("slow");
+      // }, 1000);
+    },
+    error: function (xhr) {
+      console.log(xhr);
+      Swal.fire({
+        icon: "error",
+        title: "<strong>Error!</strong>",
+        html: "<h5>Se ha presentado un error, por favor informar al area de Sistemas.</h5>",
+        showCloseButton: true,
+        showConfirmButton: false,
+        cancelButtonText: "Cerrar",
+        cancelButtonColor: "#dc3545",
+        showCancelButton: true,
+        backdrop: true,
+      });
+    },
+  });
+}
+
 function reset() {
   vercampos("#frmRegistro", 1);
   limpiarcampos("#frmRegistro");

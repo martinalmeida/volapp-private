@@ -10,6 +10,9 @@ class Maquinaria
     private $conn;
     private $tableName = "maquinarias";
     private $tableTpmaquinaria = "tipo_maquinaria";
+    private $tableAlquiler = "alquiler";
+    private $tableFletes = "fletes";
+    private $tableMovimientos = "movimientos";
     private $nit;
     private $idUser;
 
@@ -283,6 +286,8 @@ class Maquinaria
             if ($datos->u === 1) {
                 $botones .= "<button type='button' class='btn btn-success text-white' data-toggle='tooltip' data-placement='top' title='Editar Vehiculo' onclick='editarRegistro(" . $row['id'] . ");'>";
                 $botones .= "<i class='fal fa-edit'></i></button>";
+                $botones .= "<button type='button' class='btn btn-primary text-white' data-toggle='tooltip' data-placement='top' title='Asignar tipo de facturación' onclick='showModalAsignar(" . $row['id'] . ");'>";
+                $botones .= "<i class='fal fa-comment-dollar'></i></button>";
                 $botones .= "<button type='button' class='btn btn-" . $statusColor . " text-white' data-toggle='tooltip' data-placement='top' title='Estado del Vehiculo' onclick='statusRegistro(" . $row['id'] . ", " . $row['status'] . ");'>";
                 $botones .= "<i class='fal fa-eye'></i></button>";
             }
@@ -468,6 +473,34 @@ class Maquinaria
         if ($stmt->execute()) {
             echo json_encode(array('status' => '1', 'data' => NULL));
         } else {
+            echo json_encode(array('status' => '0', 'data' => NULL));
+        }
+    }
+
+    // -- ⊡ Funcion para checar si ya esta maquinaria esta asociada a un acuerdo ⊡ --
+    public function checkMaquinariaAcuerdo(): void
+    {
+        // --Preparamos la consulta--
+        $query = "SELECT m.id FROM $this->tableName m JOIN $this->tableAlquiler a ON m.id = a.idMaquinaria JOIN $this->tableFletes f ON m.id = f.idMaquinaria JOIN $this->tableMovimientos mo ON m.id = mo.id WHERE m.id=? ;";
+        $stmt = $this->conn->prepare($query);
+
+        // --Almacenamos los valores--
+        $stmt->bindParam(1, $this->id);
+
+        // --Ejecutamos la consulta y validamos ejecucion--
+        if ($stmt->execute()) {
+
+            // --Comprobamos que venga algun dato--
+            if ($stmt->rowCount() >= 1) {
+
+                // --Retornamos las respuestas--
+                echo json_encode(array('status' => '1', 'data' => NULL));
+            } else {
+                // --No esta asociado a ningun acuerdo esta maquinaria--
+                echo json_encode(array('status' => '3', 'data' => NULL));
+            }
+        } else {
+            // --Falla en la ejecución de la consulta--
             echo json_encode(array('status' => '0', 'data' => NULL));
         }
     }
