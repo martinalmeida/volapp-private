@@ -31,6 +31,17 @@ class RolesController
         $rol->getWritePermisos();
     }
 
+    public function reset(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $rol = new Rol($db);
+
+        $rol->resetPermisos();
+    }
+
     public function create(): void
     {
         // --Importacion e inicializacion de conexion--

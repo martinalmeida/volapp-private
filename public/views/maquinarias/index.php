@@ -36,7 +36,10 @@ $view->initializationView();
                         <thead class="bg-primary-600">
                             <tr>
                                 <th>id</th>
-                                <th>Nombre de la Maquinaria</th>
+                                <th>Placa</th>
+                                <th>Nombre Completo del Conductor</th>
+                                <th>Telefono</th>
+                                <th>Correo Electronico</th>
                                 <th>Vencimiento del SOAT</th>
                                 <th>Vencimiento de Licencia</th>
                                 <th>V. Seguro todo Riezgo</th>
@@ -55,7 +58,7 @@ $view->initializationView();
 </div>
 
 <h3>
-    Pagina de Maquinarias
+    Pagina de Vehiculos
 </h3>
 
 <?php

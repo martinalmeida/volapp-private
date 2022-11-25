@@ -11,12 +11,7 @@ var runDatePicker = function () {
     todayHighlight: true,
     templates: controls,
   });
-  $("#fechaLicencia").datepicker({
-    orientation: "buttom left",
-    todayHighlight: true,
-    templates: controls,
-  });
-  $("#fecchaTdr").datepicker({
+  $("#fechaTecno").datepicker({
     orientation: "buttom left",
     todayHighlight: true,
     templates: controls,
@@ -63,7 +58,10 @@ $(document).ready(function () {
     ],
     columns: [
       { data: "id" },
-      { data: "nombre" },
+      { data: "placa" },
+      { data: "nombresConductor" },
+      { data: "telefono" },
+      { data: "email" },
       { data: "fechaSoat" },
       { data: "fechaLicencia" },
       { data: "fecchaTdr" },
@@ -88,6 +86,7 @@ $(document).ready(function () {
   readPermisos();
   writePermisos();
   runDatePicker();
+  selects();
   $(":input").inputmask();
 });
 
@@ -123,6 +122,83 @@ function writePermisos() {
     complete: function () {},
     error: function (xhr) {
       console.log(xhr);
+    },
+  });
+}
+
+function selects() {
+  $.ajax({
+    dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
+    url: urlBase + "routes/selects/getTipoMaquinaria", //url a donde hacemos la peticion
+    type: "GET",
+    beforeSend: function () {
+      // $(".overlayCargue").fadeIn("slow");
+    },
+    success: function (result) {
+      var estado = result.status;
+      switch (estado) {
+        case "0":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error en el servidor</strong>",
+            html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        case "1":
+          var html = "";
+
+          html +=
+            '<option value="" disabled selected hidden>Seleccione tipo de Maquinaria</option>';
+          for (let i = 0; i < result.data.length; i++) {
+            html += result.data[i].html;
+          }
+
+          $("#tpMaquinaria").html(html);
+          break;
+
+        case "2":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error de Validacón</strong>",
+            html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        default:
+          break;
+      }
+    },
+    complete: function () {
+      // setTimeout(() => {
+      //   $(".overlayCargue").fadeOut("slow");
+      // }, 1000);
+    },
+    error: function (xhr) {
+      console.log(xhr);
+      Swal.fire({
+        icon: "error",
+        title: "<strong>Error!</strong>",
+        html: "<h5>Se ha presentado un error, por favor informar al area de Sistemas.</h5>",
+        showCloseButton: true,
+        showConfirmButton: false,
+        cancelButtonText: "Cerrar",
+        cancelButtonColor: "#dc3545",
+        showCancelButton: true,
+        backdrop: true,
+      });
     },
   });
 }
@@ -179,8 +255,8 @@ function registrar(form) {
             if (edit == false) {
               Swal.fire({
                 icon: "success",
-                title: "<strong>Maquinaria Creada</strong>",
-                html: "<h5>La maquinaria se ha registrado exitosamente</h5>",
+                title: "<strong>Maquinaria Creado</strong>",
+                html: "<h5>El Maquinaria se ha registrado exitosamente</h5>",
                 showCloseButton: false,
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#64a19d",
@@ -189,8 +265,8 @@ function registrar(form) {
             } else {
               Swal.fire({
                 icon: "success",
-                title: "<strong>Maquinaria Editada</strong>",
-                html: "<h5>La maquinaria se ha editado exitosamente</h5>",
+                title: "<strong>Maquinaria Editado</strong>",
+                html: "<h5>El Maquinaria se ha editado exitosamente</h5>",
                 showCloseButton: false,
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#64a19d",
@@ -234,7 +310,7 @@ function registrar(form) {
               '<div class="alert border-warning bg-transparent text-info fade show" role="alert">' +
               '<div class="d-flex align-items-center"><div class="alert-icon text-warning">' +
               '<i class="fal fa-exclamation-triangle"></i></div>' +
-              '<div class="flex-1 text-warning"><span class="h5 m-0 fw-700">Adjunte el Archivo de Documentación del Vehiculo </span></div>' +
+              '<div class="flex-1 text-warning"><span class="h5 m-0 fw-700">Adjunte el Archivo de Documentación de maquinaria </span></div>' +
               '<button type="button" class="btn btn-warning btn-pills btn-sm btn-w-m waves-effect waves-themed" data-dismiss="alert" aria-label="Close">' +
               "Cerrar</button></div></div>";
 
@@ -312,27 +388,33 @@ function editarRegistro(id) {
           break;
 
         case "1":
-          $("#nombre").val(result.data.nombre);
-          $("#fechaSoat").val(result.data.fechaSoat);
-          $("#fechaLicencia").val(result.data.fechaLicencia);
-          $("#fecchaTdr").val(result.data.fecchaTdr);
+          $("#placa").val(result.data[0].placa);
+          $("#nombresConductor").val(result.data[0].nombresConductor);
+          //$("#Apaterno").val(result.data[0].Apaterno);
+          //$("#Amaterno").val(result.data[0].Amaterno);
+          $("#telefono").val(result.data[0].telefono);
+          $("#email").val(result.data[0].email);
+          $("#tpMaquinaria").val(result.data[0].tpMaquinaria);
+          $("#fechaSoat").val(result.data[0].fechaSoat);
+          $("#fechaLicencia").val(result.data[0].fechaLicencia);
+          $("#fecchaTdr").val(result.data[0].fecchaTdr);
 
           html +=
             '<button type="button" class="btn btn-outline-danger" onclick="visualizarPDF(' +
             "'" +
-            result.data.contenType +
+            result.data[0].contenType +
             "', '" +
-            result.data.base64 +
+            result.data[0].base64 +
             "'" +
-            ');" >Ver Documentación del Vehiculo <i class="fal fa-file-pdf"></i></button>' +
+            ');" >Ver Documentación del Maquinaria <i class="fal fa-file-pdf"></i></button>' +
             '<input type="hidden" id="idMaquinaria" name="idMaquinaria" value="' +
-            result.data.id +
+            result.data[0].id +
             '">' +
             '<input type="hidden" id="contenType" name="contenType" value="' +
-            result.data.contenType +
+            result.data[0].contenType +
             '">' +
             '<input type="hidden" id="base64" name="base64" value="' +
-            result.data.base64 +
+            result.data[0].base64 +
             '">';
 
           $("#archivoBase64").html(html);
@@ -442,7 +524,7 @@ function statusRegistro(id, status) {
 
         case "1":
           Command: toastr["success"](
-            "Estado de la Maquinaria cambiado exitosamente.",
+            "Estado del Maquinaria cambiado exitosamente.",
             "Estado Cambiado"
           );
 
@@ -513,7 +595,7 @@ function eliminarRegistro(id) {
   Swal.fire({
     icon: "warning",
     title: "Que deseas hacer?",
-    text: "Se eliminara la Maquinaria del sistema!",
+    text: "Se eliminara el Maquinaria del sistema!",
     type: "warning",
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
@@ -551,8 +633,8 @@ function eliminarRegistro(id) {
 
             case "1":
               Command: toastr["success"](
-                "La Maquinaria se ha eliminado satisfactoriamente.",
-                "Maquinaria Eliminada"
+                "El Maquinaria se ha eliminado satisfactoriamente.",
+                "Placa Maquinaria"
               );
 
               toastr.options = {

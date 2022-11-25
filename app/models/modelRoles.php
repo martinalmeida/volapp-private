@@ -9,6 +9,8 @@ class Rol
     // --Parametros Privados--
     private $conn;
     private $tableName = "rol";
+    private $tablePermisos = "permisos";
+    private $tableModulo = "modulo";
 
     // --Parametros Publicos--
     public $id;
@@ -63,7 +65,8 @@ class Rol
             $html = "";
             $html .= '<h1 class="subheader-title">';
             $html .= '<i class="fal fa-info-circle"></i> Roles y Permisos</h1>';
-            $html .= '<button type="button" class="btn btn-info active" onclick="showModalRegistro();">Agregar <i class="fal fa-plus-square"></i></button>';
+            $html .= '<button type="button" class="btn btn-info active m-1" onclick="showModalRegistro();">Agregar <i class="fal fa-plus-square"></i></button>';
+            $html .= '<button type="button" class="btn btn-danger" onclick="resetPermisos();">Reset Permisos <i class="fal fa-window-restore"></i></button>';
 
             echo json_encode(array('status' => NULL, 'data' => $html));
         } else {
@@ -74,6 +77,80 @@ class Rol
             $html .= '<h3>No tienes permisos de escritura para este modulo.</h3>';
 
             echo json_encode(array('status' => NULL, 'data' => $html));
+        }
+    }
+
+
+    // -- ⊡ Funcion para resetear todos los permisos a los roles ⊡ --
+    public function resetPermisos(): void
+    {
+        // -- ↓↓ Preparamos la consulta ↓↓ --
+        $query = "TRUNCATE TABLE $this->tablePermisos ; ";
+        $stmt = $this->conn->prepare($query);
+
+        // -- ↓↓ Ejecutamos la consulta y validamos ejecucion ↓↓ --
+        if ($stmt->execute()) {
+
+            // -- ↓↓ Preparamos la consulta ↓↓ --
+            $query = "SELECT * FROM $this->tableModulo WHERE status = 1 ; ";
+            $stmt = $this->conn->prepare($query);
+
+            if ($stmt->execute()) {
+
+                // -- ↓↓ Comprobamos que venga algun dato ↓↓ --
+                if ($stmt->rowCount() >= 1) {
+                    // -- ↓↓ Modulos encontrados ↓↓ --
+                    $data = $stmt->fetchAll();
+
+                    foreach ($data as $row) {
+
+                        $roles = self::allRoles();
+                        foreach ($roles as $rowRol) {
+                            $rwud = $rowRol['id'] == '1' ? ',r=1, w=1, u=1, d=1' : ',r=1, w=0, u=0, d=0';
+                            $query = "INSERT INTO $this->tablePermisos SET rolid=" . $rowRol['id'] . ", moduloid=" . $row['id'] . $rwud . " ; ";
+                            $stmt = $this->conn->prepare($query);
+                            $stmt->execute();
+                        }
+                    }
+                    echo json_encode(array('status' => '1', 'data' => NULL));
+                } else {
+                    // -- ↓↓ Modulos no encontrados ↓↓ --
+                    echo json_encode(array('status' => '6', 'data' => NULL));
+                    exit;
+                }
+            } else {
+                // -- ↓↓ Falla en la ejecución de la consulta ↓↓ --
+                print_r($stmt->errorInfo());
+            }
+        } else {
+            // -- ↓↓ Falla en la ejecución de la consulta ↓↓ --
+            print_r($stmt->errorInfo());
+        }
+    }
+
+    // -- ⊡ Funcion para traer los roles ⊡ --
+    private function allRoles()
+    {
+        // -- ↓↓ Preparamos la consulta ↓↓ --
+        $query = "SELECT * FROM $this->tableName ; ";
+        $stmt = $this->conn->prepare($query);
+
+        // -- ↓↓ Ejecutamos la consulta y validamos ejecucion ↓↓ --
+        if ($stmt->execute()) {
+
+            // -- ↓↓ Comprobamos que venga algun dato ↓↓ --
+            if ($stmt->rowCount() >= 1) {
+                // -- ↓↓ Submodulos encontrados ↓↓ --
+                $data = $stmt->fetchAll();
+                return $data;
+            } else {
+                // -- ↓↓ Submodulos no encontrados ↓↓ --
+                echo json_encode(array('status' => '6', 'data' => NULL));
+                exit;
+            }
+        } else {
+            // -- ↓↓ Falla en la ejecución de la consulta ↓↓ --
+            print_r($stmt->errorInfo());
         }
     }
 

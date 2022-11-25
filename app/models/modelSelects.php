@@ -10,11 +10,11 @@ class Select
     private $conn;
     private $tableSucursal = "sucursal";
     private $tableRol = "rol";
-    private $tablePlaca = "vehiculos";
+    private $tableMaquinarias = "maquinarias";
     private $tableRuta = "rutas";
     private $tableMaterial = "materiales";
     private $tableContrato = "contratos";
-    private $tableTpvehiculo = "tipo_vehiculo";
+    private $tableTipoMaquinaria = "tipo_maquinaria";
 
 
     // --Constructor para la conexion de la BD--
@@ -95,7 +95,7 @@ class Select
     public function selectVehiculo(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT * FROM $this->tablePlaca WHERE status = 1 ORDER BY placa ASC ;";
+        $query = "SELECT * FROM $this->tableMaquinarias WHERE status = 1 ORDER BY placa ASC ;";
         $stmt = $this->conn->prepare($query);
 
         // -- ↓↓ Preparamos arreglo de modulos ↓↓ --
@@ -226,10 +226,10 @@ class Select
         }
     }
 
-    public function selectVehiculoTipo(): void
+    public function selectTipoMaquinaria(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT * FROM $this->tableTpvehiculo ORDER BY tipo ASC ;";
+        $query = "SELECT * FROM $this->tableTipoMaquinaria WHERE nit = " . $_SESSION['nit'] . " ORDER BY tipo ASC ;";
         $stmt = $this->conn->prepare($query);
 
         // -- ↓↓ Preparamos arreglo de modulos ↓↓ --

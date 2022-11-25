@@ -103,6 +103,102 @@ function writePermisos() {
   });
 }
 
+function resetPermisos() {
+  Swal.fire({
+    icon: "error",
+    title: "Resetear Permisos?",
+    text: "Se resetearan todos los permisos predeterminados!",
+    type: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Reset",
+    preConfirm: function () {
+      $.ajax({
+        dataType: "json",
+        url: urlBase + "routes/roles/reset",
+        type: "GET",
+        beforeSend: function () {
+          // $("#overlayText").text("Cerrando Sesión...");
+          // $(".overlayCargue").fadeOut("slow");
+        },
+        complete: function () {
+          // $(".overlayCargue").fadeIn("slow");
+        },
+        success: function (result) {
+          var estado = result.status;
+          switch (estado) {
+            case "1":
+              Command: toastr["success"](
+                "Los permisos han sido seteados a por defecto.",
+                "Permisos reseteados"
+              );
+
+              toastr.options = {
+                closeButton: false,
+                debug: false,
+                newestOnTop: true,
+                progressBar: true,
+                positionClass: "toast-top-right",
+                preventDuplicates: true,
+                onclick: null,
+                showDuration: 300,
+                hideDuration: 100,
+                timeOut: 5000,
+                extendedTimeOut: 1000,
+                showEasing: "swing",
+                hideEasing: "linear",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut",
+              };
+              tablaRoles.clear().draw();
+              break;
+
+            case "6":
+              Swal.fire({
+                icon: "error",
+                title: "<strong>Error en el servidor</strong>",
+                html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
+                showCloseButton: true,
+                showConfirmButton: false,
+                cancelButtonText: "Cerrar",
+                cancelButtonColor: "#dc3545",
+                showCancelButton: true,
+                backdrop: true,
+              });
+              break;
+          }
+        },
+        error: function (xhr) {
+          console.log(xhr);
+          Command: toastr["error"](
+            "Fallo la ejecucion de la acción, por favor comunicate con soporte.",
+            "Operación Fallida."
+          );
+
+          toastr.options = {
+            closeButton: false,
+            debug: false,
+            newestOnTop: true,
+            progressBar: true,
+            positionClass: "toast-top-right",
+            preventDuplicates: true,
+            onclick: null,
+            showDuration: 300,
+            hideDuration: 100,
+            timeOut: 5000,
+            extendedTimeOut: 1000,
+            showEasing: "swing",
+            hideEasing: "linear",
+            showMethod: "fadeIn",
+            hideMethod: "fadeOut",
+          };
+        },
+      });
+    },
+  });
+}
+
 function registrar(form) {
   var respuestavalidacion = validarcampos("#" + form);
   if (respuestavalidacion) {
