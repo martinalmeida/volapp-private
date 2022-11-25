@@ -121,8 +121,8 @@
                             <input type="number" onKeyPress="if(this.value.length==10)return false;" class="form-control" id="telefonOperador" name="telefonOperador" placeholder="Teléfono de operador" required>
                         </div>
                         <div class="col-md-12 mb-3">
-                            <label class="form-label" for="correoOperador">Correo electronico de Operador o Conductor:</label>
-                            <input type="email" onKeyPress="if(this.value.length==100)return false;" class="form-control" id="correoOperador" name="correoOperador" placeholder="Correo electronico de operador o conductor" required>
+                            <label class="form-label" for="correOperador">Correo electronico de Operador o Conductor:</label>
+                            <input type="email" onKeyPress="if(this.value.length==100)return false;" class="form-control" id="correOperador" name="correOperador" placeholder="Correo electronico de operador o conductor" required>
                         </div>
                         <div class="panel-tag col-md-12">
                             <p>Documentación de maquinaria: </p>

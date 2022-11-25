@@ -36,13 +36,29 @@ $view->initializationView();
                         <thead class="bg-primary-600">
                             <tr>
                                 <th>id</th>
+                                <th>Equipo o clase</th>
                                 <th>Placa</th>
-                                <th>Nombre Completo del Conductor</th>
-                                <th>Telefono</th>
-                                <th>Correo Electronico</th>
+                                <th>Marca</th>
+                                <th>Referencia</th>
+                                <th>Modelo</th>
+                                <th>Color</th>
+                                <th>Capacidad</th>
+                                <th>Nro de Serie</th>
+                                <th>Nro Serie de Chasis</th>
+                                <th>Nro de Motor</th>
+                                <th>Rodaje</th>
+                                <th>Rut</th>
+                                <th>GPS</th>
                                 <th>Vencimiento del SOAT</th>
-                                <th>Vencimiento de Licencia</th>
-                                <th>V. Seguro todo Riezgo</th>
+                                <th>Vencimiento de Tecnocomecánica</th>
+                                <th>Nombre del Propietario</th>
+                                <th>Documento del Propietario</th>
+                                <th>Telefono del Propietario</th>
+                                <th>Correo del Propietario</th>
+                                <th>Nombre del Operador</th>
+                                <th>Documento del Operador</th>
+                                <th>Telefono del Operador</th>
+                                <th>Correo del Operador</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
                             </tr>

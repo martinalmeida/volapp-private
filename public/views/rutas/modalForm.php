@@ -5,7 +5,7 @@
                 <h4 class="modal-title">
                     Agregar Rutas
                     <small class="m-0 text-muted">
-                        Una ruta es una trayectoria que recorre un vehiculo frecuentemenet.
+                        La tarifa asignada a la ruta es la que se le cobra al contrato.
                     </small>
                 </h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">

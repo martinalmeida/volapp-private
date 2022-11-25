@@ -58,13 +58,29 @@ $(document).ready(function () {
     ],
     columns: [
       { data: "id" },
+      { data: "tipo" },
       { data: "placa" },
-      { data: "nombresConductor" },
-      { data: "telefono" },
-      { data: "email" },
+      { data: "marca" },
+      { data: "referencia" },
+      { data: "modelo" },
+      { data: "color" },
+      { data: "capacidad" },
+      { data: "nroSerie" },
+      { data: "nroSerieChasis" },
+      { data: "nroMotor" },
+      { data: "rodaje" },
+      { data: "rut" },
+      { data: "gps" },
       { data: "fechaSoat" },
-      { data: "fechaLicencia" },
-      { data: "fecchaTdr" },
+      { data: "fechaTecno" },
+      { data: "propietario" },
+      { data: "documentoPropietario" },
+      { data: "telefonoPropietario" },
+      { data: "correoPropietario" },
+      { data: "operador" },
+      { data: "documentOperador" },
+      { data: "telefonOperador" },
+      { data: "correOperador" },
       { data: "status" },
       { data: "defaultContent" },
     ],
@@ -255,8 +271,8 @@ function registrar(form) {
             if (edit == false) {
               Swal.fire({
                 icon: "success",
-                title: "<strong>Maquinaria Creado</strong>",
-                html: "<h5>El Maquinaria se ha registrado exitosamente</h5>",
+                title: "<strong>Maquinaria Creada</strong>",
+                html: "<h5>La maquinaria se ha registrado exitosamente</h5>",
                 showCloseButton: false,
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#64a19d",
@@ -265,8 +281,8 @@ function registrar(form) {
             } else {
               Swal.fire({
                 icon: "success",
-                title: "<strong>Maquinaria Editado</strong>",
-                html: "<h5>El Maquinaria se ha editado exitosamente</h5>",
+                title: "<strong>Maquinaria Editada</strong>",
+                html: "<h5>La maquinaria se ha editado exitosamente</h5>",
                 showCloseButton: false,
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#64a19d",
@@ -389,15 +405,28 @@ function editarRegistro(id) {
 
         case "1":
           $("#placa").val(result.data[0].placa);
-          $("#nombresConductor").val(result.data[0].nombresConductor);
-          //$("#Apaterno").val(result.data[0].Apaterno);
-          //$("#Amaterno").val(result.data[0].Amaterno);
-          $("#telefono").val(result.data[0].telefono);
-          $("#email").val(result.data[0].email);
-          $("#tpMaquinaria").val(result.data[0].tpMaquinaria);
+          $("#marca").val(result.data[0].marca);
+          $("#referencia").val(result.data[0].referencia);
+          $("#modelo").val(result.data[0].modelo);
+          $("#color").val(result.data[0].color);
+          $("#capacidad").val(result.data[0].capacidad);
+          $("#nroSerie").val(result.data[0].nroSerie);
+          $("#nroSerieChasis").val(result.data[0].nroSerieChasis);
+          $("#nroMotor").val(result.data[0].nroMotor);
+          $("#rodaje").val(result.data[0].rodaje);
+          $("#rut").val(result.data[0].rut);
+          $("#gps").val(result.data[0].gps);
           $("#fechaSoat").val(result.data[0].fechaSoat);
-          $("#fechaLicencia").val(result.data[0].fechaLicencia);
-          $("#fecchaTdr").val(result.data[0].fecchaTdr);
+          $("#fechaTecno").val(result.data[0].fechaTecno);
+          $("#propietario").val(result.data[0].propietario);
+          $("#documentoPropietario").val(result.data[0].documentoPropietario);
+          $("#telefonoPropietario").val(result.data[0].telefonoPropietario);
+          $("#correoPropietario").val(result.data[0].correoPropietario);
+          $("#operador").val(result.data[0].operador);
+          $("#documentOperador").val(result.data[0].documentOperador);
+          $("#telefonOperador").val(result.data[0].telefonOperador);
+          $("#correOperador").val(result.data[0].correOperador);
+          $("#tpMaquinaria").val(result.data[0].idMaquinaria);
 
           html +=
             '<button type="button" class="btn btn-outline-danger" onclick="visualizarPDF(' +
@@ -633,8 +662,8 @@ function eliminarRegistro(id) {
 
             case "1":
               Command: toastr["success"](
-                "El Maquinaria se ha eliminado satisfactoriamente.",
-                "Placa Maquinaria"
+                "La maquinaria se ha eliminado satisfactoriamente.",
+                "Maquinaria Eliminada"
               );
 
               toastr.options = {
