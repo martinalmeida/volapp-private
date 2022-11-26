@@ -44,6 +44,7 @@ class Maquinaria
     public $base64;
     public $idMaquinaria;
     public $status;
+    public $table;
 
     /* Propiedades de los objetos de Datatables para utilizar (Serverside) 
     Procesamiento del lado del servidor */
@@ -480,27 +481,65 @@ class Maquinaria
     // -- ⊡ Funcion para checar si ya esta maquinaria esta asociada a un acuerdo ⊡ --
     public function checkMaquinariaAcuerdo(): void
     {
-        // --Preparamos la consulta--
-        $query = "SELECT m.id FROM $this->tableName m JOIN $this->tableAlquiler a ON m.id = a.idMaquinaria JOIN $this->tableFletes f ON m.id = f.idMaquinaria JOIN $this->tableMovimientos mo ON m.id = mo.id WHERE m.id=? ;";
+        $tablas = array($this->tableAlquiler, $this->tableFletes, $this->tableMovimientos);
+        foreach ($tablas as $tabla) {
+            // --Preparamos la consulta--
+            $query = "SELECT * FROM $tabla WHERE idMaquinaria=? ;";
+            $stmt = $this->conn->prepare($query);
+
+            // --Almacenamos los valores--
+            $stmt->bindParam(1, $this->id);
+
+            // --Ejecutamos la consulta y validamos ejecucion--
+            if ($stmt->execute()) {
+
+                // --Comprobamos que venga algun dato--
+                if ($stmt->rowCount() >= 1) {
+
+                    // --Retornamos las respuestas--
+                    echo json_encode(array('status' => '1', 'data' => NULL));
+                    exit;
+                }
+            } else {
+                // --Falla en la ejecución de la consulta--
+                echo json_encode(array('status' => '0', 'data' => NULL));
+                exit;
+            }
+        }
+        echo json_encode(array('status' => '3', 'data' => NULL));
+    }
+
+    function asignarModoFacturacion(): void
+    {
+        switch ($this->table) {
+            case '1':
+                $query = "INSERT INTO $this->tableAlquiler SET idMaquinaria=?, datecreated=?, idUsuario=? ;";
+                break;
+            case '2':
+                $query = "INSERT INTO $this->tableFletes SET idMaquinaria=?, datecreated=?, idUsuario=? ;";
+                break;
+            case '3':
+                $query = "INSERT INTO $this->tableMovimientos SET idMaquinaria=?, datecreated=?, idUsuario=? ;";
+                break;
+
+            default:
+                // code
+                break;
+        }
+
         $stmt = $this->conn->prepare($query);
+        // --Escapamos los caracteres--
+        $this->fechaActual = Utilidades::getFecha();
+        $this->idUser = $_SESSION['id'];
 
         // --Almacenamos los valores--
         $stmt->bindParam(1, $this->id);
-
+        $stmt->bindParam(2, $this->fechaActual);
+        $stmt->bindParam(3, $this->idUser);
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
-
-            // --Comprobamos que venga algun dato--
-            if ($stmt->rowCount() >= 1) {
-
-                // --Retornamos las respuestas--
-                echo json_encode(array('status' => '1', 'data' => NULL));
-            } else {
-                // --No esta asociado a ningun acuerdo esta maquinaria--
-                echo json_encode(array('status' => '3', 'data' => NULL));
-            }
+            echo json_encode(array('status' => '1', 'data' => NULL));
         } else {
-            // --Falla en la ejecución de la consulta--
             echo json_encode(array('status' => '0', 'data' => NULL));
         }
     }
