@@ -105,7 +105,7 @@ class AlquilerController
 
         // --No se adjunta un archivo nuevo--
         if (
-            Validar::numeros($alquiler->id) && Validar::float($alquiler->ruta, '.') &&
+            Validar::numeros($alquiler->id) && Validar::numeros($alquiler->ruta) &&
             Validar::float($alquiler->standBy, '.') && Validar::float($alquiler->tarifaHora, '.')
         ) {
             $alquiler->parametrizacionAlquiler();

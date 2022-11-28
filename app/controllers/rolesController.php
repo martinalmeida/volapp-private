@@ -54,7 +54,7 @@ class RolesController
         $rol->nombrerol = isset($_POST['nombrerol']) ? strtoupper(trim($_POST['nombrerol'])) : NULL;
         $rol->descripcion = isset($_POST['descripcion']) ? strtoupper(trim($_POST['descripcion'])) : NULL;
 
-        if (Validar::alfanumerico($rol->nombrerol) && Validar::alfanumerico($rol->descripcion)) {
+        if (Validar::patronalfanumerico1($rol->nombrerol) && Validar::patronalfanumerico1($rol->descripcion)) {
             $rol->createRol();
         } else {
             echo json_encode(array('status' => '2', 'data' => NULL));
@@ -132,7 +132,7 @@ class RolesController
         $rol->descripcion = isset($_POST['descripcion']) ? strtoupper(trim($_POST['descripcion'])) : NULL;
 
 
-        if (Validar::numeros($rol->id) && Validar::alfanumerico($rol->nombrerol) && Validar::alfanumerico($rol->descripcion)) {
+        if (Validar::numeros($rol->id) && Validar::patronalfanumerico1($rol->nombrerol) && Validar::patronalfanumerico1($rol->descripcion)) {
             $rol->updateRol();
         } else {
             echo json_encode(array('status' => '2', 'data' => NULL));

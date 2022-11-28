@@ -48,7 +48,7 @@ class FletesController
         $fletes->columnSortOrder = htmlspecialchars($_POST['order'][0]['dir']);
         $fletes->searchValue = htmlspecialchars($_POST['search']['value']);
 
-        $fletes->readAllDaTableAlquiler();
+        $fletes->readAllDaTableFletes();
     }
 
     public function status(): void
@@ -60,11 +60,11 @@ class FletesController
         $fletes = new Fletes($db);
 
         // --Seteo de valores existentes en el POST--
-        $fletes->id = isset($_POST['idAlquiler']) ? strtoupper(trim($_POST['idAlquiler'])) : NULL;
+        $fletes->id = isset($_POST['idFlete']) ? strtoupper(trim($_POST['idFlete'])) : NULL;
         $fletes->status = isset($_POST['status']) ? strtoupper(trim($_POST['status'])) : NULL;
 
         if (Validar::numeros($fletes->id) && Validar::numeros($fletes->status)) {
-            $fletes->statusAlquiler();
+            $fletes->statusFlete();
         } else {
             echo json_encode(array('status' => '2', 'data' => NULL));
         }
@@ -79,11 +79,11 @@ class FletesController
         $fletes = new Fletes($db);
 
         // --Seteo de valores existentes en el POST--
-        $fletes->id = isset($_POST['idAlquiler']) ? strtoupper(trim($_POST['idAlquiler'])) : NULL;
+        $fletes->id = isset($_POST['idFlete']) ? strtoupper(trim($_POST['idFlete'])) : NULL;
 
         // --Validacion de datos a enviar al modelo--
         if (Validar::numeros($fletes->id)) {
-            $fletes->datAlquiler();
+            $fletes->dataFletes();
         } else {
             echo json_encode(array('status' => '2', 'data' => NULL));
         }
@@ -98,17 +98,13 @@ class FletesController
         $fletes = new Fletes($db);
 
         // --Seteo de valores existentes en el POST--
-        $fletes->id = isset($_POST['idAlquiler']) ? trim($_POST['idAlquiler']) : NULL;
+        $fletes->id = isset($_POST['idFlete']) ? trim($_POST['idFlete']) : NULL;
         $fletes->ruta = isset($_POST['ruta']) ? trim($_POST['ruta']) : NULL;
-        $fletes->standBy = isset($_POST['standBy']) ? trim($_POST['standBy']) : NULL;
-        $fletes->tarifaHora = isset($_POST['tarifaHora']) ? strtoupper(trim($_POST['tarifaHora'])) : NULL;
+        $fletes->flete = isset($_POST['flete']) ? trim($_POST['flete']) : NULL;
 
         // --No se adjunta un archivo nuevo--
-        if (
-            Validar::numeros($fletes->id) && Validar::float($fletes->ruta, '.') &&
-            Validar::float($fletes->standBy, '.') && Validar::float($fletes->tarifaHora, '.')
-        ) {
-            $fletes->parametrizacionAlquiler();
+        if (Validar::numeros($fletes->id) && Validar::numeros($fletes->ruta) && Validar::float($fletes->flete, '.')) {
+            $fletes->parametrizacionFlete();
         } else {
             // --Error de validación--
             echo json_encode(array('status' => '2', 'data' => NULL));

@@ -41,8 +41,7 @@ $view->initializationView();
                                 <th>Placa o # de Registro:</th>
                                 <th>Titulo del Contrato</th>
                                 <th>Ruta</th>
-                                <th>Stand-by</th>
-                                <th>Tarifa por Hora</th>
+                                <th>Valor de Flete</th>
                                 <th>Usuario Modifico</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>

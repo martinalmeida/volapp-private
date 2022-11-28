@@ -58,5 +58,4 @@ $view->initializationView();
 
 <?php
 include_once(VIEW . 'materiales/modalForm.php');
-include_once(VIEW . 'materiales/modalAsignar.php');
 $view->finalizeView();

@@ -323,13 +323,13 @@ function editarRegistro(id) {
           $("#btnRegistro").removeClass("btn btn-info");
           $("#btnRegistro").addClass("btn btn-success");
 
-          $("#nombre").val(result.data.nombre);
-          $("#descripcion").val(result.data.descripcion);
+          $("#nombre").val(result.data[0].nombre);
+          $("#descripcion").val(result.data[0].descripcion);
 
           var html = "";
           html +=
             '<input type="hidden" id="idMaterial" name="idMaterial" value="' +
-            result.data.id +
+            result.data[0].id +
             '">';
 
           $("#inputsEditar").html(html);
@@ -591,17 +591,6 @@ function eliminarRegistro(id) {
       });
     },
   });
-}
-
-function asignarTarifa() {
-  $("#btnRegistroAsignar").text("Asignar Tarifa");
-  $("#btnRegistroAsignar").addClass("btn btn-primary");
-  $("#btnRegistroAsignar").attr("onclick", "registrar('frmRegistroAsignar');");
-  $("#ModalAsignarTarifa").modal({
-    backdrop: "static",
-    keyboard: false,
-  });
-  $("#inputsEditarAsignar").html("");
 }
 
 function showModalRegistro() {

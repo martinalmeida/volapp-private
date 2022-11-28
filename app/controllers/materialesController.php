@@ -43,7 +43,7 @@ class MaterialesController
         $material->nombre = isset($_POST['nombre']) ? strtoupper(trim($_POST['nombre'])) : NULL;
         $material->descripcion = isset($_POST['descripcion']) ? strtoupper(trim($_POST['descripcion'])) : NULL;
 
-        if (Validar::alfanumerico($material->nombre) && Validar::alfanumerico($material->descripcion)) {
+        if (Validar::patronalfanumerico1($material->nombre) && Validar::patronalfanumerico1($material->descripcion)) {
             $material->createMaterial();
         } else {
             echo json_encode(array('status' => '2', 'data' => NULL));
@@ -121,7 +121,7 @@ class MaterialesController
         $material->descripcion = isset($_POST['descripcion']) ? strtoupper(trim($_POST['descripcion'])) : NULL;
 
 
-        if (Validar::alfanumerico($material->nombre) && Validar::alfanumerico($material->descripcion)) {
+        if (Validar::patronalfanumerico1($material->nombre) && Validar::patronalfanumerico1($material->descripcion)) {
             $material->updateMaterial();
         } else {
             echo json_encode(array('status' => '2', 'data' => NULL));

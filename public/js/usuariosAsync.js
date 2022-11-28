@@ -450,33 +450,33 @@ function editarRegistro(id) {
           $("#btnRegistro").removeClass("btn btn-info");
           $("#btnRegistro").addClass("btn btn-success");
 
-          $("#identificacion").val(result.data.identificacion);
-          $("#nombres").val(result.data.nombres);
-          $("#Apaterno").val(result.data.Apaterno);
-          $("#Amaterno").val(result.data.Amaterno);
-          $("#telefono").val(result.data.telefono);
-          $("#emailUser").val(result.data.emailUser);
-          $("#pswd").val(result.data.pswd);
-          $("#nombreFiscal").val(result.data.nombreFiscal);
-          $("#direccionFiscal").val(result.data.direccionFiscal);
-          $("#rol").val(result.data.rol);
-          $("#sucursal").val(result.data.sucursal);
+          $("#identificacion").val(result.data[0].identificacion);
+          $("#nombres").val(result.data[0].nombres);
+          $("#Apaterno").val(result.data[0].Apaterno);
+          $("#Amaterno").val(result.data[0].Amaterno);
+          $("#telefono").val(result.data[0].telefono);
+          $("#emailUser").val(result.data[0].emailUser);
+          $("#pswd").val(result.data[0].pswd);
+          $("#nombreFiscal").val(result.data[0].nombreFiscal);
+          $("#direccionFiscal").val(result.data[0].direccionFiscal);
+          $("#rol").val(result.data[0].rol);
+          $("#sucursal").val(result.data[0].sucursal);
 
           var html = "";
           html +=
             '<img class="rounded" src="data: ' +
-            result.data.contenType +
+            result.data[0].contenType +
             ";base64," +
-            result.data.base64 +
+            result.data[0].base64 +
             '" width="50" height="auto">' +
             '<input type="hidden" id="idUser" name="idUser" value="' +
-            result.data.id +
+            result.data[0].id +
             '">' +
             '<input type="hidden" id="contenType" name="contenType" value="' +
-            result.data.contenType +
+            result.data[0].contenType +
             '">' +
             '<input type="hidden" id="base64" name="base64" value="' +
-            result.data.base64 +
+            result.data[0].base64 +
             '">';
 
           $("#imagenBase64").html(html);

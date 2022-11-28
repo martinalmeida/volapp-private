@@ -33,13 +33,9 @@
                             <select class="custom-select form-control" id="ruta" name="ruta">
                             </select>
                         </div>
-                        <div class="col-md-3 mb-3">
-                            <label class="form-label" for="standBy">StandBY(Horas Minimas):</label>
-                            <input type="text" onkeypress="return filterFloat(event,this);" class="form-control" id="standBy" name="standBy" placeholder="Horas (12.5)" required>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <label class="form-label" for="tarifaHora">Tarifa por Hora:</label>
-                            <input type="text" onkeypress="return filterFloat(event,this);" class="form-control" id="tarifaHora" name="tarifaHora" placeholder="tarifa (100000.2)" required>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="flete">Valor del Flete:</label>
+                            <input type="text" onkeypress="return filterFloat(event,this);" class="form-control" id="flete" name="flete" placeholder="valor del flete (1200000.60)" required>
                         </div>
 
                         <div id="inputsParametrizar">

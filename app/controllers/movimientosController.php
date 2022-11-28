@@ -48,7 +48,7 @@ class MovimientosController
         $movimientos->columnSortOrder = htmlspecialchars($_POST['order'][0]['dir']);
         $movimientos->searchValue = htmlspecialchars($_POST['search']['value']);
 
-        $movimientos->readAllDaTableAlquiler();
+        $movimientos->readAllDaTableMovimiento();
     }
 
     public function status(): void
@@ -60,11 +60,11 @@ class MovimientosController
         $movimientos = new Movimientos($db);
 
         // --Seteo de valores existentes en el POST--
-        $movimientos->id = isset($_POST['idAlquiler']) ? strtoupper(trim($_POST['idAlquiler'])) : NULL;
+        $movimientos->id = isset($_POST['idMovimiento']) ? strtoupper(trim($_POST['idMovimiento'])) : NULL;
         $movimientos->status = isset($_POST['status']) ? strtoupper(trim($_POST['status'])) : NULL;
 
         if (Validar::numeros($movimientos->id) && Validar::numeros($movimientos->status)) {
-            $movimientos->statusAlquiler();
+            $movimientos->statusMovimiento();
         } else {
             echo json_encode(array('status' => '2', 'data' => NULL));
         }
@@ -79,11 +79,11 @@ class MovimientosController
         $movimientos = new Movimientos($db);
 
         // --Seteo de valores existentes en el POST--
-        $movimientos->id = isset($_POST['idAlquiler']) ? strtoupper(trim($_POST['idAlquiler'])) : NULL;
+        $movimientos->id = isset($_POST['idMovimiento']) ? strtoupper(trim($_POST['idMovimiento'])) : NULL;
 
         // --Validacion de datos a enviar al modelo--
         if (Validar::numeros($movimientos->id)) {
-            $movimientos->datAlquiler();
+            $movimientos->dataMovimiento();
         } else {
             echo json_encode(array('status' => '2', 'data' => NULL));
         }
@@ -98,17 +98,17 @@ class MovimientosController
         $movimientos = new Movimientos($db);
 
         // --Seteo de valores existentes en el POST--
-        $movimientos->id = isset($_POST['idAlquiler']) ? trim($_POST['idAlquiler']) : NULL;
+        $movimientos->id = isset($_POST['idMovimiento']) ? trim($_POST['idMovimiento']) : NULL;
         $movimientos->ruta = isset($_POST['ruta']) ? trim($_POST['ruta']) : NULL;
-        $movimientos->standBy = isset($_POST['standBy']) ? trim($_POST['standBy']) : NULL;
-        $movimientos->tarifaHora = isset($_POST['tarifaHora']) ? strtoupper(trim($_POST['tarifaHora'])) : NULL;
+        $movimientos->kilometraje = isset($_POST['kilometraje']) ? trim($_POST['kilometraje']) : NULL;
+        $movimientos->tarifa = isset($_POST['tarifa']) ? strtoupper(trim($_POST['tarifa'])) : NULL;
 
         // --No se adjunta un archivo nuevo--
         if (
-            Validar::numeros($movimientos->id) && Validar::float($movimientos->ruta, '.') &&
-            Validar::float($movimientos->standBy, '.') && Validar::float($movimientos->tarifaHora, '.')
+            Validar::numeros($movimientos->id) && Validar::numeros($movimientos->ruta) &&
+            Validar::numeros($movimientos->kilometraje) && Validar::numeros($movimientos->tarifa)
         ) {
-            $movimientos->parametrizacionAlquiler();
+            $movimientos->parametrizacionMovimiento();
         } else {
             // --Error de validación--
             echo json_encode(array('status' => '2', 'data' => NULL));

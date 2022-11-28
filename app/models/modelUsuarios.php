@@ -156,15 +156,17 @@ class Usuario
         // --Search--
         $searchQuery = " ";
         if ($searchValue != '') {
-            $searchQuery = " AND (identificacion LIKE :identificacion OR
-                            nombres LIKE :nombres OR
-                            a_paterno LIKE :a_paterno OR 
-                            a_materno LIKE :a_materno OR
-                            email_user LIKE :email_user OR
-                            pswd LIKE :pswd OR
-                            nombrefiscal LIKE :nombrefiscal OR
-                            direccionfiscal LIKE :direccionfiscal  )";
+            $searchQuery = " AND (u.id LIKE :id OR
+                            u.identificacion LIKE :identificacion OR
+                            u.nombres LIKE :nombres OR
+                            u.a_paterno LIKE :a_paterno OR 
+                            u.a_materno LIKE :a_materno OR
+                            u.email_user LIKE :email_user OR
+                            u.pswd LIKE :pswd OR
+                            u.nombrefiscal LIKE :nombrefiscal OR
+                            u.direccionfiscal LIKE :direccionfiscal  )";
             $searchArray = array(
+                'id' => "%$searchValue%",
                 'identificacion' => "%$searchValue%",
                 'nombres' => "%$searchValue%",
                 'a_paterno' => "%$searchValue%",
@@ -176,12 +178,16 @@ class Usuario
             );
         }
         // --Total number of records without filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM $this->tableName");
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM $this->tableName u 
+                                                                  JOIN $this->tableRol r ON u.rolid = r.id 
+                                                                  LEFT JOIN $this->tableSucursal s ON u.sucursalid = s.id ");
         $stmt->execute();
         $records = $stmt->fetch();
         $totalRecords = $records['allcount'];
         // --Total number of records with filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM $this->tableName WHERE 1 $searchQuery");
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM $this->tableName u
+                                                                  JOIN $this->tableRol r ON u.rolid = r.id 
+                                                                  LEFT JOIN $this->tableSucursal s ON u.sucursalid = s.id WHERE 1 $searchQuery");
         $stmt->execute($searchArray);
         $records = $stmt->fetch();
         $totalRecordwithFilter = $records['allcount'];
@@ -189,10 +195,10 @@ class Usuario
         $stmt = $this->conn->prepare("SELECT 
                                       u.id, u.identificacion, u.nombres, u.a_paterno, u.a_materno, u.telefono, u.email_user, 
                                       u.pswd, u.nombrefiscal, u.direccionfiscal, r.nombrerol, s.descripcion, u.status 
-                                      FROM $this->tableName u  
-                                      JOIN $this->tableRol r ON u.rolid = r.id 
-                                      JOIN $this->tableSucursal s ON u.sucursalid = s.id 
-                                      WHERE 1 $searchQuery AND u.status in(1, 2) ORDER BY $columnName $columnSortOrder LIMIT :limit,:offset ");
+                                      FROM " . $this->tableName . " u  
+                                      JOIN " . $this->tableRol . " r ON u.rolid = r.id 
+                                      LEFT JOIN " . $this->tableSucursal . " s ON u.sucursalid = s.id 
+                                      WHERE 1 " . $searchQuery . " AND u.rolid != 1 AND u.status in(1, 2) ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
         // --Bind values--
         foreach ($searchArray as $key => $search) {
             $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
@@ -272,7 +278,7 @@ class Usuario
     public function dataUsuario(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT id, identificacion, nombres, a_paterno, a_materno, telefono, email_user, pswd, nombrefiscal, direccionfiscal, content_type, base_64, rolid, sucursalid FROM $this->tableName WHERE id=? ;";
+        $query = "SELECT id, identificacion, nombres, (a_paterno)Apaterno, (a_materno)Amaterno, telefono, (email_user)emailUser, pswd, nombrefiscal, direccionfiscal, (content_type)contenType, (base_64)base64, (rolid)rol, (sucursalid)sucursal FROM $this->tableName WHERE id=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Almacenamos los valores--
@@ -284,27 +290,8 @@ class Usuario
             // --Comprobamos que venga algun dato--
             if ($stmt->rowCount() >= 1) {
 
-                // --Cosulta a Objetos--
-                $data = $stmt->fetch(PDO::FETCH_OBJ);
-
-                $datos = array(
-                    'id' => $data->id,
-                    'identificacion' => $data->identificacion,
-                    'nombres' => $data->nombres,
-                    'Apaterno' => $data->a_paterno,
-                    'Amaterno' => $data->a_materno,
-                    'telefono' => $data->telefono,
-                    'emailUser' => $data->email_user,
-                    'pswd' => $data->pswd,
-                    'nombreFiscal' => $data->nombrefiscal,
-                    'direccionFiscal' => $data->direccionfiscal,
-                    'contenType' => $data->content_type,
-                    'base64' => $data->base_64,
-                    'rol' => $data->rolid,
-                    'sucursal' => $data->sucursalid
-                );
                 // --Retornamos las respuestas--
-                echo json_encode(array('status' => '1', 'data' => $datos));
+                echo json_encode(array('status' => '1', 'data' => $stmt->fetchAll(PDO::FETCH_ASSOC)));
             } else {
                 // --Usuario no encontrado o inactivo--
                 echo json_encode(array('status' => '3', 'data' => NULL));

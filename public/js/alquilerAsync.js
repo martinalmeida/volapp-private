@@ -307,6 +307,9 @@ function inicializarParametrizacion(id) {
           $("#id").val(result.data[0].id);
           $("#placa").val(result.data[0].placa);
           $("#tipo").val(result.data[0].tipo);
+          $("#ruta").val(result.data[0].idRuta);
+          $("#standBy").val(result.data[0].standby);
+          $("#tarifaHora").val(result.data[0].horaTarifa);
           html +=
             '<input type="hidden" id="idAlquiler" name="idAlquiler" value="' +
             result.data[0].id +
@@ -402,7 +405,7 @@ function statusRegistro(id, status) {
 
         case "1":
           Command: toastr["success"](
-            "Estado del Contrato cambiado exitosamente.",
+            "Estado de alquiler cambiado exitosamente.",
             "Estado Cambiado"
           );
 
@@ -470,7 +473,6 @@ function statusRegistro(id, status) {
 }
 
 function reset() {
-  vercampos("#frmParametrizar", 1);
   limpiarcampos("#frmParametrizar");
 }
 

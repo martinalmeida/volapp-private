@@ -34,12 +34,12 @@
                             </select>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <label class="form-label" for="standBy">StandBY(Horas Minimas):</label>
-                            <input type="text" onkeypress="return filterFloat(event,this);" class="form-control" id="standBy" name="standBy" placeholder="Horas (12.5)" required>
+                            <label class="form-label" for="kilometraje">Kilometraje Pactado:</label>
+                            <input type="number" onKeyPress="if(this.value.length==9)return false;" class="form-control" id="kilometraje" name="kilometraje" placeholder="Kilometraje pactado" required>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <label class="form-label" for="tarifaHora">Tarifa por Hora:</label>
-                            <input type="text" onkeypress="return filterFloat(event,this);" class="form-control" id="tarifaHora" name="tarifaHora" placeholder="tarifa (100000.2)" required>
+                            <label class="form-label" for="tarifa">Tarifa Pactada:</label>
+                            <input type="number" onKeyPress="if(this.value.length==9)return false;" class="form-control" id="tarifa" name="tarifa" placeholder="Tarifa pactada" required>
                         </div>
 
                         <div id="inputsParametrizar">

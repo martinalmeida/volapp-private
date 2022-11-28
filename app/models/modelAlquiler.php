@@ -227,7 +227,7 @@ class Alquiler
     public function datAlquiler(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT a.id, m.placa, tm.tipo FROM $this->tableName a JOIN $this->tableMaquinaria m ON m.id = a.idMaquinaria JOIN $this->tableTpMaquinaria tm ON tm.id = m.idTpMaquinaria WHERE a.id=? ;";
+        $query = "SELECT a.id, m.placa, tm.tipo, a.idRuta, a.standby, a.horaTarifa FROM $this->tableName a JOIN $this->tableMaquinaria m ON m.id = a.idMaquinaria JOIN $this->tableTpMaquinaria tm ON tm.id = m.idTpMaquinaria WHERE a.id=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Almacenamos los valores--

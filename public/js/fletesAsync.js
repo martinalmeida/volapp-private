@@ -44,8 +44,7 @@ $(document).ready(function () {
       { data: "placa" },
       { data: "contrato" },
       { data: "ruta" },
-      { data: "standby" },
-      { data: "horaTarifa" },
+      { data: "flete" },
       { data: "nombres" },
       { data: "status" },
       { data: "defaultContent" },
@@ -278,7 +277,7 @@ function inicializarParametrizacion(id) {
   reset();
   $("#alertaForm").html("");
   $.ajax({
-    data: { idAlquiler: id }, //datos a enviar a la url
+    data: { idFlete: id }, //datos a enviar a la url
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
     url: urlBase + "routes/fletes/getData", //url a donde hacemos la peticion
     type: "POST",
@@ -307,8 +306,10 @@ function inicializarParametrizacion(id) {
           $("#id").val(result.data[0].id);
           $("#placa").val(result.data[0].placa);
           $("#tipo").val(result.data[0].tipo);
+          $("#ruta").val(result.data[0].idRuta);
+          $("#flete").val(result.data[0].flete);
           html +=
-            '<input type="hidden" id="idAlquiler" name="idAlquiler" value="' +
+            '<input type="hidden" id="idFlete" name="idFlete" value="' +
             result.data[0].id +
             '">';
 
@@ -370,7 +371,7 @@ function inicializarParametrizacion(id) {
 function statusRegistro(id, status) {
   $.ajax({
     data: {
-      idAlquiler: id,
+      idFlete: id,
       status: status,
     },
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
@@ -402,7 +403,7 @@ function statusRegistro(id, status) {
 
         case "1":
           Command: toastr["success"](
-            "Estado del Contrato cambiado exitosamente.",
+            "Estado del flete cambiado exitosamente.",
             "Estado Cambiado"
           );
 
@@ -470,7 +471,6 @@ function statusRegistro(id, status) {
 }
 
 function reset() {
-  vercampos("#frmParametrizar", 1);
   limpiarcampos("#frmParametrizar");
 }
 

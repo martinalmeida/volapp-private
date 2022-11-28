@@ -44,8 +44,8 @@ $(document).ready(function () {
       { data: "placa" },
       { data: "contrato" },
       { data: "ruta" },
-      { data: "standby" },
-      { data: "horaTarifa" },
+      { data: "kilometraje" },
+      { data: "tarifa" },
       { data: "nombres" },
       { data: "status" },
       { data: "defaultContent" },
@@ -278,7 +278,7 @@ function inicializarParametrizacion(id) {
   reset();
   $("#alertaForm").html("");
   $.ajax({
-    data: { idAlquiler: id }, //datos a enviar a la url
+    data: { idMovimiento: id }, //datos a enviar a la url
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
     url: urlBase + "routes/movimientos/getData", //url a donde hacemos la peticion
     type: "POST",
@@ -307,8 +307,11 @@ function inicializarParametrizacion(id) {
           $("#id").val(result.data[0].id);
           $("#placa").val(result.data[0].placa);
           $("#tipo").val(result.data[0].tipo);
+          $("#ruta").val(result.data[0].idRuta);
+          $("#kilometraje").val(result.data[0].kilometraje);
+          $("#tarifa").val(result.data[0].tarifa);
           html +=
-            '<input type="hidden" id="idAlquiler" name="idAlquiler" value="' +
+            '<input type="hidden" id="idMovimiento" name="idMovimiento" value="' +
             result.data[0].id +
             '">';
 
@@ -370,7 +373,7 @@ function inicializarParametrizacion(id) {
 function statusRegistro(id, status) {
   $.ajax({
     data: {
-      idAlquiler: id,
+      idMovimiento: id,
       status: status,
     },
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
@@ -402,7 +405,7 @@ function statusRegistro(id, status) {
 
         case "1":
           Command: toastr["success"](
-            "Estado del Contrato cambiado exitosamente.",
+            "Estado de movimiento cambiado exitosamente.",
             "Estado Cambiado"
           );
 
@@ -470,43 +473,7 @@ function statusRegistro(id, status) {
 }
 
 function reset() {
-  vercampos("#frmParametrizar", 1);
   limpiarcampos("#frmParametrizar");
-}
-
-function filterFloat(evt, input) {
-  // Backspace = 8, Enter = 13, ‘0′ = 48, ‘9′ = 57, ‘.’ = 46, ‘-’ = 43
-  var key = window.Event ? evt.which : evt.keyCode;
-  var chark = String.fromCharCode(key);
-  var tempValue = input.value + chark;
-  if (key >= 48 && key <= 57) {
-    if (filter(tempValue) === false) {
-      return false;
-    } else {
-      return true;
-    }
-  } else {
-    if (key == 8 || key == 13 || key == 0) {
-      return true;
-    } else if (key == 46) {
-      if (filter(tempValue) === false) {
-        return false;
-      } else {
-        return true;
-      }
-    } else {
-      return false;
-    }
-  }
-}
-
-function filter(__val__) {
-  var preg = /^([0-9]+\.?[0-9]{0,2})$/;
-  if (preg.test(__val__) === true) {
-    return true;
-  } else {
-    return false;
-  }
 }
 
 function reajustDatatables() {

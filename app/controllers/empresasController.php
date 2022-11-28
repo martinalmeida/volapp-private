@@ -62,7 +62,7 @@ class EmpresasController
                     $empresa->base64 = base64_encode(file_get_contents($_FILES['logo']['tmp_name']));
                     if (
                         Validar::numeros($empresa->nit) && Validar::numeros($empresa->digito) && Validar::alfanumerico($empresa->nombre) &&
-                        Validar::alfanumerico($empresa->representante) && Validar::numeros($empresa->telefono) && Validar::alfanumerico($empresa->direccion) &&
+                        Validar::alfanumerico($empresa->representante) && Validar::numeros($empresa->telefono) && Validar::direccion($empresa->direccion) &&
                         Validar::correo($empresa->correo) && Validar::numeros($empresa->contacto) && Validar::correo($empresa->emailTec) &&
                         Validar::correo($empresa->emailLogis) && Validar::tipoarchivo($empresa->contenType, 7)
                     ) {
@@ -173,7 +173,7 @@ class EmpresasController
                     $empresa->base64 = base64_encode(file_get_contents($_FILES['logo']['tmp_name']));
                     if (
                         Validar::numeros($empresa->nit) && Validar::numeros($empresa->digito) && Validar::alfanumerico($empresa->nombre) &&
-                        Validar::alfanumerico($empresa->representante) && Validar::numeros($empresa->telefono) && Validar::alfanumerico($empresa->direccion) &&
+                        Validar::alfanumerico($empresa->representante) && Validar::numeros($empresa->telefono) && Validar::direccion($empresa->direccion) &&
                         Validar::correo($empresa->correo) && Validar::numeros($empresa->contacto) && Validar::correo($empresa->emailTec) &&
                         Validar::correo($empresa->emailLogis) && Validar::tipoarchivo($empresa->contenType, 7) && Validar::numeros($empresa->id)
                     ) {
@@ -191,7 +191,7 @@ class EmpresasController
             // --No se adjunta un archivo nuevo--
             if (
                 Validar::numeros($empresa->nit) && Validar::numeros($empresa->digito) && Validar::alfanumerico($empresa->nombre) && Validar::alfanumerico($empresa->representante) &&
-                Validar::numeros($empresa->telefono) && Validar::alfanumerico($empresa->direccion) && Validar::correo($empresa->correo) &&
+                Validar::numeros($empresa->telefono) && Validar::direccion($empresa->direccion) && Validar::correo($empresa->correo) &&
                 Validar::numeros($empresa->contacto) && Validar::correo($empresa->emailTec) && Validar::correo($empresa->emailLogis) && Validar::numeros($empresa->id)
             ) {
                 $empresa->updateEmpresa();

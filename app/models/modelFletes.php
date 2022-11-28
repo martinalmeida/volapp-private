@@ -8,7 +8,7 @@ class Fletes
 {
     // --Parametros Privados--
     private $conn;
-    private $tableName = "alquiler";
+    private $tableName = "fletes";
     private $tableMaquinaria = "maquinarias";
     private $tableTpMaquinaria = "tipo_maquinaria";
     private $tableRutas = "rutas";
@@ -21,8 +21,7 @@ class Fletes
     // --Parametros Publicos--
     public $id;
     public $ruta;
-    public $standBy;
-    public $tarifaHora;
+    public $flete;
     public $status;
 
     /* Propiedades de los objetos de Datatables para utilizar (Serverside) 
@@ -86,7 +85,7 @@ class Fletes
     }
 
     // -- ⊡ Funcion para dataTables Serverside ⊡ --
-    public function readAllDaTableAlquiler(): void
+    public function readAllDaTableFletes(): void
     {
         $sesion = new Sesion($this->conn);
         $sesion->rol = $_SESSION['rol'];
@@ -105,58 +104,56 @@ class Fletes
         // --Search--
         $searchQuery = " ";
         if ($searchValue != '') {
-            $searchQuery = " AND (a.id LIKE :id OR 
+            $searchQuery = " AND (f.id LIKE :id OR 
                             tm.tipo LIKE :tipo OR
                             m.placa LIKE :placa OR
                             c.titulo LIKE :contrato OR
                             r.origen LIKE :ruta OR
-                            a.standby LIKE :standby OR
-                            a.horaTarifa LIKE :horaTarifa OR
+                            f.flete LIKE :flete OR
                             u.nombres LIKE :nombres OR
-                            a.status LIKE :status )";
+                            f.status LIKE :status )";
             $searchArray = array(
                 'id' => "%$searchValue%",
                 'tipo' => "%$searchValue%",
                 'placa' => "%$searchValue%",
                 'contrato' => "%$searchValue%",
                 'ruta' => "%$searchValue%",
-                'standby' => "%$searchValue%",
-                'horaTarifa' => "%$searchValue%",
+                'flete' => "%$searchValue%",
                 'nombres' => "%$searchValue%",
                 'status' => "%$searchValue%"
             );
         }
         // --Total number of records without filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " a 
-                                      JOIN " . $this->tableMaquinaria . " m ON m.id = a.idMaquinaria 
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " f 
+                                      JOIN " . $this->tableMaquinaria . " m ON m.id = f.idMaquinaria 
                                       JOIN " . $this->tableTpMaquinaria . " tm ON tm.id = m.idTpMaquinaria 
-                                      LEFT JOIN " . $this->tableRutas . " r ON a.idRuta = r.id 
+                                      LEFT JOIN " . $this->tableRutas . " r ON f.idRuta = r.id 
                                       LEFT JOIN " . $this->tableRutaContrato . " rc ON r.id = rc.idRuta 
                                       LEFT JOIN " . $this->tableContratos . " c ON rc.idContrato = c.id
-                                      JOIN " . $this->tableUsuarios . " u ON a.idUsuario = u.id ");
+                                      JOIN " . $this->tableUsuarios . " u ON f.idUsuario = u.id ");
         $stmt->execute();
         $records = $stmt->fetch();
         $totalRecords = $records['allcount'];
         // --Total number of records with filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " a 
-                                      JOIN " . $this->tableMaquinaria . " m ON m.id = a.idMaquinaria 
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " f 
+                                      JOIN " . $this->tableMaquinaria . " m ON m.id = f.idMaquinaria 
                                       JOIN " . $this->tableTpMaquinaria . " tm ON tm.id = m.idTpMaquinaria 
-                                      LEFT JOIN " . $this->tableRutas . " r ON a.idRuta = r.id 
+                                      LEFT JOIN " . $this->tableRutas . " r ON f.idRuta = r.id 
                                       LEFT JOIN " . $this->tableRutaContrato . " rc ON r.id = rc.idRuta 
                                       LEFT JOIN " . $this->tableContratos . " c ON rc.idContrato = c.id
-                                      JOIN " . $this->tableUsuarios . " u ON a.idUsuario = u.id WHERE 1 " . $searchQuery . " ");
+                                      JOIN " . $this->tableUsuarios . " u ON f.idUsuario = u.id WHERE 1 " . $searchQuery . " ");
         $stmt->execute($searchArray);
         $records = $stmt->fetch();
         $totalRecordwithFilter = $records['allcount'];
         // --Fetch records--
-        $stmt = $this->conn->prepare("SELECT a.id, tm.tipo, m.placa, (c.titulo)contrato, concat(r.origen, ' - ', r.destino)ruta , a.standby, a.horaTarifa, u.nombres, a.status 
-                                      FROM " . $this->tableName . " a 
-                                      JOIN " . $this->tableMaquinaria . " m ON m.id = a.idMaquinaria 
+        $stmt = $this->conn->prepare("SELECT f.id, tm.tipo, m.placa, (c.titulo)contrato, concat(r.origen, ' - ', r.destino)ruta , f.flete, u.nombres, f.status 
+                                      FROM " . $this->tableName . " f 
+                                      JOIN " . $this->tableMaquinaria . " m ON m.id = f.idMaquinaria 
                                       JOIN " . $this->tableTpMaquinaria . " tm ON tm.id = m.idTpMaquinaria 
-                                      LEFT JOIN " . $this->tableRutas . " r ON a.idRuta = r.id 
+                                      LEFT JOIN " . $this->tableRutas . " r ON f.idRuta = r.id 
                                       LEFT JOIN " . $this->tableRutaContrato . " rc ON r.id = rc.idRuta 
                                       LEFT JOIN " . $this->tableContratos . " c ON rc.idContrato = c.id 
-                                      JOIN " . $this->tableUsuarios . " u ON a.idUsuario = u.id WHERE 1 " . $searchQuery . " AND a.status in(1, 2) AND m.status = 1 ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
+                                      JOIN " . $this->tableUsuarios . " u ON f.idUsuario = u.id WHERE 1 " . $searchQuery . " AND f.status in(1, 2) AND m.status = 1 ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
         // --Bind values--
         foreach ($searchArray as $key => $search) {
             $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
@@ -185,8 +182,7 @@ class Fletes
                 "placa" => $row['placa'],
                 "contrato" => $row['contrato'],
                 "ruta" => $row['ruta'],
-                "standby" => $row['standby'],
-                "horaTarifa" => $row['horaTarifa'],
+                "flete" => $row['flete'],
                 "nombres" => $row['nombres'],
                 "status" => $estado,
                 "defaultContent" => "$botones",
@@ -203,7 +199,7 @@ class Fletes
     }
 
     // -- ⊡ Funcion para cambiar el estado del rol ⊡ --
-    public function statusAlquiler(): void
+    public function statusFlete(): void
     {
         // --Preparamos la consulta--
         $query = "UPDATE $this->tableName SET status =? WHERE id=?";
@@ -224,10 +220,10 @@ class Fletes
     }
 
     // -- ⊡ Funcion para traer datos del rol ⊡ --
-    public function datAlquiler(): void
+    public function dataFletes(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT a.id, m.placa, tm.tipo FROM $this->tableName a JOIN $this->tableMaquinaria m ON m.id = a.idMaquinaria JOIN $this->tableTpMaquinaria tm ON tm.id = m.idTpMaquinaria WHERE a.id=? ;";
+        $query = "SELECT f.id, m.placa, tm.tipo, f.idRuta, f.flete FROM $this->tableName f JOIN $this->tableMaquinaria m ON m.id = f.idMaquinaria JOIN $this->tableTpMaquinaria tm ON tm.id = m.idTpMaquinaria WHERE f.id=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Almacenamos los valores--
@@ -252,28 +248,26 @@ class Fletes
     }
 
     // -- ⊡ Funcion para actualizar empresa ⊡ --
-    public function parametrizacionAlquiler(): void
+    public function parametrizacionFlete(): void
     {
         // --Preparamos la consulta--
-        $query = "UPDATE $this->tableName SET idRuta=?, standby=?, horaTarifa=?, dateupdate=?, idUsuario=?, nit=? WHERE id=? ;";
+        $query = "UPDATE $this->tableName SET idRuta=?, flete=?, dateupdate=?, idUsuario=?, nit=? WHERE id=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
         $this->ruta = htmlspecialchars(strip_tags($this->ruta));
-        $this->standBy = htmlspecialchars(strip_tags($this->standBy));
-        $this->tarifaHora = htmlspecialchars(strip_tags($this->tarifaHora));
+        $this->flete = htmlspecialchars(strip_tags($this->flete));
         $this->fechaActual = Utilidades::getFecha();
         $this->idUser = $_SESSION['id'];
         $this->nit = $_SESSION['nit'];
 
         // --Almacenamos los valores--
         $stmt->bindParam(1, $this->ruta);
-        $stmt->bindParam(2, $this->standBy);
-        $stmt->bindParam(3, $this->tarifaHora);
-        $stmt->bindParam(4, $this->fechaActual);
-        $stmt->bindParam(5, $this->idUser);
-        $stmt->bindParam(6, $this->nit);
-        $stmt->bindParam(7, $this->id);
+        $stmt->bindParam(2, $this->flete);
+        $stmt->bindParam(3, $this->fechaActual);
+        $stmt->bindParam(4, $this->idUser);
+        $stmt->bindParam(5, $this->nit);
+        $stmt->bindParam(6, $this->id);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
