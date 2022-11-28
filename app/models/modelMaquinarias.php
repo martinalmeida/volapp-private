@@ -42,7 +42,7 @@ class Maquinaria
     public $correOperador;
     public $contenType;
     public $base64;
-    public $idMaquinaria;
+    public $idTpMaquinaria;
     public $status;
     public $table;
 
@@ -111,7 +111,7 @@ class Maquinaria
     public function createMaquinaria(): void
     {
         // --Preparamos la consulta--
-        $query = "INSERT INTO $this->tableName SET placa=?, marca=?, referencia=?, modelo=?, color=?, capacidad=?, nroSerie=?, nroSerieChasis=?, nroMotor=?, rodaje=?, rut=?, gps=?, fechaSoat=?, fechaTecno=?, propietario=?, documentoPropietario=?, telefonoPropietario=?, correoPropietario=?, operador=?, documentOperador=?, telefonOperador=?, correOperador=?, content_type=?, base_64=?, idMaquinaria=?, idUsuario=?, nit=? ;";
+        $query = "INSERT INTO $this->tableName SET placa=?, marca=?, referencia=?, modelo=?, color=?, capacidad=?, nroSerie=?, nroSerieChasis=?, nroMotor=?, rodaje=?, rut=?, gps=?, fechaSoat=?, fechaTecno=?, propietario=?, documentoPropietario=?, telefonoPropietario=?, correoPropietario=?, operador=?, documentOperador=?, telefonOperador=?, correOperador=?, content_type=?, base_64=?, idTpMaquinaria=?, idUsuario=?, nit=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
@@ -139,7 +139,7 @@ class Maquinaria
         $this->correOperador = htmlspecialchars(strip_tags($this->correOperador));
         $this->contenType = htmlspecialchars(strip_tags($this->contenType));
         $this->base64 = htmlspecialchars(strip_tags($this->base64));
-        $this->idMaquinaria = htmlspecialchars(strip_tags($this->idMaquinaria));
+        $this->idTpMaquinaria = htmlspecialchars(strip_tags($this->idTpMaquinaria));
         $this->idUser = $_SESSION['id'];
         $this->nit = $_SESSION['nit'];
 
@@ -168,7 +168,7 @@ class Maquinaria
         $stmt->bindParam(22, $this->correOperador);
         $stmt->bindParam(23, $this->contenType);
         $stmt->bindParam(24, $this->base64);
-        $stmt->bindParam(25, $this->idMaquinaria);
+        $stmt->bindParam(25, $this->idTpMaquinaria);
         $stmt->bindParam(26, $this->idUser);
         $stmt->bindParam(27, $this->nit);
 
@@ -254,17 +254,17 @@ class Maquinaria
             );
         }
         // --Total number of records without filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " m JOIN " . $this->tableTpmaquinaria . " t ON m.idMaquinaria = t.id ");
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " m JOIN " . $this->tableTpmaquinaria . " t ON m.idTpMaquinaria = t.id ");
         $stmt->execute();
         $records = $stmt->fetch();
         $totalRecords = $records['allcount'];
         // --Total number of records with filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " m JOIN " . $this->tableTpmaquinaria . " t ON m.idMaquinaria = t.id WHERE 1 " . $searchQuery . "");
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " m JOIN " . $this->tableTpmaquinaria . " t ON m.idTpMaquinaria = t.id WHERE 1 " . $searchQuery . "");
         $stmt->execute($searchArray);
         $records = $stmt->fetch();
         $totalRecordwithFilter = $records['allcount'];
         // --Fetch records--
-        $stmt = $this->conn->prepare("SELECT m.id, t.tipo, m.placa, m.marca, m.referencia, m.modelo, m.color, m.capacidad, m.nroSerie, m.nroSerieChasis, m.nroMotor, m.rodaje, m.rut, m.gps, m.fechaSoat, m.fechaTecno, m.propietario, m.documentoPropietario, m.telefonoPropietario, m.correoPropietario, m.operador, m.documentOperador, m.telefonOperador, m.correOperador, m.content_type, m.base_64, m.status FROM " . $this->tableName . " m JOIN " . $this->tableTpmaquinaria . " t ON m.idMaquinaria = t.id WHERE 1 " . $searchQuery . " AND m.status in(1, 2) AND m.nit =  " . $_SESSION['nit'] . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
+        $stmt = $this->conn->prepare("SELECT m.id, t.tipo, m.placa, m.marca, m.referencia, m.modelo, m.color, m.capacidad, m.nroSerie, m.nroSerieChasis, m.nroMotor, m.rodaje, m.rut, m.gps, m.fechaSoat, m.fechaTecno, m.propietario, m.documentoPropietario, m.telefonoPropietario, m.correoPropietario, m.operador, m.documentOperador, m.telefonOperador, m.correOperador, m.content_type, m.base_64, m.status FROM " . $this->tableName . " m JOIN " . $this->tableTpmaquinaria . " t ON m.idTpMaquinaria = t.id WHERE 1 " . $searchQuery . " AND m.status in(1, 2) AND m.nit =  " . $_SESSION['nit'] . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
         // --Bind values--
         foreach ($searchArray as $key => $search) {
             $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
@@ -362,7 +362,7 @@ class Maquinaria
     public function dataMaquinaria(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT id, placa, marca, referencia, modelo, color, capacidad, nroSerie, nroSerieChasis, nroMotor, rodaje, rut, gps, fechaSoat, fechaTecno, propietario, documentoPropietario, telefonoPropietario, correoPropietario, operador, documentOperador, telefonOperador, correOperador, (content_type)contenType, (base_64)base64, idMaquinaria  FROM $this->tableName WHERE id=? ;";
+        $query = "SELECT id, placa, marca, referencia, modelo, color, capacidad, nroSerie, nroSerieChasis, nroMotor, rodaje, rut, gps, fechaSoat, fechaTecno, propietario, documentoPropietario, telefonoPropietario, correoPropietario, operador, documentOperador, telefonOperador, correOperador, (content_type)contenType, (base_64)base64, idTpMaquinaria  FROM $this->tableName WHERE id=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Almacenamos los valores--
@@ -390,7 +390,7 @@ class Maquinaria
     public function updateMaquinaria(): void
     {
         // --Preparamos la consulta--
-        $query = "UPDATE $this->tableName SET placa=?, marca=?, referencia=?, modelo=?, color=?, capacidad=?, nroSerie=?, nroSerieChasis=?, nroMotor=?, rodaje=?, rut=?, gps=?, fechaSoat=?, fechaTecno=?, propietario=?, documentoPropietario=?, telefonoPropietario=?, correoPropietario=?, operador=?, documentOperador=?, telefonOperador=?, correOperador=?, content_type=?, base_64=?, idMaquinaria=?, idUsuario=?, nit=? WHERE id=?";
+        $query = "UPDATE $this->tableName SET placa=?, marca=?, referencia=?, modelo=?, color=?, capacidad=?, nroSerie=?, nroSerieChasis=?, nroMotor=?, rodaje=?, rut=?, gps=?, fechaSoat=?, fechaTecno=?, propietario=?, documentoPropietario=?, telefonoPropietario=?, correoPropietario=?, operador=?, documentOperador=?, telefonOperador=?, correOperador=?, content_type=?, base_64=?, idTpMaquinaria=?, idUsuario=?, nit=? WHERE id=?";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
@@ -418,7 +418,7 @@ class Maquinaria
         $this->correOperador = htmlspecialchars(strip_tags($this->correOperador));
         $this->contenType = htmlspecialchars(strip_tags($this->contenType));
         $this->base64 = htmlspecialchars(strip_tags($this->base64));
-        $this->idMaquinaria = htmlspecialchars(strip_tags($this->idMaquinaria));
+        $this->idTpMaquinaria = htmlspecialchars(strip_tags($this->idTpMaquinaria));
         $this->idUser = $_SESSION['id'];
         $this->nit = $_SESSION['nit'];
 
@@ -447,7 +447,7 @@ class Maquinaria
         $stmt->bindParam(22, $this->correOperador);
         $stmt->bindParam(23, $this->contenType);
         $stmt->bindParam(24, $this->base64);
-        $stmt->bindParam(25, $this->idMaquinaria);
+        $stmt->bindParam(25, $this->idTpMaquinaria);
         $stmt->bindParam(26, $this->idUser);
         $stmt->bindParam(27, $this->nit);
         $stmt->bindParam(28, $this->id);
@@ -492,10 +492,8 @@ class Maquinaria
 
             // --Ejecutamos la consulta y validamos ejecucion--
             if ($stmt->execute()) {
-
                 // --Comprobamos que venga algun dato--
                 if ($stmt->rowCount() >= 1) {
-
                     // --Retornamos las respuestas--
                     echo json_encode(array('status' => '1', 'data' => NULL));
                     exit;
@@ -513,13 +511,13 @@ class Maquinaria
     {
         switch ($this->table) {
             case '1':
-                $query = "INSERT INTO $this->tableAlquiler SET idMaquinaria=?, datecreated=?, idUsuario=? ;";
+                $query = "INSERT INTO $this->tableAlquiler SET idMaquinaria=?, datecreated=?, idUsuario=?, nit=? ;";
                 break;
             case '2':
-                $query = "INSERT INTO $this->tableFletes SET idMaquinaria=?, datecreated=?, idUsuario=? ;";
+                $query = "INSERT INTO $this->tableFletes SET idMaquinaria=?, datecreated=?, idUsuario=?, nit=? ;";
                 break;
             case '3':
-                $query = "INSERT INTO $this->tableMovimientos SET idMaquinaria=?, datecreated=?, idUsuario=? ;";
+                $query = "INSERT INTO $this->tableMovimientos SET idMaquinaria=?, datecreated=?, idUsuario=?, nit=? ;";
                 break;
 
             default:
@@ -531,11 +529,13 @@ class Maquinaria
         // --Escapamos los caracteres--
         $this->fechaActual = Utilidades::getFecha();
         $this->idUser = $_SESSION['id'];
+        $this->nit = $_SESSION['nit'];
 
         // --Almacenamos los valores--
         $stmt->bindParam(1, $this->id);
         $stmt->bindParam(2, $this->fechaActual);
         $stmt->bindParam(3, $this->idUser);
+        $stmt->bindParam(4, $this->nit);
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
             echo json_encode(array('status' => '1', 'data' => NULL));

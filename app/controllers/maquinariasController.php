@@ -41,7 +41,7 @@ class MaquinariasController
         $maquinaria = new Maquinaria($db);
 
         // --Seteo de valores existentes en el POST--
-        $maquinaria->idMaquinaria = isset($_POST['tpMaquinaria']) ? strtoupper(trim($_POST['tpMaquinaria'])) : NULL;
+        $maquinaria->idTpMaquinaria = isset($_POST['tpMaquinaria']) ? strtoupper(trim($_POST['tpMaquinaria'])) : NULL;
         $maquinaria->placa = isset($_POST['placa']) ? strtoupper(trim($_POST['placa'])) : NULL;
         $maquinaria->marca = isset($_POST['marca']) ? strtoupper(trim($_POST['marca'])) : NULL;
         $maquinaria->referencia = isset($_POST['referencia']) ? strtoupper(trim($_POST['referencia'])) : NULL;
@@ -75,7 +75,7 @@ class MaquinariasController
                     $maquinaria->contenType = $_FILES['archivo']['type'];
                     $maquinaria->base64 = base64_encode(file_get_contents($_FILES['archivo']['tmp_name']));
                     if (
-                        Validar::numeros($maquinaria->idMaquinaria) && Validar::patronalfanumerico1($maquinaria->placa) && Validar::fecha($maquinaria->fechaSoat, '/', 'mda') &&
+                        Validar::numeros($maquinaria->idTpMaquinaria) && Validar::patronalfanumerico1($maquinaria->placa) && Validar::fecha($maquinaria->fechaSoat, '/', 'mda') &&
                         Validar::fecha($maquinaria->fechaTecno, '/', 'mda') && Validar::patronalfanumerico1($maquinaria->propietario) && Validar::numeros($maquinaria->documentoPropietario) &&
                         Validar::patronalfanumerico1($maquinaria->operador) && Validar::numeros($maquinaria->documentOperador) && Validar::tipoarchivo($maquinaria->contenType, 1)
                     ) {
@@ -162,7 +162,7 @@ class MaquinariasController
 
         // --Seteo de valores existentes en el POST--
         $maquinaria->id = isset($_POST['idMaquinaria']) ? trim($_POST['idMaquinaria']) : NULL;
-        $maquinaria->idMaquinaria = isset($_POST['tpMaquinaria']) ? strtoupper(trim($_POST['tpMaquinaria'])) : NULL;
+        $maquinaria->idTpMaquinaria = isset($_POST['tpMaquinaria']) ? strtoupper(trim($_POST['tpMaquinaria'])) : NULL;
         $maquinaria->placa = isset($_POST['placa']) ? strtoupper(trim($_POST['placa'])) : NULL;
         $maquinaria->marca = isset($_POST['marca']) ? strtoupper(trim($_POST['marca'])) : NULL;
         $maquinaria->referencia = isset($_POST['referencia']) ? strtoupper(trim($_POST['referencia'])) : NULL;
@@ -198,7 +198,7 @@ class MaquinariasController
                     $maquinaria->contenType = $_FILES['archivo']['type'];
                     $maquinaria->base64 = base64_encode(file_get_contents($_FILES['archivo']['tmp_name']));
                     if (
-                        Validar::numeros($maquinaria->idMaquinaria) && Validar::patronalfanumerico1($maquinaria->placa) && Validar::fecha($maquinaria->fechaSoat, '/', 'mda') &&
+                        Validar::numeros($maquinaria->idTpMaquinaria) && Validar::patronalfanumerico1($maquinaria->placa) && Validar::fecha($maquinaria->fechaSoat, '/', 'mda') &&
                         Validar::fecha($maquinaria->fechaTecno, '/', 'mda') && Validar::patronalfanumerico1($maquinaria->propietario) && Validar::numeros($maquinaria->documentoPropietario) &&
                         Validar::patronalfanumerico1($maquinaria->operador) && Validar::numeros($maquinaria->documentOperador) && Validar::tipoarchivo($maquinaria->contenType, 1) && Validar::numeros($maquinaria->id)
                     ) {
@@ -215,7 +215,7 @@ class MaquinariasController
         } else {
             // --No se adjunta un archivo nuevo--
             if (
-                Validar::numeros($maquinaria->idMaquinaria) && Validar::patronalfanumerico1($maquinaria->placa) && Validar::fecha($maquinaria->fechaSoat, '/', 'mda') &&
+                Validar::numeros($maquinaria->idTpMaquinaria) && Validar::patronalfanumerico1($maquinaria->placa) && Validar::fecha($maquinaria->fechaSoat, '/', 'mda') &&
                 Validar::fecha($maquinaria->fechaTecno, '/', 'mda') && Validar::patronalfanumerico1($maquinaria->propietario) && Validar::numeros($maquinaria->documentoPropietario) &&
                 Validar::patronalfanumerico1($maquinaria->operador) && Validar::numeros($maquinaria->documentOperador) && Validar::tipoarchivo($maquinaria->contenType, 1) && Validar::numeros($maquinaria->id)
             ) {
