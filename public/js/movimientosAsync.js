@@ -1,10 +1,8 @@
-let edit = null;
-var peticion = null;
-var tablaRutas = "";
+var tablaMovimientos = "";
 
 $(document).ready(function () {
-  /* ---------  START Serverside Tabla ( tablaRutas ) ----------- */
-  tablaRutas = $("#tablaRutas").DataTable({
+  /* ---------  START Serverside Tabla ( tablaMovimientos ) ----------- */
+  tablaMovimientos = $("#tablaMovimientos").DataTable({
     processing: true,
     orderClasses: true,
     deferRender: true,
@@ -14,7 +12,7 @@ $(document).ready(function () {
     pageLength: 30,
     ajax: {
       type: "POST",
-      url: urlBase + "routes/rutas/readAllDaTable",
+      url: urlBase + "routes/movimientos/readAllDaTable",
     },
     dom:
       "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
@@ -42,12 +40,13 @@ $(document).ready(function () {
     ],
     columns: [
       { data: "id" },
-      { data: "nombre" },
-      { data: "origen" },
-      { data: "destino" },
-      { data: "titulo" },
-      { data: "kilometraje" },
-      { data: "tarifa" },
+      { data: "tipo" },
+      { data: "placa" },
+      { data: "contrato" },
+      { data: "ruta" },
+      { data: "standby" },
+      { data: "horaTarifa" },
+      { data: "nombres" },
       { data: "status" },
       { data: "defaultContent" },
     ],
@@ -74,7 +73,7 @@ $(document).ready(function () {
 function readPermisos() {
   $.ajax({
     dataType: "json",
-    url: urlBase + "routes/rutas/read",
+    url: urlBase + "routes/movimientos/read",
     type: "GET",
     beforeSend: function () {},
     success: function (result) {
@@ -94,7 +93,7 @@ function readPermisos() {
 function writePermisos() {
   $.ajax({
     dataType: "json",
-    url: urlBase + "routes/rutas/write",
+    url: urlBase + "routes/movimientos/write",
     type: "GET",
     beforeSend: function () {},
     success: function (result) {
@@ -110,7 +109,7 @@ function writePermisos() {
 function selects() {
   $.ajax({
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-    url: urlBase + "routes/selects/getContrato", //url a donde hacemos la peticion
+    url: urlBase + "routes/selects/getRuta", //url a donde hacemos la peticion
     type: "GET",
     beforeSend: function () {
       // $(".overlayCargue").fadeIn("slow");
@@ -136,12 +135,12 @@ function selects() {
           var html = "";
 
           html +=
-            '<option value="" disabled selected hidden>Seleccione el Contrato para esta ruta</option>';
+            '<option value="" disabled selected hidden>Seleccione la ruta para esta ruta</option>';
           for (let i = 0; i < result.data.length; i++) {
             html += result.data[i].html;
           }
 
-          $("#contrato").html(html);
+          $("#ruta").html(html);
           break;
 
         case "2":
@@ -184,26 +183,18 @@ function selects() {
   });
 }
 
-function registrar(form) {
+function parametrizar(form) {
   $("#alertaForm").html("");
   var respuestavalidacion = validarcampos("#" + form);
   if (respuestavalidacion) {
     var formData = new FormData(document.getElementById(form));
-    if (edit == true) {
-      peticion = urlBase + "routes/rutas/update";
-    } else if (edit == false) {
-      $("#archivoBase64").html("");
-      peticion = urlBase + "routes/rutas/create";
-    } else if (edit == null) {
-      return false;
-    }
     $.ajax({
       cache: false, //necesario para enviar archivos
       contentType: false, //necesario para enviar archivos
       processData: false, //necesario para enviar archivos
       data: formData, //necesario para enviar archivos
       dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-      url: peticion, //url a donde hacemos la peticion
+      url: urlBase + "routes/movimientos/parametrizar", //url a donde hacemos la peticion
       type: "POST",
       beforeSend: function () {
         // $(".overlayCargue").fadeIn("slow");
@@ -229,33 +220,21 @@ function registrar(form) {
               showCancelButton: true,
               backdrop: true,
             });
-            $("#ModalRegistro").modal("hide");
+            $("#ModalParametrizar").modal("hide");
             break;
 
           case "1":
-            if (edit == false) {
-              Swal.fire({
-                icon: "success",
-                title: "<strong>Contrato Creado</strong>",
-                html: "<h5>El contrato se ha registrado exitosamente</h5>",
-                showCloseButton: false,
-                confirmButtonText: "Aceptar",
-                confirmButtonColor: "#64a19d",
-                backdrop: true,
-              });
-            } else {
-              Swal.fire({
-                icon: "success",
-                title: "<strong>Contrato Editado</strong>",
-                html: "<h5>El contrato se ha editado exitosamente</h5>",
-                showCloseButton: false,
-                confirmButtonText: "Aceptar",
-                confirmButtonColor: "#64a19d",
-                backdrop: true,
-              });
-            }
-            $("#ModalRegistro").modal("hide");
-            tablaRutas.clear().draw();
+            Swal.fire({
+              icon: "success",
+              title: "<strong>Parametrizacion Realizada</strong>",
+              html: "<h5>La parametrizacion se ha guardado exitosamente</h5>",
+              showCloseButton: false,
+              confirmButtonText: "Aceptar",
+              confirmButtonColor: "#64a19d",
+              backdrop: true,
+            });
+            $("#ModalParametrizar").modal("hide");
+            tablaMovimientos.clear().draw();
             reset();
             break;
 
@@ -289,19 +268,19 @@ function registrar(form) {
           showCancelButton: true,
           backdrop: true,
         });
-        $("#ModalRegistro").modal("hide");
+        $("#ModalParametrizar").modal("hide");
       },
     });
   }
 }
 
-function editarRegistro(id) {
+function inicializarParametrizacion(id) {
+  reset();
   $("#alertaForm").html("");
-  edit = true;
   $.ajax({
-    data: { idRuta: id }, //datos a enviar a la url
+    data: { idAlquiler: id }, //datos a enviar a la url
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-    url: urlBase + "routes/rutas/getData", //url a donde hacemos la peticion
+    url: urlBase + "routes/movimientos/getData", //url a donde hacemos la peticion
     type: "POST",
     beforeSend: function () {
       // $(".overlayCargue").fadeIn("slow");
@@ -325,28 +304,24 @@ function editarRegistro(id) {
           break;
 
         case "1":
-          $("#nombre").val(result.data.nombre);
-          $("#origen").val(result.data.origen);
-          $("#destino").val(result.data.destino);
-          $("#kilometraje").val(result.data.kilometraje);
-          $("#tarifa").val(result.data.tarifa);
-          $("#contrato").val(result.data.contrato);
-
+          $("#id").val(result.data[0].id);
+          $("#placa").val(result.data[0].placa);
+          $("#tipo").val(result.data[0].tipo);
           html +=
-            '<input type="hidden" id="idRuta" name="idRuta" value="' +
-            result.data.id +
-            '">' +
-            '<input type="hidden" id="idRuC" name="idRuC" value="' +
-            result.data.idRuC +
+            '<input type="hidden" id="idAlquiler" name="idAlquiler" value="' +
+            result.data[0].id +
             '">';
 
-          $("#inputsEditar").html(html);
+          $("#inputsParametrizar").html(html);
 
-          $("#btnRegistro").text("Editar Contrato");
-          $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
-          $("#btnRegistro").removeClass("btn btn-info");
-          $("#btnRegistro").addClass("btn btn-success");
-          $("#ModalRegistro").modal({
+          $("#btnParametrizar").text("Parametrizar");
+          $("#btnParametrizar").attr(
+            "onclick",
+            "parametrizar('frmParametrizar');"
+          );
+          $("#btnParametrizar").removeClass("btn btn-info");
+          $("#btnParametrizar").addClass("btn btn-success");
+          $("#ModalParametrizar").modal({
             backdrop: "static",
             keyboard: false,
           });
@@ -395,11 +370,11 @@ function editarRegistro(id) {
 function statusRegistro(id, status) {
   $.ajax({
     data: {
-      idRuta: id,
+      idAlquiler: id,
       status: status,
     },
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-    url: urlBase + "routes/rutas/status", //url a donde hacemos la peticion
+    url: urlBase + "routes/movimientos/status", //url a donde hacemos la peticion
     type: "POST",
     beforeSend: function () {
       // $("#overlayText").text("Cerrando Sesión...");
@@ -448,7 +423,7 @@ function statusRegistro(id, status) {
             showMethod: "fadeIn",
             hideMethod: "fadeOut",
           };
-          tablaRutas.clear().draw();
+          tablaMovimientos.clear().draw();
           break;
 
         case "2":
@@ -494,134 +469,9 @@ function statusRegistro(id, status) {
   });
 }
 
-function eliminarRegistro(id) {
-  Swal.fire({
-    icon: "warning",
-    title: "Que deseas hacer?",
-    text: "Se eliminara el Contrato del sistema!",
-    type: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Eliminar Contrato",
-    preConfirm: function () {
-      $.ajax({
-        data: { idRuta: id },
-        dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-        url: urlBase + "routes/rutas/delete", //url a donde hacemos la peticion
-        type: "POST",
-        beforeSend: function () {
-          // $("#overlayText").text("Cerrando Sesión...");
-          // $(".overlayCargue").fadeOut("slow");
-        },
-        complete: function () {
-          // $(".overlayCargue").fadeIn("slow");
-        },
-        success: function (result) {
-          var estado = result.status;
-          switch (estado) {
-            case "0":
-              Swal.fire({
-                icon: "error",
-                title: "<strong>Error en el servidor</strong>",
-                html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
-                showCloseButton: true,
-                showConfirmButton: false,
-                cancelButtonText: "Cerrar",
-                cancelButtonColor: "#dc3545",
-                showCancelButton: true,
-                backdrop: true,
-              });
-              break;
-
-            case "1":
-              Command: toastr["success"](
-                "El contrato se ha eliminado satisfactoriamente.",
-                "Contrato Eliminado"
-              );
-
-              toastr.options = {
-                closeButton: false,
-                debug: false,
-                newestOnTop: true,
-                progressBar: true,
-                positionClass: "toast-top-right",
-                preventDuplicates: true,
-                onclick: null,
-                showDuration: 300,
-                hideDuration: 100,
-                timeOut: 5000,
-                extendedTimeOut: 1000,
-                showEasing: "swing",
-                hideEasing: "linear",
-                showMethod: "fadeIn",
-                hideMethod: "fadeOut",
-              };
-              tablaRutas.clear().draw();
-              break;
-
-            case "2":
-              Swal.fire({
-                icon: "error",
-                title: "<strong>Error de Validacón</strong>",
-                html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
-                showCloseButton: true,
-                showConfirmButton: false,
-                cancelButtonText: "Cerrar",
-                cancelButtonColor: "#dc3545",
-                showCancelButton: true,
-                backdrop: true,
-              });
-              break;
-          }
-        },
-        error: function (xhr) {
-          console.log(xhr);
-          Command: toastr["error"](
-            "Fallo la ejecucion de la acción, por favor comunicate con soporte.",
-            "Operación Fallida."
-          );
-
-          toastr.options = {
-            closeButton: false,
-            debug: false,
-            newestOnTop: true,
-            progressBar: true,
-            positionClass: "toast-top-right",
-            preventDuplicates: true,
-            onclick: null,
-            showDuration: 300,
-            hideDuration: 100,
-            timeOut: 5000,
-            extendedTimeOut: 1000,
-            showEasing: "swing",
-            hideEasing: "linear",
-            showMethod: "fadeIn",
-            hideMethod: "fadeOut",
-          };
-        },
-      });
-    },
-  });
-}
-
-function showModalRegistro() {
-  reset();
-  $("#alertaForm").html("");
-  $("#btnRegistro").text("Registrar Contrato");
-  $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
-  $("#ModalRegistro").modal({
-    backdrop: "static",
-    keyboard: false,
-  });
-  edit = false;
-}
-
 function reset() {
-  vercampos("#frmRegistro", 1);
-  limpiarcampos("#frmRegistro");
-  $("#btnRegistro").removeClass("btn btn-success");
-  $("#btnRegistro").addClass("btn btn-info");
+  vercampos("#frmParametrizar", 1);
+  limpiarcampos("#frmParametrizar");
 }
 
 function filterFloat(evt, input) {
@@ -660,5 +510,5 @@ function filter(__val__) {
 }
 
 function reajustDatatables() {
-  tablaRutas.columns.adjust().draw();
+  tablaMovimientos.columns.adjust().draw();
 }

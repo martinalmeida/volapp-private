@@ -4,7 +4,8 @@ include_once(VIEW_CONTROLLER);
 
 use View\ViewController;
 
-$view = new ViewController('contratos');
+$view = new ViewController('movimientos');
+
 
 $view->initializationView();
 ?>
@@ -19,7 +20,7 @@ $view->initializationView();
         <div id="panel-1" class="panel">
             <div class="panel-hdr">
                 <h2>
-                    Tabla de Contratos
+                    Tabla de Movimientos
                     <!-- Tabla <span class="fw-300"><i>Usuarios</i></span> -->
                 </h2>
                 <div class="panel-toolbar">
@@ -32,16 +33,17 @@ $view->initializationView();
                 <div class="panel-content">
                     <!-- <div class="panel-tag">
                     </div> -->
-                    <table id="tablaContratos" class="table table-bordered table-hover table-striped w-100">
+                    <table id="tablaMovimientos" class="table table-bordered table-hover table-striped w-100">
                         <thead class="bg-primary-600">
                             <tr>
                                 <th>id</th>
-                                <th>Fecha de Inicio</th>
-                                <th>Fecha de Finalización</th>
+                                <th>Tipo Maquinaria</th>
+                                <th>Placa o # de Registro:</th>
                                 <th>Titulo del Contrato</th>
-                                <th>Representante</th>
-                                <th>Telefono</th>
-                                <th>Correo Electronico</th>
+                                <th>Ruta</th>
+                                <th>Stand-by</th>
+                                <th>Tarifa por Hora</th>
+                                <th>Usuario Modifico</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
                             </tr>
@@ -57,9 +59,9 @@ $view->initializationView();
 </div>
 
 <h3>
-    Pagina de Contratos
+    Pagina de Movimientos
 </h3>
 
 <?php
-include_once(VIEW . 'contratos/modalForm.php');
+include_once(VIEW . 'movimientos/modalParametrizar.php');
 $view->finalizeView();

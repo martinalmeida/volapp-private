@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 include(MODELS . 'modelSesion.php');
 
-class Alquiler
+class Fletes
 {
     // --Parametros Privados--
     private $conn;
@@ -71,14 +71,14 @@ class Alquiler
 
             $html = "";
             $html .= '<h1 class="subheader-title">';
-            $html .= '<i class="fal fa-info-circle"></i> Alquiler</h1>';
+            $html .= '<i class="fal fa-info-circle"></i> Fletes</h1>';
 
             echo json_encode(array('status' => NULL, 'data' => $html));
         } else {
 
             $html = "";
             $html .= '<h1 class="subheader-title">';
-            $html .= '<i class="fal fa-info-circle"></i> Alquiler</h1>';
+            $html .= '<i class="fal fa-info-circle"></i> Fletes</h1>';
             $html .= '<h3>No tienes permisos de escritura para este modulo.</h3>';
 
             echo json_encode(array('status' => NULL, 'data' => $html));

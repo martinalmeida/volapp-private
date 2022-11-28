@@ -1,22 +1,4 @@
-let edit = null;
-var peticion = null;
 var tablAlquiler = "";
-var controls = {
-  leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',
-  rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>',
-};
-var runDatePicker = function () {
-  $("#fechaInicio").datepicker({
-    orientation: "buttom left",
-    todayHighlight: true,
-    templates: controls,
-  });
-  $("#fechaFin").datepicker({
-    orientation: "buttom left",
-    todayHighlight: true,
-    templates: controls,
-  });
-};
 
 $(document).ready(function () {
   /* ---------  START Serverside Tabla ( tablAlquiler ) ----------- */
@@ -58,12 +40,13 @@ $(document).ready(function () {
     ],
     columns: [
       { data: "id" },
-      { data: "fechaInicio" },
-      { data: "fechaFin" },
-      { data: "titulo" },
-      { data: "representante" },
-      { data: "telefono" },
-      { data: "email" },
+      { data: "tipo" },
+      { data: "placa" },
+      { data: "contrato" },
+      { data: "ruta" },
+      { data: "standby" },
+      { data: "horaTarifa" },
+      { data: "nombres" },
       { data: "status" },
       { data: "defaultContent" },
     ],
@@ -84,8 +67,7 @@ $(document).ready(function () {
   });
   readPermisos();
   writePermisos();
-  runDatePicker();
-  $(":input").inputmask();
+  selects();
 });
 
 function readPermisos() {
@@ -124,26 +106,95 @@ function writePermisos() {
   });
 }
 
-function registrar(form) {
+function selects() {
+  $.ajax({
+    dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
+    url: urlBase + "routes/selects/getRuta", //url a donde hacemos la peticion
+    type: "GET",
+    beforeSend: function () {
+      // $(".overlayCargue").fadeIn("slow");
+    },
+    success: function (result) {
+      var estado = result.status;
+      switch (estado) {
+        case "0":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error en el servidor</strong>",
+            html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        case "1":
+          var html = "";
+
+          html +=
+            '<option value="" disabled selected hidden>Seleccione la ruta para esta ruta</option>';
+          for (let i = 0; i < result.data.length; i++) {
+            html += result.data[i].html;
+          }
+
+          $("#ruta").html(html);
+          break;
+
+        case "2":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error de Validacón</strong>",
+            html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        default:
+          break;
+      }
+    },
+    complete: function () {
+      // setTimeout(() => {
+      //   $(".overlayCargue").fadeOut("slow");
+      // }, 1000);
+    },
+    error: function (xhr) {
+      console.log(xhr);
+      Swal.fire({
+        icon: "error",
+        title: "<strong>Error!</strong>",
+        html: "<h5>Se ha presentado un error, por favor informar al area de Sistemas.</h5>",
+        showCloseButton: true,
+        showConfirmButton: false,
+        cancelButtonText: "Cerrar",
+        cancelButtonColor: "#dc3545",
+        showCancelButton: true,
+        backdrop: true,
+      });
+    },
+  });
+}
+
+function parametrizar(form) {
   $("#alertaForm").html("");
   var respuestavalidacion = validarcampos("#" + form);
   if (respuestavalidacion) {
     var formData = new FormData(document.getElementById(form));
-    if (edit == true) {
-      peticion = urlBase + "routes/alquiler/update";
-    } else if (edit == false) {
-      $("#archivoBase64").html("");
-      peticion = urlBase + "routes/alquiler/create";
-    } else if (edit == null) {
-      return false;
-    }
     $.ajax({
       cache: false, //necesario para enviar archivos
       contentType: false, //necesario para enviar archivos
       processData: false, //necesario para enviar archivos
       data: formData, //necesario para enviar archivos
       dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-      url: peticion, //url a donde hacemos la peticion
+      url: urlBase + "routes/alquiler/parametrizar", //url a donde hacemos la peticion
       type: "POST",
       beforeSend: function () {
         // $(".overlayCargue").fadeIn("slow");
@@ -169,32 +220,20 @@ function registrar(form) {
               showCancelButton: true,
               backdrop: true,
             });
-            $("#ModalRegistro").modal("hide");
+            $("#ModalParametrizar").modal("hide");
             break;
 
           case "1":
-            if (edit == false) {
-              Swal.fire({
-                icon: "success",
-                title: "<strong>Contrato Creado</strong>",
-                html: "<h5>El contrato se ha registrado exitosamente</h5>",
-                showCloseButton: false,
-                confirmButtonText: "Aceptar",
-                confirmButtonColor: "#64a19d",
-                backdrop: true,
-              });
-            } else {
-              Swal.fire({
-                icon: "success",
-                title: "<strong>Contrato Editado</strong>",
-                html: "<h5>El contrato se ha editado exitosamente</h5>",
-                showCloseButton: false,
-                confirmButtonText: "Aceptar",
-                confirmButtonColor: "#64a19d",
-                backdrop: true,
-              });
-            }
-            $("#ModalRegistro").modal("hide");
+            Swal.fire({
+              icon: "success",
+              title: "<strong>Parametrizacion Realizada</strong>",
+              html: "<h5>La parametrizacion se ha guardado exitosamente</h5>",
+              showCloseButton: false,
+              confirmButtonText: "Aceptar",
+              confirmButtonColor: "#64a19d",
+              backdrop: true,
+            });
+            $("#ModalParametrizar").modal("hide");
             tablAlquiler.clear().draw();
             reset();
             break;
@@ -209,48 +248,6 @@ function registrar(form) {
               "Cerrar</button></div></div>";
 
             $("#alertaForm").html(html);
-            break;
-
-          case "4":
-            Swal.fire({
-              icon: "warning",
-              title: "<strong>Archivo Dañado</strong>",
-              html: "<h5>El archivo esta corrupto.</h5>",
-              showCloseButton: true,
-              showConfirmButton: false,
-              cancelButtonText: "Cerrar",
-              cancelButtonColor: "#dc3545",
-              showCancelButton: true,
-              backdrop: true,
-            });
-            $("#ModalRegistro").modal("hide");
-            break;
-
-          case "5":
-            html +=
-              '<div class="alert border-warning bg-transparent text-info fade show" role="alert">' +
-              '<div class="d-flex align-items-center"><div class="alert-icon text-warning">' +
-              '<i class="fal fa-exclamation-triangle"></i></div>' +
-              '<div class="flex-1 text-warning"><span class="h5 m-0 fw-700">Adjunte el Archivo de Documentación del Contrato </span></div>' +
-              '<button type="button" class="btn btn-warning btn-pills btn-sm btn-w-m waves-effect waves-themed" data-dismiss="alert" aria-label="Close">' +
-              "Cerrar</button></div></div>";
-
-            $("#archivoBase64").html(html);
-            break;
-
-          case "6":
-            Swal.fire({
-              icon: "error",
-              title: "<strong>Tamaño excesivo de Archivo</strong>",
-              html: "<h5>Adjunta un archivo de menor tamaño, el peso maximo es de 10MB.</h5>",
-              showCloseButton: true,
-              showConfirmButton: false,
-              cancelButtonText: "Cerrar",
-              cancelButtonColor: "#dc3545",
-              showCancelButton: true,
-              backdrop: true,
-            });
-            $("#ModalRegistro").modal("hide");
             break;
 
           default:
@@ -271,19 +268,17 @@ function registrar(form) {
           showCancelButton: true,
           backdrop: true,
         });
-        $("#ModalRegistro").modal("hide");
+        $("#ModalParametrizar").modal("hide");
       },
     });
   }
 }
 
-function editarRegistro(id) {
+function inicializarParametrizacion(id) {
+  reset();
   $("#alertaForm").html("");
-  $("#archivoBase64").html("");
-  $(':input[type="file"]').val("");
-  edit = true;
   $.ajax({
-    data: { idContrato: id }, //datos a enviar a la url
+    data: { idAlquiler: id }, //datos a enviar a la url
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
     url: urlBase + "routes/alquiler/getData", //url a donde hacemos la peticion
     type: "POST",
@@ -309,38 +304,24 @@ function editarRegistro(id) {
           break;
 
         case "1":
-          $("#fechaInicio").val(result.data.fechaInicio);
-          $("#fechaFin").val(result.data.fechaFin);
-          $("#titulo").val(result.data.titulo);
-          $("#representante").val(result.data.representante);
-          $("#telefono").val(result.data.telefono);
-          $("#email").val(result.data.email);
-
+          $("#id").val(result.data[0].id);
+          $("#placa").val(result.data[0].placa);
+          $("#tipo").val(result.data[0].tipo);
           html +=
-            '<button type="button" class="btn btn-outline-danger" onclick="visualizarPDF(' +
-            "'" +
-            result.data.contenType +
-            "', '" +
-            result.data.base64 +
-            "'" +
-            ');" >Ver Documentación del Vehiculo <i class="fal fa-file-pdf"></i></button>' +
-            '<input type="hidden" id="idContrato" name="idContrato" value="' +
-            result.data.id +
-            '">' +
-            '<input type="hidden" id="contenType" name="contenType" value="' +
-            result.data.contenType +
-            '">' +
-            '<input type="hidden" id="base64" name="base64" value="' +
-            result.data.base64 +
+            '<input type="hidden" id="idAlquiler" name="idAlquiler" value="' +
+            result.data[0].id +
             '">';
 
-          $("#archivoBase64").html(html);
+          $("#inputsParametrizar").html(html);
 
-          $("#btnRegistro").text("Editar Contrato");
-          $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
-          $("#btnRegistro").removeClass("btn btn-info");
-          $("#btnRegistro").addClass("btn btn-success");
-          $("#ModalRegistro").modal({
+          $("#btnParametrizar").text("Parametrizar");
+          $("#btnParametrizar").attr(
+            "onclick",
+            "parametrizar('frmParametrizar');"
+          );
+          $("#btnParametrizar").removeClass("btn btn-info");
+          $("#btnParametrizar").addClass("btn btn-success");
+          $("#ModalParametrizar").modal({
             backdrop: "static",
             keyboard: false,
           });
@@ -386,30 +367,10 @@ function editarRegistro(id) {
   });
 }
 
-function visualizarPDF(content, base) {
-  var base64 = base;
-  const blob = base64ToBlob(base64, content);
-  const url = URL.createObjectURL(blob);
-  const pdfWindow = window.open("");
-  pdfWindow.document.write(
-    "<iframe width='100%' height='100%' src='" + url + "'></iframe>"
-  );
-
-  function base64ToBlob(base64, type = "application/octet-stream") {
-    const binStr = atob(base64);
-    const len = binStr.length;
-    const arr = new Uint8Array(len);
-    for (let i = 0; i < len; i++) {
-      arr[i] = binStr.charCodeAt(i);
-    }
-    return new Blob([arr], { type: type });
-  }
-}
-
 function statusRegistro(id, status) {
   $.ajax({
     data: {
-      idContrato: id,
+      idAlquiler: id,
       status: status,
     },
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
@@ -508,136 +469,44 @@ function statusRegistro(id, status) {
   });
 }
 
-function eliminarRegistro(id) {
-  Swal.fire({
-    icon: "warning",
-    title: "Que deseas hacer?",
-    text: "Se eliminara el Contrato del sistema!",
-    type: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Eliminar Contrato",
-    preConfirm: function () {
-      $.ajax({
-        data: { idContrato: id },
-        dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-        url: urlBase + "routes/alquiler/delete", //url a donde hacemos la peticion
-        type: "POST",
-        beforeSend: function () {
-          // $("#overlayText").text("Cerrando Sesión...");
-          // $(".overlayCargue").fadeOut("slow");
-        },
-        complete: function () {
-          // $(".overlayCargue").fadeIn("slow");
-        },
-        success: function (result) {
-          var estado = result.status;
-          switch (estado) {
-            case "0":
-              Swal.fire({
-                icon: "error",
-                title: "<strong>Error en el servidor</strong>",
-                html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
-                showCloseButton: true,
-                showConfirmButton: false,
-                cancelButtonText: "Cerrar",
-                cancelButtonColor: "#dc3545",
-                showCancelButton: true,
-                backdrop: true,
-              });
-              break;
-
-            case "1":
-              Command: toastr["success"](
-                "El contrato se ha eliminado satisfactoriamente.",
-                "Contrato Eliminado"
-              );
-
-              toastr.options = {
-                closeButton: false,
-                debug: false,
-                newestOnTop: true,
-                progressBar: true,
-                positionClass: "toast-top-right",
-                preventDuplicates: true,
-                onclick: null,
-                showDuration: 300,
-                hideDuration: 100,
-                timeOut: 5000,
-                extendedTimeOut: 1000,
-                showEasing: "swing",
-                hideEasing: "linear",
-                showMethod: "fadeIn",
-                hideMethod: "fadeOut",
-              };
-              tablAlquiler.clear().draw();
-              break;
-
-            case "2":
-              Swal.fire({
-                icon: "error",
-                title: "<strong>Error de Validacón</strong>",
-                html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
-                showCloseButton: true,
-                showConfirmButton: false,
-                cancelButtonText: "Cerrar",
-                cancelButtonColor: "#dc3545",
-                showCancelButton: true,
-                backdrop: true,
-              });
-              break;
-          }
-        },
-        error: function (xhr) {
-          console.log(xhr);
-          Command: toastr["error"](
-            "Fallo la ejecucion de la acción, por favor comunicate con soporte.",
-            "Operación Fallida."
-          );
-
-          toastr.options = {
-            closeButton: false,
-            debug: false,
-            newestOnTop: true,
-            progressBar: true,
-            positionClass: "toast-top-right",
-            preventDuplicates: true,
-            onclick: null,
-            showDuration: 300,
-            hideDuration: 100,
-            timeOut: 5000,
-            extendedTimeOut: 1000,
-            showEasing: "swing",
-            hideEasing: "linear",
-            showMethod: "fadeIn",
-            hideMethod: "fadeOut",
-          };
-        },
-      });
-    },
-  });
-}
-
-function showModalRegistro() {
-  reset();
-  $("#alertaForm").html("");
-  $("#btnRegistro").text("Registrar Contrato");
-  $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
-  $("#ModalRegistro").modal({
-    backdrop: "static",
-    keyboard: false,
-  });
-  edit = false;
-}
-
 function reset() {
-  vercampos("#frmRegistro", 1);
-  limpiarcampos("#frmRegistro");
-  $("#archivoBase64").html("");
-  $("#btnRegistro").removeClass("btn btn-success");
-  $("#btnRegistro").addClass("btn btn-info");
-  $(':input[type="file"]').val("");
+  vercampos("#frmParametrizar", 1);
+  limpiarcampos("#frmParametrizar");
+}
+
+function filterFloat(evt, input) {
+  // Backspace = 8, Enter = 13, ‘0′ = 48, ‘9′ = 57, ‘.’ = 46, ‘-’ = 43
+  var key = window.Event ? evt.which : evt.keyCode;
+  var chark = String.fromCharCode(key);
+  var tempValue = input.value + chark;
+  if (key >= 48 && key <= 57) {
+    if (filter(tempValue) === false) {
+      return false;
+    } else {
+      return true;
+    }
+  } else {
+    if (key == 8 || key == 13 || key == 0) {
+      return true;
+    } else if (key == 46) {
+      if (filter(tempValue) === false) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
+  }
+}
+
+function filter(__val__) {
+  var preg = /^([0-9]+\.?[0-9]{0,2})$/;
+  if (preg.test(__val__) === true) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function reajustDatatables() {

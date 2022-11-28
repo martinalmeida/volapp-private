@@ -39,6 +39,7 @@ $view->initializationView();
                                 <th>Nombre de Ruta</th>
                                 <th>Origen</th>
                                 <th>Destino</th>
+                                <th>Contrato</th>
                                 <th>Kilometraje</th>
                                 <th>Tarifa</th>
                                 <th>Estado</th>

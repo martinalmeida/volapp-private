@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-11-2022 a las 03:34:49
--- Versión del servidor: 10.4.24-MariaDB
--- Versión de PHP: 8.1.6
+-- Tiempo de generación: 28-11-2022 a las 20:10:55
+-- Versión del servidor: 10.4.25-MariaDB
+-- Versión de PHP: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -30,7 +30,6 @@ SET time_zone = "+00:00";
 CREATE TABLE `alquiler` (
   `id` bigint(20) NOT NULL,
   `idMaquinaria` bigint(20) NOT NULL,
-  `idContrato` bigint(20) DEFAULT NULL,
   `idRuta` bigint(20) DEFAULT NULL,
   `standby` float NOT NULL,
   `horaTarifa` float NOT NULL,
@@ -46,9 +45,9 @@ CREATE TABLE `alquiler` (
 -- Volcado de datos para la tabla `alquiler`
 --
 
-INSERT INTO `alquiler` (`id`, `idMaquinaria`, `idContrato`, `idRuta`, `standby`, `horaTarifa`, `datecreated`, `dateupdate`, `datedelete`, `idUsuario`, `nit`, `status`) VALUES
-(1, 17, NULL, NULL, 0, 0, '2022-11-28 00:29:26', NULL, NULL, 1, 24234245, 1),
-(2, 33, NULL, NULL, 0, 0, '2022-11-28 00:29:37', NULL, NULL, 1, 24234245, 1);
+INSERT INTO `alquiler` (`id`, `idMaquinaria`, `idRuta`, `standby`, `horaTarifa`, `datecreated`, `dateupdate`, `datedelete`, `idUsuario`, `nit`, `status`) VALUES
+(1, 17, 1, 32, 456, '2022-11-28 18:29:13', '2022-11-28 18:29:13', NULL, 1, 24234245, 1),
+(2, 33, NULL, 0, 0, '2022-11-28 00:29:37', NULL, NULL, 1, 24234245, 1);
 
 -- --------------------------------------------------------
 
@@ -143,7 +142,6 @@ INSERT INTO `empresas` (`nit`, `digito`, `nombre`, `representante`, `telefono`, 
 CREATE TABLE `fletes` (
   `id` bigint(20) NOT NULL,
   `idMaquinaria` bigint(20) NOT NULL,
-  `idContrato` bigint(20) DEFAULT NULL,
   `idRuta` bigint(20) DEFAULT NULL,
   `flete` float NOT NULL,
   `datecreated` timestamp NULL DEFAULT NULL,
@@ -158,9 +156,9 @@ CREATE TABLE `fletes` (
 -- Volcado de datos para la tabla `fletes`
 --
 
-INSERT INTO `fletes` (`id`, `idMaquinaria`, `idContrato`, `idRuta`, `flete`, `datecreated`, `dateupdate`, `datedelete`, `idUsuario`, `nit`, `status`) VALUES
-(1, 16, NULL, NULL, 0, '2022-11-27 16:54:25', NULL, NULL, 1, 24234245, 1),
-(2, 37, NULL, NULL, 0, '2022-11-28 01:05:57', NULL, NULL, 1, 24234245, 1);
+INSERT INTO `fletes` (`id`, `idMaquinaria`, `idRuta`, `flete`, `datecreated`, `dateupdate`, `datedelete`, `idUsuario`, `nit`, `status`) VALUES
+(1, 16, NULL, 0, '2022-11-27 16:54:25', NULL, NULL, 1, 24234245, 1),
+(2, 37, NULL, 0, '2022-11-28 01:05:57', NULL, NULL, 1, 24234245, 1);
 
 -- --------------------------------------------------------
 
@@ -293,7 +291,6 @@ INSERT INTO `modulo` (`id`, `menu_id`, `page`, `titulo`, `icono`, `descripcion`,
 CREATE TABLE `movimientos` (
   `id` bigint(20) NOT NULL,
   `idMaquinaria` bigint(20) NOT NULL,
-  `idContrato` bigint(20) DEFAULT NULL,
   `idRuta` bigint(20) DEFAULT NULL,
   `kilometraje` int(11) NOT NULL,
   `tarifa` int(11) NOT NULL,
@@ -309,8 +306,8 @@ CREATE TABLE `movimientos` (
 -- Volcado de datos para la tabla `movimientos`
 --
 
-INSERT INTO `movimientos` (`id`, `idMaquinaria`, `idContrato`, `idRuta`, `kilometraje`, `tarifa`, `datecreated`, `dateupdate`, `datedelete`, `idUsuario`, `nit`, `status`) VALUES
-(1, 35, NULL, NULL, 0, 0, '2022-11-28 00:54:04', NULL, NULL, 1, 24234245, 1);
+INSERT INTO `movimientos` (`id`, `idMaquinaria`, `idRuta`, `kilometraje`, `tarifa`, `datecreated`, `dateupdate`, `datedelete`, `idUsuario`, `nit`, `status`) VALUES
+(1, 35, NULL, 0, 0, '2022-11-28 00:54:04', NULL, NULL, 1, 24234245, 1);
 
 -- --------------------------------------------------------
 
@@ -521,9 +518,9 @@ INSERT INTO `rutas_contratos` (`id`, `kilometraje`, `tarifa`, `fecha_creado`, `i
 (2, 121.34, 3454.77, '2022-11-10 20:37:52', 4, 3, 2),
 (3, 12.34, 34.77, '2022-11-10 22:55:24', 4, 3, 2),
 (4, 45.57, 780.7, '2022-11-25 18:28:07', 4, 3, 2),
-(5, 121.34, 3454.77, '2022-11-25 18:58:40', 4, 3, 2),
-(6, 121.34, 6544.2, '2022-11-25 19:17:29', 4, 3, 2),
-(7, 12.7, 34.9, '2022-11-25 19:17:37', 5, 3, 2),
+(5, 121.34, 3454.77, '2022-11-28 18:34:15', 1, 3, 1),
+(6, 121.34, 6544.2, '2022-11-28 18:34:08', 2, 3, 1),
+(7, 12.7, 34.9, '2022-11-28 18:33:59', 3, 3, 1),
 (8, 121.34, 6544.1, '2022-11-25 19:17:29', 4, 3, 1),
 (9, 12.7, 34.8, '2022-11-25 19:17:37', 5, 3, 1);
 
@@ -669,10 +666,9 @@ INSERT INTO `usuarios` (`id`, `nit`, `identificacion`, `nombres`, `a_paterno`, `
 ALTER TABLE `alquiler`
   ADD PRIMARY KEY (`id`),
   ADD KEY `idMaquinaria` (`idMaquinaria`),
-  ADD KEY `idContrato` (`idContrato`),
-  ADD KEY `idRuta` (`idRuta`),
   ADD KEY `idUsuario` (`idUsuario`),
-  ADD KEY `nit` (`nit`);
+  ADD KEY `nit` (`nit`),
+  ADD KEY `idRuta` (`idRuta`);
 
 --
 -- Indices de la tabla `contratos`
@@ -703,7 +699,6 @@ ALTER TABLE `fletes`
   ADD PRIMARY KEY (`id`),
   ADD KEY `idMaquinaria` (`idMaquinaria`),
   ADD KEY `idRuta` (`idRuta`),
-  ADD KEY `idContrato` (`idContrato`),
   ADD KEY `idUsuario` (`idUsuario`),
   ADD KEY `nit` (`nit`);
 
@@ -735,7 +730,6 @@ ALTER TABLE `modulo`
 ALTER TABLE `movimientos`
   ADD PRIMARY KEY (`id`),
   ADD KEY `idMaquinaria` (`idMaquinaria`),
-  ADD KEY `idContrato` (`idContrato`),
   ADD KEY `idUsuario` (`idUsuario`),
   ADD KEY `idRuta` (`idRuta`),
   ADD KEY `nit` (`nit`);
@@ -942,8 +936,7 @@ ALTER TABLE `usuarios`
 ALTER TABLE `alquiler`
   ADD CONSTRAINT `alquiler_ibfk_1` FOREIGN KEY (`idUsuario`) REFERENCES `usuarios` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `alquiler_ibfk_2` FOREIGN KEY (`idMaquinaria`) REFERENCES `maquinarias` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `alquiler_ibfk_3` FOREIGN KEY (`idContrato`) REFERENCES `contratos` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `alquiler_ibfk_4` FOREIGN KEY (`idRuta`) REFERENCES `rutas` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `alquiler_ibfk_3` FOREIGN KEY (`idRuta`) REFERENCES `rutas` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `descontables`
@@ -958,7 +951,6 @@ ALTER TABLE `descontables`
 ALTER TABLE `fletes`
   ADD CONSTRAINT `fletes_ibfk_1` FOREIGN KEY (`idUsuario`) REFERENCES `usuarios` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `fletes_ibfk_2` FOREIGN KEY (`idMaquinaria`) REFERENCES `maquinarias` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `fletes_ibfk_3` FOREIGN KEY (`idContrato`) REFERENCES `contratos` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `fletes_ibfk_4` FOREIGN KEY (`idRuta`) REFERENCES `rutas` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
@@ -974,7 +966,6 @@ ALTER TABLE `maquinarias`
 ALTER TABLE `movimientos`
   ADD CONSTRAINT `movimientos_ibfk_1` FOREIGN KEY (`idUsuario`) REFERENCES `usuarios` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `movimientos_ibfk_2` FOREIGN KEY (`idMaquinaria`) REFERENCES `maquinarias` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `movimientos_ibfk_3` FOREIGN KEY (`idContrato`) REFERENCES `contratos` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `movimientos_ibfk_4` FOREIGN KEY (`idRuta`) REFERENCES `rutas` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --

@@ -62,5 +62,5 @@ $view->initializationView();
 </h3>
 
 <?php
-include_once(VIEW . 'alquiler/modalForm.php');
+include_once(VIEW . 'alquiler/modalParametrizar.php');
 $view->finalizeView();

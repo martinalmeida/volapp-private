@@ -10,6 +10,7 @@ class Ruta
     private $conn;
     private $tableName = "rutas";
     private $tableRutasContratos = "rutas_contratos";
+    private $tableContratos = "contratos";
     private $nit;
     private $idUser;
     private $fechaActual;
@@ -159,28 +160,36 @@ class Ruta
             $searchQuery = " AND (r.id LIKE :id OR 
                             r.nombre LIKE :nombre OR
                             r.origen LIKE :origen OR
+                            c.titulo LIKE :titulo OR
                             r.destino LIKE :destino OR
                             r.status LIKE :status )";
             $searchArray = array(
                 'id' => "%$searchValue%",
                 'nombre' => "%$searchValue%",
                 'origen' => "%$searchValue%",
+                'titulo' => "%$searchValue%",
                 'destino' => "%$searchValue%",
                 'status' => "%$searchValue%"
             );
         }
         // --Total number of records without filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " r JOIN " . $this->tableRutasContratos . " rc ON rc.idRuta = r.id");
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " r 
+                                                                  JOIN " . $this->tableRutasContratos . " rc ON r.id = rc.idRuta 
+                                                                  JOIN " . $this->tableContratos . " c ON rc.idContrato = c.id");
         $stmt->execute();
         $records = $stmt->fetch();
         $totalRecords = $records['allcount'];
         // --Total number of records with filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " r JOIN " . $this->tableRutasContratos . " rc ON rc.idRuta = r.id WHERE 1 " . $searchQuery . "");
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " r 
+                                                                  JOIN " . $this->tableRutasContratos . " rc ON r.id = rc.idRuta 
+                                                                  JOIN " . $this->tableContratos . " c ON rc.idContrato = c.id WHERE 1 " . $searchQuery . " ");
         $stmt->execute($searchArray);
         $records = $stmt->fetch();
         $totalRecordwithFilter = $records['allcount'];
         // --Fetch records--
-        $stmt = $this->conn->prepare("SELECT r.id, r.nombre, r.origen, r.destino, CONCAT(rc.kilometraje, ' KM')kilometraje, CONCAT(rc.tarifa, ' $')tarifa, r.status FROM " . $this->tableName . " r JOIN " . $this->tableRutasContratos . " rc ON rc.idRuta = r.id WHERE 1 " . $searchQuery . " AND r.status in(1, 2) AND rc.status = 1 ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
+        $stmt = $this->conn->prepare("SELECT r.id, r.nombre, r.origen, r.destino, c.titulo, CONCAT(rc.kilometraje, ' KM')kilometraje, CONCAT(rc.tarifa, ' $')tarifa, r.status FROM " . $this->tableName . " r 
+                                                                                                                                                                    JOIN " . $this->tableRutasContratos . " rc ON r.id = rc.idRuta 
+                                                                                                                                                                    JOIN " . $this->tableContratos . " c ON rc.idContrato = c.id WHERE 1 " . $searchQuery . " AND r.status in(1, 2) AND rc.status = 1 ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
         // --Bind values--
         foreach ($searchArray as $key => $search) {
             $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
@@ -212,6 +221,7 @@ class Ruta
                 "nombre" => $row['nombre'],
                 "origen" => $row['origen'],
                 "destino" => $row['destino'],
+                "titulo" => $row['titulo'],
                 "kilometraje" => $row['kilometraje'],
                 "tarifa" => $row['tarifa'],
                 "status" => $estado,
