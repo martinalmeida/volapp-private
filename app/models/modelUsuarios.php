@@ -11,6 +11,7 @@ class Usuario
     private $tableName = "usuarios";
     private $tableRol = "rol";
     private $tableSucursal = "sucursal";
+    private $nit;
 
     // --Parametros Publicos--
     public $identificacion;
@@ -94,11 +95,12 @@ class Usuario
     public function createUsuario(): void
     {
         // --Preparamos la consulta--
-        $query = "INSERT INTO $this->tableName SET identificacion=?, nombres=?, a_paterno=?, a_materno=?, telefono=?, email_user=?, pswd=?,
+        $query = "INSERT INTO $this->tableName SET nit=?, identificacion=?, nombres=?, a_paterno=?, a_materno=?, telefono=?, email_user=?, pswd=?,
         nombrefiscal=?, direccionfiscal=?, content_type=?, base_64=?, rolid =?, sucursalid =? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
+        $this->nit = $_SESSION['nit'];
         $this->identificacion = htmlspecialchars(strip_tags($this->identificacion));
         $this->nombres = htmlspecialchars(strip_tags($this->nombres));
         $this->Apaterno = htmlspecialchars(strip_tags($this->Apaterno));
@@ -114,19 +116,20 @@ class Usuario
         $this->sucursal = htmlspecialchars(strip_tags($this->sucursal));
 
         // --Almacenamos los valores--
-        $stmt->bindParam(1, $this->identificacion);
-        $stmt->bindParam(2, $this->nombres);
-        $stmt->bindParam(3, $this->Apaterno);
-        $stmt->bindParam(4, $this->Amaterno);
-        $stmt->bindParam(5, $this->telefono);
-        $stmt->bindParam(6, $this->emailUser);
-        $stmt->bindParam(7, $this->pswd);
-        $stmt->bindParam(8, $this->nombreFiscal);
-        $stmt->bindParam(9, $this->direccionFiscal);
-        $stmt->bindParam(10, $this->contenType);
-        $stmt->bindParam(11, $this->base64);
-        $stmt->bindParam(12, $this->rol);
-        $stmt->bindParam(13, $this->sucursal);
+        $stmt->bindParam(1, $this->nit);
+        $stmt->bindParam(2, $this->identificacion);
+        $stmt->bindParam(3, $this->nombres);
+        $stmt->bindParam(4, $this->Apaterno);
+        $stmt->bindParam(5, $this->Amaterno);
+        $stmt->bindParam(6, $this->telefono);
+        $stmt->bindParam(7, $this->emailUser);
+        $stmt->bindParam(8, $this->pswd);
+        $stmt->bindParam(9, $this->nombreFiscal);
+        $stmt->bindParam(10, $this->direccionFiscal);
+        $stmt->bindParam(11, $this->contenType);
+        $stmt->bindParam(12, $this->base64);
+        $stmt->bindParam(13, $this->rol);
+        $stmt->bindParam(14, $this->sucursal);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
@@ -306,11 +309,12 @@ class Usuario
     public function updateUsuario(): void
     {
         // --Preparamos la consulta--
-        $query = "UPDATE $this->tableName SET identificacion=?, nombres=?, a_paterno=?, a_materno=?, telefono=?, email_user=?, pswd=?, nombrefiscal=?,
+        $query = "UPDATE $this->tableName SET nit=?, identificacion=?, nombres=?, a_paterno=?, a_materno=?, telefono=?, email_user=?, pswd=?, nombrefiscal=?,
         direccionfiscal=?, content_type=?, base_64=?, rolid =?, sucursalid =? WHERE id=?";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
+        $this->nit = $_SESSION['nit'];
         $this->identificacion = htmlspecialchars(strip_tags($this->identificacion));
         $this->nombres = htmlspecialchars(strip_tags($this->nombres));
         $this->Apaterno = htmlspecialchars(strip_tags($this->Apaterno));
@@ -324,20 +328,21 @@ class Usuario
         $this->sucursal = htmlspecialchars(strip_tags($this->sucursal));
 
         // --Almacenamos los valores--
-        $stmt->bindParam(1, $this->identificacion);
-        $stmt->bindParam(2, $this->nombres);
-        $stmt->bindParam(3, $this->Apaterno);
-        $stmt->bindParam(4, $this->Amaterno);
-        $stmt->bindParam(5, $this->telefono);
-        $stmt->bindParam(6, $this->emailUser);
-        $stmt->bindParam(7, $this->pswd);
-        $stmt->bindParam(8, $this->nombreFiscal);
-        $stmt->bindParam(9, $this->direccionFiscal);
-        $stmt->bindParam(10, $this->contenType);
-        $stmt->bindParam(11, $this->base64);
-        $stmt->bindParam(12, $this->rol);
-        $stmt->bindParam(13, $this->sucursal);
-        $stmt->bindParam(14, $this->id);
+        $stmt->bindParam(1, $this->nit);
+        $stmt->bindParam(2, $this->identificacion);
+        $stmt->bindParam(3, $this->nombres);
+        $stmt->bindParam(4, $this->Apaterno);
+        $stmt->bindParam(5, $this->Amaterno);
+        $stmt->bindParam(6, $this->telefono);
+        $stmt->bindParam(7, $this->emailUser);
+        $stmt->bindParam(8, $this->pswd);
+        $stmt->bindParam(9, $this->nombreFiscal);
+        $stmt->bindParam(10, $this->direccionFiscal);
+        $stmt->bindParam(11, $this->contenType);
+        $stmt->bindParam(12, $this->base64);
+        $stmt->bindParam(13, $this->rol);
+        $stmt->bindParam(14, $this->sucursal);
+        $stmt->bindParam(15, $this->id);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {

@@ -14,6 +14,7 @@
             </div>
             <div class="modal-body">
                 <form id="frmRegistro">
+                    <div id="alertaForm"></div>
                     <div class="form-row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label" for="identificacion">Identificacion</label>
@@ -68,14 +69,9 @@
                         </div>
                     </div>
                     <div class="form-group">
-
-                        <div id="imagenBase64">
-
-                        </div>
-
+                        <div id="imagenBase64"></div>
                         <label class="form-label" for="logo">Foto de Usuario</label>
                         <div class="input-group">
-
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="logo" name="logo" accept="image/png" required>
                                 <label class="custom-file-label" for="logo">Adjuntar Foto del Usuario</label>

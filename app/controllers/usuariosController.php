@@ -62,9 +62,9 @@ class UsuariosController
                     $usuario->contenType = $_FILES['logo']['type'];
                     $usuario->base64 = base64_encode(file_get_contents($_FILES['logo']['tmp_name']));
                     if (
-                        Validar::numeros($usuario->identificacion) && Validar::alfanumerico($usuario->nombres) && Validar::alfanumerico($usuario->Apaterno) &&
-                        Validar::alfanumerico($usuario->Amaterno) && Validar::numeros($usuario->telefono) && Validar::correo($usuario->emailUser) &&
-                        Validar::password($usuario->pswd) && Validar::alfanumerico($usuario->nombreFiscal) && Validar::direccion($usuario->direccionFiscal) &&
+                        Validar::numeros($usuario->identificacion) && Validar::patronalfanumerico1($usuario->nombres) && Validar::patronalfanumerico1($usuario->Apaterno) &&
+                        Validar::patronalfanumerico1($usuario->Amaterno) && Validar::numeros($usuario->telefono) && Validar::correo($usuario->emailUser) &&
+                        Validar::password($usuario->pswd) && Validar::patronalfanumerico1($usuario->nombreFiscal) && Validar::direccion($usuario->direccionFiscal) &&
                         Validar::numeros($usuario->rol) && Validar::numeros($usuario->sucursal) && Validar::tipoarchivo($usuario->contenType, 7)
                     ) {
                         $usuario->createUsuario();
@@ -174,9 +174,9 @@ class UsuariosController
                     $usuario->contenType = $_FILES['logo']['type'];
                     $usuario->base64 = base64_encode(file_get_contents($_FILES['logo']['tmp_name']));
                     if (
-                        Validar::numeros($usuario->identificacion) && Validar::alfanumerico($usuario->nombres) && Validar::alfanumerico($usuario->Apaterno) &&
-                        Validar::alfanumerico($usuario->Amaterno) && Validar::numeros($usuario->telefono) && Validar::correo($usuario->emailUser) &&
-                        Validar::password($usuario->pswd) && Validar::alfanumerico($usuario->nombreFiscal) && Validar::direccion($usuario->direccionFiscal) &&
+                        Validar::numeros($usuario->identificacion) && Validar::patronalfanumerico1($usuario->nombres) && Validar::patronalfanumerico1($usuario->Apaterno) &&
+                        Validar::patronalfanumerico1($usuario->Amaterno) && Validar::numeros($usuario->telefono) && Validar::correo($usuario->emailUser) &&
+                        Validar::password($usuario->pswd) && Validar::patronalfanumerico1($usuario->nombreFiscal) && Validar::direccion($usuario->direccionFiscal) &&
                         Validar::numeros($usuario->rol) && Validar::numeros($usuario->sucursal) && Validar::tipoarchivo($usuario->contenType, 7)
                     ) {
                         $usuario->updateUsuario();
@@ -192,9 +192,9 @@ class UsuariosController
         } else {
             // --No se adjunta un archivo nuevo--
             if (
-                Validar::numeros($usuario->identificacion) && Validar::alfanumerico($usuario->nombres) && Validar::alfanumerico($usuario->Apaterno) &&
-                Validar::alfanumerico($usuario->Amaterno) && Validar::numeros($usuario->telefono) && Validar::correo($usuario->emailUser) &&
-                Validar::password($usuario->pswd) && Validar::alfanumerico($usuario->nombreFiscal) && Validar::direccion($usuario->direccionFiscal) &&
+                Validar::numeros($usuario->identificacion) && Validar::patronalfanumerico1($usuario->nombres) && Validar::patronalfanumerico1($usuario->Apaterno) &&
+                Validar::patronalfanumerico1($usuario->Amaterno) && Validar::numeros($usuario->telefono) && Validar::correo($usuario->emailUser) &&
+                Validar::password($usuario->pswd) && Validar::patronalfanumerico1($usuario->nombreFiscal) && Validar::direccion($usuario->direccionFiscal) &&
                 Validar::numeros($usuario->rol) && Validar::numeros($usuario->sucursal)
             ) {
                 $usuario->updateUsuario();

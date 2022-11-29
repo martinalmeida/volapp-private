@@ -264,12 +264,14 @@ function selects() {
 }
 
 function registrar(form) {
+  $("#alertaForm").html("");
   var respuestavalidacion = validarcampos("#" + form);
   if (respuestavalidacion) {
     var formData = new FormData(document.getElementById(form));
     if (edit == true) {
       peticion = urlBase + "routes/usuarios/update";
     } else {
+      $("#imagenBase64").html("");
       peticion = urlBase + "routes/usuarios/create";
     }
     $.ajax({
@@ -290,6 +292,7 @@ function registrar(form) {
       },
       success: function (result) {
         var estado = result.status;
+        var html = "";
         switch (estado) {
           case "0":
             Swal.fire({
@@ -334,18 +337,15 @@ function registrar(form) {
             break;
 
           case "2":
-            Swal.fire({
-              icon: "error",
-              title: "<strong>Error de Validacón</strong>",
-              html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
-              showCloseButton: true,
-              showConfirmButton: false,
-              cancelButtonText: "Cerrar",
-              cancelButtonColor: "#dc3545",
-              showCancelButton: true,
-              backdrop: true,
-            });
-            $("#ModalRegistro").modal("hide");
+            html +=
+              '<div class="alert border-danger bg-transparent text-info fade show" role="alert">' +
+              '<div class="d-flex align-items-center"><div class="alert-icon text-danger">' +
+              '<i class="fal fa-exclamation-triangle"></i></div>' +
+              '<div class="flex-1 text-danger"><span class="h5 m-0 fw-700">Error de Validación </span></div>' +
+              '<button type="button" class="btn btn-danger btn-pills btn-sm btn-w-m waves-effect waves-themed" data-dismiss="alert" aria-label="Close">' +
+              "Cerrar</button></div></div>";
+
+            $("#alertaForm").html(html);
             break;
 
           case "4":
@@ -364,18 +364,15 @@ function registrar(form) {
             break;
 
           case "5":
-            Swal.fire({
-              icon: "warning",
-              title: "<strong>Adjunte un Archivo</strong>",
-              html: "<h5>No se ha adjuntado un archivo.</h5>",
-              showCloseButton: true,
-              showConfirmButton: false,
-              cancelButtonText: "Cerrar",
-              cancelButtonColor: "#dc3545",
-              showCancelButton: true,
-              backdrop: true,
-            });
-            $("#ModalRegistro").modal("hide");
+            html +=
+              '<div class="alert border-warning bg-transparent text-info fade show" role="alert">' +
+              '<div class="d-flex align-items-center"><div class="alert-icon text-warning">' +
+              '<i class="fal fa-exclamation-triangle"></i></div>' +
+              '<div class="flex-1 text-warning"><span class="h5 m-0 fw-700">Adjunte el Archivo de Documentación de maquinaria </span></div>' +
+              '<button type="button" class="btn btn-warning btn-pills btn-sm btn-w-m waves-effect waves-themed" data-dismiss="alert" aria-label="Close">' +
+              "Cerrar</button></div></div>";
+
+            $("#imagenBase64").html(html);
             break;
 
           case "6":
@@ -457,8 +454,8 @@ function editarRegistro(id) {
           $("#telefono").val(result.data[0].telefono);
           $("#emailUser").val(result.data[0].emailUser);
           $("#pswd").val(result.data[0].pswd);
-          $("#nombreFiscal").val(result.data[0].nombreFiscal);
-          $("#direccionFiscal").val(result.data[0].direccionFiscal);
+          $("#nombreFiscal").val(result.data[0].nombrefiscal);
+          $("#direccionFiscal").val(result.data[0].direccionfiscal);
           $("#rol").val(result.data[0].rol);
           $("#sucursal").val(result.data[0].sucursal);
 
