@@ -48,3 +48,11 @@ define('VIEW_CONTROLLER', CONTROLLERS . '/viewController.php');
 
 // Login vista
 define('LOGIN', VIEW . 'login/');
+// Home vista
+define('HOME', 'public/views/home/');
+// Home vista
+define('REGISTROSALQUILER', 'public/views/registros/registrosAlquiler');
+// Home vista
+define('REGISTROSFLETES', 'public/views/registros/registrosFletes');
+// Home vista
+define('REGISTROSMOVIMIENTOS', 'public/views/registros/registrosMovimientos');

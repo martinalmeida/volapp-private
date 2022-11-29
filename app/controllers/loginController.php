@@ -5,6 +5,7 @@ header('Content-type: application/json');
 
 include_once(LIBRARIES . 'validations.php');
 include_once(MODELS . 'modelLogin.php');
+include_once(ROOTS);
 
 class LoginController
 {

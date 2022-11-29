@@ -1,4 +1,10 @@
 <?php
+
+declare(strict_types=1);
+
+include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/volappConfig.php');
+include_once(CONTROLLERS . 'sesionController.php');
+
 class Roots
 {
     private $folder;
@@ -14,6 +20,44 @@ class Roots
             header('Location: ' . $url);
         } else {
             self::error404('error', '404');
+        }
+    }
+
+    // --Ruta Inicio de Sesion HOME--
+    public static function inicioSesion()
+    {
+        $verificar = SesionController::verificarUsuario();
+        if ($verificar === TRUE) {
+            return HOME;
+        } else {
+            return LOGIN;
+        }
+    }
+
+    // --Rutas de Registros--
+    public static function regitrosRoots($numero)
+    {
+        $verificar = SesionController::verificarUsuario();
+        if ($verificar === TRUE) {
+            switch ($numero) {
+                case '1':
+                    return REGISTROSALQUILER;
+                    break;
+
+                case '2':
+                    return REGISTROSFLETES;
+                    break;
+
+                case '3':
+                    return REGISTROSMOVIMIENTOS;
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
+        } else {
+            return LOGIN;
         }
     }
 

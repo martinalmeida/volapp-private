@@ -10,7 +10,6 @@ class Login
     private $conn;
     private $tableName = "usuarios";
     private $tableEmpresa = "empresas";
-    private const URLDEFAULT = 'public/views/home/';
 
     // --Parametros Publicos--
     public $correo;
@@ -66,7 +65,7 @@ class Login
                         );
                         SesionTools::crearSesion($datosSesion);
                         // -- ↓↓ Retornamos las respuestas con la urldefault ↓↓ --
-                        echo json_encode(array('status' => '1', 'data' => $data, 'url' => self::URLDEFAULT));
+                        echo json_encode(array('status' => '1', 'data' => NULL, 'url' => Roots::inicioSesion()));
                     } else {
                         // -- ↓↓ Empresa inactiva ↓↓ --
                         echo json_encode(array('status' => '9', 'data' => NULL));

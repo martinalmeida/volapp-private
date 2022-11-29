@@ -24,9 +24,9 @@ function readPermisos() {
 
 function getRuta(ruta) {
   $.ajax({
-    data: { idRegistro: ruta },
+    data: { idRuta: ruta },
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-    url: urlBase + "routes/registros/status", //url a donde hacemos la peticion
+    url: urlBase + "routes/registros/getRuta", //url a donde hacemos la peticion
     type: "POST",
     beforeSend: function () {
       // $("#overlayText").text("Cerrando Sesión...");
