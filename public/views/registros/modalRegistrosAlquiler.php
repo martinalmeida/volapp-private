@@ -15,32 +15,22 @@
             <div class="modal-body">
                 <form id="frmRegistro">
                     <div class="form-row">
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label" for="placa">Cod Ficha</label>
-                            <input type="text" onKeyPress="if(this.value.length==7)return false;" class="form-control" id="cod" name="cod" placeholder="Codigo de la ficha del registro" required>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="codFicha">Cod Ficha</label>
+                            <input type="text" onKeyPress="if(this.value.length==7)return false;" class="form-control" id="codFicha" name="codFicha" placeholder="Codigo de la ficha del registro" required>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label" for="placa">Nro de Recorridos</label>
-                            <input type="number" onKeyPress="if(this.value.length==7)return false;" class="form-control" id="recorridos" name="recorridos" placeholder="Numeros de recorridos del vehiculo" required>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="horas">Horas Trabajadas:</label>
+                            <input type="text" onkeypress="return filterFloat(event,this);" class="form-control" id="horas" name="horas" placeholder="Horas trabajadas (8.5)" required>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label">Contrato</label>
-                            <select class="custom-select form-control" id="contrato" name="contrato">
-                            </select>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label">Placa</label>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Placa o # de Registro:</label>
                             <select class="custom-select form-control" id="placa" name="placa">
                             </select>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label">Ruta</label>
-                            <select class="custom-select form-control" id="ruta" name="ruta">
-                            </select>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label">Material</label>
-                            <select class="custom-select form-control" id="material" name="material">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Acuerdo de Alquiler:</label>
+                            <select class="custom-select form-control" id="contrato" name="contrato">
                             </select>
                         </div>
                         <div class="input-group col-md-6 mb-3">
@@ -58,10 +48,6 @@
                                     <i class="fal fa-calendar-check"></i>
                                 </span>
                             </div>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <label class="form-label" for="nota">Nota para este registro</label>
-                            <textarea onKeyPress="if(this.value.length==1000)return false;" class="form-control" id="nota" name="nota" rows="5" style="height: 77px;" required></textarea>
                         </div>
 
                         <div id="inputsEditar">

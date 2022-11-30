@@ -20,7 +20,8 @@ class Alquiler
 
     // --Parametros Publicos--
     public $id;
-    public $ruta;
+    public $placa;
+    public $contrato;
     public $standBy;
     public $tarifaHora;
     public $status;
@@ -66,22 +67,55 @@ class Alquiler
         $sesion->tabla = $this->tableName;
 
         $datos = $sesion->permisoModulo();
+        $html = "";
 
         if ($datos->w === 1) {
 
-            $html = "";
             $html .= '<h1 class="subheader-title">';
             $html .= '<i class="fal fa-info-circle"></i> Alquiler</h1>';
+            $html .= '<button type="button" class="btn btn-info active" onclick="showModalRegistro();">Agregar Acuerdo<i class="fal fa-plus-square"></i></button>';
 
             echo json_encode(array('status' => NULL, 'data' => $html));
         } else {
 
-            $html = "";
             $html .= '<h1 class="subheader-title">';
             $html .= '<i class="fal fa-info-circle"></i> Alquiler</h1>';
             $html .= '<h3>No tienes permisos de escritura para este modulo.</h3>';
 
             echo json_encode(array('status' => NULL, 'data' => $html));
+        }
+    }
+
+    // -- ⊡ Funcion para crear un acuerdo ⊡ --
+    public function createAcuerdo(): void
+    {
+        // --Preparamos la consulta--
+        $query = "INSERT INTO $this->tableName SET idMaquinaria=?, idContrato=?, standby=?, horaTarifa=?, datecreated=?, idUsuario=?, nit=? ;";
+        $stmt = $this->conn->prepare($query);
+
+        // --Escapamos los caracteres--
+        $this->placa = htmlspecialchars(strip_tags($this->placa));
+        $this->contrato = htmlspecialchars(strip_tags($this->contrato));
+        $this->standBy = htmlspecialchars(strip_tags($this->standBy));
+        $this->tarifaHora = htmlspecialchars(strip_tags($this->tarifaHora));
+        $this->fechaActual = Utilidades::getFecha();
+        $this->idUser = $_SESSION['id'];
+        $this->nit = $_SESSION['nit'];
+
+        // --Almacenamos los valores--
+        $stmt->bindParam(1, $this->placa);
+        $stmt->bindParam(2, $this->contrato);
+        $stmt->bindParam(3, $this->standBy);
+        $stmt->bindParam(4, $this->tarifaHora);
+        $stmt->bindParam(5, $this->fechaActual);
+        $stmt->bindParam(6, $this->idUser);
+        $stmt->bindParam(7, $this->nit);
+
+        // --Ejecutamos la consulta y validamos ejecucion--
+        if ($stmt->execute()) {
+            echo json_encode(array('status' => '1', 'data' => NULL));
+        } else {
+            echo json_encode(array('status' => '0', 'data' => NULL));
         }
     }
 
@@ -109,7 +143,6 @@ class Alquiler
                             tm.tipo LIKE :tipo OR
                             m.placa LIKE :placa OR
                             c.titulo LIKE :contrato OR
-                            r.origen LIKE :ruta OR
                             a.standby LIKE :standby OR
                             a.horaTarifa LIKE :horaTarifa OR
                             u.nombres LIKE :nombres OR
@@ -119,7 +152,6 @@ class Alquiler
                 'tipo' => "%$searchValue%",
                 'placa' => "%$searchValue%",
                 'contrato' => "%$searchValue%",
-                'ruta' => "%$searchValue%",
                 'standby' => "%$searchValue%",
                 'horaTarifa' => "%$searchValue%",
                 'nombres' => "%$searchValue%",
@@ -130,9 +162,7 @@ class Alquiler
         $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " a 
                                       JOIN " . $this->tableMaquinaria . " m ON m.id = a.idMaquinaria 
                                       JOIN " . $this->tableTpMaquinaria . " tm ON tm.id = m.idTpMaquinaria 
-                                      LEFT JOIN " . $this->tableRutas . " r ON a.idRuta = r.id 
-                                      LEFT JOIN " . $this->tableRutaContrato . " rc ON r.id = rc.idRuta 
-                                      LEFT JOIN " . $this->tableContratos . " c ON rc.idContrato = c.id
+                                      LEFT JOIN " . $this->tableContratos . " c ON a.idContrato = c.id
                                       JOIN " . $this->tableUsuarios . " u ON a.idUsuario = u.id ");
         $stmt->execute();
         $records = $stmt->fetch();
@@ -141,21 +171,17 @@ class Alquiler
         $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " a 
                                       JOIN " . $this->tableMaquinaria . " m ON m.id = a.idMaquinaria 
                                       JOIN " . $this->tableTpMaquinaria . " tm ON tm.id = m.idTpMaquinaria 
-                                      LEFT JOIN " . $this->tableRutas . " r ON a.idRuta = r.id 
-                                      LEFT JOIN " . $this->tableRutaContrato . " rc ON r.id = rc.idRuta 
-                                      LEFT JOIN " . $this->tableContratos . " c ON rc.idContrato = c.id
+                                      LEFT JOIN " . $this->tableContratos . " c ON a.idContrato = c.id
                                       JOIN " . $this->tableUsuarios . " u ON a.idUsuario = u.id WHERE 1 " . $searchQuery . " ");
         $stmt->execute($searchArray);
         $records = $stmt->fetch();
         $totalRecordwithFilter = $records['allcount'];
         // --Fetch records--
-        $stmt = $this->conn->prepare("SELECT a.id, tm.tipo, m.placa, (c.titulo)contrato, concat(r.origen, ' - ', r.destino)ruta , a.standby, a.horaTarifa, u.nombres, a.status 
+        $stmt = $this->conn->prepare("SELECT a.id, tm.tipo, m.placa, (c.titulo)contrato, a.standby, a.horaTarifa, u.nombres, a.status 
                                       FROM " . $this->tableName . " a 
                                       JOIN " . $this->tableMaquinaria . " m ON m.id = a.idMaquinaria 
                                       JOIN " . $this->tableTpMaquinaria . " tm ON tm.id = m.idTpMaquinaria 
-                                      LEFT JOIN " . $this->tableRutas . " r ON a.idRuta = r.id 
-                                      LEFT JOIN " . $this->tableRutaContrato . " rc ON r.id = rc.idRuta 
-                                      LEFT JOIN " . $this->tableContratos . " c ON rc.idContrato = c.id 
+                                      LEFT JOIN " . $this->tableContratos . " c ON a.idContrato = c.id 
                                       JOIN " . $this->tableUsuarios . " u ON a.idUsuario = u.id WHERE 1 " . $searchQuery . " AND a.status in(1, 2) AND m.status = 1 AND a.nit =  " . $_SESSION['nit'] . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
         // --Bind values--
         foreach ($searchArray as $key => $search) {
@@ -184,7 +210,6 @@ class Alquiler
                 "tipo" => $row['tipo'],
                 "placa" => $row['placa'],
                 "contrato" => $row['contrato'],
-                "ruta" => $row['ruta'],
                 "standby" => $row['standby'],
                 "horaTarifa" => $row['horaTarifa'],
                 "nombres" => $row['nombres'],
@@ -227,7 +252,7 @@ class Alquiler
     public function datAlquiler(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT a.id, m.placa, tm.tipo, a.idRuta, a.standby, a.horaTarifa FROM $this->tableName a JOIN $this->tableMaquinaria m ON m.id = a.idMaquinaria JOIN $this->tableTpMaquinaria tm ON tm.id = m.idTpMaquinaria WHERE a.id=? ;";
+        $query = "SELECT a.id, m.placa, tm.tipo, a.idContrato, a.standby, a.horaTarifa FROM $this->tableName a JOIN $this->tableMaquinaria m ON m.id = a.idMaquinaria JOIN $this->tableTpMaquinaria tm ON tm.id = m.idTpMaquinaria WHERE a.id=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Almacenamos los valores--
@@ -255,11 +280,11 @@ class Alquiler
     public function parametrizacionAlquiler(): void
     {
         // --Preparamos la consulta--
-        $query = "UPDATE $this->tableName SET idRuta=?, standby=?, horaTarifa=?, dateupdate=?, idUsuario=?, nit=? WHERE id=? ;";
+        $query = "UPDATE $this->tableName SET idContrato=?, standby=?, horaTarifa=?, dateupdate=?, idUsuario=?, nit=? WHERE id=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
-        $this->ruta = htmlspecialchars(strip_tags($this->ruta));
+        $this->contrato = htmlspecialchars(strip_tags($this->contrato));
         $this->standBy = htmlspecialchars(strip_tags($this->standBy));
         $this->tarifaHora = htmlspecialchars(strip_tags($this->tarifaHora));
         $this->fechaActual = Utilidades::getFecha();
@@ -267,7 +292,7 @@ class Alquiler
         $this->nit = $_SESSION['nit'];
 
         // --Almacenamos los valores--
-        $stmt->bindParam(1, $this->ruta);
+        $stmt->bindParam(1, $this->contrato);
         $stmt->bindParam(2, $this->standBy);
         $stmt->bindParam(3, $this->tarifaHora);
         $stmt->bindParam(4, $this->fechaActual);

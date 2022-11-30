@@ -1,17 +1,17 @@
 var edit = null;
 var peticion = null;
-var tablaMaquinarias = "";
+var tablaRegistrosAlquiler = "";
 var controls = {
   leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',
   rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>',
 };
 var runDatePicker = function () {
-  $("#fechaSoat").datepicker({
+  $("#fechaInicial").datepicker({
     orientation: "buttom left",
     todayHighlight: true,
     templates: controls,
   });
-  $("#fechaTecno").datepicker({
+  $("#fechaFinal").datepicker({
     orientation: "buttom left",
     todayHighlight: true,
     templates: controls,
@@ -19,8 +19,8 @@ var runDatePicker = function () {
 };
 
 $(document).ready(function () {
-  /* ---------  START Serverside Tabla ( tablaMaquinarias ) ----------- */
-  tablaMaquinarias = $("#tablaMaquinarias").DataTable({
+  /* ---------  START Serverside Tabla ( tablaRegistrosAlquiler ) ----------- */
+  tablaRegistrosAlquiler = $("#tablaRegistrosAlquiler").DataTable({
     processing: true,
     orderClasses: true,
     deferRender: true,
@@ -58,29 +58,14 @@ $(document).ready(function () {
     ],
     columns: [
       { data: "id" },
-      { data: "tipo" },
+      { data: "codFicha" },
       { data: "placa" },
-      { data: "marca" },
-      { data: "referencia" },
-      { data: "modelo" },
-      { data: "color" },
-      { data: "capacidad" },
-      { data: "nroSerie" },
-      { data: "nroSerieChasis" },
-      { data: "nroMotor" },
-      { data: "rodaje" },
-      { data: "rut" },
-      { data: "gps" },
-      { data: "fechaSoat" },
-      { data: "fechaTecno" },
-      { data: "propietario" },
-      { data: "documentoPropietario" },
-      { data: "telefonoPropietario" },
-      { data: "correoPropietario" },
-      { data: "operador" },
-      { data: "documentOperador" },
-      { data: "telefonOperador" },
-      { data: "correOperador" },
+      { data: "alquiler" },
+      { data: "fechaInicio" },
+      { data: "fechaFin" },
+      { data: "horas" },
+      { data: "titulo" },
+      { data: "nombres" },
       { data: "status" },
       { data: "defaultContent" },
     ],
@@ -171,12 +156,12 @@ function selects() {
           var html = "";
 
           html +=
-            '<option value="" disabled selected hidden>Seleccione tipo de Maquinaria</option>';
+            '<option value="" disabled selected hidden>Seleccione Maquinaria</option>';
           for (let i = 0; i < result.data.length; i++) {
             html += result.data[i].html;
           }
 
-          $("#tpMaquinaria").html(html);
+          $("#placa").html(html);
           break;
 
         case "2":
@@ -290,7 +275,7 @@ function registrar(form) {
               });
             }
             $("#ModalRegistro").modal("hide");
-            tablaMaquinarias.clear().draw();
+            tablaRegistrosAlquiler.clear().draw();
             reset();
             break;
 
@@ -498,26 +483,6 @@ function editarRegistro(id) {
   });
 }
 
-function visualizarPDF(content, base) {
-  var base64 = base;
-  const blob = base64ToBlob(base64, content);
-  const url = URL.createObjectURL(blob);
-  const pdfWindow = window.open("");
-  pdfWindow.document.write(
-    "<iframe width='100%' height='100%' src='" + url + "'></iframe>"
-  );
-
-  function base64ToBlob(base64, type = "application/octet-stream") {
-    const binStr = atob(base64);
-    const len = binStr.length;
-    const arr = new Uint8Array(len);
-    for (let i = 0; i < len; i++) {
-      arr[i] = binStr.charCodeAt(i);
-    }
-    return new Blob([arr], { type: type });
-  }
-}
-
 function statusRegistro(id, status) {
   $.ajax({
     data: {
@@ -574,7 +539,7 @@ function statusRegistro(id, status) {
             showMethod: "fadeIn",
             hideMethod: "fadeOut",
           };
-          tablaMaquinarias.clear().draw();
+          tablaRegistrosAlquiler.clear().draw();
           break;
 
         case "2":
@@ -683,7 +648,7 @@ function eliminarRegistro(id) {
                 showMethod: "fadeIn",
                 hideMethod: "fadeOut",
               };
-              tablaMaquinarias.clear().draw();
+              tablaRegistrosAlquiler.clear().draw();
               break;
 
             case "2":
@@ -752,6 +717,41 @@ function reset() {
   $(':input[type="file"]').val("");
 }
 
+function filterFloat(evt, input) {
+  // Backspace = 8, Enter = 13, ‘0′ = 48, ‘9′ = 57, ‘.’ = 46, ‘-’ = 43
+  var key = window.Event ? evt.which : evt.keyCode;
+  var chark = String.fromCharCode(key);
+  var tempValue = input.value + chark;
+  if (key >= 48 && key <= 57) {
+    if (filter(tempValue) === false) {
+      return false;
+    } else {
+      return true;
+    }
+  } else {
+    if (key == 8 || key == 13 || key == 0) {
+      return true;
+    } else if (key == 46) {
+      if (filter(tempValue) === false) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
+  }
+}
+
+function filter(__val__) {
+  var preg = /^([0-9]+\.?[0-9]{0,2})$/;
+  if (preg.test(__val__) === true) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 function reajustDatatables() {
-  tablaMaquinarias.columns.adjust().draw();
+  tablaRegistrosAlquiler.columns.adjust().draw();
 }

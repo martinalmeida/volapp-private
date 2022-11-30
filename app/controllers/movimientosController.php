@@ -32,6 +32,30 @@ class MovimientosController
         $movimientos->getWritePermisos();
     }
 
+    public function create(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $movimientos = new Movimientos($db);
+
+        // --Seteo de valores existentes en el POST--
+        $movimientos->placa = isset($_POST['placaInsertInsert']) ? strtoupper(trim($_POST['placaInsertInsert'])) : NULL;
+        $movimientos->ruta = isset($_POST['rutaInsertInsert']) ? strtoupper(trim($_POST['rutaInsertInsert'])) : NULL;
+        $movimientos->kilometraje = isset($_POST['kilometrajeInsert']) ? strtoupper(trim($_POST['kilometrajeInsert'])) : NULL;
+        $movimientos->tarifa = isset($_POST['tarifaInsert']) ? strtoupper(trim($_POST['tarifaInsert'])) : NULL;
+
+        if (
+            Validar::numeros($movimientos->placa) && Validar::numeros($movimientos->ruta) &&
+            Validar::float($movimientos->kilometraje, '.') && Validar::float($movimientos->tarifa, '.')
+        ) {
+            $movimientos->createAcuerdo();
+        } else {
+            echo json_encode(array('status' => '2', 'data' => NULL));
+        }
+    }
+
     public function readAllDaTable(): void
     {
         // --Importacion e inicializacion de conexion--

@@ -1,3 +1,5 @@
+let edit = false;
+var peticion = null;
 var tablaMovimientos = "";
 
 $(document).ready(function () {
@@ -9,7 +11,7 @@ $(document).ready(function () {
     serverSide: true,
     responsive: true,
     lengthChange: false,
-    pageLength: 30,
+    pageLength: 10,
     ajax: {
       type: "POST",
       url: urlBase + "routes/movimientos/readAllDaTable",
@@ -109,6 +111,80 @@ function writePermisos() {
 function selects() {
   $.ajax({
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
+    url: urlBase + "routes/selects/getVehiculo", //url a donde hacemos la peticion
+    type: "GET",
+    beforeSend: function () {
+      // $(".overlayCargue").fadeIn("slow");
+    },
+    success: function (result) {
+      var estado = result.status;
+      switch (estado) {
+        case "0":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error en el servidor</strong>",
+            html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        case "1":
+          var html = "";
+
+          html +=
+            '<option value="" disabled selected hidden>Seleccione la placa o # de registro</option>';
+          for (let i = 0; i < result.data.length; i++) {
+            html += result.data[i].html;
+          }
+
+          $("#placaInsertInsert").html(html);
+          break;
+
+        case "2":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error de Validacón</strong>",
+            html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        default:
+          break;
+      }
+    },
+    complete: function () {
+      // setTimeout(() => {
+      //   $(".overlayCargue").fadeOut("slow");
+      // }, 1000);
+    },
+    error: function (xhr) {
+      console.log(xhr);
+      Swal.fire({
+        icon: "error",
+        title: "<strong>Error!</strong>",
+        html: "<h5>Se ha presentado un error, por favor informar al area de Sistemas.</h5>",
+        showCloseButton: true,
+        showConfirmButton: false,
+        cancelButtonText: "Cerrar",
+        cancelButtonColor: "#dc3545",
+        showCancelButton: true,
+        backdrop: true,
+      });
+    },
+  });
+  $.ajax({
+    dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
     url: urlBase + "routes/selects/getRuta", //url a donde hacemos la peticion
     type: "GET",
     beforeSend: function () {
@@ -135,12 +211,12 @@ function selects() {
           var html = "";
 
           html +=
-            '<option value="" disabled selected hidden>Seleccione la ruta para esta ruta</option>';
+            '<option value="" disabled selected hidden>Seleccione la ruta para este acuerdo</option>';
           for (let i = 0; i < result.data.length; i++) {
             html += result.data[i].html;
           }
 
-          $("#ruta").html(html);
+          $("#ruta, #rutaInsertInsert").html(html);
           break;
 
         case "2":
@@ -184,17 +260,22 @@ function selects() {
 }
 
 function parametrizar(form) {
-  $("#alertaForm").html("");
+  $("#alertaForm, #alertaFormInsert").html("");
   var respuestavalidacion = validarcampos("#" + form);
   if (respuestavalidacion) {
     var formData = new FormData(document.getElementById(form));
+    if (edit == true) {
+      peticion = urlBase + "routes/movimientos/parametrizar";
+    } else {
+      peticion = urlBase + "routes/movimientos/create";
+    }
     $.ajax({
       cache: false, //necesario para enviar archivos
       contentType: false, //necesario para enviar archivos
       processData: false, //necesario para enviar archivos
       data: formData, //necesario para enviar archivos
       dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-      url: urlBase + "routes/movimientos/parametrizar", //url a donde hacemos la peticion
+      url: peticion, //url a donde hacemos la peticion
       type: "POST",
       beforeSend: function () {
         // $(".overlayCargue").fadeIn("slow");
@@ -220,20 +301,32 @@ function parametrizar(form) {
               showCancelButton: true,
               backdrop: true,
             });
-            $("#ModalParametrizar").modal("hide");
+            $("#ModalParametrizar, #ModalRegistro").modal("hide");
             break;
 
           case "1":
-            Swal.fire({
-              icon: "success",
-              title: "<strong>Parametrizacion Realizada</strong>",
-              html: "<h5>La parametrizacion se ha guardado exitosamente</h5>",
-              showCloseButton: false,
-              confirmButtonText: "Aceptar",
-              confirmButtonColor: "#64a19d",
-              backdrop: true,
-            });
-            $("#ModalParametrizar").modal("hide");
+            if (edit == false) {
+              Swal.fire({
+                icon: "success",
+                title: "<strong>Acuerdo Creado</strong>",
+                html: "<h5>El acuerdo de movimiento se ha registrado exitosamente</h5>",
+                showCloseButton: false,
+                confirmButtonText: "Aceptar",
+                confirmButtonColor: "#64a19d",
+                backdrop: true,
+              });
+            } else {
+              Swal.fire({
+                icon: "success",
+                title: "<strong>Parametrizacion Realizada</strong>",
+                html: "<h5>La parametrizacion se ha guardado exitosamente</h5>",
+                showCloseButton: false,
+                confirmButtonText: "Aceptar",
+                confirmButtonColor: "#64a19d",
+                backdrop: true,
+              });
+            }
+            $("#ModalParametrizar, #ModalRegistro").modal("hide");
             tablaMovimientos.clear().draw();
             reset();
             break;
@@ -247,7 +340,7 @@ function parametrizar(form) {
               '<button type="button" class="btn btn-danger btn-pills btn-sm btn-w-m waves-effect waves-themed" data-dismiss="alert" aria-label="Close">' +
               "Cerrar</button></div></div>";
 
-            $("#alertaForm").html(html);
+            $("#alertaForm, #alertaFormInsert").html(html);
             break;
 
           default:
@@ -275,7 +368,7 @@ function parametrizar(form) {
 }
 
 function inicializarParametrizacion(id) {
-  reset();
+  edit = true;
   $("#alertaForm").html("");
   $.ajax({
     data: { idMovimiento: id }, //datos a enviar a la url
@@ -472,8 +565,22 @@ function statusRegistro(id, status) {
   });
 }
 
+function showModalRegistro() {
+  reset();
+  $("#btnRegistro").show();
+  $("#btnRegistro").text("Registrar Acuerdo");
+  $("#btnRegistro").attr("onclick", "parametrizar('frmRegistro');");
+  $("#ModalRegistro").modal({
+    backdrop: "static",
+    keyboard: false,
+  });
+}
+
 function reset() {
+  edit = false;
+  $("#alertaForm, #alertaFormInsert").html("");
   limpiarcampos("#frmParametrizar");
+  limpiarcampos("#frmRegistro");
 }
 
 function reajustDatatables() {

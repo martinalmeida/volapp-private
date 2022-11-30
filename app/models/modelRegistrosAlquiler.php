@@ -10,10 +10,10 @@ class RegistrosAlquiler
     private $conn;
     private $nombreSubModulo = 'registros';
     private $tableName = "registros_alquiler";
-    private $tablePlaca = "vehiculos";
-    private $tableRuta = "rutas";
-    private $tableMaterial = "materiales";
-    private $tableUser = "usuarios";
+    private $tableMaquinaria = "maquinarias";
+    private $tableAlquiler = "alquiler";
+    private $tableContrato = "contratos";
+    private $tableUsuario = "usuarios";
     private $fechaActual;
     private $nit;
 
@@ -139,32 +139,57 @@ class RegistrosAlquiler
         // --Search--
         $searchQuery = " ";
         if ($searchValue != '') {
-            $searchQuery = " AND (nota LIKE :nota)";
+            $searchQuery = " AND (ra.id LIKE :id OR 
+                            ra.codFicha LIKE :codFicha OR
+                            m.placa LIKE :placa OR
+                            a.standby LIKE :standby OR
+                            ra.fechaInicio LIKE :fechaInicio OR
+                            ra.fechaFin LIKE :fechaFin OR
+                            ra.horasTrabajadas LIKE :horasTrabajadas OR
+                            c.titulo LIKE :titulo OR
+                            u.nombres LIKE :nombres OR
+                            ra.status LIKE :status )";
             $searchArray = array(
-                'nota' => "%$searchValue%",
+                'id' => "%$searchValue%",
+                'codFicha' => "%$searchValue%",
+                'placa' => "%$searchValue%",
+                'standby' => "%$searchValue%",
+                'fechaInicio' => "%$searchValue%",
+                'fechaFin' => "%$searchValue%",
+                'horasTrabajadas' => "%$searchValue%",
+                'titulo' => "%$searchValue%",
+                'nombres' => "%$searchValue%",
+                'status' => "%$searchValue%"
             );
         }
         // --Total number of records without filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . "");
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM $this->tableName ra 
+                                                                  JOIN $this->tableMaquinaria m ON ra.idMaquinaria = m.id 
+                                                                  JOIN $this->tableAlquiler a ON ra.idAlquiler = a.id
+                                                                  JOIN $this->tableContrato c ON a.idContrato = c.id 
+                                                                  JOIN $this->tableUsuario u ON ra.idUsuario = u.id ");
         $stmt->execute();
         $records = $stmt->fetch();
         $totalRecords = $records['allcount'];
         // --Total number of records with filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " WHERE 1 " . $searchQuery . "");
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM $this->tableName ra 
+                                                                  JOIN $this->tableMaquinaria m ON ra.idMaquinaria = m.id 
+                                                                  JOIN $this->tableAlquiler a ON ra.idAlquiler = a.id
+                                                                  JOIN $this->tableContrato c ON a.idContrato = c.id 
+                                                                  JOIN $this->tableUsuario u ON ra.idUsuario = u.id  WHERE 1 " . $searchQuery . "");
         $stmt->execute($searchArray);
         $records = $stmt->fetch();
         $totalRecordwithFilter = $records['allcount'];
         // --Fetch records--
         $stmt = $this->conn->prepare("SELECT 
-                                      r.id, v.placa, (ru.nombre)ruta, (m.nombre)material, r.nota, 
-                                      (r.datecreated)creado, (r.dateupdate)actualizado, (u.nombres)usuario, r.status 
-                                      FROM $this->tableName r 
-                                      JOIN $this->tablePlaca v ON r.idVehiculo = v.id
-                                      JOIN $this->tableRuta ru ON r.idRuta = ru.id
-                                      JOIN $this->tableMaterial m ON r.idMaterial = m.id
-                                      JOIN $this->tableUser u ON r.idUsuario = u.id
+                                      ra.id, ra.codFicha, m.placa, concat('ID: ', a.id, ' STANDBY: ', a.standby)alquiler, ra.fechaInicio, ra.fechaFin, (ra.horasTrabajadas)horas, c.titulo, u.nombres
+                                      FROM $this->tableName ra 
+                                      JOIN $this->tableMaquinaria m ON ra.idMaquinaria = m.id 
+                                      JOIN $this->tableAlquiler a ON ra.idAlquiler = a.id
+                                      JOIN $this->tableContrato c ON a.idContrato = c.id 
+                                      JOIN $this->tableUsuario u ON ra.idUsuario = u.id 
                                       WHERE 1 $searchQuery 
-                                      AND r.status in(1, 2) ORDER BY $columnName $columnSortOrder LIMIT :limit,:offset ");
+                                      AND ra.status IN(1, 2) AND ra.nit =  " . $_SESSION['nit'] . " ORDER BY $columnName $columnSortOrder LIMIT :limit,:offset ");
         // --Bind values--
         foreach ($searchArray as $key => $search) {
             $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
@@ -195,13 +220,14 @@ class RegistrosAlquiler
 
             $data[] = array(
                 "id" => $row['id'],
+                "codFicha" => $row['codFicha'],
                 "placa" => $row['placa'],
-                "ruta" => $row['ruta'],
-                "material" => $row['material'],
-                "nota" => $row['nota'],
-                "creado" => $row['creado'],
-                "actualizado" => $row['actualizado'],
-                "usuario" => $row['usuario'],
+                "alquiler" => $row['alquiler'],
+                "fechaInicio" => $row['fechaInicio'],
+                "fechaFin" => $row['fechaFin'],
+                "horas" => $row['horas'],
+                "titulo" => $row['titulo'],
+                "nombres" => $row['nombres'],
                 "status" => $estado,
                 "defaultContent" => "$botones"
             );

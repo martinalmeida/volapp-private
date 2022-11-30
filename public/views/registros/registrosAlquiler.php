@@ -32,16 +32,18 @@ $view->initializationView();
                 <div class="panel-content">
                     <!-- <div class="panel-tag">
                     </div> -->
-                    <table id="tablaContratos" class="table table-bordered table-hover table-striped w-100">
+                    <table id="tablaRegistrosAlquiler" class="table table-bordered table-hover table-striped w-100">
                         <thead class="bg-primary-600">
                             <tr>
                                 <th>id</th>
+                                <th>Cod. Ficha</th>
+                                <th>Placa o Nro Registro</th>
+                                <th>Acuerdo de Alquiler</th>
                                 <th>Fecha de Inicio</th>
-                                <th>Fecha de Finalización</th>
+                                <th>Fecha de Final</th>
+                                <th>horasTrabjadas</th>
                                 <th>Titulo del Contrato</th>
-                                <th>Representante</th>
-                                <th>Telefono</th>
-                                <th>Correo Electronico</th>
+                                <th>Usuarios</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
                             </tr>

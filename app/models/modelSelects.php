@@ -95,7 +95,7 @@ class Select
     public function selectVehiculo(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT * FROM $this->tableMaquinarias WHERE status = 1 ORDER BY placa ASC ;";
+        $query = "SELECT * FROM $this->tableMaquinarias WHERE status = 1 AND nit =  " . $_SESSION['nit'] . "  ORDER BY placa ASC ;";
         $stmt = $this->conn->prepare($query);
 
         // -- ↓↓ Preparamos arreglo de modulos ↓↓ --

@@ -62,5 +62,6 @@ $view->initializationView();
 </h3>
 
 <?php
+include_once(VIEW . 'fletes/modalForm.php');
 include_once(VIEW . 'fletes/modalParametrizar.php');
 $view->finalizeView();

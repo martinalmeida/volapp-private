@@ -3,9 +3,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">
-                    Agregar Rutas
+                    Agregar Acuerdo de Alquiler
                     <small class="m-0 text-muted">
-                        La tarifa asignada a la ruta es la que se le cobra al contrato.
+                        Puedes asignar a una misma placa a varios acuerdos(rutas).
                     </small>
                 </h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -14,42 +14,32 @@
             </div>
             <div class="modal-body">
                 <form id="frmRegistro">
-                    <div id="alertaForm"></div>
+                    <div id="alertaFormInsert"></div>
                     <div class="form-row">
-                        <div class="col-md-12 mb-3">
-                            <label class="form-label" for="nombre">Nombre de la Ruta</label>
-                            <input type="text" onKeyPress="if(this.value.length==50)return false;" class="form-control" id="nombre" name="nombre" placeholder="Nombre de la ruta" required>
-                        </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label" for="origen">Origen de la Ruta</label>
-                            <input type="text" onKeyPress="if(this.value.length==50)return false;" class="form-control" id="origen" name="origen" placeholder="Nombre de la ruta" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label" for="destino">Destino de la Ruta</label>
-                            <input type="text" onKeyPress="if(this.value.length==50)return false;" class="form-control" id="destino" name="destino" placeholder="Nombre de la ruta" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Asignar Contrato para esta ruta</label>
-                            <select class="custom-select form-control" id="contrato" name="contrato">
+                            <label class="form-label">Placa o # de Registro:</label>
+                            <select class="custom-select form-control" id="placaInsertInsert" name="placaInsertInsert">
                             </select>
                         </div>
-                        <div class="col-md-3 mb-3">
-                            <label class="form-label" for="kilometraje">kilometraje de Ruta</label>
-                            <input type="text" onkeypress="return filterFloat(event,this);" class="form-control" id="kilometraje" name="kilometraje" placeholder="Kilometraje de la ruta" required>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Asignar Contrato:</label>
+                            <select class="custom-select form-control" id="contratoInsertInsert" name="contratoInsertInsert">
+                            </select>
                         </div>
-                        <div class="col-md-3 mb-3">
-                            <label class="form-label" for="tarifa">Tarifa de la Ruta</label>
-                            <input type="text" onkeypress="return filterFloat(event,this);" class="form-control" id="tarifa" name="tarifa" placeholder="Tarifa de la ruta" required>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="standByInsert">Stand-By(horas minimas de trabajo por mes):</label>
+                            <input type="text" onkeypress="return filterFloat(event,this);" class="form-control" id="standByInsert" name="standByInsert" placeholder="Stand By (12.5)" required>
                         </div>
-
-                        <div id="inputsEditar">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="tarifaInsert">Valor de tarifa por hora:</label>
+                            <input type="text" onkeypress="return filterFloat(event,this);" class="form-control" id="tarifaInsert" name="tarifaInsert" placeholder="Tarifa por hora (100000.80)" required>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                <button type="button" id="btnRegistro"></button>
+                <button type="button" class="btn btn-info active" id="btnRegistro"></button>
             </div>
         </div>
     </div>

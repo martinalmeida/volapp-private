@@ -29,8 +29,8 @@
                             <input type="text" class="form-control" id="tipo" disabled>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Asignar Ruta:</label>
-                            <select class="custom-select form-control" id="ruta" name="ruta">
+                            <label class="form-label">Asignar Contrato:</label>
+                            <select class="custom-select form-control" id="contrato" name="contrato">
                             </select>
                         </div>
                         <div class="col-md-3 mb-3">

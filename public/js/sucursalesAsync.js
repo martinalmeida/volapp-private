@@ -11,7 +11,7 @@ $(document).ready(function () {
     serverSide: true,
     responsive: true,
     lengthChange: false,
-    pageLength: 30,
+    pageLength: 10,
     ajax: {
       type: "POST",
       url: urlBase + "routes/sucursales/readAllDaTable",

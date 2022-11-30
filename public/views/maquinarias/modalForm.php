@@ -47,15 +47,15 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="nroSerie">No. Serie: </label>
-                            <input type="number" onKeyPress="if(this.value.length==30)return false;" class="form-control" id="nroSerie" name="nroSerie" placeholder="Numero de serie" required>
+                            <input type="text" onKeyPress="if(this.value.length==30)return false;" class="form-control" id="nroSerie" name="nroSerie" placeholder="Numero de serie" required>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="nroSerieChasis">No. Serie de chasis: </label>
-                            <input type="number" onKeyPress="if(this.value.length==30)return false;" class="form-control" id="nroSerieChasis" name="nroSerieChasis" placeholder="Numero de serie de chasis" required>
+                            <input type="text" onKeyPress="if(this.value.length==30)return false;" class="form-control" id="nroSerieChasis" name="nroSerieChasis" placeholder="Numero de serie de chasis" required>
                         </div>
                         <div class="col-md-3 mb-3">
                             <label class="form-label" for="nroMotor">No. del motor: </label>
-                            <input type="number" onKeyPress="if(this.value.length==30)return false;" class="form-control" id="nroMotor" name="nroMotor" placeholder="Numero de motor" required>
+                            <input type="text" onKeyPress="if(this.value.length==30)return false;" class="form-control" id="nroMotor" name="nroMotor" placeholder="Numero de motor" required>
                         </div>
                         <div class="col-md-3 mb-3">
                             <label class="form-label" for="rodaje">Rodaje: </label>

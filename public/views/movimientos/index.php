@@ -63,5 +63,6 @@ $view->initializationView();
 </h3>
 
 <?php
+include_once(VIEW . 'movimientos/modalForm.php');
 include_once(VIEW . 'movimientos/modalParametrizar.php');
 $view->finalizeView();

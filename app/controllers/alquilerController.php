@@ -32,6 +32,30 @@ class AlquilerController
         $alquiler->getWritePermisos();
     }
 
+    public function create(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $alquiler = new Alquiler($db);
+
+        // --Seteo de valores existentes en el POST--
+        $alquiler->placa = isset($_POST['placaInsertInsert']) ? strtoupper(trim($_POST['placaInsertInsert'])) : NULL;
+        $alquiler->contrato = isset($_POST['contratoInsertInsert']) ? strtoupper(trim($_POST['contratoInsertInsert'])) : NULL;
+        $alquiler->standBy = isset($_POST['standByInsert']) ? strtoupper(trim($_POST['standByInsert'])) : NULL;
+        $alquiler->tarifaHora = isset($_POST['tarifaInsert']) ? strtoupper(trim($_POST['tarifaInsert'])) : NULL;
+
+        if (
+            Validar::numeros($alquiler->placa) && Validar::numeros($alquiler->contrato) &&
+            Validar::float($alquiler->standBy, '.') && Validar::float($alquiler->tarifaHora, '.')
+        ) {
+            $alquiler->createAcuerdo();
+        } else {
+            echo json_encode(array('status' => '2', 'data' => NULL));
+        }
+    }
+
     public function readAllDaTable(): void
     {
         // --Importacion e inicializacion de conexion--
@@ -99,13 +123,13 @@ class AlquilerController
 
         // --Seteo de valores existentes en el POST--
         $alquiler->id = isset($_POST['idAlquiler']) ? trim($_POST['idAlquiler']) : NULL;
-        $alquiler->ruta = isset($_POST['ruta']) ? trim($_POST['ruta']) : NULL;
+        $alquiler->contrato = isset($_POST['contrato']) ? trim($_POST['contrato']) : NULL;
         $alquiler->standBy = isset($_POST['standBy']) ? trim($_POST['standBy']) : NULL;
         $alquiler->tarifaHora = isset($_POST['tarifaHora']) ? strtoupper(trim($_POST['tarifaHora'])) : NULL;
 
         // --No se adjunta un archivo nuevo--
         if (
-            Validar::numeros($alquiler->id) && Validar::numeros($alquiler->ruta) &&
+            Validar::numeros($alquiler->id) && Validar::numeros($alquiler->contrato) &&
             Validar::float($alquiler->standBy, '.') && Validar::float($alquiler->tarifaHora, '.')
         ) {
             $alquiler->parametrizacionAlquiler();

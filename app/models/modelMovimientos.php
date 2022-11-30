@@ -20,6 +20,7 @@ class Movimientos
 
     // --Parametros Publicos--
     public $id;
+    public $placa;
     public $ruta;
     public $kilometraje;
     public $tarifa;
@@ -66,22 +67,55 @@ class Movimientos
         $sesion->tabla = $this->tableName;
 
         $datos = $sesion->permisoModulo();
+        $html = "";
 
         if ($datos->w === 1) {
 
-            $html = "";
             $html .= '<h1 class="subheader-title">';
             $html .= '<i class="fal fa-info-circle"></i> Movimientos</h1>';
+            $html .= '<button type="button" class="btn btn-info active" onclick="showModalRegistro();">Agregar Acuerdo<i class="fal fa-plus-square"></i></button>';
 
             echo json_encode(array('status' => NULL, 'data' => $html));
         } else {
 
-            $html = "";
             $html .= '<h1 class="subheader-title">';
             $html .= '<i class="fal fa-info-circle"></i> Movimientos</h1>';
             $html .= '<h3>No tienes permisos de escritura para este modulo.</h3>';
 
             echo json_encode(array('status' => NULL, 'data' => $html));
+        }
+    }
+
+    // -- ⊡ Funcion para crear un acuerdo ⊡ --
+    public function createAcuerdo(): void
+    {
+        // --Preparamos la consulta--
+        $query = "INSERT INTO $this->tableName SET idMaquinaria=?, idRuta=?, kilometraje=?, tarifa=?, datecreated=?, idUsuario=?, nit=? ;";
+        $stmt = $this->conn->prepare($query);
+
+        // --Escapamos los caracteres--
+        $this->placa = htmlspecialchars(strip_tags($this->placa));
+        $this->ruta = htmlspecialchars(strip_tags($this->ruta));
+        $this->kilometraje = htmlspecialchars(strip_tags($this->kilometraje));
+        $this->tarifa = htmlspecialchars(strip_tags($this->tarifa));
+        $this->fechaActual = Utilidades::getFecha();
+        $this->idUser = $_SESSION['id'];
+        $this->nit = $_SESSION['nit'];
+
+        // --Almacenamos los valores--
+        $stmt->bindParam(1, $this->placa);
+        $stmt->bindParam(2, $this->ruta);
+        $stmt->bindParam(3, $this->kilometraje);
+        $stmt->bindParam(4, $this->tarifa);
+        $stmt->bindParam(5, $this->fechaActual);
+        $stmt->bindParam(6, $this->idUser);
+        $stmt->bindParam(7, $this->nit);
+
+        // --Ejecutamos la consulta y validamos ejecucion--
+        if ($stmt->execute()) {
+            echo json_encode(array('status' => '1', 'data' => NULL));
+        } else {
+            echo json_encode(array('status' => '0', 'data' => NULL));
         }
     }
 

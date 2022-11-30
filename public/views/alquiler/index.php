@@ -39,7 +39,6 @@ $view->initializationView();
                                 <th>Tipo Maquinaria</th>
                                 <th>Placa o # de Registro:</th>
                                 <th>Titulo del Contrato</th>
-                                <th>Ruta</th>
                                 <th>Stand-by</th>
                                 <th>Tarifa por Hora</th>
                                 <th>Usuario Modifico</th>
@@ -62,5 +61,6 @@ $view->initializationView();
 </h3>
 
 <?php
+include_once(VIEW . 'alquiler/modalForm.php');
 include_once(VIEW . 'alquiler/modalParametrizar.php');
 $view->finalizeView();
