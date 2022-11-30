@@ -30,7 +30,7 @@ $(document).ready(function () {
     pageLength: 10,
     ajax: {
       type: "POST",
-      url: urlBase + "routes/maquinarias/readAllDaTable",
+      url: urlBase + "routes/registrosAlquiler/readAllDaTable",
     },
     dom:
       "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
@@ -109,7 +109,7 @@ $(document).ready(function () {
 function readPermisos() {
   $.ajax({
     dataType: "json",
-    url: urlBase + "routes/maquinarias/read",
+    url: urlBase + "routes/registrosAlquiler/read",
     type: "GET",
     beforeSend: function () {},
     success: function (result) {
@@ -129,7 +129,7 @@ function readPermisos() {
 function writePermisos() {
   $.ajax({
     dataType: "json",
-    url: urlBase + "routes/maquinarias/write",
+    url: urlBase + "routes/registrosAlquiler/write",
     type: "GET",
     beforeSend: function () {},
     success: function (result) {
@@ -225,10 +225,10 @@ function registrar(form) {
   if (respuestavalidacion) {
     var formData = new FormData(document.getElementById(form));
     if (edit == true) {
-      peticion = urlBase + "routes/maquinarias/update";
+      peticion = urlBase + "routes/registrosAlquiler/update";
     } else if (edit == false) {
       $("#archivoBase64").html("");
-      peticion = urlBase + "routes/maquinarias/create";
+      peticion = urlBase + "routes/registrosAlquiler/create";
     } else if (edit == null) {
       return false;
     }
@@ -380,7 +380,7 @@ function editarRegistro(id) {
   $.ajax({
     data: { idMaquinaria: id }, //datos a enviar a la url
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-    url: urlBase + "routes/maquinarias/getData", //url a donde hacemos la peticion
+    url: urlBase + "routes/registrosAlquiler/getData", //url a donde hacemos la peticion
     type: "POST",
     beforeSend: function () {
       // $(".overlayCargue").fadeIn("slow");
@@ -525,7 +525,7 @@ function statusRegistro(id, status) {
       status: status,
     },
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-    url: urlBase + "routes/maquinarias/status", //url a donde hacemos la peticion
+    url: urlBase + "routes/registrosAlquiler/status", //url a donde hacemos la peticion
     type: "POST",
     beforeSend: function () {
       // $("#overlayText").text("Cerrando Sesión...");
@@ -634,7 +634,7 @@ function eliminarRegistro(id) {
       $.ajax({
         data: { idMaquinaria: id },
         dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-        url: urlBase + "routes/maquinarias/delete", //url a donde hacemos la peticion
+        url: urlBase + "routes/registrosAlquiler/delete", //url a donde hacemos la peticion
         type: "POST",
         beforeSend: function () {
           // $("#overlayText").text("Cerrando Sesión...");

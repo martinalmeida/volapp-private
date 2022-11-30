@@ -15,6 +15,7 @@ class Maquinaria
     private $tableMovimientos = "movimientos";
     private $nit;
     private $idUser;
+    private $idInsert;
 
     // --Parametros Publicos--
     public $id;
@@ -174,6 +175,26 @@ class Maquinaria
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
+
+            $this->idInsert = $this->conn->lastInsertId();
+            $tablas = array($this->tableAlquiler, $this->tableFletes, $this->tableMovimientos);
+
+            foreach ($tablas as $tabla) {
+                $query = "INSERT INTO $tabla SET idMaquinaria=?, datecreated=?, idUsuario=?, nit=? ;";
+                $stmt = $this->conn->prepare($query);
+                // --Escapamos los caracteres--
+                $this->fechaActual = Utilidades::getFecha();
+                $this->idUser = $_SESSION['id'];
+                $this->nit = $_SESSION['nit'];
+
+                // --Almacenamos los valores--
+                $stmt->bindParam(1, $this->idInsert);
+                $stmt->bindParam(2, $this->fechaActual);
+                $stmt->bindParam(3, $this->idUser);
+                $stmt->bindParam(4, $this->nit);
+                // --Ejecutamos la consulta y validamos ejecucion--
+                $stmt->execute();
+            }
             echo json_encode(array('status' => '1', 'data' => NULL));
         } else {
             echo json_encode(array('status' => '0', 'data' => NULL));
@@ -287,8 +308,6 @@ class Maquinaria
             if ($datos->u === 1) {
                 $botones .= "<button type='button' class='btn btn-success text-white' data-toggle='tooltip' data-placement='top' title='Editar Vehiculo' onclick='editarRegistro(" . $row['id'] . ");'>";
                 $botones .= "<i class='fal fa-edit'></i></button>";
-                $botones .= "<button type='button' class='btn btn-primary text-white' data-toggle='tooltip' data-placement='top' title='Asignar tipo de facturación' onclick='showModalAsignar(" . $row['id'] . ");'>";
-                $botones .= "<i class='fal fa-comment-dollar'></i></button>";
                 $botones .= "<button type='button' class='btn btn-" . $statusColor . " text-white' data-toggle='tooltip' data-placement='top' title='Estado del Vehiculo' onclick='statusRegistro(" . $row['id'] . ", " . $row['status'] . ");'>";
                 $botones .= "<i class='fal fa-eye'></i></button>";
             }
@@ -470,72 +489,6 @@ class Maquinaria
         // --Almacenamos los valores--
         $stmt->bindParam(1, $this->id);
 
-        // --Ejecutamos la consulta y validamos ejecucion--
-        if ($stmt->execute()) {
-            echo json_encode(array('status' => '1', 'data' => NULL));
-        } else {
-            echo json_encode(array('status' => '0', 'data' => NULL));
-        }
-    }
-
-    // -- ⊡ Funcion para checar si ya esta maquinaria esta asociada a un acuerdo ⊡ --
-    public function checkMaquinariaAcuerdo(): void
-    {
-        $tablas = array($this->tableAlquiler, $this->tableFletes, $this->tableMovimientos);
-        foreach ($tablas as $tabla) {
-            // --Preparamos la consulta--
-            $query = "SELECT * FROM $tabla WHERE idMaquinaria=? ;";
-            $stmt = $this->conn->prepare($query);
-
-            // --Almacenamos los valores--
-            $stmt->bindParam(1, $this->id);
-
-            // --Ejecutamos la consulta y validamos ejecucion--
-            if ($stmt->execute()) {
-                // --Comprobamos que venga algun dato--
-                if ($stmt->rowCount() >= 1) {
-                    // --Retornamos las respuestas--
-                    echo json_encode(array('status' => '1', 'data' => NULL));
-                    exit;
-                }
-            } else {
-                // --Falla en la ejecución de la consulta--
-                echo json_encode(array('status' => '0', 'data' => NULL));
-                exit;
-            }
-        }
-        echo json_encode(array('status' => '3', 'data' => NULL));
-    }
-
-    function asignarModoFacturacion(): void
-    {
-        switch ($this->table) {
-            case '1':
-                $query = "INSERT INTO $this->tableAlquiler SET idMaquinaria=?, datecreated=?, idUsuario=?, nit=? ;";
-                break;
-            case '2':
-                $query = "INSERT INTO $this->tableFletes SET idMaquinaria=?, datecreated=?, idUsuario=?, nit=? ;";
-                break;
-            case '3':
-                $query = "INSERT INTO $this->tableMovimientos SET idMaquinaria=?, datecreated=?, idUsuario=?, nit=? ;";
-                break;
-
-            default:
-                // code
-                break;
-        }
-
-        $stmt = $this->conn->prepare($query);
-        // --Escapamos los caracteres--
-        $this->fechaActual = Utilidades::getFecha();
-        $this->idUser = $_SESSION['id'];
-        $this->nit = $_SESSION['nit'];
-
-        // --Almacenamos los valores--
-        $stmt->bindParam(1, $this->id);
-        $stmt->bindParam(2, $this->fechaActual);
-        $stmt->bindParam(3, $this->idUser);
-        $stmt->bindParam(4, $this->nit);
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
             echo json_encode(array('status' => '1', 'data' => NULL));

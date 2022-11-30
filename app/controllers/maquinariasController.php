@@ -244,43 +244,4 @@ class MaquinariasController
             echo json_encode(array('status' => '2', 'data' => NULL));
         }
     }
-
-    public function checkAcuerdo(): void
-    {
-        // --Importacion e inicializacion de conexion--
-        include_once(DB);
-        $database = new Database();
-        $db = $database->getConnection();
-        $maquinaria = new Maquinaria($db);
-
-        // --Seteo de valores existentes en el POST--
-        $maquinaria->id = isset($_POST['idMaquinaria']) ? trim($_POST['idMaquinaria']) : NULL;
-
-        // --Validacion de datos a enviar al modelo--
-        if (Validar::numeros($maquinaria->id)) {
-            $maquinaria->checkMaquinariaAcuerdo();
-        } else {
-            echo json_encode(array('status' => '2', 'data' => NULL));
-        }
-    }
-
-    public function asignarMode(): void
-    {
-        // --Importacion e inicializacion de conexion--
-        include_once(DB);
-        $database = new Database();
-        $db = $database->getConnection();
-        $maquinaria = new Maquinaria($db);
-
-        // --Seteo de valores existentes en el POST--
-        $maquinaria->id = isset($_POST['idMaquinaria']) ? trim($_POST['idMaquinaria']) : NULL;
-        $maquinaria->table = isset($_POST['tabla']) ? trim($_POST['tabla']) : NULL;
-
-        // --Validacion de datos a enviar al modelo--
-        if (Validar::numeros($maquinaria->id) && Validar::numeros($maquinaria->table)) {
-            $maquinaria->asignarModoFacturacion();
-        } else {
-            echo json_encode(array('status' => '2', 'data' => NULL));
-        }
-    }
 }

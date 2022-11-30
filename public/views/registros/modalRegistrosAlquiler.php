@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">
-                    Agregar Registro
+                    Agregar Registro de ALlquiler
                     <small class="m-0 text-muted">
                         Un registro es la información de un viaje que hizo un vehiculo.
                     </small>

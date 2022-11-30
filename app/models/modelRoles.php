@@ -11,6 +11,7 @@ class Rol
     private $tableName = "rol";
     private $tablePermisos = "permisos";
     private $tableModulo = "modulo";
+    private $idInsert;
 
     // --Parametros Publicos--
     public $id;
@@ -65,8 +66,10 @@ class Rol
             $html = "";
             $html .= '<h1 class="subheader-title">';
             $html .= '<i class="fal fa-info-circle"></i> Roles y Permisos</h1>';
+            if ($datos->d === 1) {
+                $html .= '<button type="button" class="btn btn-danger" onclick="resetPermisos();">Reset Permisos <i class="fal fa-window-restore"></i></button>';
+            }
             $html .= '<button type="button" class="btn btn-info active m-1" onclick="showModalRegistro();">Agregar <i class="fal fa-plus-square"></i></button>';
-            $html .= '<button type="button" class="btn btn-danger" onclick="resetPermisos();">Reset Permisos <i class="fal fa-window-restore"></i></button>';
 
             echo json_encode(array('status' => NULL, 'data' => $html));
         } else {
@@ -171,7 +174,29 @@ class Rol
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
-            echo json_encode(array('status' => '1', 'data' => NULL));
+            $this->idInsert = $this->conn->lastInsertId();
+
+            // --Preparamos la consulta--
+            $query = "SELECT id FROM $this->tableModulo WHERE status = 1 ;";
+            $stmt = $this->conn->prepare($query);
+
+            // --Ejecutamos la consulta y validamos ejecucion--
+            if ($stmt->execute()) {
+
+                // --Comprobamos que venga algun dato--
+                if ($stmt->rowCount() >= 1) {
+                    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                    foreach ($data as $row) {
+                        $query = "INSERT INTO $this->tablePermisos SET rolid=?, moduloid=?, r=1";
+                        $stmt = $this->conn->prepare($query);
+                        $stmt->bindParam(1, $this->idInsert);
+                        $stmt->bindParam(2, $row['id']);
+                        $stmt->execute();
+                    }
+                    echo json_encode(array('status' => '1', 'data' => NULL));
+                }
+            }
         } else {
             echo json_encode(array('status' => '0', 'data' => NULL));
         }
@@ -303,16 +328,8 @@ class Rol
             // --Comprobamos que venga algun dato--
             if ($stmt->rowCount() >= 1) {
 
-                // --Cosulta a Objetos--
-                $data = $stmt->fetch(PDO::FETCH_OBJ);
-
-                $datos = array(
-                    'id' => $data->id,
-                    'nombrerol' => $data->nombrerol,
-                    'descripcion' => $data->descripcion
-                );
                 // --Retornamos las respuestas--
-                echo json_encode(array('status' => '1', 'data' => $datos));
+                echo json_encode(array('status' => '1', 'data' => $stmt->fetchAll(PDO::FETCH_ASSOC)));
             } else {
                 // --Usuario no encontrado o inactivo--
                 echo json_encode(array('status' => '3', 'data' => NULL));

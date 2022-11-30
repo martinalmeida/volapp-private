@@ -343,13 +343,13 @@ function editarRegistro(id) {
           $("#btnRegistro").removeClass("btn btn-info");
           $("#btnRegistro").addClass("btn btn-success");
 
-          $("#nombrerol").val(result.data.nombrerol);
-          $("#descripcion").val(result.data.descripcion);
+          $("#nombrerol").val(result.data[0].nombrerol);
+          $("#descripcion").val(result.data[0].descripcion);
 
           var html = "";
           html +=
             '<input type="hidden" id="idRol" name="idRol" value="' +
-            result.data.id +
+            result.data[0].id +
             '">';
 
           $("#inputsEditar").html(html);

@@ -34,6 +34,7 @@ class Sesion
                   JOIN $this->tableRol r ON r.id = p.rolid
                   JOIN $this->tableUsuarios u ON u.rolid = r.id 
                   WHERE ISNULL(m.menu_id) 
+                  AND m.id NOT IN (SELECT m2.menu_id FROM $this->tablePermisos p2 JOIN $this->tableName m2 ON m2.id = p2.moduloid WHERE p2.r = 0 AND p2.rolid=? GROUP BY m2.menu_id HAVING COUNT(*)>1)
                   AND m.status = 1 
                   AND p.r = 1
                   AND u.id=?
@@ -41,10 +42,12 @@ class Sesion
         $stmt = $this->conn->prepare($query);
 
         // -- ↓↓ Traer el id del usuario ↓↓ --
+        $this->rol = SesionTools::getParametro('rol');
         $this->idUser = SesionTools::getParametro('id');
 
         // -- ↓↓ Almacenamos los valores ↓↓ --
-        $stmt->bindParam(1, $this->idUser);
+        $stmt->bindParam(1, $this->rol);
+        $stmt->bindParam(2, $this->idUser);
 
         // -- ↓↓ Ejecutamos la consulta y validamos ejecucion ↓↓ --
         if ($stmt->execute()) {
@@ -103,10 +106,6 @@ class Sesion
                 // -- ↓↓ Submodulos encontrados ↓↓ --
                 $data = $stmt->fetchAll();
                 return $data;
-            } else {
-                // -- ↓↓ Submodulos no encontrados ↓↓ --
-                echo json_encode(array('status' => '6', 'data' => NULL));
-                exit;
             }
         } else {
             // -- ↓↓ Falla en la ejecución de la consulta ↓↓ --

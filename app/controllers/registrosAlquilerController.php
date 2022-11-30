@@ -6,7 +6,7 @@ header('Content-type: application/json');
 
 include(LIBRARIES . 'validations.php');
 include(LIBRARIES . 'utilidades.php');
-include(MODELS . 'modelRegistros.php');
+include(MODELS . 'modelRegistrosAlquiler.php');
 
 class RegistrosAlquilerController
 {
@@ -16,7 +16,7 @@ class RegistrosAlquilerController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $registros = new Registro($db);
+        $registros = new RegistrosAlquiler($db);
 
         $registros->getReadPermisos();
     }
@@ -27,7 +27,7 @@ class RegistrosAlquilerController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $registros = new Registro($db);
+        $registros = new RegistrosAlquiler($db);
 
         $registros->getWritePermisos();
     }
@@ -38,7 +38,7 @@ class RegistrosAlquilerController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $registros = new Registro($db);
+        $registros = new RegistrosAlquiler($db);
 
         // --Seteo de valores existentes en el POST--
         $registros->placa = isset($_POST['placa']) ? strtoupper(trim($_POST['placa'])) : NULL;
@@ -62,7 +62,7 @@ class RegistrosAlquilerController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $registros = new Registro($db);
+        $registros = new RegistrosAlquiler($db);
 
         $registros->draw = htmlspecialchars($_POST['draw']);
         $registros->row = htmlspecialchars($_POST['start']);
@@ -81,7 +81,7 @@ class RegistrosAlquilerController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $registros = new Registro($db);
+        $registros = new RegistrosAlquiler($db);
 
         // --Seteo de valores existentes en el POST--
         $registros->id = isset($_POST['idRegistro']) ? strtoupper(trim($_POST['idRegistro'])) : NULL;
@@ -100,7 +100,7 @@ class RegistrosAlquilerController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $registros = new Registro($db);
+        $registros = new RegistrosAlquiler($db);
 
         // --Seteo de valores existentes en el POST--
         $registros->id = isset($_POST['idRegistro']) ? strtoupper(trim($_POST['idRegistro'])) : NULL;
@@ -119,7 +119,7 @@ class RegistrosAlquilerController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $registros = new Registro($db);
+        $registros = new RegistrosAlquiler($db);
 
         // --Seteo de valores existentes en el POST--
         $registros->id = isset($_POST['idRegistro']) ? strtoupper(trim($_POST['idRegistro'])) : NULL;
@@ -145,7 +145,7 @@ class RegistrosAlquilerController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $registros = new Registro($db);
+        $registros = new RegistrosAlquiler($db);
 
         // --Seteo de valores existentes en el POST--
         $registros->id = isset($_POST['idRegistro']) ? strtoupper(trim($_POST['idRegistro'])) : NULL;

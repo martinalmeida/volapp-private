@@ -189,7 +189,7 @@ class Ruta
         // --Fetch records--
         $stmt = $this->conn->prepare("SELECT r.id, r.nombre, r.origen, r.destino, c.titulo, CONCAT(rc.kilometraje, ' KM')kilometraje, CONCAT(rc.tarifa, ' $')tarifa, r.status FROM " . $this->tableName . " r 
                                                                                                                                                                     JOIN " . $this->tableRutasContratos . " rc ON r.id = rc.idRuta 
-                                                                                                                                                                    JOIN " . $this->tableContratos . " c ON rc.idContrato = c.id WHERE 1 " . $searchQuery . " AND r.status in(1, 2) AND rc.status = 1 ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
+                                                                                                                                                                    JOIN " . $this->tableContratos . " c ON rc.idContrato = c.id WHERE 1 " . $searchQuery . " AND r.status in(1, 2) AND rc.status = 1 AND r.nit =  " . $_SESSION['nit'] . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
         // --Bind values--
         foreach ($searchArray as $key => $search) {
             $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);

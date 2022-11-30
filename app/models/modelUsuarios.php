@@ -201,7 +201,7 @@ class Usuario
                                       FROM " . $this->tableName . " u  
                                       JOIN " . $this->tableRol . " r ON u.rolid = r.id 
                                       LEFT JOIN " . $this->tableSucursal . " s ON u.sucursalid = s.id 
-                                      WHERE 1 " . $searchQuery . " AND u.rolid != 1 AND u.status in(1, 2) ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
+                                      WHERE 1 " . $searchQuery . " AND u.rolid != 1 AND u.status in(1, 2) AND u.nit =  " . $_SESSION['nit'] . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
         // --Bind values--
         foreach ($searchArray as $key => $search) {
             $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);

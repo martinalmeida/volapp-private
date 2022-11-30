@@ -156,7 +156,7 @@ class Alquiler
                                       LEFT JOIN " . $this->tableRutas . " r ON a.idRuta = r.id 
                                       LEFT JOIN " . $this->tableRutaContrato . " rc ON r.id = rc.idRuta 
                                       LEFT JOIN " . $this->tableContratos . " c ON rc.idContrato = c.id 
-                                      JOIN " . $this->tableUsuarios . " u ON a.idUsuario = u.id WHERE 1 " . $searchQuery . " AND a.status in(1, 2) AND m.status = 1 ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
+                                      JOIN " . $this->tableUsuarios . " u ON a.idUsuario = u.id WHERE 1 " . $searchQuery . " AND a.status in(1, 2) AND m.status = 1 AND a.nit =  " . $_SESSION['nit'] . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
         // --Bind values--
         foreach ($searchArray as $key => $search) {
             $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
