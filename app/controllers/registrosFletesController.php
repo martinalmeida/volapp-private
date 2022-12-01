@@ -133,7 +133,7 @@ class RegistrosFletesController
         $registros->observacion = isset($_POST['observacion']) ? strtoupper(trim($_POST['observacion'])) : NULL;
 
         if (
-            Validar::numeros($registros->placa) && Validar::numeros($registros->acuerdo) &&
+            Validar::numeros($registros->id) && Validar::numeros($registros->placa) && Validar::numeros($registros->acuerdo) &&
             Validar::fecha($registros->fechaInicio, '/', 'mda') &&  Validar::fecha($registros->fechaFin, '/', 'mda')
         ) {
             $registros->updateRegistro();

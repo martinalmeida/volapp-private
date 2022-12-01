@@ -1,7 +1,7 @@
 var edit = null;
 var peticion = null;
 var idSubSelect = null;
-var tablaRegistrosFletes = "";
+var tablaRegistrosMovimientos = "";
 var controls = {
   leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',
   rightArrow: '<i class="fal fa-angle-right" style="font-size: 1.25rem"></i>',
@@ -20,8 +20,8 @@ var runDatePicker = function () {
 };
 
 $(document).ready(function () {
-  /* ---------  START Serverside Tabla ( tablaRegistrosFletes ) ----------- */
-  tablaRegistrosFletes = $("#tablaRegistrosFletes").DataTable({
+  /* ---------  START Serverside Tabla ( tablaRegistrosMovimientos ) ----------- */
+  tablaRegistrosMovimientos = $("#tablaRegistrosMovimientos").DataTable({
     processing: true,
     orderClasses: true,
     deferRender: true,
@@ -31,7 +31,7 @@ $(document).ready(function () {
     pageLength: 10,
     ajax: {
       type: "POST",
-      url: urlBase + "routes/registrosFletes/readAllDaTable",
+      url: urlBase + "routes/registrosMovimientos/readAllDaTable",
     },
     dom:
       "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
@@ -62,7 +62,8 @@ $(document).ready(function () {
       { data: "codFicha" },
       { data: "placa" },
       { data: "acuerdo" },
-      { data: "flete" },
+      { data: "kilometraje" },
+      { data: "tarifa" },
       { data: "fechaInicio" },
       { data: "fechaFin" },
       { data: "titulo" },
@@ -96,7 +97,7 @@ $(document).ready(function () {
 function readPermisos() {
   $.ajax({
     dataType: "json",
-    url: urlBase + "routes/registrosFletes/read",
+    url: urlBase + "routes/registrosMovimientos/read",
     type: "GET",
     beforeSend: function () {},
     success: function (result) {
@@ -116,7 +117,7 @@ function readPermisos() {
 function writePermisos() {
   $.ajax({
     dataType: "json",
-    url: urlBase + "routes/registrosFletes/write",
+    url: urlBase + "routes/registrosMovimientos/write",
     type: "GET",
     beforeSend: function () {},
     success: function (result) {
@@ -130,6 +131,80 @@ function writePermisos() {
 }
 
 function selects() {
+  $.ajax({
+    dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
+    url: urlBase + "routes/selects/getMaterial", //url a donde hacemos la peticion
+    type: "GET",
+    beforeSend: function () {
+      // $(".overlayCargue").fadeIn("slow");
+    },
+    success: function (result) {
+      var estado = result.status;
+      switch (estado) {
+        case "0":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error en el servidor</strong>",
+            html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        case "1":
+          var html = "";
+
+          html +=
+            '<option value="" disabled selected hidden>Seleccione material transportado</option>';
+          for (let i = 0; i < result.data.length; i++) {
+            html += result.data[i].html;
+          }
+
+          $("#material").html(html);
+          break;
+
+        case "2":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error de Validacón</strong>",
+            html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        default:
+          break;
+      }
+    },
+    complete: function () {
+      // setTimeout(() => {
+      //   $(".overlayCargue").fadeOut("slow");
+      // }, 1000);
+    },
+    error: function (xhr) {
+      console.log(xhr);
+      Swal.fire({
+        icon: "error",
+        title: "<strong>Error!</strong>",
+        html: "<h5>Se ha presentado un error, por favor informar al area de Sistemas.</h5>",
+        showCloseButton: true,
+        showConfirmButton: false,
+        cancelButtonText: "Cerrar",
+        cancelButtonColor: "#dc3545",
+        showCancelButton: true,
+        backdrop: true,
+      });
+    },
+  });
   $.ajax({
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
     url: urlBase + "routes/selects/getVehiculo", //url a donde hacemos la peticion
@@ -210,7 +285,7 @@ function subSelects(id) {
   $.ajax({
     data: { idMaquinaria: id }, //datos a enviar a la url
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-    url: urlBase + "routes/selects/getAcuerdoFlete", //url a donde hacemos la peticion
+    url: urlBase + "routes/selects/getAcuerdoMovimiento", //url a donde hacemos la peticion
     type: "POST",
     beforeSend: function () {
       // $(".overlayCargue").fadeIn("slow");
@@ -261,7 +336,7 @@ function subSelects(id) {
         case "3":
           var html = "";
           html +=
-            '<option value="" disabled selected hidden>No hay acuerdos de flete parametrizados para placa</option>';
+            '<option value="" disabled selected hidden>No hay acuerdos de movimiento parametrizados para placa</option>';
           $("#acuerdo").html(html);
           $("#acuerdo").prop("disabled", true);
           break;
@@ -298,10 +373,10 @@ function registrar(form) {
   if (respuestavalidacion) {
     var formData = new FormData(document.getElementById(form));
     if (edit == true) {
-      peticion = urlBase + "routes/registrosFletes/update";
+      peticion = urlBase + "routes/registrosMovimientos/update";
     } else if (edit == false) {
       $("#inputsEditar").html("");
-      peticion = urlBase + "routes/registrosFletes/create";
+      peticion = urlBase + "routes/registrosMovimientos/create";
     } else if (edit == null) {
       return false;
     }
@@ -363,7 +438,7 @@ function registrar(form) {
               });
             }
             $("#ModalRegistro").modal("hide");
-            tablaRegistrosFletes.clear().draw();
+            tablaRegistrosMovimientos.clear().draw();
             reset();
             break;
 
@@ -410,7 +485,7 @@ function editarRegistro(id) {
   $.ajax({
     data: { idRegistro: id }, //datos a enviar a la url
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-    url: urlBase + "routes/registrosFletes/getData", //url a donde hacemos la peticion
+    url: urlBase + "routes/registrosMovimientos/getData", //url a donde hacemos la peticion
     type: "POST",
     beforeSend: function () {
       // $(".overlayCargue").fadeIn("slow");
@@ -441,7 +516,8 @@ function editarRegistro(id) {
           setTimeout(function () {
             $("#codFicha").val(result.data[0].codFicha);
             $("#placa").val(result.data[0].idMaquinaria);
-            $("#acuerdo").val(result.data[0].idFlete);
+            $("#acuerdo").val(result.data[0].idMovimeinto);
+            $("#material").val(result.data[0].idMaterial);
             $("#fechaInicial").val(result.data[0].fechaInicio);
             $("#fechaFinal").val(result.data[0].fechaFin);
             $("#observacion").val(result.data[0].observacion);
@@ -510,7 +586,7 @@ function statusRegistro(id, status) {
       status: status,
     },
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-    url: urlBase + "routes/registrosFletes/status", //url a donde hacemos la peticion
+    url: urlBase + "routes/registrosMovimientos/status", //url a donde hacemos la peticion
     type: "POST",
     beforeSend: function () {
       // $("#overlayText").text("Cerrando Sesión...");
@@ -559,7 +635,7 @@ function statusRegistro(id, status) {
             showMethod: "fadeIn",
             hideMethod: "fadeOut",
           };
-          tablaRegistrosFletes.clear().draw();
+          tablaRegistrosMovimientos.clear().draw();
           break;
 
         case "2":
@@ -619,7 +695,7 @@ function eliminarRegistro(id) {
       $.ajax({
         data: { idRegistro: id },
         dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-        url: urlBase + "routes/registrosFletes/delete", //url a donde hacemos la peticion
+        url: urlBase + "routes/registrosMovimientos/delete", //url a donde hacemos la peticion
         type: "POST",
         beforeSend: function () {
           // $("#overlayText").text("Cerrando Sesión...");
@@ -668,7 +744,7 @@ function eliminarRegistro(id) {
                 showMethod: "fadeIn",
                 hideMethod: "fadeOut",
               };
-              tablaRegistrosFletes.clear().draw();
+              tablaRegistrosMovimientos.clear().draw();
               break;
 
             case "2":
@@ -749,5 +825,5 @@ function selectsAcciones() {
 }
 
 function reajustDatatables() {
-  tablaRegistrosFletes.columns.adjust().draw();
+  tablaRegistrosMovimientos.columns.adjust().draw();
 }

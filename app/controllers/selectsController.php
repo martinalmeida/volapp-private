@@ -133,4 +133,22 @@ class selectsController
             echo json_encode(array('status' => '2', 'data' => NULL));
         }
     }
+
+    public function getAcuerdoMovimiento(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $select = new Select($db);
+
+        // --Seteo de valores existentes en el POST--
+        $select->id = isset($_POST['idMaquinaria']) ? strtoupper(trim($_POST['idMaquinaria'])) : NULL;
+
+        if (Validar::numeros($select->id)) {
+            $select->selectAcuerdoMovimiento();
+        } else {
+            echo json_encode(array('status' => '2', 'data' => NULL));
+        }
+    }
 }

@@ -9,9 +9,9 @@ class RegistrosMovimientos
     // --Parametros Privados--
     private $conn;
     private $nombreSubModulo = 'registros';
-    private $tableName = "registros_fletes";
+    private $tableName = "registros_movimientos";
     private $tableMaquinaria = "maquinarias";
-    private $tableFletes = "fletes";
+    private $tableMovimientos = "movimientos";
     private $tableRutas = "rutas";
     private $tableRutaContrato = "rutas_contratos";
     private $tableContrato = "contratos";
@@ -23,6 +23,7 @@ class RegistrosMovimientos
     public $id;
     public $placa;
     public $acuerdo;
+    public $material;
     public $codFicha;
     public $fechaInicio;
     public $fechaFin;
@@ -75,14 +76,14 @@ class RegistrosMovimientos
         if ($datos->w === 1) {
 
             $html .= '<h1 class="subheader-title">';
-            $html .= '<i class="fal fa-info-circle"></i> Registros de Fletes</h1>';
+            $html .= '<i class="fal fa-info-circle"></i> Registros de Movimientos</h1>';
             $html .= '<button type="button" class="btn btn-info active" onclick="showModalRegistro();">Agregar <i class="fal fa-plus-square"></i></button>';
 
             echo json_encode(array('status' => NULL, 'data' => $html));
         } else {
 
             $html .= '<h1 class="subheader-title">';
-            $html .= '<i class="fal fa-info-circle"></i> Registros de Fletes</h1>';
+            $html .= '<i class="fal fa-info-circle"></i> Registros de Movimientos</h1>';
             $html .= '<h3>No tienes permisos de escritura para este modulo.</h3>';
 
             echo json_encode(array('status' => NULL, 'data' => $html));
@@ -93,12 +94,13 @@ class RegistrosMovimientos
     public function createRegistro(): void
     {
         // --Preparamos la consulta--
-        $query = "INSERT INTO $this->tableName SET idMaquinaria=?, idFlete=?, codFicha=?, fechaInicio=?, fechaFin=?, observacion=?, datecreated=?, idUsuario=?, nit=? ;";
+        $query = "INSERT INTO $this->tableName SET idMaquinaria=?, idMovimeinto=?, idMaterial=?, codFicha=?, fechaInicio=?, fechaFin=?, observacion=?, datecreated=?, idUsuario=?, nit=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
         $this->placa = htmlspecialchars(strip_tags($this->placa));
         $this->acuerdo = htmlspecialchars(strip_tags($this->acuerdo));
+        $this->material = htmlspecialchars(strip_tags($this->material));
         $this->codFicha = htmlspecialchars(strip_tags($this->codFicha));
         $this->fechaInicio = htmlspecialchars(strip_tags($this->fechaInicio));
         $this->fechaFin = htmlspecialchars(strip_tags($this->fechaFin));
@@ -110,13 +112,14 @@ class RegistrosMovimientos
         // --Almacenamos los valores--
         $stmt->bindParam(1, $this->placa);
         $stmt->bindParam(2, $this->acuerdo);
-        $stmt->bindParam(3, $this->codFicha);
-        $stmt->bindParam(4, $this->fechaInicio);
-        $stmt->bindParam(5, $this->fechaFin);
-        $stmt->bindParam(6, $this->observacion);
-        $stmt->bindParam(7, $this->fechaActual);
-        $stmt->bindParam(8, $this->idUser);
-        $stmt->bindParam(9, $this->nit);
+        $stmt->bindParam(3, $this->material);
+        $stmt->bindParam(4, $this->codFicha);
+        $stmt->bindParam(5, $this->fechaInicio);
+        $stmt->bindParam(6, $this->fechaFin);
+        $stmt->bindParam(7, $this->observacion);
+        $stmt->bindParam(8, $this->fechaActual);
+        $stmt->bindParam(9, $this->idUser);
+        $stmt->bindParam(10, $this->nit);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
@@ -146,23 +149,25 @@ class RegistrosMovimientos
         // --Search--
         $searchQuery = " ";
         if ($searchValue != '') {
-            $searchQuery = " AND (rf.id LIKE :id OR 
-                            rf.codFicha LIKE :codFicha OR
+            $searchQuery = " AND (rm.id LIKE :id OR 
+                            rm.codFicha LIKE :codFicha OR
                             m.placa LIKE :placa OR
                             r.origen LIKE :origen OR
-                            f.flete LIKE :flete OR
-                            rf.fechaInicio LIKE :fechaInicio OR
-                            rf.fechaFin LIKE :fechaFin OR
+                            mo.kilometraje LIKE :kilometraje OR
+                            mo.tarifa LIKE :tarifa OR
+                            rm.fechaInicio LIKE :fechaInicio OR
+                            rm.fechaFin LIKE :fechaFin OR
                             c.titulo LIKE :titulo OR
-                            rf.observacion LIKE :observacion OR
+                            rm.observacion LIKE :observacion OR
                             u.nombres LIKE :nombres OR
-                            rf.status LIKE :status )";
+                            rm.status LIKE :status )";
             $searchArray = array(
                 'id' => "%$searchValue%",
                 'codFicha' => "%$searchValue%",
                 'placa' => "%$searchValue%",
                 'origen' => "%$searchValue%",
-                'flete' => "%$searchValue%",
+                'kilometraje' => "%$searchValue%",
+                'tarifa' => "%$searchValue%",
                 'fechaInicio' => "%$searchValue%",
                 'fechaFin' => "%$searchValue%",
                 'titulo' => "%$searchValue%",
@@ -172,39 +177,39 @@ class RegistrosMovimientos
             );
         }
         // --Total number of records without filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM $this->tableName rf 
-                                                                  JOIN $this->tableMaquinaria m ON rf.idMaquinaria = m.id 
-                                                                  JOIN $this->tableFletes f ON rf.idFlete = f.id 
-                                                                  JOIN $this->tableRutas r ON f.idRuta = r.id 
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM $this->tableName rm 
+                                                                  JOIN $this->tableMaquinaria m ON rm.idMaquinaria = m.id 
+                                                                  JOIN $this->tableMovimientos mo ON rm.idMovimeinto = mo.id 
+                                                                  JOIN $this->tableRutas r ON mo.idRuta = r.id 
                                                                   JOIN $this->tableRutaContrato rc ON rc.idRuta = r.id 
                                                                   JOIN $this->tableContrato c ON rc.idContrato = c.id 
-                                                                  JOIN $this->tableUsuario u ON rf.idUsuario = u.id ");
+                                                                  JOIN $this->tableUsuario u ON rm.idUsuario = u.id ");
         $stmt->execute();
         $records = $stmt->fetch();
         $totalRecords = $records['allcount'];
         // --Total number of records with filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM $this->tableName rf 
-                                                                  JOIN $this->tableMaquinaria m ON rf.idMaquinaria = m.id 
-                                                                  JOIN $this->tableFletes f ON rf.idFlete = f.id 
-                                                                  JOIN $this->tableRutas r ON f.idRuta = r.id 
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM $this->tableName rm 
+                                                                  JOIN $this->tableMaquinaria m ON rm.idMaquinaria = m.id 
+                                                                  JOIN $this->tableMovimientos mo ON rm.idMovimeinto = mo.id 
+                                                                  JOIN $this->tableRutas r ON mo.idRuta = r.id 
                                                                   JOIN $this->tableRutaContrato rc ON rc.idRuta = r.id 
                                                                   JOIN $this->tableContrato c ON rc.idContrato = c.id 
-                                                                  JOIN $this->tableUsuario u ON rf.idUsuario = u.id   WHERE 1 " . $searchQuery . "");
+                                                                  JOIN $this->tableUsuario u ON rm.idUsuario = u.id   WHERE 1 " . $searchQuery . "");
         $stmt->execute($searchArray);
         $records = $stmt->fetch();
         $totalRecordwithFilter = $records['allcount'];
         // --Fetch records--
         $stmt = $this->conn->prepare("SELECT 
-                                      rf.id, rf.codFicha, m.placa, concat(r.origen, ' - ', r.destino )acuerdo, f.flete, rf.fechaInicio, rf.fechaFin, c.titulo, rf.observacion, u.nombres, rf.status 
-                                      FROM $this->tableName rf 
-                                      JOIN $this->tableMaquinaria m ON rf.idMaquinaria = m.id 
-                                      JOIN $this->tableFletes f ON rf.idFlete = f.id 
-                                      JOIN $this->tableRutas r ON f.idRuta = r.id 
+                                      rm.id, rm.codFicha, m.placa, concat(r.origen, ' - ', r.destino )acuerdo, mo.kilometraje, mo.tarifa, rm.fechaInicio, rm.fechaFin, c.titulo, rm.observacion, u.nombres, rm.status 
+                                      FROM $this->tableName rm 
+                                      JOIN $this->tableMaquinaria m ON rm.idMaquinaria = m.id 
+                                      JOIN $this->tableMovimientos mo ON rm.idMovimeinto = mo.id 
+                                      JOIN $this->tableRutas r ON mo.idRuta = r.id 
                                       JOIN $this->tableRutaContrato rc ON rc.idRuta = r.id 
                                       JOIN $this->tableContrato c ON rc.idContrato = c.id 
-                                      JOIN $this->tableUsuario u ON rf.idUsuario = u.id 
+                                      JOIN $this->tableUsuario u ON rm.idUsuario = u.id 
                                       WHERE 1 $searchQuery 
-                                      AND rf.status IN(1, 2) AND rf.nit =  " . $_SESSION['nit'] . " ORDER BY $columnName $columnSortOrder LIMIT :limit,:offset ");
+                                      AND rm.status IN(1, 2) AND rm.nit =  " . $_SESSION['nit'] . " ORDER BY $columnName $columnSortOrder LIMIT :limit,:offset ");
         // --Bind values--
         foreach ($searchArray as $key => $search) {
             $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
@@ -238,7 +243,8 @@ class RegistrosMovimientos
                 "codFicha" => $row['codFicha'],
                 "placa" => $row['placa'],
                 "acuerdo" => $row['acuerdo'],
-                "flete" => $row['flete'],
+                "kilometraje" => $row['kilometraje'],
+                "tarifa" => $row['tarifa'],
                 "fechaInicio" => $row['fechaInicio'],
                 "fechaFin" => $row['fechaFin'],
                 "titulo" => $row['titulo'],
@@ -311,12 +317,13 @@ class RegistrosMovimientos
     public function updateRegistro(): void
     {
         // --Preparamos la consulta--
-        $query = "UPDATE $this->tableName SET idMaquinaria=?, idFlete=?, codFicha=?, fechaInicio=?, fechaFin=?, observacion=?, dateupdate=?, idUsuario=?, nit=? WHERE id=? ;";
+        $query = "UPDATE $this->tableName SET idMaquinaria=?, idMovimeinto=?, idMaterial=?, codFicha=?, fechaInicio=?, fechaFin=?, observacion=?, datecreated=?, idUsuario=?, nit=? WHERE id=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
         $this->placa = htmlspecialchars(strip_tags($this->placa));
         $this->acuerdo = htmlspecialchars(strip_tags($this->acuerdo));
+        $this->material = htmlspecialchars(strip_tags($this->material));
         $this->codFicha = htmlspecialchars(strip_tags($this->codFicha));
         $this->fechaInicio = htmlspecialchars(strip_tags($this->fechaInicio));
         $this->fechaFin = htmlspecialchars(strip_tags($this->fechaFin));
@@ -328,14 +335,15 @@ class RegistrosMovimientos
         // --Almacenamos los valores--
         $stmt->bindParam(1, $this->placa);
         $stmt->bindParam(2, $this->acuerdo);
-        $stmt->bindParam(3, $this->codFicha);
-        $stmt->bindParam(4, $this->fechaInicio);
-        $stmt->bindParam(5, $this->fechaFin);
-        $stmt->bindParam(6, $this->observacion);
-        $stmt->bindParam(7, $this->fechaActual);
-        $stmt->bindParam(8, $this->idUser);
-        $stmt->bindParam(9, $this->nit);
-        $stmt->bindParam(10, $this->id);
+        $stmt->bindParam(3, $this->material);
+        $stmt->bindParam(4, $this->codFicha);
+        $stmt->bindParam(5, $this->fechaInicio);
+        $stmt->bindParam(6, $this->fechaFin);
+        $stmt->bindParam(7, $this->observacion);
+        $stmt->bindParam(8, $this->fechaActual);
+        $stmt->bindParam(9, $this->idUser);
+        $stmt->bindParam(10, $this->nit);
+        $stmt->bindParam(11, $this->id);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {

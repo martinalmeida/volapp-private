@@ -6,9 +6,9 @@ header('Content-type: application/json');
 
 include(LIBRARIES . 'validations.php');
 include(LIBRARIES . 'utilidades.php');
-include(MODELS . 'modelRegistrosFletes.php');
+include(MODELS . 'modelRegistrosMovimientos.php');
 
-class RegistrosFletesController
+class RegistrosMovimientosController
 {
     public function read(): void
     {
@@ -16,7 +16,7 @@ class RegistrosFletesController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $registros = new RegistrosFletes($db);
+        $registros = new RegistrosMovimientos($db);
 
         $registros->getReadPermisos();
     }
@@ -27,7 +27,7 @@ class RegistrosFletesController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $registros = new RegistrosFletes($db);
+        $registros = new RegistrosMovimientos($db);
 
         $registros->getWritePermisos();
     }
@@ -38,18 +38,19 @@ class RegistrosFletesController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $registros = new RegistrosFletes($db);
+        $registros = new RegistrosMovimientos($db);
 
         // --Seteo de valores existentes en el POST--
         $registros->codFicha = isset($_POST['codFicha']) ? strtoupper(trim($_POST['codFicha'])) : NULL;
         $registros->placa = isset($_POST['placa']) ? strtoupper(trim($_POST['placa'])) : NULL;
         $registros->acuerdo = isset($_POST['acuerdo']) ? strtoupper(trim($_POST['acuerdo'])) : NULL;
+        $registros->material = isset($_POST['material']) ? strtoupper(trim($_POST['material'])) : NULL;
         $registros->fechaInicio = isset($_POST['fechaInicial']) ? strtoupper(trim($_POST['fechaInicial'])) : NULL;
         $registros->fechaFin = isset($_POST['fechaFinal']) ? strtoupper(trim($_POST['fechaFinal'])) : NULL;
         $registros->observacion = isset($_POST['observacion']) ? strtoupper(trim($_POST['observacion'])) : NULL;
 
         if (
-            Validar::numeros($registros->placa) && Validar::numeros($registros->acuerdo) &&
+            Validar::numeros($registros->placa) && Validar::numeros($registros->acuerdo) && Validar::numeros($registros->material) &&
             Validar::fecha($registros->fechaInicio, '/', 'mda') &&  Validar::fecha($registros->fechaFin, '/', 'mda')
         ) {
             $registros->createRegistro();
@@ -64,7 +65,7 @@ class RegistrosFletesController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $registros = new RegistrosFletes($db);
+        $registros = new RegistrosMovimientos($db);
 
         $registros->draw = htmlspecialchars($_POST['draw']);
         $registros->row = htmlspecialchars($_POST['start']);
@@ -83,7 +84,7 @@ class RegistrosFletesController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $registros = new RegistrosFletes($db);
+        $registros = new RegistrosMovimientos($db);
 
         // --Seteo de valores existentes en el POST--
         $registros->id = isset($_POST['idRegistro']) ? strtoupper(trim($_POST['idRegistro'])) : NULL;
@@ -102,7 +103,7 @@ class RegistrosFletesController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $registros = new RegistrosFletes($db);
+        $registros = new RegistrosMovimientos($db);
 
         // --Seteo de valores existentes en el POST--
         $registros->id = isset($_POST['idRegistro']) ? strtoupper(trim($_POST['idRegistro'])) : NULL;
@@ -121,20 +122,21 @@ class RegistrosFletesController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $registros = new RegistrosFletes($db);
+        $registros = new RegistrosMovimientos($db);
 
         // --Seteo de valores existentes en el POST--
         $registros->id = isset($_POST['idRegistro']) ? strtoupper(trim($_POST['idRegistro'])) : NULL;
         $registros->codFicha = isset($_POST['codFicha']) ? strtoupper(trim($_POST['codFicha'])) : NULL;
         $registros->placa = isset($_POST['placa']) ? strtoupper(trim($_POST['placa'])) : NULL;
         $registros->acuerdo = isset($_POST['acuerdo']) ? strtoupper(trim($_POST['acuerdo'])) : NULL;
+        $registros->material = isset($_POST['material']) ? strtoupper(trim($_POST['material'])) : NULL;
         $registros->fechaInicio = isset($_POST['fechaInicial']) ? strtoupper(trim($_POST['fechaInicial'])) : NULL;
         $registros->fechaFin = isset($_POST['fechaFinal']) ? strtoupper(trim($_POST['fechaFinal'])) : NULL;
         $registros->observacion = isset($_POST['observacion']) ? strtoupper(trim($_POST['observacion'])) : NULL;
 
         if (
-            Validar::numeros($registros->placa) && Validar::numeros($registros->acuerdo) &&
-            Validar::fecha($registros->fechaInicio, '/', 'mda') &&  Validar::fecha($registros->fechaFin, '/', 'mda')
+            Validar::numeros($registros->placa) && Validar::numeros($registros->acuerdo) && Validar::numeros($registros->material) &&
+            Validar::fecha($registros->fechaInicio, '/', 'mda') &&  Validar::fecha($registros->fechaFin, '/', 'mda') && Validar::numeros($registros->id)
         ) {
             $registros->updateRegistro();
         } else {
@@ -148,7 +150,7 @@ class RegistrosFletesController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $registros = new RegistrosFletes($db);
+        $registros = new RegistrosMovimientos($db);
 
         // --Seteo de valores existentes en el POST--
         $registros->id = isset($_POST['idRegistro']) ? strtoupper(trim($_POST['idRegistro'])) : NULL;

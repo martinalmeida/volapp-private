@@ -19,7 +19,7 @@ $view->initializationView();
         <div id="panel-1" class="panel">
             <div class="panel-hdr">
                 <h2>
-                    Tabla de Registros de Fletes
+                    Tabla de Registros de Movimientos
                     <!-- Tabla <span class="fw-300"><i>Usuarios</i></span> -->
                 </h2>
                 <div class="panel-toolbar">
@@ -32,14 +32,15 @@ $view->initializationView();
                 <div class="panel-content">
                     <!-- <div class="panel-tag">
                     </div> -->
-                    <table id="tablaRegistrosFletes" class="table table-bordered table-hover table-striped w-100">
+                    <table id="tablaRegistrosMovimientos" class="table table-bordered table-hover table-striped w-100">
                         <thead class="bg-primary-600">
                             <tr>
                                 <th>id</th>
                                 <th>Cod. Ficha</th>
                                 <th>Placa o Nro Registro</th>
                                 <th>Acuerdo de Flete o Ruta</th>
-                                <th>Valor Flete</th>
+                                <th>kilometraje</th>
+                                <th>Tarifa</th>
                                 <th>Fecha de Inicio</th>
                                 <th>Fecha Final</th>
                                 <th>Titulo del Contrato</th>
@@ -60,9 +61,9 @@ $view->initializationView();
 </div>
 
 <h3>
-    Pagina de Registros de Fletes
+    Pagina de Registros de Movimientos
 </h3>
 
 <?php
-include_once(VIEW . 'registros/modalRegistrosFletes.php');
+include_once(VIEW . 'registros/modalRegistrosMovimientos.php');
 $view->finalizeView();

@@ -17,6 +17,7 @@ class Select
     private $tableTipoMaquinaria = "tipo_maquinaria";
     private $tableAlquiler = "alquiler";
     private $tableFletes = "fletes";
+    private $tableMovimientos = "movimientos";
 
     public $id;
 
@@ -302,6 +303,42 @@ class Select
     {
         // --Preparamos la consulta--
         $query = "SELECT f.id, r.origen, r.destino FROM $this->tableFletes f JOIN rutas r ON f.idRuta = r.id WHERE f.idMaquinaria = ? AND f.flete != 0 ;";
+        $stmt = $this->conn->prepare($query);
+
+        // --Almacenamos los valores--
+        $stmt->bindParam(1, $this->id);
+
+        // -- ↓↓ Preparamos arreglo de modulos ↓↓ --
+        $selctHtml = array();
+
+        // --Ejecutamos la consulta y validamos ejecucion--
+        if ($stmt->execute()) {
+
+            // --Comprobamos que venga algun dato--
+            if ($stmt->rowCount() >= 1) {
+
+                $data = $stmt->fetchAll();
+                foreach ($data as $row) {
+                    $selctHtml[] = array(
+                        "html" => '<option value="' . $row["id"] . '">ORIGEN: ' . $row["origen"] . ' - DESTINO: ' . $row["destino"] . '</option>',
+                    );
+                }
+                // --Retornamos las respuestas--
+                echo json_encode(array('status' => '1', 'data' => $selctHtml));
+            } else {
+                // --Modulos no encontrado o inactivo--
+                echo json_encode(array('status' => '3', 'data' => NULL));
+            }
+        } else {
+            // --Falla en la ejecución de la consulta--
+            echo json_encode(array('status' => '0', 'data' => NULL));
+        }
+    }
+
+    public function selectAcuerdoMovimiento(): void
+    {
+        // --Preparamos la consulta--
+        $query = "SELECT m.id, r.origen, r.destino FROM $this->tableMovimientos m JOIN rutas r ON m.idRuta = r.id WHERE m.idMaquinaria = ? AND m.tarifa != 0 ;";
         $stmt = $this->conn->prepare($query);
 
         // --Almacenamos los valores--
