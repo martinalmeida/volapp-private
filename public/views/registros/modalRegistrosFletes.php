@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">
-                    Agregar Registro de Alquiler
+                    Agregar Registro de Flete
                     <small class="m-0 text-muted">
                         Un registro es la información de la operación que realizo una maquinaria.
                     </small>
@@ -16,25 +16,17 @@
                 <form id="frmRegistro">
                     <div id="alertaForm"></div>
                     <div class="form-row">
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 mb-3">
                             <label class="form-label" for="codFicha">Cod Ficha</label>
                             <input type="text" onKeyPress="if(this.value.length==12)return false;" class="form-control" id="codFicha" name="codFicha" placeholder="Codigo de la ficha del registro" required>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label" for="horometroInicial">Horometro Inical:</label>
-                            <input type="number" onKeyPress="if(this.value.length==14)return false;" class="form-control" id="horometroInicial" name="horometroInicial" placeholder="Horometro Inical" required>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label" for="horometroFin">Horometro Final:</label>
-                            <input type="number" onKeyPress="if(this.value.length==14)return false;" class="form-control" id="horometroFin" name="horometroFin" placeholder="Horas Final" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-3 mb-3">
                             <label class="form-label">Placa o # de Registro:</label>
                             <select class="custom-select form-control" id="placa" name="placa">
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Acuerdo de Alquiler:</label>
+                            <label class="form-label">Acuerdo de Flete o Ruta:</label>
                             <select class="custom-select form-control" id="acuerdo" name="acuerdo">
                             </select>
                         </div>
@@ -53,6 +45,10 @@
                                     <i class="fal fa-calendar-check"></i>
                                 </span>
                             </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label" for="observacion">Observacion del Material</label>
+                            <textarea onKeyPress="if(this.value.length==1000)return false;" class="form-control" id="observacion" name="observacion" rows="5" style="height: 77px;" required></textarea>
                         </div>
 
                         <div id="inputsEditar">

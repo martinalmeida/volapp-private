@@ -19,7 +19,7 @@ $view->initializationView();
         <div id="panel-1" class="panel">
             <div class="panel-hdr">
                 <h2>
-                    Tabla de Contratos
+                    Tabla de Registros de Fletes
                     <!-- Tabla <span class="fw-300"><i>Usuarios</i></span> -->
                 </h2>
                 <div class="panel-toolbar">
@@ -32,16 +32,19 @@ $view->initializationView();
                 <div class="panel-content">
                     <!-- <div class="panel-tag">
                     </div> -->
-                    <table id="tablaContratos" class="table table-bordered table-hover table-striped w-100">
+                    <table id="tablaRegistrosFletes" class="table table-bordered table-hover table-striped w-100">
                         <thead class="bg-primary-600">
                             <tr>
                                 <th>id</th>
+                                <th>Cod. Ficha</th>
+                                <th>Placa o Nro Registro</th>
+                                <th>Acuerdo de Flete o Ruta</th>
+                                <th>Valor Flete</th>
                                 <th>Fecha de Inicio</th>
-                                <th>Fecha de Finalización</th>
+                                <th>Fecha Final</th>
                                 <th>Titulo del Contrato</th>
-                                <th>Representante</th>
-                                <th>Telefono</th>
-                                <th>Correo Electronico</th>
+                                <th>Observación</th>
+                                <th>Usuarios</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
                             </tr>
@@ -57,7 +60,9 @@ $view->initializationView();
 </div>
 
 <h3>
-    Pagina de Contratos
+    Pagina de Registros de Fletes
 </h3>
 
-<?= $view->finalizeView();
+<?php
+include_once(VIEW . 'registros/modalRegistrosFletes.php');
+$view->finalizeView();

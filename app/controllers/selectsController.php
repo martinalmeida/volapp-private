@@ -97,4 +97,40 @@ class selectsController
 
         $select->selectTipoMaquinaria();
     }
+
+    public function getAcuerdoAlquiler(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $select = new Select($db);
+
+        // --Seteo de valores existentes en el POST--
+        $select->id = isset($_POST['idMaquinaria']) ? strtoupper(trim($_POST['idMaquinaria'])) : NULL;
+
+        if (Validar::numeros($select->id)) {
+            $select->selectAcuerdoAlquiler();
+        } else {
+            echo json_encode(array('status' => '2', 'data' => NULL));
+        }
+    }
+
+    public function getAcuerdoFlete(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $select = new Select($db);
+
+        // --Seteo de valores existentes en el POST--
+        $select->id = isset($_POST['idMaquinaria']) ? strtoupper(trim($_POST['idMaquinaria'])) : NULL;
+
+        if (Validar::numeros($select->id)) {
+            $select->selectAcuerdoFlete();
+        } else {
+            echo json_encode(array('status' => '2', 'data' => NULL));
+        }
+    }
 }

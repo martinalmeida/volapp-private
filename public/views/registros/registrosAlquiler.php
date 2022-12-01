@@ -40,8 +40,9 @@ $view->initializationView();
                                 <th>Placa o Nro Registro</th>
                                 <th>Acuerdo de Alquiler</th>
                                 <th>Fecha de Inicio</th>
-                                <th>Fecha de Final</th>
-                                <th>horasTrabjadas</th>
+                                <th>Fecha Final</th>
+                                <th>Horometro Inicial</th>
+                                <th>Horometro Final</th>
                                 <th>Titulo del Contrato</th>
                                 <th>Usuarios</th>
                                 <th>Estado</th>

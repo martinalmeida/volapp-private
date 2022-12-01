@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 include(MODELS . 'modelSesion.php');
 
-class RegistrosAlquiler
+class RegistrosFletes
 {
     // --Parametros Privados--
     private $conn;
     private $nombreSubModulo = 'registros';
-    private $tableName = "registros_alquiler";
+    private $tableName = "registros_fletes";
     private $tableMaquinaria = "maquinarias";
-    private $tableAlquiler = "alquiler";
+    private $tableFletes = "fletes";
+    private $tableRutas = "rutas";
+    private $tableRutaContrato = "rutas_contratos";
     private $tableContrato = "contratos";
     private $tableUsuario = "usuarios";
     private $fechaActual;
@@ -24,8 +26,7 @@ class RegistrosAlquiler
     public $codFicha;
     public $fechaInicio;
     public $fechaFin;
-    public $horometroInicial;
-    public $horometroFin;
+    public $observacion;
     public $status;
 
     /* Propiedades de los objetos de Datatables para utilizar (Serverside) 
@@ -74,14 +75,14 @@ class RegistrosAlquiler
         if ($datos->w === 1) {
 
             $html .= '<h1 class="subheader-title">';
-            $html .= '<i class="fal fa-info-circle"></i> Registros de Alquiler</h1>';
+            $html .= '<i class="fal fa-info-circle"></i> Registros de Fletes</h1>';
             $html .= '<button type="button" class="btn btn-info active" onclick="showModalRegistro();">Agregar <i class="fal fa-plus-square"></i></button>';
 
             echo json_encode(array('status' => NULL, 'data' => $html));
         } else {
 
             $html .= '<h1 class="subheader-title">';
-            $html .= '<i class="fal fa-info-circle"></i> Registros de Alquiler</h1>';
+            $html .= '<i class="fal fa-info-circle"></i> Registros de Fletes</h1>';
             $html .= '<h3>No tienes permisos de escritura para este modulo.</h3>';
 
             echo json_encode(array('status' => NULL, 'data' => $html));
@@ -92,7 +93,7 @@ class RegistrosAlquiler
     public function createRegistro(): void
     {
         // --Preparamos la consulta--
-        $query = "INSERT INTO $this->tableName SET idMaquinaria=?, idAlquiler=?, codFicha=?, fechaInicio=?, fechaFin=?, horometroInicial=?, horometroFin=?, datecreated=?, idUsuario=?, nit=? ;";
+        $query = "INSERT INTO $this->tableName SET idMaquinaria=?, idFlete=?, codFicha=?, fechaInicio=?, fechaFin=?, observacion=?, datecreated=?, idUsuario=?, nit=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
@@ -101,8 +102,7 @@ class RegistrosAlquiler
         $this->codFicha = htmlspecialchars(strip_tags($this->codFicha));
         $this->fechaInicio = htmlspecialchars(strip_tags($this->fechaInicio));
         $this->fechaFin = htmlspecialchars(strip_tags($this->fechaFin));
-        $this->horometroInicial = htmlspecialchars(strip_tags($this->horometroInicial));
-        $this->horometroFin = htmlspecialchars(strip_tags($this->horometroFin));
+        $this->observacion = htmlspecialchars(strip_tags($this->observacion));
         $this->fechaActual = Utilidades::getFecha();
         $this->idUser = $_SESSION['id'];
         $this->nit = $_SESSION['nit'];
@@ -113,11 +113,10 @@ class RegistrosAlquiler
         $stmt->bindParam(3, $this->codFicha);
         $stmt->bindParam(4, $this->fechaInicio);
         $stmt->bindParam(5, $this->fechaFin);
-        $stmt->bindParam(6, $this->horometroInicial);
-        $stmt->bindParam(7, $this->horometroFin);
-        $stmt->bindParam(8, $this->fechaActual);
-        $stmt->bindParam(9, $this->idUser);
-        $stmt->bindParam(10, $this->nit);
+        $stmt->bindParam(6, $this->observacion);
+        $stmt->bindParam(7, $this->fechaActual);
+        $stmt->bindParam(8, $this->idUser);
+        $stmt->bindParam(9, $this->nit);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
@@ -147,59 +146,65 @@ class RegistrosAlquiler
         // --Search--
         $searchQuery = " ";
         if ($searchValue != '') {
-            $searchQuery = " AND (ra.id LIKE :id OR 
-                            ra.codFicha LIKE :codFicha OR
+            $searchQuery = " AND (rf.id LIKE :id OR 
+                            rf.codFicha LIKE :codFicha OR
                             m.placa LIKE :placa OR
-                            a.standby LIKE :standby OR
-                            ra.fechaInicio LIKE :fechaInicio OR
-                            ra.fechaFin LIKE :fechaFin OR
-                            ra.horometroInicial LIKE :horometroInicial OR
-                            ra.horometroFin LIKE :horometroFin OR
+                            r.origen LIKE :origen OR
+                            f.flete LIKE :flete OR
+                            rf.fechaInicio LIKE :fechaInicio OR
+                            rf.fechaFin LIKE :fechaFin OR
                             c.titulo LIKE :titulo OR
+                            rf.observacion LIKE :observacion OR
                             u.nombres LIKE :nombres OR
-                            ra.status LIKE :status )";
+                            rf.status LIKE :status )";
             $searchArray = array(
                 'id' => "%$searchValue%",
                 'codFicha' => "%$searchValue%",
                 'placa' => "%$searchValue%",
-                'standby' => "%$searchValue%",
+                'origen' => "%$searchValue%",
+                'flete' => "%$searchValue%",
                 'fechaInicio' => "%$searchValue%",
                 'fechaFin' => "%$searchValue%",
-                'horometroInicial' => "%$searchValue%",
-                'horometroFin' => "%$searchValue%",
                 'titulo' => "%$searchValue%",
+                'observacion' => "%$searchValue%",
                 'nombres' => "%$searchValue%",
                 'status' => "%$searchValue%"
             );
         }
         // --Total number of records without filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM $this->tableName ra 
-                                                                  JOIN $this->tableMaquinaria m ON ra.idMaquinaria = m.id 
-                                                                  JOIN $this->tableAlquiler a ON ra.idAlquiler = a.id
-                                                                  JOIN $this->tableContrato c ON a.idContrato = c.id 
-                                                                  JOIN $this->tableUsuario u ON ra.idUsuario = u.id ");
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM $this->tableName rf 
+                                                                  JOIN $this->tableMaquinaria m ON rf.idMaquinaria = m.id 
+                                                                  JOIN $this->tableFletes f ON rf.idFlete = f.id 
+                                                                  JOIN $this->tableRutas r ON f.idRuta = r.id 
+                                                                  JOIN $this->tableRutaContrato rc ON rc.idRuta = r.id 
+                                                                  JOIN $this->tableContrato c ON rc.idContrato = c.id 
+                                                                  JOIN $this->tableUsuario u ON rf.idUsuario = u.id ");
         $stmt->execute();
         $records = $stmt->fetch();
         $totalRecords = $records['allcount'];
         // --Total number of records with filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM $this->tableName ra 
-                                                                  JOIN $this->tableMaquinaria m ON ra.idMaquinaria = m.id 
-                                                                  JOIN $this->tableAlquiler a ON ra.idAlquiler = a.id
-                                                                  JOIN $this->tableContrato c ON a.idContrato = c.id 
-                                                                  JOIN $this->tableUsuario u ON ra.idUsuario = u.id  WHERE 1 " . $searchQuery . "");
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM $this->tableName rf 
+                                                                  JOIN $this->tableMaquinaria m ON rf.idMaquinaria = m.id 
+                                                                  JOIN $this->tableFletes f ON rf.idFlete = f.id 
+                                                                  JOIN $this->tableRutas r ON f.idRuta = r.id 
+                                                                  JOIN $this->tableRutaContrato rc ON rc.idRuta = r.id 
+                                                                  JOIN $this->tableContrato c ON rc.idContrato = c.id 
+                                                                  JOIN $this->tableUsuario u ON rf.idUsuario = u.id   WHERE 1 " . $searchQuery . "");
         $stmt->execute($searchArray);
         $records = $stmt->fetch();
         $totalRecordwithFilter = $records['allcount'];
         // --Fetch records--
         $stmt = $this->conn->prepare("SELECT 
-                                      ra.id, ra.codFicha, m.placa, concat('ID: ', a.id, ' STANDBY: ', a.standby)alquiler, ra.fechaInicio, ra.fechaFin, ra.horometroInicial, ra.horometroFin, c.titulo, u.nombres, ra.status
-                                      FROM $this->tableName ra 
-                                      JOIN $this->tableMaquinaria m ON ra.idMaquinaria = m.id 
-                                      JOIN $this->tableAlquiler a ON ra.idAlquiler = a.id
-                                      JOIN $this->tableContrato c ON a.idContrato = c.id 
-                                      JOIN $this->tableUsuario u ON ra.idUsuario = u.id 
+                                      rf.id, rf.codFicha, m.placa, concat(r.origen, ' - ', r.destino )acuerdo, f.flete, rf.fechaInicio, rf.fechaFin, c.titulo, rf.observacion, u.nombres, rf.status 
+                                      FROM $this->tableName rf 
+                                      JOIN $this->tableMaquinaria m ON rf.idMaquinaria = m.id 
+                                      JOIN $this->tableFletes f ON rf.idFlete = f.id 
+                                      JOIN $this->tableRutas r ON f.idRuta = r.id 
+                                      JOIN $this->tableRutaContrato rc ON rc.idRuta = r.id 
+                                      JOIN $this->tableContrato c ON rc.idContrato = c.id 
+                                      JOIN $this->tableUsuario u ON rf.idUsuario = u.id 
                                       WHERE 1 $searchQuery 
-                                      AND ra.status IN(1, 2) AND ra.nit =  " . $_SESSION['nit'] . " ORDER BY $columnName $columnSortOrder LIMIT :limit,:offset ");
+                                      AND rf.status IN(1, 2) AND rf.nit =  " . $_SESSION['nit'] . " ORDER BY $columnName $columnSortOrder LIMIT :limit,:offset ");
         // --Bind values--
         foreach ($searchArray as $key => $search) {
             $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
@@ -232,12 +237,12 @@ class RegistrosAlquiler
                 "id" => $row['id'],
                 "codFicha" => $row['codFicha'],
                 "placa" => $row['placa'],
-                "alquiler" => $row['alquiler'],
+                "acuerdo" => $row['acuerdo'],
+                "flete" => $row['flete'],
                 "fechaInicio" => $row['fechaInicio'],
                 "fechaFin" => $row['fechaFin'],
-                "horometroInicial" => $row['horometroInicial'],
-                "horometroFin" => $row['horometroFin'],
                 "titulo" => $row['titulo'],
+                "observacion" => $row['observacion'],
                 "nombres" => $row['nombres'],
                 "status" => $estado,
                 "defaultContent" => "$botones"
@@ -306,7 +311,7 @@ class RegistrosAlquiler
     public function updateRegistro(): void
     {
         // --Preparamos la consulta--
-        $query = "UPDATE $this->tableName SET idMaquinaria=?, idAlquiler=?, codFicha=?, fechaInicio=?, fechaFin=?, horometroInicial=?, horometroFin=?, dateupdate=?, idUsuario=?, nit=? WHERE id=? ;";
+        $query = "UPDATE $this->tableName SET idMaquinaria=?, idFlete=?, codFicha=?, fechaInicio=?, fechaFin=?, observacion=?, dateupdate=?, idUsuario=?, nit=? WHERE id=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
@@ -315,8 +320,7 @@ class RegistrosAlquiler
         $this->codFicha = htmlspecialchars(strip_tags($this->codFicha));
         $this->fechaInicio = htmlspecialchars(strip_tags($this->fechaInicio));
         $this->fechaFin = htmlspecialchars(strip_tags($this->fechaFin));
-        $this->horometroInicial = htmlspecialchars(strip_tags($this->horometroInicial));
-        $this->horometroFin = htmlspecialchars(strip_tags($this->horometroFin));
+        $this->observacion = htmlspecialchars(strip_tags($this->observacion));
         $this->fechaActual = Utilidades::getFecha();
         $this->idUser = $_SESSION['id'];
         $this->nit = $_SESSION['nit'];
@@ -327,12 +331,11 @@ class RegistrosAlquiler
         $stmt->bindParam(3, $this->codFicha);
         $stmt->bindParam(4, $this->fechaInicio);
         $stmt->bindParam(5, $this->fechaFin);
-        $stmt->bindParam(6, $this->horometroInicial);
-        $stmt->bindParam(7, $this->horometroFin);
-        $stmt->bindParam(8, $this->fechaActual);
-        $stmt->bindParam(9, $this->idUser);
-        $stmt->bindParam(10, $this->nit);
-        $stmt->bindParam(11, $this->id);
+        $stmt->bindParam(6, $this->observacion);
+        $stmt->bindParam(7, $this->fechaActual);
+        $stmt->bindParam(8, $this->idUser);
+        $stmt->bindParam(9, $this->nit);
+        $stmt->bindParam(10, $this->id);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {

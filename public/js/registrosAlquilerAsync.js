@@ -1,5 +1,6 @@
 var edit = null;
 var peticion = null;
+var idSubSelect = null;
 var tablaRegistrosAlquiler = "";
 var controls = {
   leftArrow: '<i class="fal fa-angle-left" style="font-size: 1.25rem"></i>',
@@ -63,7 +64,8 @@ $(document).ready(function () {
       { data: "alquiler" },
       { data: "fechaInicio" },
       { data: "fechaFin" },
-      { data: "horas" },
+      { data: "horometroInicial" },
+      { data: "horometroFin" },
       { data: "titulo" },
       { data: "nombres" },
       { data: "status" },
@@ -130,7 +132,7 @@ function writePermisos() {
 function selects() {
   $.ajax({
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-    url: urlBase + "routes/selects/getTipoMaquinaria", //url a donde hacemos la peticion
+    url: urlBase + "routes/selects/getVehiculo", //url a donde hacemos la peticion
     type: "GET",
     beforeSend: function () {
       // $(".overlayCargue").fadeIn("slow");
@@ -156,7 +158,7 @@ function selects() {
           var html = "";
 
           html +=
-            '<option value="" disabled selected hidden>Seleccione Maquinaria</option>';
+            '<option value="" disabled selected hidden>Seleccione la placa o # de registro</option>';
           for (let i = 0; i < result.data.length; i++) {
             html += result.data[i].html;
           }
@@ -204,6 +206,92 @@ function selects() {
   });
 }
 
+function subSelects(id) {
+  $.ajax({
+    data: { idMaquinaria: id }, //datos a enviar a la url
+    dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
+    url: urlBase + "routes/selects/getAcuerdoAlquiler", //url a donde hacemos la peticion
+    type: "POST",
+    beforeSend: function () {
+      // $(".overlayCargue").fadeIn("slow");
+    },
+    success: function (result) {
+      var estado = result.status;
+      switch (estado) {
+        case "0":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error en el servidor</strong>",
+            html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        case "1":
+          var html = "";
+
+          html +=
+            '<option value="" disabled selected hidden>Seleccione el Acuerdo de la placa</option>';
+          for (let i = 0; i < result.data.length; i++) {
+            html += result.data[i].html;
+          }
+
+          $("#acuerdo").html(html);
+          break;
+
+        case "2":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error de Validacón</strong>",
+            html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        case "3":
+          var html = "";
+          html +=
+            '<option value="" disabled selected hidden>No hay acuerdos de alquiler parametrizados para placa</option>';
+          $("#acuerdo").html(html);
+          $("#acuerdo").prop("disabled", true);
+          break;
+
+        default:
+          break;
+      }
+    },
+    complete: function () {
+      // setTimeout(() => {
+      //   $(".overlayCargue").fadeOut("slow");
+      // }, 1000);
+    },
+    error: function (xhr) {
+      console.log(xhr);
+      Swal.fire({
+        icon: "error",
+        title: "<strong>Error!</strong>",
+        html: "<h5>Se ha presentado un error, por favor informar al area de Sistemas.</h5>",
+        showCloseButton: true,
+        showConfirmButton: false,
+        cancelButtonText: "Cerrar",
+        cancelButtonColor: "#dc3545",
+        showCancelButton: true,
+        backdrop: true,
+      });
+    },
+  });
+}
+
 function registrar(form) {
   $("#alertaForm").html("");
   var respuestavalidacion = validarcampos("#" + form);
@@ -212,7 +300,7 @@ function registrar(form) {
     if (edit == true) {
       peticion = urlBase + "routes/registrosAlquiler/update";
     } else if (edit == false) {
-      $("#archivoBase64").html("");
+      $("#inputsEditar").html("");
       peticion = urlBase + "routes/registrosAlquiler/create";
     } else if (edit == null) {
       return false;
@@ -256,8 +344,8 @@ function registrar(form) {
             if (edit == false) {
               Swal.fire({
                 icon: "success",
-                title: "<strong>Maquinaria Creada</strong>",
-                html: "<h5>La maquinaria se ha registrado exitosamente</h5>",
+                title: "<strong>Registro Creado</strong>",
+                html: "<h5>El registro se ha registrado exitosamente</h5>",
                 showCloseButton: false,
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#64a19d",
@@ -266,8 +354,8 @@ function registrar(form) {
             } else {
               Swal.fire({
                 icon: "success",
-                title: "<strong>Maquinaria Editada</strong>",
-                html: "<h5>La maquinaria se ha editado exitosamente</h5>",
+                title: "<strong>Registro Editado</strong>",
+                html: "<h5>El registro se ha editado exitosamente</h5>",
                 showCloseButton: false,
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#64a19d",
@@ -289,48 +377,6 @@ function registrar(form) {
               "Cerrar</button></div></div>";
 
             $("#alertaForm").html(html);
-            break;
-
-          case "4":
-            Swal.fire({
-              icon: "warning",
-              title: "<strong>Archivo Dañado</strong>",
-              html: "<h5>El archivo esta corrupto.</h5>",
-              showCloseButton: true,
-              showConfirmButton: false,
-              cancelButtonText: "Cerrar",
-              cancelButtonColor: "#dc3545",
-              showCancelButton: true,
-              backdrop: true,
-            });
-            $("#ModalRegistro").modal("hide");
-            break;
-
-          case "5":
-            html +=
-              '<div class="alert border-warning bg-transparent text-info fade show" role="alert">' +
-              '<div class="d-flex align-items-center"><div class="alert-icon text-warning">' +
-              '<i class="fal fa-exclamation-triangle"></i></div>' +
-              '<div class="flex-1 text-warning"><span class="h5 m-0 fw-700">Adjunte el Archivo de Documentación de maquinaria </span></div>' +
-              '<button type="button" class="btn btn-warning btn-pills btn-sm btn-w-m waves-effect waves-themed" data-dismiss="alert" aria-label="Close">' +
-              "Cerrar</button></div></div>";
-
-            $("#archivoBase64").html(html);
-            break;
-
-          case "6":
-            Swal.fire({
-              icon: "error",
-              title: "<strong>Tamaño excesivo de Archivo</strong>",
-              html: "<h5>Adjunta un archivo de menor tamaño, el peso maximo es de 10MB.</h5>",
-              showCloseButton: true,
-              showConfirmButton: false,
-              cancelButtonText: "Cerrar",
-              cancelButtonColor: "#dc3545",
-              showCancelButton: true,
-              backdrop: true,
-            });
-            $("#ModalRegistro").modal("hide");
             break;
 
           default:
@@ -359,11 +405,10 @@ function registrar(form) {
 
 function editarRegistro(id) {
   $("#alertaForm").html("");
-  $("#archivoBase64").html("");
-  $(':input[type="file"]').val("");
+  $("#inputsEditar").html("");
   edit = true;
   $.ajax({
-    data: { idMaquinaria: id }, //datos a enviar a la url
+    data: { idRegistro: id }, //datos a enviar a la url
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
     url: urlBase + "routes/registrosAlquiler/getData", //url a donde hacemos la peticion
     type: "POST",
@@ -389,58 +434,34 @@ function editarRegistro(id) {
           break;
 
         case "1":
-          $("#placa").val(result.data[0].placa);
-          $("#marca").val(result.data[0].marca);
-          $("#referencia").val(result.data[0].referencia);
-          $("#modelo").val(result.data[0].modelo);
-          $("#color").val(result.data[0].color);
-          $("#capacidad").val(result.data[0].capacidad);
-          $("#nroSerie").val(result.data[0].nroSerie);
-          $("#nroSerieChasis").val(result.data[0].nroSerieChasis);
-          $("#nroMotor").val(result.data[0].nroMotor);
-          $("#rodaje").val(result.data[0].rodaje);
-          $("#rut").val(result.data[0].rut);
-          $("#gps").val(result.data[0].gps);
-          $("#fechaSoat").val(result.data[0].fechaSoat);
-          $("#fechaTecno").val(result.data[0].fechaTecno);
-          $("#propietario").val(result.data[0].propietario);
-          $("#documentoPropietario").val(result.data[0].documentoPropietario);
-          $("#telefonoPropietario").val(result.data[0].telefonoPropietario);
-          $("#correoPropietario").val(result.data[0].correoPropietario);
-          $("#operador").val(result.data[0].operador);
-          $("#documentOperador").val(result.data[0].documentOperador);
-          $("#telefonOperador").val(result.data[0].telefonOperador);
-          $("#correOperador").val(result.data[0].correOperador);
-          $("#tpMaquinaria").val(result.data[0].idTpMaquinaria);
+          $("#acuerdo").prop("disabled", false);
+          idSubSelect = result.data[0].idMaquinaria;
+          subSelects(idSubSelect);
 
-          html +=
-            '<button type="button" class="btn btn-outline-danger" onclick="visualizarPDF(' +
-            "'" +
-            result.data[0].contenType +
-            "', '" +
-            result.data[0].base64 +
-            "'" +
-            ');" >Ver Documentación del Maquinaria <i class="fal fa-file-pdf"></i></button>' +
-            '<input type="hidden" id="idMaquinaria" name="idMaquinaria" value="' +
-            result.data[0].id +
-            '">' +
-            '<input type="hidden" id="contenType" name="contenType" value="' +
-            result.data[0].contenType +
-            '">' +
-            '<input type="hidden" id="base64" name="base64" value="' +
-            result.data[0].base64 +
-            '">';
+          setTimeout(function () {
+            $("#codFicha").val(result.data[0].codFicha);
+            $("#horometroInicial").val(result.data[0].horometroInicial);
+            $("#horometroFin").val(result.data[0].horometroFin);
+            $("#placa").val(result.data[0].idMaquinaria);
+            $("#acuerdo").val(result.data[0].idAlquiler);
+            $("#fechaInicial").val(result.data[0].fechaInicio);
+            $("#fechaFinal").val(result.data[0].fechaFin);
 
-          $("#archivoBase64").html(html);
+            html +=
+              '<input type="hidden" id="idRegistro" name="idRegistro" value="' +
+              result.data[0].id +
+              '">';
+            $("#inputsEditar").html(html);
 
-          $("#btnRegistro").text("Editar Maquinaria");
-          $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
-          $("#btnRegistro").removeClass("btn btn-info");
-          $("#btnRegistro").addClass("btn btn-success");
-          $("#ModalRegistro").modal({
-            backdrop: "static",
-            keyboard: false,
-          });
+            $("#btnRegistro").text("Editar Registro");
+            $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
+            $("#btnRegistro").removeClass("btn btn-info");
+            $("#btnRegistro").addClass("btn btn-success");
+            $("#ModalRegistro").modal({
+              backdrop: "static",
+              keyboard: false,
+            });
+          }, 200);
           break;
 
         case "2":
@@ -486,7 +507,7 @@ function editarRegistro(id) {
 function statusRegistro(id, status) {
   $.ajax({
     data: {
-      idMaquinaria: id,
+      idRegistro: id,
       status: status,
     },
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
@@ -518,7 +539,7 @@ function statusRegistro(id, status) {
 
         case "1":
           Command: toastr["success"](
-            "Estado del Maquinaria cambiado exitosamente.",
+            "Estado del registro cambiado exitosamente.",
             "Estado Cambiado"
           );
 
@@ -589,15 +610,15 @@ function eliminarRegistro(id) {
   Swal.fire({
     icon: "warning",
     title: "Que deseas hacer?",
-    text: "Se eliminara el Maquinaria del sistema!",
+    text: "Se eliminara el registro del sistema!",
     type: "warning",
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Eliminar Maquinaria",
+    confirmButtonText: "Eliminar Registro",
     preConfirm: function () {
       $.ajax({
-        data: { idMaquinaria: id },
+        data: { idRegistro: id },
         dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
         url: urlBase + "routes/registrosAlquiler/delete", //url a donde hacemos la peticion
         type: "POST",
@@ -627,8 +648,8 @@ function eliminarRegistro(id) {
 
             case "1":
               Command: toastr["success"](
-                "La maquinaria se ha eliminado satisfactoriamente.",
-                "Maquinaria Eliminada"
+                "El registro se ha eliminado satisfactoriamente.",
+                "Registro Eliminado"
               );
 
               toastr.options = {
@@ -698,8 +719,9 @@ function eliminarRegistro(id) {
 
 function showModalRegistro() {
   reset();
+  selectsAcciones();
   $("#alertaForm").html("");
-  $("#btnRegistro").text("Registrar Maquinaria");
+  $("#btnRegistro").text("Ingresar Registro");
   $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
   $("#ModalRegistro").modal({
     backdrop: "static",
@@ -709,47 +731,22 @@ function showModalRegistro() {
 }
 
 function reset() {
-  vercampos("#frmRegistro", 1);
   limpiarcampos("#frmRegistro");
-  $("#archivoBase64").html("");
+  $("#inputsEditar").html("");
   $("#btnRegistro").removeClass("btn btn-success");
   $("#btnRegistro").addClass("btn btn-info");
-  $(':input[type="file"]').val("");
 }
 
-function filterFloat(evt, input) {
-  // Backspace = 8, Enter = 13, ‘0′ = 48, ‘9′ = 57, ‘.’ = 46, ‘-’ = 43
-  var key = window.Event ? evt.which : evt.keyCode;
-  var chark = String.fromCharCode(key);
-  var tempValue = input.value + chark;
-  if (key >= 48 && key <= 57) {
-    if (filter(tempValue) === false) {
-      return false;
-    } else {
-      return true;
-    }
-  } else {
-    if (key == 8 || key == 13 || key == 0) {
-      return true;
-    } else if (key == 46) {
-      if (filter(tempValue) === false) {
-        return false;
-      } else {
-        return true;
-      }
-    } else {
-      return false;
-    }
-  }
-}
+function selectsAcciones() {
+  $("#acuerdo").prop("disabled", true);
+  $("#placa").change(function () {
+    $("#acuerdo").prop("disabled", false);
+    idSubSelect = $("#placa").val();
 
-function filter(__val__) {
-  var preg = /^([0-9]+\.?[0-9]{0,2})$/;
-  if (preg.test(__val__) === true) {
-    return true;
-  } else {
-    return false;
-  }
+    idSubSelect == null
+      ? $("#acuerdo").prop("disabled", true)
+      : subSelects(idSubSelect);
+  });
 }
 
 function reajustDatatables() {
