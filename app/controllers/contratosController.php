@@ -96,6 +96,25 @@ class ContratosController
         $contrato->readAllDaTableContrato();
     }
 
+    public function getFile(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $contrato = new Contrato($db);
+
+        // --Seteo de valores existentes en el POST--
+        $contrato->id = isset($_POST['idContrato']) ? strtoupper(trim($_POST['idContrato'])) : NULL;
+
+        // --Validacion de datos a enviar al modelo--
+        if (Validar::numeros($contrato->id)) {
+            $contrato->traerArchivo();
+        } else {
+            echo json_encode(array('status' => '2', 'data' => NULL));
+        }
+    }
+
     public function status(): void
     {
         // --Importacion e inicializacion de conexion--

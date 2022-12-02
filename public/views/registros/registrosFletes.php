@@ -65,4 +65,5 @@ $view->initializationView();
 
 <?php
 include_once(VIEW . 'registros/modalRegistrosFletes.php');
+include_once(VIEW . 'registros/modalDescontables.php');
 $view->finalizeView();

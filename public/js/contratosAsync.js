@@ -309,29 +309,29 @@ function editarRegistro(id) {
           break;
 
         case "1":
-          $("#fechaInicio").val(result.data.fechaInicio);
-          $("#fechaFin").val(result.data.fechaFin);
-          $("#titulo").val(result.data.titulo);
-          $("#representante").val(result.data.representante);
-          $("#telefono").val(result.data.telefono);
-          $("#email").val(result.data.email);
+          $("#fechaInicio").val(result.data[0].fechaInicio);
+          $("#fechaFin").val(result.data[0].fechaFin);
+          $("#titulo").val(result.data[0].titulo);
+          $("#representante").val(result.data[0].representante);
+          $("#telefono").val(result.data[0].telefono);
+          $("#email").val(result.data[0].email);
 
           html +=
             '<button type="button" class="btn btn-outline-danger" onclick="visualizarPDF(' +
             "'" +
-            result.data.contenType +
+            result.data[0].contenType +
             "', '" +
-            result.data.base64 +
+            result.data[0].base64 +
             "'" +
             ');" >Ver Documentación del Vehiculo <i class="fal fa-file-pdf"></i></button>' +
             '<input type="hidden" id="idContrato" name="idContrato" value="' +
-            result.data.id +
+            result.data[0].id +
             '">' +
             '<input type="hidden" id="contenType" name="contenType" value="' +
-            result.data.contenType +
+            result.data[0].contenType +
             '">' +
             '<input type="hidden" id="base64" name="base64" value="' +
-            result.data.base64 +
+            result.data[0].base64 +
             '">';
 
           $("#archivoBase64").html(html);
@@ -344,6 +344,77 @@ function editarRegistro(id) {
             backdrop: "static",
             keyboard: false,
           });
+          break;
+
+        case "2":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error de Validacón</strong>",
+            html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        default:
+          break;
+      }
+    },
+    complete: function () {
+      // setTimeout(() => {
+      //   $(".overlayCargue").fadeOut("slow");
+      // }, 1000);
+    },
+    error: function (xhr) {
+      console.log(xhr);
+      Swal.fire({
+        icon: "error",
+        title: "<strong>Error!</strong>",
+        html: "<h5>Se ha presentado un error, por favor informar al area de Sistemas.</h5>",
+        showCloseButton: true,
+        showConfirmButton: false,
+        cancelButtonText: "Cerrar",
+        cancelButtonColor: "#dc3545",
+        showCancelButton: true,
+        backdrop: true,
+      });
+    },
+  });
+}
+
+function traerArchivo(id) {
+  $.ajax({
+    data: { idContrato: id }, //datos a enviar a la url
+    dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
+    url: urlBase + "routes/contratos/getFile", //url a donde hacemos la peticion
+    type: "POST",
+    beforeSend: function () {
+      // $(".overlayCargue").fadeIn("slow");
+    },
+    success: function (result) {
+      var estado = result.status;
+      var html = "";
+      switch (estado) {
+        case "0":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error en el servidor</strong>",
+            html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        case "1":
+          visualizarPDF(result.data[0].contenType, result.data[0].base64);
           break;
 
         case "2":

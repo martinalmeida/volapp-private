@@ -266,7 +266,7 @@ class Select
     public function selectAcuerdoAlquiler(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT * FROM $this->tableAlquiler WHERE idMaquinaria = ? AND standby != 0 ;";
+        $query = "SELECT * FROM $this->tableAlquiler WHERE idMaquinaria = ? AND standby != 0 AND status = 1 ;";
         $stmt = $this->conn->prepare($query);
 
         // --Almacenamos los valores--
@@ -302,7 +302,7 @@ class Select
     public function selectAcuerdoFlete(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT f.id, r.origen, r.destino FROM $this->tableFletes f JOIN rutas r ON f.idRuta = r.id WHERE f.idMaquinaria = ? AND f.flete != 0 ;";
+        $query = "SELECT f.id, r.origen, r.destino FROM $this->tableFletes f JOIN rutas r ON f.idRuta = r.id WHERE f.idMaquinaria = ? AND f.flete != 0 AND status = 1 ;";
         $stmt = $this->conn->prepare($query);
 
         // --Almacenamos los valores--
@@ -338,7 +338,7 @@ class Select
     public function selectAcuerdoMovimiento(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT m.id, r.origen, r.destino FROM $this->tableMovimientos m JOIN rutas r ON m.idRuta = r.id WHERE m.idMaquinaria = ? AND m.tarifa != 0 ;";
+        $query = "SELECT m.id, r.origen, r.destino FROM $this->tableMovimientos m JOIN rutas r ON m.idRuta = r.id WHERE m.idMaquinaria = ? AND m.tarifa != 0 AND status = 1 ;";
         $stmt = $this->conn->prepare($query);
 
         // --Almacenamos los valores--

@@ -275,17 +275,17 @@ class Maquinaria
             );
         }
         // --Total number of records without filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " m JOIN " . $this->tableTpmaquinaria . " t ON m.idTpMaquinaria = t.id ");
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " m JOIN " . $this->tableTpmaquinaria . " t ON m.idTpMaquinaria = t.id WHERE m.status = 1 ");
         $stmt->execute();
         $records = $stmt->fetch();
         $totalRecords = $records['allcount'];
         // --Total number of records with filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " m JOIN " . $this->tableTpmaquinaria . " t ON m.idTpMaquinaria = t.id WHERE 1 " . $searchQuery . "");
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " m JOIN " . $this->tableTpmaquinaria . " t ON m.idTpMaquinaria = t.id WHERE m.status = 1 AND 1 " . $searchQuery . "");
         $stmt->execute($searchArray);
         $records = $stmt->fetch();
         $totalRecordwithFilter = $records['allcount'];
         // --Fetch records--
-        $stmt = $this->conn->prepare("SELECT m.id, t.tipo, m.placa, m.marca, m.referencia, m.modelo, m.color, m.capacidad, m.nroSerie, m.nroSerieChasis, m.nroMotor, m.rodaje, m.rut, m.gps, m.fechaSoat, m.fechaTecno, m.propietario, m.documentoPropietario, m.telefonoPropietario, m.correoPropietario, m.operador, m.documentOperador, m.telefonOperador, m.correOperador, m.content_type, m.base_64, m.status FROM " . $this->tableName . " m JOIN " . $this->tableTpmaquinaria . " t ON m.idTpMaquinaria = t.id WHERE 1 " . $searchQuery . " AND m.status in(1, 2) AND m.nit =  " . $_SESSION['nit'] . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
+        $stmt = $this->conn->prepare("SELECT m.id, t.tipo, m.placa, m.marca, m.referencia, m.modelo, m.color, m.capacidad, m.nroSerie, m.nroSerieChasis, m.nroMotor, m.rodaje, m.rut, m.gps, m.fechaSoat, m.fechaTecno, m.propietario, m.documentoPropietario, m.telefonoPropietario, m.correoPropietario, m.operador, m.documentOperador, m.telefonOperador, m.correOperador, m.status FROM " . $this->tableName . " m JOIN " . $this->tableTpmaquinaria . " t ON m.idTpMaquinaria = t.id WHERE 1 " . $searchQuery . " AND m.status in(1, 2) AND m.nit =  " . $_SESSION['nit'] . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
         // --Bind values--
         foreach ($searchArray as $key => $search) {
             $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
@@ -301,9 +301,8 @@ class Maquinaria
 
             $botones = "<div class='btn-group'>";
             if ($datos->r === 1) {
-                $botones .= '<button type="button" class="btn btn-outline-danger" data-toggle="tooltip" data-placement="top" title="Ver docuemntación del vehiculo en PDF" onclick="visualizarPDF(';
-                $botones .= "'" . $row['content_type'] . "', '" . $row['base_64'] . "'); ";
-                $botones .= '"><i class="fal fa-file-pdf"></i></button>';
+                $botones .= '<button type="button" class="btn btn-outline-danger" data-toggle="tooltip" data-placement="top" title="Ver docuemntación del contrato en PDF" onclick="traerArchivo( ' . $row['id'] . ');">';
+                $botones .= '<i class="fal fa-file-pdf"></i></button>';
             }
             if ($datos->u === 1) {
                 $botones .= "<button type='button' class='btn btn-success text-white' data-toggle='tooltip' data-placement='top' title='Editar Vehiculo' onclick='editarRegistro(" . $row['id'] . ");'>";
@@ -354,6 +353,34 @@ class Maquinaria
             "aaData" => $data
         );
         echo json_encode($response);
+    }
+
+    // -- ⊡ Funcion para traer datos la base 64 del archivo y su content type ⊡ --
+    public function traerArchivo(): void
+    {
+        // --Preparamos la consulta--
+        $query = "SELECT (content_type)contenType, (base_64)base64 FROM $this->tableName WHERE id=? ;";
+        $stmt = $this->conn->prepare($query);
+
+        // --Almacenamos los valores--
+        $stmt->bindParam(1, $this->id);
+
+        // --Ejecutamos la consulta y validamos ejecucion--
+        if ($stmt->execute()) {
+
+            // --Comprobamos que venga algun dato--
+            if ($stmt->rowCount() >= 1) {
+
+                // --Retornamos las respuestas--
+                echo json_encode(array('status' => '1', 'data' => $stmt->fetchAll(PDO::FETCH_ASSOC)));
+            } else {
+                // --Usuario no encontrado o inactivo--
+                echo json_encode(array('status' => '3', 'data' => NULL));
+            }
+        } else {
+            // --Falla en la ejecución de la consulta--
+            echo json_encode(array('status' => '0', 'data' => NULL));
+        }
     }
 
     // -- ⊡ Funcion para cambiar el estado del rol ⊡ --

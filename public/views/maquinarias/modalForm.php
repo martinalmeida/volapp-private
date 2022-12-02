@@ -143,6 +143,7 @@
                 </form>
             </div>
             <div class="modal-footer">
+                <a class="text-dark" target="_blank" href="https://www.adobe.com/acrobat/online/compress-pdf.html">Ir a pagina de compresion de documentos PDF <i class="fal fa-file-pdf fa-1x"></i></a>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
                 <button type="button" id="btnRegistro"></button>
             </div>

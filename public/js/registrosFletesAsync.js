@@ -729,6 +729,61 @@ function showModalRegistro() {
   edit = false;
 }
 
+function agregarDescontable() {
+  $("#btnRegistroDescontable").text("Registrar Deducibles");
+  $("#btnRegistroDescontable").attr("onclick", "registrar('frmRegistro');");
+  $("#ModalDescontables").modal({
+    backdrop: "static",
+    keyboard: false,
+  });
+
+  $(
+    "#uno, #dos, #tres, #cuatro, #cinco, #seis, #siete, #ocho, #nueve, #diez, #once, #doce, #trece"
+  ).hide();
+  $("#check1").change(function () {
+    $("#check1").is(":checked") ? $("#uno").show() : $("#uno").hide();
+  });
+  $("#check2").change(function () {
+    $("#check2").is(":checked") ? $("#dos").show() : $("#dos").hide();
+  });
+  $("#check3").change(function () {
+    $("#check3").is(":checked") ? $("#tres").show() : $("#tres").hide();
+  });
+  $("#check4").change(function () {
+    $("#check4").is(":checked") ? $("#cuatro").show() : $("#cuatro").hide();
+  });
+  $("#check5").change(function () {
+    $("#check5").is(":checked") ? $("#cinco").show() : $("#cinco").hide();
+  });
+  $("#check6").change(function () {
+    $("#check6").is(":checked") ? $("#seis").show() : $("#seis").hide();
+  });
+  $("#check6").change(function () {
+    $("#check6").is(":checked") ? $("#seis").show() : $("#seis").hide();
+  });
+  $("#check7").change(function () {
+    $("#check7").is(":checked") ? $("#siete").show() : $("#siete").hide();
+  });
+  $("#check8").change(function () {
+    $("#check8").is(":checked") ? $("#ocho").show() : $("#ocho").hide();
+  });
+  $("#check9").change(function () {
+    $("#check9").is(":checked") ? $("#nueve").show() : $("#nueve").hide();
+  });
+  $("#check10").change(function () {
+    $("#check10").is(":checked") ? $("#diez").show() : $("#diez").hide();
+  });
+  $("#check11").change(function () {
+    $("#check11").is(":checked") ? $("#once").show() : $("#once").hide();
+  });
+  $("#check12").change(function () {
+    $("#check12").is(":checked") ? $("#doce").show() : $("#doce").hide();
+  });
+  $("#check13").change(function () {
+    $("#check13").is(":checked") ? $("#trece").show() : $("#trece").hide();
+  });
+}
+
 function reset() {
   limpiarcampos("#frmRegistro");
   $("#inputsEditar").html("");

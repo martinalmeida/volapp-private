@@ -18,7 +18,7 @@
                     <div class="form-row">
                         <div class="col-md-12 mb-3">
                             <label class="form-label" for="nombre">Nombre de la Ruta</label>
-                            <input type="text" onKeyPress="if(this.value.length==50)return false;" class="form-control" id="nombre" name="nombre" placeholder="Nombre de la ruta" required>
+                            <input type="text" onKeyPress="if(this.value.length==200)return false;" class="form-control" id="nombre" name="nombre" placeholder="Nombre de la ruta" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label" for="origen">Origen de la Ruta</label>

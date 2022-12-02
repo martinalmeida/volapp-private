@@ -12,7 +12,9 @@ class SesionController
     {
 
         $token = SesionTools::getParametro('token');
-        if ($token == self::TOKEN) {
+        $nit = SesionTools::getParametro('nit');
+        $user = SesionTools::getParametro('id');
+        if ($token == self::TOKEN && $nit != 0 && $user != 0) {
             return true;
         } else {
             return false;

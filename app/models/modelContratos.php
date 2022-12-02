@@ -164,17 +164,17 @@ class Contrato
             );
         }
         // --Total number of records without filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . "");
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " WHERE status = 1");
         $stmt->execute();
         $records = $stmt->fetch();
         $totalRecords = $records['allcount'];
         // --Total number of records with filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " WHERE 1 " . $searchQuery . "");
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " WHERE status = 1 AND 1 " . $searchQuery . "");
         $stmt->execute($searchArray);
         $records = $stmt->fetch();
         $totalRecordwithFilter = $records['allcount'];
         // --Fetch records--
-        $stmt = $this->conn->prepare("SELECT id, fechaInicio, fechaFin, titulo, representante, telefono, email, content_type, base_64, status FROM " . $this->tableName . " WHERE 1 " . $searchQuery . " AND status in(1, 2) AND nit =  " . $_SESSION['nit'] . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
+        $stmt = $this->conn->prepare("SELECT id, fechaInicio, fechaFin, titulo, representante, telefono, email, status FROM " . $this->tableName . " WHERE 1 " . $searchQuery . " AND status in(1, 2) AND nit =  " . $_SESSION['nit'] . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
         // --Bind values--
         foreach ($searchArray as $key => $search) {
             $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
@@ -190,9 +190,8 @@ class Contrato
 
             $botones = "<div class='btn-group'>";
             if ($datos->r === 1) {
-                $botones .= '<button type="button" class="btn btn-outline-danger" data-toggle="tooltip" data-placement="top" title="Ver docuemntación del contrato en PDF" onclick="visualizarPDF(';
-                $botones .= "'" . $row['content_type'] . "', '" . $row['base_64'] . "'); ";
-                $botones .= '"><i class="fal fa-file-pdf"></i></button>';
+                $botones .= '<button type="button" class="btn btn-outline-danger" data-toggle="tooltip" data-placement="top" title="Ver docuemntación del contrato en PDF" onclick="traerArchivo( ' . $row['id'] . ');">';
+                $botones .= '<i class="fal fa-file-pdf"></i></button>';
             }
             if ($datos->u === 1) {
                 $botones .= "<button type='button' class='btn btn-success text-white' data-toggle='tooltip' data-placement='top' title='Editar Contrato' onclick='editarRegistro(" . $row['id'] . ");'>";
@@ -228,6 +227,34 @@ class Contrato
         echo json_encode($response);
     }
 
+    // -- ⊡ Funcion para traer datos la base 64 del archivo y su content type ⊡ --
+    public function traerArchivo(): void
+    {
+        // --Preparamos la consulta--
+        $query = "SELECT (content_type)contenType, (base_64)base64 FROM $this->tableName WHERE id=? ;";
+        $stmt = $this->conn->prepare($query);
+
+        // --Almacenamos los valores--
+        $stmt->bindParam(1, $this->id);
+
+        // --Ejecutamos la consulta y validamos ejecucion--
+        if ($stmt->execute()) {
+
+            // --Comprobamos que venga algun dato--
+            if ($stmt->rowCount() >= 1) {
+
+                // --Retornamos las respuestas--
+                echo json_encode(array('status' => '1', 'data' => $stmt->fetchAll(PDO::FETCH_ASSOC)));
+            } else {
+                // --Usuario no encontrado o inactivo--
+                echo json_encode(array('status' => '3', 'data' => NULL));
+            }
+        } else {
+            // --Falla en la ejecución de la consulta--
+            echo json_encode(array('status' => '0', 'data' => NULL));
+        }
+    }
+
     // -- ⊡ Funcion para cambiar el estado del rol ⊡ --
     public function statusContrato(): void
     {
@@ -253,7 +280,7 @@ class Contrato
     public function dataContrato(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT id, fechaInicio, fechaFin, titulo, representante, telefono, email, content_type, base_64 FROM $this->tableName WHERE id=? ;";
+        $query = "SELECT id, fechaInicio, fechaFin, titulo, representante, telefono, email, (content_type)contenType, (base_64)base64 FROM $this->tableName WHERE id=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Almacenamos los valores--
@@ -265,22 +292,8 @@ class Contrato
             // --Comprobamos que venga algun dato--
             if ($stmt->rowCount() >= 1) {
 
-                // --Cosulta a Objetos--
-                $data = $stmt->fetch(PDO::FETCH_OBJ);
-
-                $datos = array(
-                    'id' => $data->id,
-                    'fechaInicio' => $data->fechaInicio,
-                    'fechaFin' => $data->fechaFin,
-                    'titulo' => $data->titulo,
-                    'representante' => $data->representante,
-                    'telefono' => $data->telefono,
-                    'email' => $data->email,
-                    'contenType' => $data->content_type,
-                    'base64' => $data->base_64
-                );
                 // --Retornamos las respuestas--
-                echo json_encode(array('status' => '1', 'data' => $datos));
+                echo json_encode(array('status' => '1', 'data' => $stmt->fetchAll(PDO::FETCH_ASSOC)));
             } else {
                 // --Usuario no encontrado o inactivo--
                 echo json_encode(array('status' => '3', 'data' => NULL));

@@ -114,6 +114,25 @@ class MaquinariasController
         $maquinaria->readAllDaTableMaquinaria();
     }
 
+    public function getFile(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $maquinaria = new Maquinaria($db);
+
+        // --Seteo de valores existentes en el POST--
+        $maquinaria->id = isset($_POST['idMaquinaria']) ? strtoupper(trim($_POST['idMaquinaria'])) : NULL;
+
+        // --Validacion de datos a enviar al modelo--
+        if (Validar::numeros($maquinaria->id)) {
+            $maquinaria->traerArchivo();
+        } else {
+            echo json_encode(array('status' => '2', 'data' => NULL));
+        }
+    }
+
     public function status(): void
     {
         // --Importacion e inicializacion de conexion--

@@ -77,6 +77,7 @@ class RegistrosMovimientos
 
             $html .= '<h1 class="subheader-title">';
             $html .= '<i class="fal fa-info-circle"></i> Registros de Movimientos</h1>';
+            $html .= '<button type="button" class="btn btn-primary active m-1" onClick="history.go(-1); return false;"><i class="fal fa-arrow-left"></i> Regresar</button>';
             $html .= '<button type="button" class="btn btn-info active" onclick="showModalRegistro();">Agregar <i class="fal fa-plus-square"></i></button>';
 
             echo json_encode(array('status' => NULL, 'data' => $html));
@@ -84,6 +85,7 @@ class RegistrosMovimientos
 
             $html .= '<h1 class="subheader-title">';
             $html .= '<i class="fal fa-info-circle"></i> Registros de Movimientos</h1>';
+            $html .= '<button type="button" class="btn btn-primary active m-1" onClick="history.go(-1); return false;"><i class="fal fa-arrow-left"></i> Regresar</button>';
             $html .= '<h3>No tienes permisos de escritura para este modulo.</h3>';
 
             echo json_encode(array('status' => NULL, 'data' => $html));

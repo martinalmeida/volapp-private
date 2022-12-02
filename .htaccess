@@ -23,7 +23,7 @@ RewriteRule .* - [F]
 LimitRequestBody 10000000
 
 # Mensaje de error personalizado en ubicación local
-ErrorDocument 404 http://localhost/volapp/public/views/error/404
+ErrorDocument 404 http://192.168.1.249/volapp/public/views/error/404
 
 # Bloquear Archivos
 <FilesMatch "\.(htaccess|env|phps|log|bak|txt)$">
