@@ -201,7 +201,7 @@ class RegistrosAlquiler
                                       JOIN $this->tableContrato c ON a.idContrato = c.id 
                                       JOIN $this->tableUsuario u ON ra.idUsuario = u.id 
                                       WHERE 1 $searchQuery 
-                                      AND ra.status IN(1, 2) AND ra.nit =  " . $_SESSION['nit'] . " ORDER BY $columnName $columnSortOrder LIMIT :limit,:offset ");
+                                      AND ra.status IN(1, 2) AND ra.nit =  " . $_SESSION['nit'] . " GROUP BY ra.id ORDER BY $columnName $columnSortOrder LIMIT :limit,:offset ");
         // --Bind values--
         foreach ($searchArray as $key => $search) {
             $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);

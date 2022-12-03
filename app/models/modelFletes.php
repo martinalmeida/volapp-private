@@ -162,7 +162,7 @@ class Fletes
                                       LEFT JOIN " . $this->tableRutas . " r ON f.idRuta = r.id 
                                       LEFT JOIN " . $this->tableRutaContrato . " rc ON r.id = rc.idRuta 
                                       LEFT JOIN " . $this->tableContratos . " c ON rc.idContrato = c.id
-                                      JOIN " . $this->tableUsuarios . " u ON f.idUsuario = u.id ");
+                                      JOIN " . $this->tableUsuarios . " u ON f.idUsuario = u.id WHERE f.status = 1");
         $stmt->execute();
         $records = $stmt->fetch();
         $totalRecords = $records['allcount'];
@@ -173,7 +173,7 @@ class Fletes
                                       LEFT JOIN " . $this->tableRutas . " r ON f.idRuta = r.id 
                                       LEFT JOIN " . $this->tableRutaContrato . " rc ON r.id = rc.idRuta 
                                       LEFT JOIN " . $this->tableContratos . " c ON rc.idContrato = c.id
-                                      JOIN " . $this->tableUsuarios . " u ON f.idUsuario = u.id WHERE 1 " . $searchQuery . " ");
+                                      JOIN " . $this->tableUsuarios . " u ON f.idUsuario = u.id WHERE f.status = 1 AND 1 " . $searchQuery . " ");
         $stmt->execute($searchArray);
         $records = $stmt->fetch();
         $totalRecordwithFilter = $records['allcount'];
@@ -185,7 +185,7 @@ class Fletes
                                       LEFT JOIN " . $this->tableRutas . " r ON f.idRuta = r.id 
                                       LEFT JOIN " . $this->tableRutaContrato . " rc ON r.id = rc.idRuta 
                                       LEFT JOIN " . $this->tableContratos . " c ON rc.idContrato = c.id 
-                                      JOIN " . $this->tableUsuarios . " u ON f.idUsuario = u.id WHERE 1 " . $searchQuery . " AND f.status in(1, 2) AND m.status = 1 AND f.nit =  " . $_SESSION['nit'] . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
+                                      JOIN " . $this->tableUsuarios . " u ON f.idUsuario = u.id WHERE 1 " . $searchQuery . " AND f.status in(1, 2) AND m.status = 1 AND f.nit =  " . $_SESSION['nit'] . " GROUP BY f.id ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
         // --Bind values--
         foreach ($searchArray as $key => $search) {
             $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);

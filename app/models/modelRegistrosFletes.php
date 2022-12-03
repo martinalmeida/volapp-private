@@ -206,7 +206,7 @@ class RegistrosFletes
                                       JOIN $this->tableContrato c ON rc.idContrato = c.id 
                                       JOIN $this->tableUsuario u ON rf.idUsuario = u.id 
                                       WHERE 1 $searchQuery 
-                                      AND rf.status IN(1, 2) AND rf.nit =  " . $_SESSION['nit'] . " ORDER BY $columnName $columnSortOrder LIMIT :limit,:offset ");
+                                      AND rf.status IN(1, 2) AND rf.nit =  " . $_SESSION['nit'] . " GROUP BY rf.id ORDER BY $columnName $columnSortOrder LIMIT :limit,:offset ");
         // --Bind values--
         foreach ($searchArray as $key => $search) {
             $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);

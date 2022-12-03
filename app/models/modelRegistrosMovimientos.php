@@ -211,7 +211,7 @@ class RegistrosMovimientos
                                       JOIN $this->tableContrato c ON rc.idContrato = c.id 
                                       JOIN $this->tableUsuario u ON rm.idUsuario = u.id 
                                       WHERE 1 $searchQuery 
-                                      AND rm.status IN(1, 2) AND rm.nit =  " . $_SESSION['nit'] . " ORDER BY $columnName $columnSortOrder LIMIT :limit,:offset ");
+                                      AND rm.status IN(1, 2) AND rm.nit =  " . $_SESSION['nit'] . " GROUP BY rm.id ORDER BY $columnName $columnSortOrder LIMIT :limit,:offset ");
         // --Bind values--
         foreach ($searchArray as $key => $search) {
             $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);

@@ -302,7 +302,7 @@ class Select
     public function selectAcuerdoFlete(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT f.id, r.origen, r.destino FROM $this->tableFletes f JOIN rutas r ON f.idRuta = r.id WHERE f.idMaquinaria = ? AND f.flete != 0 AND status = 1 ;";
+        $query = "SELECT f.id, r.origen, r.destino FROM $this->tableFletes f JOIN rutas r ON f.idRuta = r.id WHERE f.idMaquinaria = ? AND f.flete != 0 AND f.status = 1 ;";
         $stmt = $this->conn->prepare($query);
 
         // --Almacenamos los valores--
@@ -338,7 +338,7 @@ class Select
     public function selectAcuerdoMovimiento(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT m.id, r.origen, r.destino FROM $this->tableMovimientos m JOIN rutas r ON m.idRuta = r.id WHERE m.idMaquinaria = ? AND m.tarifa != 0 AND status = 1 ;";
+        $query = "SELECT m.id, r.origen, r.destino FROM $this->tableMovimientos m JOIN rutas r ON m.idRuta = r.id WHERE m.idMaquinaria = ? AND m.tarifa != 0 AND m.status = 1 ;";
         $stmt = $this->conn->prepare($query);
 
         // --Almacenamos los valores--
