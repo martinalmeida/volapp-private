@@ -30,12 +30,12 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Placa o # de Registro:</label>
-                            <select class="custom-select form-control" id="placa" name="placa">
+                            <select class="select2 custom-select form-control" id="placa" name="placa">
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Acuerdo de Alquiler:</label>
-                            <select class="custom-select form-control" id="acuerdo" name="acuerdo">
+                            <select class="select2 custom-select form-control" id="acuerdo" name="acuerdo">
                             </select>
                         </div>
                         <div class="input-group col-md-6 mb-3">

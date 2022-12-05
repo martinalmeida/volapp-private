@@ -117,7 +117,7 @@ class Sesion
     public function permisoModulo()
     {
         // --Preparamos la consulta--
-        $query = "SELECT m.tabla_bd, p.r, p.w, p.u, p.d FROM $this->tablePermisos p JOIN $this->tableName m on p.moduloid = m.id WHERE p.rolid=? AND m.tabla_bd=? ;";
+        $query = "SELECT m.page, p.r, p.w, p.u, p.d FROM $this->tablePermisos p JOIN $this->tableName m on p.moduloid = m.id WHERE p.rolid=? AND m.page=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Almacenamos los valores--

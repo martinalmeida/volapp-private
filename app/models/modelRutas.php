@@ -9,6 +9,7 @@ class Ruta
     // --Parametros Privados--
     private $conn;
     private $tableName = "rutas";
+    private $viewTable = "view_rutas";
     private $tableRutasContratos = "rutas_contratos";
     private $tableContratos = "contratos";
     private $nit;
@@ -157,12 +158,12 @@ class Ruta
         // --Search--
         $searchQuery = " ";
         if ($searchValue != '') {
-            $searchQuery = " AND (r.id LIKE :id OR 
-                            r.nombre LIKE :nombre OR
-                            r.origen LIKE :origen OR
-                            c.titulo LIKE :titulo OR
-                            r.destino LIKE :destino OR
-                            r.status LIKE :status )";
+            $searchQuery = " AND (id LIKE :id OR 
+                            nombre LIKE :nombre OR
+                            origen LIKE :origen OR
+                            titulo LIKE :titulo OR
+                            destino LIKE :destino OR
+                            status LIKE :status )";
             $searchArray = array(
                 'id' => "%$searchValue%",
                 'nombre' => "%$searchValue%",
@@ -173,23 +174,17 @@ class Ruta
             );
         }
         // --Total number of records without filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " r 
-                                                                  JOIN " . $this->tableRutasContratos . " rc ON r.id = rc.idRuta 
-                                                                  JOIN " . $this->tableContratos . " c ON rc.idContrato = c.id");
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->viewTable . " WHERE nit = " . $_SESSION['nit'] . " ");
         $stmt->execute();
         $records = $stmt->fetch();
         $totalRecords = $records['allcount'];
         // --Total number of records with filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->tableName . " r 
-                                                                  JOIN " . $this->tableRutasContratos . " rc ON r.id = rc.idRuta 
-                                                                  JOIN " . $this->tableContratos . " c ON rc.idContrato = c.id WHERE 1 " . $searchQuery . " ");
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM " . $this->viewTable . " WHERE 1 " . $searchQuery . " AND nit = " . $_SESSION['nit'] . " ");
         $stmt->execute($searchArray);
         $records = $stmt->fetch();
         $totalRecordwithFilter = $records['allcount'];
         // --Fetch records--
-        $stmt = $this->conn->prepare("SELECT r.id, r.nombre, r.origen, r.destino, c.titulo, CONCAT(rc.kilometraje, ' KM')kilometraje, CONCAT(rc.tarifa, ' $')tarifa, r.status FROM " . $this->tableName . " r 
-                                                                                                                                                                    JOIN " . $this->tableRutasContratos . " rc ON r.id = rc.idRuta 
-                                                                                                                                                                    JOIN " . $this->tableContratos . " c ON rc.idContrato = c.id WHERE 1 " . $searchQuery . " AND r.status in(1, 2) AND rc.status = 1 AND r.nit =  " . $_SESSION['nit'] . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
+        $stmt = $this->conn->prepare("SELECT * FROM " . $this->viewTable . " WHERE 1 " . $searchQuery . " AND status in(1, 2) AND nit = " . $_SESSION['nit'] . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset ");
         // --Bind values--
         foreach ($searchArray as $key => $search) {
             $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);

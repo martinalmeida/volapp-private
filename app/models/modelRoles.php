@@ -8,6 +8,7 @@ class Rol
 {
     // --Parametros Privados--
     private $conn;
+    private $nombreSubModulo = 'roles';
     private $tableName = "rol";
     private $tablePermisos = "permisos";
     private $tableModulo = "modulo";
@@ -41,7 +42,7 @@ class Rol
     {
         $sesion = new Sesion($this->conn);
         $sesion->rol = $_SESSION['rol'];
-        $sesion->tabla = $this->tableName;
+        $sesion->tabla = $this->nombreSubModulo;
 
         $datos = $sesion->permisoModulo();
 
@@ -57,7 +58,7 @@ class Rol
     {
         $sesion = new Sesion($this->conn);
         $sesion->rol = $_SESSION['rol'];
-        $sesion->tabla = $this->tableName;
+        $sesion->tabla = $this->nombreSubModulo;
 
         $datos = $sesion->permisoModulo();
 
@@ -207,7 +208,7 @@ class Rol
     {
         $sesion = new Sesion($this->conn);
         $sesion->rol = $_SESSION['rol'];
-        $sesion->tabla = $this->tableName;
+        $sesion->tabla = $this->nombreSubModulo;
         $datos = $sesion->permisoModulo();
 
         // --Read value--

@@ -16,18 +16,18 @@
                 <form id="frmRegistro">
                     <div id="alertaForm"></div>
                     <div class="form-row">
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-2 mb-3">
                             <label class="form-label" for="codFicha">Cod Ficha</label>
                             <input type="text" onKeyPress="if(this.value.length==12)return false;" class="form-control" id="codFicha" name="codFicha" placeholder="Codigo de la ficha del registro" required>
                         </div>
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label class="form-label">Placa o # de Registro:</label>
-                            <select class="custom-select form-control" id="placa" name="placa">
+                            <select class="select2 custom-select form-control" id="placa" name="placa">
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Acuerdo de Flete o Ruta:</label>
-                            <select class="custom-select form-control" id="acuerdo" name="acuerdo">
+                            <select class="select2 custom-select form-control" id="acuerdo" name="acuerdo">
                             </select>
                         </div>
                         <div class="input-group col-md-6 mb-3">

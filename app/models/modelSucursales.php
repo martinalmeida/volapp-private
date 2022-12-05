@@ -8,6 +8,7 @@ class Sucursal
 {
     // --Parametros Privados--
     private $conn;
+    private $nombreSubModulo = 'sucursales';
     private $tableName = "sucursal";
     private $nit;
 
@@ -41,7 +42,7 @@ class Sucursal
     {
         $sesion = new Sesion($this->conn);
         $sesion->rol = $_SESSION['rol'];
-        $sesion->tabla = $this->tableName;
+        $sesion->tabla = $this->nombreSubModulo;
 
         $datos = $sesion->permisoModulo();
 
@@ -57,7 +58,7 @@ class Sucursal
     {
         $sesion = new Sesion($this->conn);
         $sesion->rol = $_SESSION['rol'];
-        $sesion->tabla = $this->tableName;
+        $sesion->tabla = $this->nombreSubModulo;
 
         $datos = $sesion->permisoModulo();
 
@@ -114,7 +115,7 @@ class Sucursal
     {
         $sesion = new Sesion($this->conn);
         $sesion->rol = $_SESSION['rol'];
-        $sesion->tabla = $this->tableName;
+        $sesion->tabla = $this->nombreSubModulo;
         $datos = $sesion->permisoModulo();
 
         // --Read value--

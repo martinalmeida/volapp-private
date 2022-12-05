@@ -90,6 +90,14 @@ $(document).ready(function () {
   writePermisos();
   runDatePicker();
   selects();
+  $("#placa").select2({
+    placeholder: "Seleccione la placa o # de registro",
+    allowClear: true,
+  });
+  $("#acuerdo").select2({
+    placeholder: "Seleccione el Acuerdo de la placa",
+    allowClear: true,
+  });
   $(":input").inputmask();
 });
 
@@ -157,8 +165,6 @@ function selects() {
         case "1":
           var html = "";
 
-          html +=
-            '<option value="" disabled selected hidden>Seleccione la placa o # de registro</option>';
           for (let i = 0; i < result.data.length; i++) {
             html += result.data[i].html;
           }
@@ -235,8 +241,6 @@ function subSelects(id) {
         case "1":
           var html = "";
 
-          html +=
-            '<option value="" disabled selected hidden>Seleccione el Acuerdo de la placa</option>';
           for (let i = 0; i < result.data.length; i++) {
             html += result.data[i].html;
           }

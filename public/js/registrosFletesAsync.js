@@ -90,6 +90,14 @@ $(document).ready(function () {
   writePermisos();
   runDatePicker();
   selects();
+  $("#placa").select2({
+    placeholder: "Seleccione la placa o # de registro",
+    allowClear: true,
+  });
+  $("#acuerdo").select2({
+    placeholder: "Seleccione el Acuerdo de la placa",
+    allowClear: true,
+  });
   $(":input").inputmask();
 });
 
@@ -157,8 +165,6 @@ function selects() {
         case "1":
           var html = "";
 
-          html +=
-            '<option value="" disabled selected hidden>Seleccione la placa o # de registro</option>';
           for (let i = 0; i < result.data.length; i++) {
             html += result.data[i].html;
           }
@@ -235,8 +241,6 @@ function subSelects(id) {
         case "1":
           var html = "";
 
-          html +=
-            '<option value="" disabled selected hidden>Seleccione el Acuerdo de la placa</option>';
           for (let i = 0; i < result.data.length; i++) {
             html += result.data[i].html;
           }
@@ -732,13 +736,13 @@ function showModalRegistro() {
 function agregarDescontable() {
   $("#btnRegistroDescontable").text("Registrar Deducibles");
   $("#btnRegistroDescontable").attr("onclick", "registrar('frmRegistro');");
-  $("#ModalDescontables").modal({
+  $("#ModalDeducibles").modal({
     backdrop: "static",
     keyboard: false,
   });
 
   $(
-    "#uno, #dos, #tres, #cuatro, #cinco, #seis, #siete, #ocho, #nueve, #diez, #once, #doce, #trece"
+    "#uno, #dos, #tres, #cuatro, #cinco, #seis, #siete, #ocho, #nueve, #diez, #once, #doce, #trece, #catorce, #quince, #diezyseis, #diezysiete, #diezocho, #diezynueve, #veinte, #veinteyuno"
   ).hide();
   $("#check1").change(function () {
     $("#check1").is(":checked") ? $("#uno").show() : $("#uno").hide();
@@ -781,6 +785,40 @@ function agregarDescontable() {
   });
   $("#check13").change(function () {
     $("#check13").is(":checked") ? $("#trece").show() : $("#trece").hide();
+  });
+  $("#check14").change(function () {
+    $("#check14").is(":checked") ? $("#catorce").show() : $("#catorce").hide();
+  });
+  $("#check15").change(function () {
+    $("#check15").is(":checked") ? $("#quince").show() : $("#quince").hide();
+  });
+  $("#check16").change(function () {
+    $("#check16").is(":checked")
+      ? $("#diezyseis").show()
+      : $("#diezyseis").hide();
+  });
+  $("#check17").change(function () {
+    $("#check17").is(":checked")
+      ? $("#diezysiete").show()
+      : $("#diezysiete").hide();
+  });
+  $("#check18").change(function () {
+    $("#check18").is(":checked")
+      ? $("#diezocho").show()
+      : $("#diezocho").hide();
+  });
+  $("#check19").change(function () {
+    $("#check19").is(":checked")
+      ? $("#diezynueve").show()
+      : $("#diezynueve").hide();
+  });
+  $("#check20").change(function () {
+    $("#check20").is(":checked") ? $("#veinte").show() : $("#veinte").hide();
+  });
+  $("#check21").change(function () {
+    $("#check21").is(":checked")
+      ? $("#veinteyuno").show()
+      : $("#veinteyuno").hide();
   });
 }
 

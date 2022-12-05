@@ -10,12 +10,7 @@ class RegistrosFletes
     private $conn;
     private $nombreSubModulo = 'registros';
     private $tableName = "registros_fletes";
-    private $tableMaquinaria = "maquinarias";
-    private $tableFletes = "fletes";
-    private $tableRutas = "rutas";
-    private $tableRutaContrato = "rutas_contratos";
-    private $tableContrato = "contratos";
-    private $tableUsuario = "usuarios";
+    private $viewTable = "view_registro_fletes";
     private $fechaActual;
     private $nit;
 
@@ -148,22 +143,22 @@ class RegistrosFletes
         // --Search--
         $searchQuery = " ";
         if ($searchValue != '') {
-            $searchQuery = " AND (rf.id LIKE :id OR 
-                            rf.codFicha LIKE :codFicha OR
-                            m.placa LIKE :placa OR
-                            r.origen LIKE :origen OR
-                            f.flete LIKE :flete OR
-                            rf.fechaInicio LIKE :fechaInicio OR
-                            rf.fechaFin LIKE :fechaFin OR
-                            c.titulo LIKE :titulo OR
-                            rf.observacion LIKE :observacion OR
-                            u.nombres LIKE :nombres OR
-                            rf.status LIKE :status )";
+            $searchQuery = " AND (id LIKE :id OR 
+                            codFicha LIKE :codFicha OR
+                            placa LIKE :placa OR
+                            acuerdo LIKE :acuerdo OR
+                            flete LIKE :flete OR
+                            fechaInicio LIKE :fechaInicio OR
+                            fechaFin LIKE :fechaFin OR
+                            titulo LIKE :titulo OR
+                            observacion LIKE :observacion OR
+                            nombres LIKE :nombres OR
+                            status LIKE :status )";
             $searchArray = array(
                 'id' => "%$searchValue%",
                 'codFicha' => "%$searchValue%",
                 'placa' => "%$searchValue%",
-                'origen' => "%$searchValue%",
+                'acuerdo' => "%$searchValue%",
                 'flete' => "%$searchValue%",
                 'fechaInicio' => "%$searchValue%",
                 'fechaFin' => "%$searchValue%",
@@ -174,39 +169,18 @@ class RegistrosFletes
             );
         }
         // --Total number of records without filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM $this->tableName rf 
-                                                                  JOIN $this->tableMaquinaria m ON rf.idMaquinaria = m.id 
-                                                                  JOIN $this->tableFletes f ON rf.idFlete = f.id 
-                                                                  JOIN $this->tableRutas r ON f.idRuta = r.id 
-                                                                  JOIN $this->tableRutaContrato rc ON rc.idRuta = r.id 
-                                                                  JOIN $this->tableContrato c ON rc.idContrato = c.id 
-                                                                  JOIN $this->tableUsuario u ON rf.idUsuario = u.id ");
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM $this->viewTable WHERE status IN(1, 2) AND nit = " . $_SESSION['nit'] . " ");
         $stmt->execute();
         $records = $stmt->fetch();
         $totalRecords = $records['allcount'];
         // --Total number of records with filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM $this->tableName rf 
-                                                                  JOIN $this->tableMaquinaria m ON rf.idMaquinaria = m.id 
-                                                                  JOIN $this->tableFletes f ON rf.idFlete = f.id 
-                                                                  JOIN $this->tableRutas r ON f.idRuta = r.id 
-                                                                  JOIN $this->tableRutaContrato rc ON rc.idRuta = r.id 
-                                                                  JOIN $this->tableContrato c ON rc.idContrato = c.id 
-                                                                  JOIN $this->tableUsuario u ON rf.idUsuario = u.id   WHERE 1 " . $searchQuery . "");
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM $this->viewTable WHERE 1 " . $searchQuery . " AND nit = " . $_SESSION['nit'] . " ");
         $stmt->execute($searchArray);
         $records = $stmt->fetch();
         $totalRecordwithFilter = $records['allcount'];
         // --Fetch records--
-        $stmt = $this->conn->prepare("SELECT 
-                                      rf.id, rf.codFicha, m.placa, concat(r.origen, ' - ', r.destino )acuerdo, f.flete, rf.fechaInicio, rf.fechaFin, c.titulo, rf.observacion, u.nombres, rf.status 
-                                      FROM $this->tableName rf 
-                                      JOIN $this->tableMaquinaria m ON rf.idMaquinaria = m.id 
-                                      JOIN $this->tableFletes f ON rf.idFlete = f.id 
-                                      JOIN $this->tableRutas r ON f.idRuta = r.id 
-                                      JOIN $this->tableRutaContrato rc ON rc.idRuta = r.id 
-                                      JOIN $this->tableContrato c ON rc.idContrato = c.id 
-                                      JOIN $this->tableUsuario u ON rf.idUsuario = u.id 
-                                      WHERE 1 $searchQuery 
-                                      AND rf.status IN(1, 2) AND rf.nit =  " . $_SESSION['nit'] . " GROUP BY rf.id ORDER BY $columnName $columnSortOrder LIMIT :limit,:offset ");
+        $stmt = $this->conn->prepare("SELECT * FROM $this->viewTable  WHERE 1 $searchQuery 
+                                      AND status IN(1, 2) AND nit = " . $_SESSION['nit'] . " ORDER BY $columnName $columnSortOrder LIMIT :limit,:offset ");
         // --Bind values--
         foreach ($searchArray as $key => $search) {
             $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
