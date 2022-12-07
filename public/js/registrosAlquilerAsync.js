@@ -1,5 +1,7 @@
 var edit = null;
+var editDeducible = null;
 var peticion = null;
+var peticionDeducible = null;
 var idSubSelect = null;
 var tablaRegistrosAlquiler = "";
 var controls = {
@@ -734,11 +736,266 @@ function showModalRegistro() {
   edit = false;
 }
 
+function deducibles(id, placa) {
+  limpiarcampos("#frmRegistroDescontable");
+  $("#alertaFormDeducible").html("");
+  $(".modal-title").text(
+    "Agregar deducibles al registro #" + id + " de la placa: " + placa
+  );
+  $("#btnRegistroDescontable").text("Registrar Deducibles");
+  $("#uno, #dos, #tres, #cuatro, #cinco").hide();
+  $("#check1").change(function () {
+    $("#check1").is(":checked") ? $("#uno").show() : $("#uno").hide();
+  });
+  $("#check2").change(function () {
+    $("#check2").is(":checked") ? $("#dos").show() : $("#dos").hide();
+  });
+  $("#check3").change(function () {
+    $("#check3").is(":checked") ? $("#tres").show() : $("#tres").hide();
+  });
+  $("#check4").change(function () {
+    $("#check4").is(":checked") ? $("#cuatro").show() : $("#cuatro").hide();
+  });
+  $("#check5").change(function () {
+    $("#check5").is(":checked") ? $("#cinco").show() : $("#cinco").hide();
+  });
+
+  $.ajax({
+    data: { idRegistro: id }, //datos a enviar a la url
+    dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
+    url: urlBase + "routes/registrosAlquiler/getDataDeducible", //url a donde hacemos la peticion
+    type: "POST",
+    beforeSend: function () {
+      // $(".overlayCargue").fadeIn("slow");
+    },
+    success: function (result) {
+      var estado = result.status;
+      switch (estado) {
+        case "0":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error en el servidor</strong>",
+            html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        case "1":
+          editDeducible = true;
+          $("#idRegistro").val(result.data[0].id);
+          $("#check1, #check2, #check3, #check4, #check5").prop(
+            "checked",
+            true
+          );
+          $("#uno, #dos, #tres, #cuatro, #cinco").show();
+
+          $("#admon").val(result.data[0].admon);
+          $("#retefuente").val(result.data[0].retefuente);
+          $("#reteica").val(result.data[0].reteica);
+          $("#anticipo").val(result.data[0].anticipo);
+          $("#otros").val(result.data[0].otros);
+          $("#observacionDeducible").val(result.data[0].observacion);
+          break;
+
+        case "2":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error de Validacón</strong>",
+            html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        case "3":
+          editDeducible = false;
+          $("#idRegistro").val(id);
+          $("#check1, #check2, #check3, #check4, #check5").prop(
+            "checked",
+            false
+          );
+          $("#uno, #dos, #tres, #cuatro, #cinco").hide();
+          break;
+
+        default:
+          break;
+      }
+    },
+    complete: function () {
+      // setTimeout(() => {
+      //   $(".overlayCargue").fadeOut("slow");
+      // }, 1000);
+    },
+    error: function (xhr) {
+      console.log(xhr);
+      Swal.fire({
+        icon: "error",
+        title: "<strong>Error!</strong>",
+        html: "<h5>Se ha presentado un error, por favor informar al area de Sistemas.</h5>",
+        showCloseButton: true,
+        showConfirmButton: false,
+        cancelButtonText: "Cerrar",
+        cancelButtonColor: "#dc3545",
+        showCancelButton: true,
+        backdrop: true,
+      });
+    },
+  });
+  $("#btnRegistroDescontable").attr(
+    "onclick",
+    "ingresarDeducible('frmRegistroDescontable');"
+  );
+  $("#ModalDeducibles").modal({
+    backdrop: "static",
+    keyboard: false,
+  });
+}
+
+function ingresarDeducible(form) {
+  var respuestavalidacion = validarcampos("#" + form);
+  if (respuestavalidacion) {
+    var formData = new FormData(document.getElementById(form));
+    if (editDeducible == true) {
+      peticionDeducible = urlBase + "routes/registrosAlquiler/updateDeducible";
+    } else if (editDeducible == false) {
+      peticionDeducible = urlBase + "routes/registrosAlquiler/createDeducible";
+    } else if (editDeducible == null) {
+      return false;
+    }
+    $.ajax({
+      cache: false, //necesario para enviar archivos
+      contentType: false, //necesario para enviar archivos
+      processData: false, //necesario para enviar archivos
+      data: formData, //necesario para enviar archivos
+      dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
+      url: peticionDeducible, //url a donde hacemos la peticion
+      type: "POST",
+      beforeSend: function () {
+        // $(".overlayCargue").fadeIn("slow");
+      },
+      complete: function () {
+        // setTimeout(() => {
+        //   $(".overlayCargue").fadeOut("slow");
+        // }, 1000);
+      },
+      success: function (result) {
+        var estado = result.status;
+        var html = "";
+        switch (estado) {
+          case "0":
+            Swal.fire({
+              icon: "error",
+              title: "<strong>Error en el servidor</strong>",
+              html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
+              showCloseButton: true,
+              showConfirmButton: false,
+              cancelButtonText: "Cerrar",
+              cancelButtonColor: "#dc3545",
+              showCancelButton: true,
+              backdrop: true,
+            });
+            $("#ModalRegistro").modal("hide");
+            break;
+
+          case "1":
+            Swal.fire({
+              icon: "success",
+              title: "<strong>Deducible Registrado</strong>",
+              html: "<h5>El deducible se ha registrado exitosamente</h5>",
+              showCloseButton: false,
+              confirmButtonText: "Aceptar",
+              confirmButtonColor: "#64a19d",
+              backdrop: true,
+            });
+            $("#ModalDeducibles").modal("hide");
+            tablaRegistrosFletes.clear().draw();
+            break;
+
+          case "2":
+            html +=
+              '<div class="alert border-danger bg-transparent text-info fade show" role="alert">' +
+              '<div class="d-flex align-items-center"><div class="alert-icon text-danger">' +
+              '<i class="fal fa-exclamation-triangle"></i></div>' +
+              '<div class="flex-1 text-danger"><span class="h5 m-0 fw-700">Error de Validación </span></div>' +
+              '<button type="button" class="btn btn-danger btn-pills btn-sm btn-w-m waves-effect waves-themed" data-dismiss="alert" aria-label="Close">' +
+              "Cerrar</button></div></div>";
+
+            $("#alertaFormDeducible").html(html);
+            break;
+
+          default:
+            // Code
+            break;
+        }
+      },
+      error: function (xhr) {
+        console.log(xhr);
+        Swal.fire({
+          icon: "error",
+          title: "<strong>Error!</strong>",
+          html: "<h5>Se ha presentado un error, por favor informar al area de Sistemas.</h5>",
+          showCloseButton: true,
+          showConfirmButton: false,
+          cancelButtonText: "Cerrar",
+          cancelButtonColor: "#dc3545",
+          showCancelButton: true,
+          backdrop: true,
+        });
+        $("#ModalRegistro").modal("hide");
+      },
+    });
+  }
+}
+
 function reset() {
   limpiarcampos("#frmRegistro");
   $("#inputsEditar").html("");
   $("#btnRegistro").removeClass("btn btn-success");
   $("#btnRegistro").addClass("btn btn-info");
+}
+
+function filterFloat(evt, input) {
+  // Backspace = 8, Enter = 13, ‘0′ = 48, ‘9′ = 57, ‘.’ = 46, ‘-’ = 43
+  var key = window.Event ? evt.which : evt.keyCode;
+  var chark = String.fromCharCode(key);
+  var tempValue = input.value + chark;
+  if (key >= 48 && key <= 57) {
+    if (filter(tempValue) === false) {
+      return false;
+    } else {
+      return true;
+    }
+  } else {
+    if (key == 8 || key == 13 || key == 0) {
+      return true;
+    } else if (key == 46) {
+      if (filter(tempValue) === false) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
+  }
+}
+
+function filter(__val__) {
+  var preg = /^([0-9]+\.?[0-9]{0,2})$/;
+  if (preg.test(__val__) === true) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function selectsAcciones() {

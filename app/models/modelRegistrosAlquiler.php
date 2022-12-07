@@ -10,6 +10,7 @@ class RegistrosAlquiler
     private $conn;
     private $nombreSubModulo = 'registros';
     private $tableName = "registros_alquiler";
+    private $tableDeducible = "deducibles_alquiler";
     private $tableMaquinaria = "maquinarias";
     private $tableAlquiler = "alquiler";
     private $tableContrato = "contratos";
@@ -26,6 +27,12 @@ class RegistrosAlquiler
     public $fechaFin;
     public $horometroInicial;
     public $horometroFin;
+    public $admon;
+    public $retefuente;
+    public $reteica;
+    public $anticipo;
+    public $otros;
+    public $observacion;
     public $status;
 
     /* Propiedades de los objetos de Datatables para utilizar (Serverside) 
@@ -221,7 +228,7 @@ class RegistrosAlquiler
                 $botones .= "<i class='fal fa-edit'></i></button>";
                 $botones .= "<button type='button' class='btn btn-" . $statusColor . " text-white' data-toggle='tooltip' data-placement='top' title='Estado del Registro' onclick='statusRegistro(" . $row['id'] . ", " . $row['status'] . ");'>";
                 $botones .= "<i class='fal fa-eye'></i></button>";
-                $botones .= "<button type='button' class='btn btn-primary text-white' data-toggle='tooltip' data-placement='top' title='Agregar Descontables' onclick='agregarDescontable(" . $row['id'] . ");'>";
+                $botones .= '<button type="button" class="btn btn-primary text-white" data-toggle="tooltip" data-placement="top" title="Agregar Descontables" onclick="deducibles(' . $row['id'] . ', \'' . $row['placa'] . '\');">';
                 $botones .= "<i class='fal fa-file-invoice-dollar'></i></button>";
             }
             if ($datos->d === 1) {
@@ -362,6 +369,106 @@ class RegistrosAlquiler
         if ($stmt->execute()) {
             echo json_encode(array('status' => '1', 'data' => NULL));
         } else {
+            echo json_encode(array('status' => '0', 'data' => NULL));
+        }
+    }
+
+    // -- ⊡ Funcion para ingresar un deducible ⊡ --
+    public function createDeducible(): void
+    {
+        // --Preparamos la consulta--
+        $query = "INSERT INTO $this->tableDeducible SET admon=?, retefuente=?, reteica=?, anticipo=?, otros=?, observacion=?, datecreated=?, idRegistro=?, idUsuario=? ;";
+        $stmt = $this->conn->prepare($query);
+
+        // --Escapamos los caracteres--
+        $this->admon = htmlspecialchars(strip_tags($this->admon));
+        $this->retefuente = htmlspecialchars(strip_tags($this->retefuente));
+        $this->reteica = htmlspecialchars(strip_tags($this->reteica));
+        $this->anticipo = htmlspecialchars(strip_tags($this->anticipo));
+        $this->otros = htmlspecialchars(strip_tags($this->otros));
+        $this->observacion = htmlspecialchars(strip_tags($this->observacion));
+        $this->fechaActual = Utilidades::getFecha();
+        $this->idUser = $_SESSION['id'];
+
+        // --Almacenamos los valores--
+        $stmt->bindParam(1, $this->admon);
+        $stmt->bindParam(2, $this->retefuente);
+        $stmt->bindParam(3, $this->reteica);
+        $stmt->bindParam(4, $this->anticipo);
+        $stmt->bindParam(5, $this->otros);
+        $stmt->bindParam(6, $this->observacion);
+        $stmt->bindParam(7, $this->fechaActual);
+        $stmt->bindParam(8, $this->id);
+        $stmt->bindParam(9, $this->idUser);
+
+        // --Ejecutamos la consulta y validamos ejecucion--
+        if ($stmt->execute()) {
+            echo json_encode(array('status' => '1', 'data' => NULL));
+        } else {
+            echo json_encode(array('status' => '0', 'data' => NULL));
+        }
+    }
+
+    // -- ⊡ Funcion para ingresar un deducible ⊡ --
+    public function updateDeducible(): void
+    {
+        // --Preparamos la consulta--
+        $query = "UPDATE $this->tableDeducible SET admon=?, retefuente=?, reteica=?, anticipo=?, otros=?, observacion=?, dateUpdate=?, idUsuario=? WHERE id=? ;";
+        $stmt = $this->conn->prepare($query);
+
+        // --Escapamos los caracteres--
+        $this->admon = htmlspecialchars(strip_tags($this->admon));
+        $this->retefuente = htmlspecialchars(strip_tags($this->retefuente));
+        $this->reteica = htmlspecialchars(strip_tags($this->reteica));
+        $this->anticipo = htmlspecialchars(strip_tags($this->anticipo));
+        $this->otros = htmlspecialchars(strip_tags($this->otros));
+        $this->observacion = htmlspecialchars(strip_tags($this->observacion));
+        $this->fechaActual = Utilidades::getFecha();
+        $this->idUser = $_SESSION['id'];
+
+        // --Almacenamos los valores--
+        $stmt->bindParam(1, $this->admon);
+        $stmt->bindParam(2, $this->retefuente);
+        $stmt->bindParam(3, $this->reteica);
+        $stmt->bindParam(4, $this->anticipo);
+        $stmt->bindParam(5, $this->otros);
+        $stmt->bindParam(6, $this->observacion);
+        $stmt->bindParam(7, $this->fechaActual);
+        $stmt->bindParam(8, $this->idUser);
+        $stmt->bindParam(9, $this->id);
+
+        // --Ejecutamos la consulta y validamos ejecucion--
+        if ($stmt->execute()) {
+            echo json_encode(array('status' => '1', 'data' => NULL));
+        } else {
+            echo json_encode(array('status' => '0', 'data' => NULL));
+        }
+    }
+
+    // -- ⊡ Funcion para traer datos de dedubles ⊡ --
+    public function dataDeducible(): void
+    {
+        // --Preparamos la consulta--
+        $query = "SELECT * FROM $this->tableDeducible WHERE idRegistro=? ;";
+        $stmt = $this->conn->prepare($query);
+
+        // --Almacenamos los valores--
+        $stmt->bindParam(1, $this->id);
+
+        // --Ejecutamos la consulta y validamos ejecucion--
+        if ($stmt->execute()) {
+
+            // --Comprobamos que venga algun dato--
+            if ($stmt->rowCount() >= 1) {
+
+                // --Retornamos las respuestas--
+                echo json_encode(array('status' => '1', 'data' => $stmt->fetchAll(PDO::FETCH_ASSOC)));
+            } else {
+                // --Usuario no encontrado o inactivo--
+                echo json_encode(array('status' => '3', 'data' => NULL));
+            }
+        } else {
+            // --Falla en la ejecución de la consulta--
             echo json_encode(array('status' => '0', 'data' => NULL));
         }
     }

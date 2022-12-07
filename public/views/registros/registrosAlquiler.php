@@ -65,4 +65,5 @@ $view->initializationView();
 
 <?php
 include_once(VIEW . 'registros/modalRegistrosAlquiler.php');
+include_once(VIEW . 'registros/modalDeducibles.php');
 $view->finalizeView();

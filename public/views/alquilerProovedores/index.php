@@ -4,7 +4,7 @@ include_once(VIEW_CONTROLLER);
 
 use View\ViewController;
 
-$view = new ViewController('registrosMovimientos');
+$view = new ViewController('alquilerProovedores');
 
 $view->initializationView();
 ?>
@@ -19,7 +19,7 @@ $view->initializationView();
         <div id="panel-1" class="panel">
             <div class="panel-hdr">
                 <h2>
-                    Tabla de Registros de Movimientos
+                    Tabla de Alquiler para Proovedores
                     <!-- Tabla <span class="fw-300"><i>Usuarios</i></span> -->
                 </h2>
                 <div class="panel-toolbar">
@@ -32,20 +32,16 @@ $view->initializationView();
                 <div class="panel-content">
                     <!-- <div class="panel-tag">
                     </div> -->
-                    <table id="tablaRegistrosMovimientos" class="table table-bordered table-hover table-striped w-100">
+                    <table id="tablAlquilerProovedores" class="table table-bordered table-hover table-striped w-100">
                         <thead class="bg-primary-600">
                             <tr>
                                 <th>id</th>
-                                <th>Cod. Ficha</th>
-                                <th>Placa o Nro Registro</th>
-                                <th>Acuerdo de Flete o Ruta</th>
-                                <th>kilometraje</th>
-                                <th>Tarifa</th>
-                                <th>Fecha de Inicio</th>
-                                <th>Fecha Final</th>
+                                <th>Tipo Maquinaria</th>
+                                <th>Placa o # de Registro:</th>
                                 <th>Titulo del Contrato</th>
-                                <th>Observación</th>
-                                <th>Usuarios</th>
+                                <th>Stand-by</th>
+                                <th>Tarifa por Hora</th>
+                                <th>Usuario Modifico</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
                             </tr>
@@ -61,10 +57,10 @@ $view->initializationView();
 </div>
 
 <h3>
-    Pagina de Registros de Movimientos
+    Pagina de Alquiler para Proovedores
 </h3>
 
 <?php
-include_once(VIEW . 'registros/modalRegistrosMovimientos.php');
-include_once(VIEW . 'registros/modalDeducibles.php');
+include_once(VIEW . 'alquilerProovedores/modalForm.php');
+include_once(VIEW . 'alquilerProovedores/modalParametrizar.php');
 $view->finalizeView();

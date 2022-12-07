@@ -163,4 +163,71 @@ class RegistrosAlquilerController
             echo json_encode(array('status' => '2', 'data' => NULL));
         }
     }
+
+    public function getDataDeducible(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $registros = new RegistrosAlquiler($db);
+
+        // --Seteo de valores existentes en el POST--
+        $registros->id = isset($_POST['idRegistro']) ? strtoupper(trim($_POST['idRegistro'])) : NULL;
+
+        // --Validacion de datos a enviar al modelo--
+        if (Validar::numeros($registros->id)) {
+            $registros->dataDeducible();
+        } else {
+            echo json_encode(array('status' => '2', 'data' => NULL));
+        }
+    }
+
+    public function createDeducible(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $registros = new RegistrosAlquiler($db);
+
+        // --Seteo de valores existentes en el POST--
+        $registros->id = isset($_POST['idRegistro']) ? strtoupper(trim($_POST['idRegistro'])) : NULL;
+        $registros->admon = isset($_POST['admon']) ? strtoupper(trim($_POST['admon'])) : NULL;
+        $registros->retefuente = isset($_POST['retefuente']) ? strtoupper(trim($_POST['retefuente'])) : NULL;
+        $registros->reteica = isset($_POST['reteica']) ? strtoupper(trim($_POST['reteica'])) : NULL;
+        $registros->anticipo = isset($_POST['anticipo']) ? strtoupper(trim($_POST['anticipo'])) : NULL;
+        $registros->otros = isset($_POST['otros']) ? strtoupper(trim($_POST['otros'])) : NULL;
+        $registros->observacion = isset($_POST['observacionDeducible']) ? strtoupper(trim($_POST['observacionDeducible'])) : NULL;
+
+        if (Validar::numeros($registros->id)) {
+            $registros->createDeducible();
+        } else {
+            echo json_encode(array('status' => '2', 'data' => NULL));
+        }
+    }
+
+    public function updateDeducible(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $registros = new RegistrosAlquiler($db);
+
+        // --Seteo de valores existentes en el POST--
+        $registros->id = isset($_POST['idRegistro']) ? strtoupper(trim($_POST['idRegistro'])) : NULL;
+        $registros->admon = isset($_POST['admon']) ? strtoupper(trim($_POST['admon'])) : NULL;
+        $registros->retefuente = isset($_POST['retefuente']) ? strtoupper(trim($_POST['retefuente'])) : NULL;
+        $registros->reteica = isset($_POST['reteica']) ? strtoupper(trim($_POST['reteica'])) : NULL;
+        $registros->anticipo = isset($_POST['anticipo']) ? strtoupper(trim($_POST['anticipo'])) : NULL;
+        $registros->otros = isset($_POST['otros']) ? strtoupper(trim($_POST['otros'])) : NULL;
+        $registros->observacion = isset($_POST['observacionDeducible']) ? strtoupper(trim($_POST['observacionDeducible'])) : NULL;
+
+        if (Validar::numeros($registros->id)) {
+            $registros->updateDeducible();
+        } else {
+            echo json_encode(array('status' => '2', 'data' => NULL));
+        }
+    }
 }
