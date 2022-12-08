@@ -85,8 +85,8 @@ class RegistrosFletes
 
             $html .= '<h1 class="subheader-title">';
             $html .= '<i class="fal fa-info-circle"></i> Registros de Fletes</h1>';
+            $html .= '<h3>No tienes permisos de escritura para este modulo </h3>';
             $html .= '<button type="button" class="btn btn-primary active m-1" onClick="history.go(-1); return false;"><i class="fal fa-arrow-left"></i> Regresar</button>';
-            $html .= '<h3>No tienes permisos de escritura para este modulo.</h3>';
 
             echo json_encode(array('status' => NULL, 'data' => $html));
         }

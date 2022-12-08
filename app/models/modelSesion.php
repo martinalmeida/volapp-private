@@ -34,7 +34,7 @@ class Sesion
                   JOIN $this->tableRol r ON r.id = p.rolid
                   JOIN $this->tableUsuarios u ON u.rolid = r.id 
                   WHERE ISNULL(m.menu_id) 
-                  AND m.id NOT IN (SELECT m2.menu_id FROM $this->tablePermisos p2 JOIN $this->tableName m2 ON m2.id = p2.moduloid WHERE p2.r = 0 AND p2.rolid=? GROUP BY m2.menu_id HAVING COUNT(*)>1)
+                  AND m.id NOT IN (SELECT m2.menu_id FROM $this->tablePermisos p2 JOIN $this->tableName m2 ON m2.id = p2.moduloid WHERE p2.r = 0 AND p2.rolid=? GROUP BY m2.menu_id HAVING COUNT(*)>=1)
                   AND m.status = 1 
                   AND p.r = 1
                   AND u.id=?
