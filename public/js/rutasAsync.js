@@ -192,7 +192,6 @@ function registrar(form) {
     if (edit == true) {
       peticion = urlBase + "routes/rutas/update";
     } else if (edit == false) {
-      $("#archivoBase64").html("");
       peticion = urlBase + "routes/rutas/create";
     } else if (edit == null) {
       return false;

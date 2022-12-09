@@ -12,9 +12,9 @@ $view->initializationView();
 <div class="row">
     <div class="col col-md-6 col-lg-7 hidden-sm-down">
         <h2 class="fs-xxl fw-500 mt-4 text-white">
-            <img src="../../../resources/assets/img/logo-login.png" alt="VolApp">
+            <img class="img-fluid mx-auto d-block" src="../../../resources/assets/img/logo-login.png" alt="VolApp">
             <small class="h3 fw-300 mt-2 mb-5 text-white opacity-60 text-center">
-                <b>Soluciones de software para negocios orientados al transporte de carga pesada.</b>
+                <b>Soluciones de software para negocios orientados al <br> transporte de carga pesada.</b>
             </small>
         </h2>
         <!-- <a href="#" class="fs-lg fw-500 text-white opacity-70">Ver más &gt;&gt;</a> -->

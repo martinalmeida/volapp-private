@@ -5,10 +5,10 @@ declare(strict_types=1);
 header('Content-type: application/json');
 
 include(LIBRARIES . 'validations.php');
-include(MODELS . 'modelRegistros.php');
+include(MODELS . 'modelProovedores.php');
 
 
-class RegistrosController
+class ProovedoresController
 {
     public function read(): void
     {
@@ -16,9 +16,9 @@ class RegistrosController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $registros = new Registro($db);
+        $proovedor = new Proovedores($db);
 
-        $registros->getReadPermisos();
+        $proovedor->getReadPermisos();
     }
 
     public function getRuta(): void
@@ -28,7 +28,7 @@ class RegistrosController
         $numero = isset($_POST['idRuta']) ? strtoupper(trim($_POST['idRuta'])) : NULL;
 
         if (Validar::numeros($numero)) {
-            echo json_encode(array('status' => '1', 'data' => NULL, 'url' => Roots::regitrosRoots($numero)));
+            echo json_encode(array('status' => '1', 'data' => NULL, 'url' => Roots::proovedoresRoots($numero)));
         } else {
             echo json_encode(array('status' => '2', 'data' => NULL, 'url' => NULL));
         }

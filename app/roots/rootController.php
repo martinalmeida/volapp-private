@@ -61,6 +61,60 @@ class Roots
         }
     }
 
+    // --Rutas de Informes--
+    public static function informesRoots($numero)
+    {
+        $verificar = SesionController::verificarUsuario();
+        if ($verificar === TRUE) {
+            switch ($numero) {
+                case '1':
+                    return INFORMESALQUILER;
+                    break;
+
+                case '2':
+                    return INFORMESFLETES;
+                    break;
+
+                case '3':
+                    return INFORMESMOVIMIENTOS;
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
+        } else {
+            return LOGIN;
+        }
+    }
+
+    // --Rutas de proovedores--
+    public static function proovedoresRoots($numero)
+    {
+        $verificar = SesionController::verificarUsuario();
+        if ($verificar === TRUE) {
+            switch ($numero) {
+                case '1':
+                    return PROOVEDORALQUILER;
+                    break;
+
+                case '2':
+                    return PROOVEDORFLETES;
+                    break;
+
+                case '3':
+                    return PROOVEDORMOVIMIENTOS;
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
+        } else {
+            return LOGIN;
+        }
+    }
+
     // --Error de pagina no encontrada--
     public static function error404($folder, $file)
     {

@@ -42,12 +42,11 @@ $(document).ready(function () {
     ],
     columns: [
       { data: "id" },
-      { data: "nombre" },
-      { data: "origen" },
-      { data: "destino" },
+      { data: "tipo" },
+      { data: "placa" },
       { data: "titulo" },
-      { data: "kilometraje" },
-      { data: "tarifa" },
+      { data: "standby" },
+      { data: "horaTarifa" },
       { data: "status" },
       { data: "defaultContent" },
     ],
@@ -69,6 +68,14 @@ $(document).ready(function () {
   readPermisos();
   writePermisos();
   selects();
+  $("#placa").select2({
+    placeholder: "Seleccione la placa o # de registro",
+    allowClear: true,
+  });
+  $("#contrato").select2({
+    placeholder: "Seleccione el contrato",
+    allowClear: true,
+  });
 });
 
 function readPermisos() {
@@ -110,6 +117,78 @@ function writePermisos() {
 function selects() {
   $.ajax({
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
+    url: urlBase + "routes/selects/getVehiculo", //url a donde hacemos la peticion
+    type: "GET",
+    beforeSend: function () {
+      // $(".overlayCargue").fadeIn("slow");
+    },
+    success: function (result) {
+      var estado = result.status;
+      switch (estado) {
+        case "0":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error en el servidor</strong>",
+            html: "<h5>Se ha presentado un error al intentar insertar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        case "1":
+          var html = "";
+
+          for (let i = 0; i < result.data.length; i++) {
+            html += result.data[i].html;
+          }
+
+          $("#placa").html(html);
+          break;
+
+        case "2":
+          Swal.fire({
+            icon: "error",
+            title: "<strong>Error de Validacón</strong>",
+            html: "<h5>Se ha presentado un error al intentar validar la información.</h5>",
+            showCloseButton: true,
+            showConfirmButton: false,
+            cancelButtonText: "Cerrar",
+            cancelButtonColor: "#dc3545",
+            showCancelButton: true,
+            backdrop: true,
+          });
+          break;
+
+        default:
+          break;
+      }
+    },
+    complete: function () {
+      // setTimeout(() => {
+      //   $(".overlayCargue").fadeOut("slow");
+      // }, 1000);
+    },
+    error: function (xhr) {
+      console.log(xhr);
+      Swal.fire({
+        icon: "error",
+        title: "<strong>Error!</strong>",
+        html: "<h5>Se ha presentado un error, por favor informar al area de Sistemas.</h5>",
+        showCloseButton: true,
+        showConfirmButton: false,
+        cancelButtonText: "Cerrar",
+        cancelButtonColor: "#dc3545",
+        showCancelButton: true,
+        backdrop: true,
+      });
+    },
+  });
+  $.ajax({
+    dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
     url: urlBase + "routes/selects/getContrato", //url a donde hacemos la peticion
     type: "GET",
     beforeSend: function () {
@@ -135,8 +214,6 @@ function selects() {
         case "1":
           var html = "";
 
-          html +=
-            '<option value="" disabled selected hidden>Seleccione el Contrato para esta ruta</option>';
           for (let i = 0; i < result.data.length; i++) {
             html += result.data[i].html;
           }
@@ -192,7 +269,6 @@ function registrar(form) {
     if (edit == true) {
       peticion = urlBase + "routes/alquilerProovedores/update";
     } else if (edit == false) {
-      $("#archivoBase64").html("");
       peticion = urlBase + "routes/alquilerProovedores/create";
     } else if (edit == null) {
       return false;
@@ -236,8 +312,8 @@ function registrar(form) {
             if (edit == false) {
               Swal.fire({
                 icon: "success",
-                title: "<strong>Contrato Creado</strong>",
-                html: "<h5>El contrato se ha registrado exitosamente</h5>",
+                title: "<strong>Alquiler para Proovedor Creado</strong>",
+                html: "<h5>El alquiler para proovedor se ha registrado exitosamente</h5>",
                 showCloseButton: false,
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#64a19d",
@@ -246,8 +322,8 @@ function registrar(form) {
             } else {
               Swal.fire({
                 icon: "success",
-                title: "<strong>Contrato Editado</strong>",
-                html: "<h5>El contrato se ha editado exitosamente</h5>",
+                title: "<strong>Alquiler para Proovedor Editado</strong>",
+                html: "<h5>El alquiler para proovedor se ha editado exitosamente</h5>",
                 showCloseButton: false,
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#64a19d",
@@ -299,7 +375,7 @@ function editarRegistro(id) {
   $("#alertaForm").html("");
   edit = true;
   $.ajax({
-    data: { idRuta: id }, //datos a enviar a la url
+    data: { idMaquinaria: id }, //datos a enviar a la url
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
     url: urlBase + "routes/alquilerProovedores/getData", //url a donde hacemos la peticion
     type: "POST",
@@ -325,24 +401,19 @@ function editarRegistro(id) {
           break;
 
         case "1":
-          $("#nombre").val(result.data.nombre);
-          $("#origen").val(result.data.origen);
-          $("#destino").val(result.data.destino);
-          $("#kilometraje").val(result.data.kilometraje);
-          $("#tarifa").val(result.data.tarifa);
-          $("#contrato").val(result.data.contrato);
+          $("#placa").val(result.data[0].idMaquinaria);
+          $("#contrato").val(result.data[0].idContrato);
+          $("#standby").val(result.data[0].standby);
+          $("#horaTarifa").val(result.data[0].horaTarifa);
 
           html +=
-            '<input type="hidden" id="idRuta" name="idRuta" value="' +
-            result.data.id +
-            '">' +
-            '<input type="hidden" id="idRuC" name="idRuC" value="' +
-            result.data.idRuC +
+            '<input type="hidden" id="idMaquinaria" name="idMaquinaria" value="' +
+            result.data[0].idMaquinaria +
             '">';
 
           $("#inputsEditar").html(html);
 
-          $("#btnRegistro").text("Editar Contrato");
+          $("#btnRegistro").text("Editar Alquiler Proovedor");
           $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
           $("#btnRegistro").removeClass("btn btn-info");
           $("#btnRegistro").addClass("btn btn-success");
@@ -395,7 +466,7 @@ function editarRegistro(id) {
 function statusRegistro(id, status) {
   $.ajax({
     data: {
-      idRuta: id,
+      idAlquiler: id,
       status: status,
     },
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
@@ -427,7 +498,7 @@ function statusRegistro(id, status) {
 
         case "1":
           Command: toastr["success"](
-            "Estado del Contrato cambiado exitosamente.",
+            "Estado del alquiler para proovedores cambiado exitosamente.",
             "Estado Cambiado"
           );
 
@@ -498,15 +569,15 @@ function eliminarRegistro(id) {
   Swal.fire({
     icon: "warning",
     title: "Que deseas hacer?",
-    text: "Se eliminara el Contrato del sistema!",
+    text: "Se eliminara el Alquiler para Proovedor del sistema!",
     type: "warning",
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Eliminar Contrato",
+    confirmButtonText: "Eliminar Alquiler para Proovedor",
     preConfirm: function () {
       $.ajax({
-        data: { idRuta: id },
+        data: { idAlquiler: id },
         dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
         url: urlBase + "routes/alquilerProovedores/delete", //url a donde hacemos la peticion
         type: "POST",
@@ -536,8 +607,8 @@ function eliminarRegistro(id) {
 
             case "1":
               Command: toastr["success"](
-                "El contrato se ha eliminado satisfactoriamente.",
-                "Contrato Eliminado"
+                "El alquiler para proovedor se ha eliminado satisfactoriamente.",
+                "Alquiler para Proovedor Eliminado"
               );
 
               toastr.options = {
@@ -608,7 +679,7 @@ function eliminarRegistro(id) {
 function showModalRegistro() {
   reset();
   $("#alertaForm").html("");
-  $("#btnRegistro").text("Registrar Contrato");
+  $("#btnRegistro").text("Registrar Alquiler");
   $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
   $("#ModalRegistro").modal({
     backdrop: "static",

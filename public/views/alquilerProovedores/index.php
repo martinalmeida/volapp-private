@@ -41,7 +41,6 @@ $view->initializationView();
                                 <th>Titulo del Contrato</th>
                                 <th>Stand-by</th>
                                 <th>Tarifa por Hora</th>
-                                <th>Usuario Modifico</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
                             </tr>

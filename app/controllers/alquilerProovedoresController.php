@@ -41,18 +41,16 @@ class AlquilerProovedoresController
         $alquiler = new AlquilerProovedores($db);
 
         // --Seteo de valores existentes en el POST--
-        $alquiler->nombre = isset($_POST['nombre']) ? strtoupper(trim($_POST['nombre'])) : NULL;
-        $alquiler->origen = isset($_POST['origen']) ? strtoupper(trim($_POST['origen'])) : NULL;
-        $alquiler->destino = isset($_POST['destino']) ? strtoupper(trim($_POST['destino'])) : NULL;
+        $alquiler->placa = isset($_POST['placa']) ? strtoupper(trim($_POST['placa'])) : NULL;
         $alquiler->contrato = isset($_POST['contrato']) ? strtoupper(trim($_POST['contrato'])) : NULL;
-        $alquiler->kilometraje = isset($_POST['kilometraje']) ? strtoupper(trim($_POST['kilometraje'])) : NULL;
-        $alquiler->tarifa = isset($_POST['tarifa']) ? strtoupper(trim($_POST['tarifa'])) : NULL;
+        $alquiler->standby = isset($_POST['standby']) ? strtoupper(trim($_POST['standby'])) : NULL;
+        $alquiler->horaTarifa = isset($_POST['horaTarifa']) ? strtoupper(trim($_POST['horaTarifa'])) : NULL;
 
         if (
-            Validar::patronalfanumerico1($alquiler->nombre) && Validar::patronalfanumerico1($alquiler->origen) && Validar::patronalfanumerico1($alquiler->destino) &&
-            Validar::numeros($alquiler->contrato) && Validar::float($alquiler->kilometraje, '.') && Validar::float($alquiler->tarifa, '.')
+            Validar::numeros($alquiler->placa) && Validar::numeros($alquiler->contrato) &&
+            Validar::float($alquiler->standby, '.') && Validar::float($alquiler->horaTarifa, '.')
         ) {
-            $alquiler->createRuta();
+            $alquiler->createAlquiler();
         } else {
             echo json_encode(array('status' => '2', 'data' => NULL));
         }
@@ -74,7 +72,7 @@ class AlquilerProovedoresController
         $alquiler->columnSortOrder = htmlspecialchars($_POST['order'][0]['dir']);
         $alquiler->searchValue = htmlspecialchars($_POST['search']['value']);
 
-        $alquiler->readAllDaTableRutas();
+        $alquiler->readAllDaTableAlquiler();
     }
 
     public function status(): void
@@ -86,11 +84,11 @@ class AlquilerProovedoresController
         $alquiler = new AlquilerProovedores($db);
 
         // --Seteo de valores existentes en el POST--
-        $alquiler->id = isset($_POST['idRuta']) ? strtoupper(trim($_POST['idRuta'])) : NULL;
+        $alquiler->id = isset($_POST['idAlquiler']) ? strtoupper(trim($_POST['idAlquiler'])) : NULL;
         $alquiler->status = isset($_POST['status']) ? strtoupper(trim($_POST['status'])) : NULL;
 
         if (Validar::numeros($alquiler->id) && Validar::numeros($alquiler->status)) {
-            $alquiler->statusRuta();
+            $alquiler->statusAlquiler();
         } else {
             echo json_encode(array('status' => '2', 'data' => NULL));
         }
@@ -105,11 +103,11 @@ class AlquilerProovedoresController
         $alquiler = new AlquilerProovedores($db);
 
         // --Seteo de valores existentes en el POST--
-        $alquiler->id = isset($_POST['idRuta']) ? strtoupper(trim($_POST['idRuta'])) : NULL;
+        $alquiler->id = isset($_POST['idMaquinaria']) ? strtoupper(trim($_POST['idMaquinaria'])) : NULL;
 
         // --Validacion de datos a enviar al modelo--
         if (Validar::numeros($alquiler->id)) {
-            $alquiler->dataRuta();
+            $alquiler->dataAlquiler();
         } else {
             echo json_encode(array('status' => '2', 'data' => NULL));
         }
@@ -124,22 +122,18 @@ class AlquilerProovedoresController
         $alquiler = new AlquilerProovedores($db);
 
         // --Seteo de valores existentes en el POST--
-        $alquiler->id = isset($_POST['idRuta']) ? strtoupper(trim($_POST['idRuta'])) : NULL;
-        $alquiler->idRuC = isset($_POST['idRuC']) ? strtoupper(trim($_POST['idRuC'])) : NULL;
-        $alquiler->nombre = isset($_POST['nombre']) ? strtoupper(trim($_POST['nombre'])) : NULL;
-        $alquiler->origen = isset($_POST['origen']) ? strtoupper(trim($_POST['origen'])) : NULL;
-        $alquiler->destino = isset($_POST['destino']) ? strtoupper(trim($_POST['destino'])) : NULL;
+        $alquiler->id = isset($_POST['idMaquinaria']) ? strtoupper(trim($_POST['idMaquinaria'])) : NULL;
+        $alquiler->placa = isset($_POST['placa']) ? strtoupper(trim($_POST['placa'])) : NULL;
         $alquiler->contrato = isset($_POST['contrato']) ? strtoupper(trim($_POST['contrato'])) : NULL;
-        $alquiler->kilometraje = isset($_POST['kilometraje']) ? strtoupper(trim($_POST['kilometraje'])) : NULL;
-        $alquiler->tarifa = isset($_POST['tarifa']) ? strtoupper(trim($_POST['tarifa'])) : NULL;
+        $alquiler->standby = isset($_POST['standby']) ? strtoupper(trim($_POST['standby'])) : NULL;
+        $alquiler->horaTarifa = isset($_POST['horaTarifa']) ? strtoupper(trim($_POST['horaTarifa'])) : NULL;
 
 
         if (
-            Validar::patronalfanumerico1($alquiler->nombre) && Validar::patronalfanumerico1($alquiler->origen) && Validar::patronalfanumerico1($alquiler->destino) &&
-            Validar::numeros($alquiler->contrato) && Validar::float($alquiler->kilometraje, '.') && Validar::float($alquiler->tarifa, '.') && Validar::numeros($alquiler->id) &&
-            Validar::numeros($alquiler->idRuC)
+            Validar::numeros($alquiler->id) && Validar::numeros($alquiler->placa) && Validar::numeros($alquiler->contrato) &&
+            Validar::float($alquiler->standby, '.') && Validar::float($alquiler->horaTarifa, '.')
         ) {
-            $alquiler->updateRuta();
+            $alquiler->updateAlquilar();
         } else {
             echo json_encode(array('status' => '2', 'data' => NULL));
         }
@@ -154,10 +148,10 @@ class AlquilerProovedoresController
         $alquiler = new AlquilerProovedores($db);
 
         // --Seteo de valores existentes en el POST--
-        $alquiler->id = isset($_POST['idRuta']) ? strtoupper(trim($_POST['idRuta'])) : NULL;
+        $alquiler->id = isset($_POST['idAlquiler']) ? strtoupper(trim($_POST['idAlquiler'])) : NULL;
 
         if (Validar::numeros($alquiler->id)) {
-            $alquiler->deleteRuta();
+            $alquiler->deleteAlquiler();
         } else {
             echo json_encode(array('status' => '2', 'data' => NULL));
         }

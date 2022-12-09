@@ -8,23 +8,17 @@ class AlquilerProovedores
 {
     // --Parametros Privados--
     private $conn;
-    private $tableName = "rutas";
-    private $viewTable = "view_rutas";
-    private $tableRutasContratos = "rutas_contratos";
-    private $nit;
-    private $idUser;
+    private $nombreModulo = 'alquilerProovedores';
+    private $tableName = "maquinarias_contratos";
+    private $viewTable = "view_alquiler";
     private $fechaActual;
-    private $idInsert;
 
     // --Parametros Publicos--
     public $id;
-    public $nombre;
-    public $origen;
-    public $destino;
+    public $placa;
     public $contrato;
-    public $idRuC;
-    public $kilometraje;
-    public $tarifa;
+    public $standby;
+    public $horaTarifa;
     public $status;
 
     /* Propiedades de los objetos de Datatables para utilizar (Serverside) 
@@ -49,7 +43,7 @@ class AlquilerProovedores
     {
         $sesion = new Sesion($this->conn);
         $sesion->rol = $_SESSION['rol'];
-        $sesion->tabla = $this->tableName;
+        $sesion->tabla = $this->nombreModulo;
 
         $datos = $sesion->permisoModulo();
 
@@ -65,7 +59,7 @@ class AlquilerProovedores
     {
         $sesion = new Sesion($this->conn);
         $sesion->rol = $_SESSION['rol'];
-        $sesion->tabla = $this->tableName;
+        $sesion->tabla = $this->nombreModulo;
 
         $datos = $sesion->permisoModulo();
 
@@ -89,60 +83,40 @@ class AlquilerProovedores
     }
 
     // -- ⊡ Funcion para crear un material ⊡ --
-    public function createRuta(): void
+    public function createAlquiler(): void
     {
         // --Preparamos la consulta--
-        $query = "INSERT INTO $this->tableName SET nombre=?, origen=?, destino=?, idUsuario=?, nit=? ;";
+        $query = "INSERT INTO $this->tableName SET standby=?, horaTarifa=?, idMaquinaria=?, idContrato=?, fecha_creado=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
-        $this->nombre = htmlspecialchars(strip_tags($this->nombre));
-        $this->origen = htmlspecialchars(strip_tags($this->origen));
-        $this->destino = htmlspecialchars(strip_tags($this->destino));
-        $this->idUser = $_SESSION['id'];
-        $this->nit = $_SESSION['nit'];
+        $this->standby = htmlspecialchars(strip_tags($this->standby));
+        $this->horaTarifa = htmlspecialchars(strip_tags($this->horaTarifa));
+        $this->placa = htmlspecialchars(strip_tags($this->placa));
+        $this->contrato = htmlspecialchars(strip_tags($this->contrato));
+        $this->fechaActual = Utilidades::getFecha();
 
         // --Almacenamos los valores--
-        $stmt->bindParam(1, $this->nombre);
-        $stmt->bindParam(2, $this->origen);
-        $stmt->bindParam(3, $this->destino);
-        $stmt->bindParam(4, $this->idUser);
-        $stmt->bindParam(5, $this->nit);
+        $stmt->bindParam(1, $this->standby);
+        $stmt->bindParam(2, $this->horaTarifa);
+        $stmt->bindParam(3, $this->placa);
+        $stmt->bindParam(4, $this->contrato);
+        $stmt->bindParam(5, $this->fechaActual);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
-            $this->idInsert = $this->conn->lastInsertId();
-            // --Preparamos la consulta--
-            $query = "INSERT INTO $this->tableRutasContratos SET kilometraje=?, tarifa=?, fecha_creado=?, idRuta=?, idContrato =? ;";
-            $stmt = $this->conn->prepare($query);
-
-            // --Escapamos los caracteres--
-            $this->kilometraje = htmlspecialchars(strip_tags($this->kilometraje));
-            $this->tarifa = htmlspecialchars(strip_tags($this->tarifa));
-            $this->fechaActual = Utilidades::getFecha();
-            $this->contrato = htmlspecialchars(strip_tags($this->contrato));
-
-            // --Almacenamos los valores--
-            $stmt->bindParam(1, $this->kilometraje);
-            $stmt->bindParam(2, $this->tarifa);
-            $stmt->bindParam(3, $this->fechaActual);
-            $stmt->bindParam(4, $this->idInsert);
-            $stmt->bindParam(5, $this->contrato);
-
-            if ($stmt->execute()) {
-                echo json_encode(array('status' => '1', 'data' => NULL));
-            }
+            echo json_encode(array('status' => '1', 'data' => NULL));
         } else {
             echo json_encode(array('status' => '0', 'data' => NULL));
         }
     }
 
     // -- ⊡ Funcion para dataTables Serverside ⊡ --
-    public function readAllDaTableRutas(): void
+    public function readAllDaTableAlquiler(): void
     {
         $sesion = new Sesion($this->conn);
         $sesion->rol = $_SESSION['rol'];
-        $sesion->tabla = $this->tableName;
+        $sesion->tabla = $this->nombreModulo;
         $datos = $sesion->permisoModulo();
 
         // --Read value--
@@ -158,17 +132,19 @@ class AlquilerProovedores
         $searchQuery = " ";
         if ($searchValue != '') {
             $searchQuery = " AND (id LIKE :id OR 
-                            nombre LIKE :nombre OR
-                            origen LIKE :origen OR
+                            tipo LIKE :tipo OR
+                            placa LIKE :placa OR
                             titulo LIKE :titulo OR
-                            destino LIKE :destino OR
+                            standby LIKE :standby OR
+                            horaTarifa LIKE :horaTarifa OR
                             status LIKE :status )";
             $searchArray = array(
                 'id' => "%$searchValue%",
-                'nombre' => "%$searchValue%",
-                'origen' => "%$searchValue%",
+                'tipo' => "%$searchValue%",
+                'placa' => "%$searchValue%",
                 'titulo' => "%$searchValue%",
-                'destino' => "%$searchValue%",
+                'standby' => "%$searchValue%",
+                'horaTarifa' => "%$searchValue%",
                 'status' => "%$searchValue%"
             );
         }
@@ -199,7 +175,7 @@ class AlquilerProovedores
 
             $botones = "<div class='btn-group'>";
             if ($datos->u === 1) {
-                $botones .= "<button type='button' class='btn btn-success text-white' data-toggle='tooltip' data-placement='top' title='Editar Material' onclick='editarRegistro(" . $row['id'] . ");'>";
+                $botones .= "<button type='button' class='btn btn-success text-white' data-toggle='tooltip' data-placement='top' title='Editar Material' onclick='editarRegistro(" . $row['idMaquinaria'] . ");'>";
                 $botones .= "<i class='fal fa-edit'></i></button>";
                 $botones .= "<button type='button' class='btn btn-" . $statusColor . " text-white' data-toggle='tooltip' data-placement='top' title='Estado del Material' onclick='statusRegistro(" . $row['id'] . ", " . $row['status'] . ");'>";
                 $botones .= "<i class='fal fa-eye'></i></button>";
@@ -212,12 +188,11 @@ class AlquilerProovedores
 
             $data[] = array(
                 "id" => $row['id'],
-                "nombre" => $row['nombre'],
-                "origen" => $row['origen'],
-                "destino" => $row['destino'],
+                "tipo" => $row['tipo'],
+                "placa" => $row['placa'],
                 "titulo" => $row['titulo'],
-                "kilometraje" => $row['kilometraje'],
-                "tarifa" => $row['tarifa'],
+                "standby" => $row['standby'],
+                "horaTarifa" => $row['horaTarifa'],
                 "status" => $estado,
                 "defaultContent" => "$botones"
             );
@@ -233,7 +208,7 @@ class AlquilerProovedores
     }
 
     // -- ⊡ Funcion para cambiar el estado del rol ⊡ --
-    public function statusRuta(): void
+    public function statusAlquiler(): void
     {
         // --Preparamos la consulta--
         $query = "UPDATE $this->tableName SET status =? WHERE id=?";
@@ -254,10 +229,10 @@ class AlquilerProovedores
     }
 
     // -- ⊡ Funcion para traer datos del rol ⊡ --
-    public function dataRuta(): void
+    public function dataAlquiler(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT r.id, r.nombre, r.origen, r.destino, (rc.id)idRuC, rc.kilometraje, rc.tarifa, rc.idContrato FROM $this->tableName r JOIN $this->tableRutasContratos rc ON r.id = rc.idRuta WHERE r.id=? AND rc.status = 1;";
+        $query = "SELECT * FROM $this->tableName WHERE idMaquinaria=? AND status = 1;";
         $stmt = $this->conn->prepare($query);
 
         // --Almacenamos los valores--
@@ -269,21 +244,8 @@ class AlquilerProovedores
             // --Comprobamos que venga algun dato--
             if ($stmt->rowCount() >= 1) {
 
-                // --Cosulta a Objetos--
-                $data = $stmt->fetch(PDO::FETCH_OBJ);
-
-                $datos = array(
-                    'id' => $data->id,
-                    'nombre' => $data->nombre,
-                    'origen' => $data->origen,
-                    'destino' => $data->destino,
-                    'idRuC' => $data->idRuC,
-                    'kilometraje' => $data->kilometraje,
-                    'tarifa' => $data->tarifa,
-                    'contrato' => $data->idContrato,
-                );
                 // --Retornamos las respuestas--
-                echo json_encode(array('status' => '1', 'data' => $datos));
+                echo json_encode(array('status' => '1', 'data' => $stmt->fetchAll(PDO::FETCH_ASSOC)));
             } else {
                 // --Usuario no encontrado o inactivo--
                 echo json_encode(array('status' => '3', 'data' => NULL));
@@ -295,57 +257,35 @@ class AlquilerProovedores
     }
 
     // -- ⊡ Funcion para actualizar empresa ⊡ --
-    public function updateRuta(): void
+    public function updateAlquilar(): void
     {
         // --Preparamos la consulta--
-        $query = "UPDATE $this->tableName SET nombre=?, origen=?, destino=?, idUsuario=?, nit=? WHERE id=?";
+        $query = "UPDATE $this->tableName SET status=3 WHERE idMaquinaria=?";
         $stmt = $this->conn->prepare($query);
 
-        // --Escapamos los caracteres--
-        $this->nombre = htmlspecialchars(strip_tags($this->nombre));
-        $this->origen = htmlspecialchars(strip_tags($this->origen));
-        $this->destino = htmlspecialchars(strip_tags($this->destino));
-        $this->idUser = $_SESSION['id'];
-        $this->nit = $_SESSION['nit'];
+        $stmt->bindParam(1, $this->id);
 
-        // --Almacenamos los valores--
-        $stmt->bindParam(1, $this->nombre);
-        $stmt->bindParam(2, $this->origen);
-        $stmt->bindParam(3, $this->destino);
-        $stmt->bindParam(4, $this->idUser);
-        $stmt->bindParam(5, $this->nit);
-        $stmt->bindParam(6, $this->id);
-
-        // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
             // --Preparamos la consulta--
-            $query = "UPDATE $this->tableRutasContratos SET status = 2 WHERE id=?";
+            $query = "INSERT INTO $this->tableName SET standby=?, horaTarifa=?, idMaquinaria=?, idContrato=?, fecha_creado=? ;";
             $stmt = $this->conn->prepare($query);
 
+            // --Escapamos los caracteres--
+            $this->standby = htmlspecialchars(strip_tags($this->standby));
+            $this->horaTarifa = htmlspecialchars(strip_tags($this->horaTarifa));
+            $this->placa = htmlspecialchars(strip_tags($this->placa));
+            $this->contrato = htmlspecialchars(strip_tags($this->contrato));
+            $this->fechaActual = Utilidades::getFecha();
+
             // --Almacenamos los valores--
-            $stmt->bindParam(1, $this->idRuC);
+            $stmt->bindParam(1, $this->standby);
+            $stmt->bindParam(2, $this->horaTarifa);
+            $stmt->bindParam(3, $this->placa);
+            $stmt->bindParam(4, $this->contrato);
+            $stmt->bindParam(5, $this->fechaActual);
 
             if ($stmt->execute()) {
-                // --Preparamos la consulta--
-                $query = "INSERT INTO $this->tableRutasContratos SET kilometraje=?, tarifa=?, fecha_creado=?, idRuta=?, idContrato =? ;";
-                $stmt = $this->conn->prepare($query);
-
-                // --Escapamos los caracteres--
-                $this->kilometraje = htmlspecialchars(strip_tags($this->kilometraje));
-                $this->tarifa = htmlspecialchars(strip_tags($this->tarifa));
-                $this->fechaActual = Utilidades::getFecha();
-                $this->contrato = htmlspecialchars(strip_tags($this->contrato));
-
-                // --Almacenamos los valores--
-                $stmt->bindParam(1, $this->kilometraje);
-                $stmt->bindParam(2, $this->tarifa);
-                $stmt->bindParam(3, $this->fechaActual);
-                $stmt->bindParam(4, $this->id);
-                $stmt->bindParam(5, $this->contrato);
-
-                if ($stmt->execute()) {
-                    echo json_encode(array('status' => '1', 'data' => NULL));
-                }
+                echo json_encode(array('status' => '1', 'data' => NULL));
             }
         } else {
             echo json_encode(array('status' => '0', 'data' => NULL));
@@ -353,7 +293,7 @@ class AlquilerProovedores
     }
 
     // -- ⊡ Funcion para eliminar rol ⊡ --
-    public function deleteRuta(): void
+    public function deleteAlquiler(): void
     {
         // --Preparamos la consulta--
         $query = "UPDATE $this->tableName SET status = 3 WHERE id=?";

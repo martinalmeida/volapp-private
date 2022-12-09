@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 include(MODELS . 'modelSesion.php');
 
-class Registro
+class InformesRelacion
 {
     // --Parametros Privados--
     private $conn;
-    private $nombreModulo = "registros";
+    private $nombreModulo = "informes";
 
 
     // --Constructor para la conexion de la BD--

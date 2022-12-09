@@ -319,7 +319,7 @@ class Ruta
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
             // --Preparamos la consulta--
-            $query = "UPDATE $this->tableRutasContratos SET status = 2 WHERE id=?";
+            $query = "UPDATE $this->tableRutasContratos SET status = 3 WHERE id=?";
             $stmt = $this->conn->prepare($query);
 
             // --Almacenamos los valores--
