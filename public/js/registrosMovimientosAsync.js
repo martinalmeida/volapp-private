@@ -66,6 +66,8 @@ $(document).ready(function () {
       { data: "acuerdo" },
       { data: "kilometraje" },
       { data: "tarifa" },
+      { data: "movimientos" },
+      { data: "mts3" },
       { data: "fechaInicio" },
       { data: "fechaFin" },
       { data: "titulo" },
@@ -93,6 +95,10 @@ $(document).ready(function () {
   writePermisos();
   runDatePicker();
   selects();
+  $("#material").select2({
+    placeholder: "Seleccione material transportado",
+    allowClear: true,
+  });
   $("#placa").select2({
     placeholder: "Seleccione la placa o # de registro",
     allowClear: true,
@@ -168,8 +174,6 @@ function selects() {
         case "1":
           var html = "";
 
-          html +=
-            '<option value="" disabled selected hidden>Seleccione material transportado</option>';
           for (let i = 0; i < result.data.length; i++) {
             html += result.data[i].html;
           }
@@ -515,34 +519,40 @@ function editarRegistro(id) {
           break;
 
         case "1":
+          $("#codFicha").val(result.data[0].codFicha);
+          $("#placa").val(result.data[0].idMaquinaria);
+          $("#placa").val(result.data[0].idMaquinaria).trigger("change");
+
           $("#acuerdo").prop("disabled", false);
           idSubSelect = result.data[0].idMaquinaria;
           subSelects(idSubSelect);
 
           setTimeout(function () {
-            $("#codFicha").val(result.data[0].codFicha);
-            $("#placa").val(result.data[0].idMaquinaria);
             $("#acuerdo").val(result.data[0].idMovimeinto);
-            $("#material").val(result.data[0].idMaterial);
-            $("#fechaInicial").val(result.data[0].fechaInicio);
-            $("#fechaFinal").val(result.data[0].fechaFin);
-            $("#observacion").val(result.data[0].observacion);
+            $("#acuerdo").val(result.data[0].idMovimeinto).trigger("change");
+          }, 300);
 
-            html +=
-              '<input type="hidden" id="idRegistro" name="idRegistro" value="' +
-              result.data[0].id +
-              '">';
-            $("#inputsEditar").html(html);
+          $("#material").val(result.data[0].idMaterial);
+          $("#movimientos").val(result.data[0].movimientos);
+          $("#mts3").val(result.data[0].mts3);
+          $("#fechaInicial").val(result.data[0].fechaInicio);
+          $("#fechaFinal").val(result.data[0].fechaFin);
+          $("#observacion").val(result.data[0].observacion);
 
-            $("#btnRegistro").text("Editar Registro");
-            $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
-            $("#btnRegistro").removeClass("btn btn-info");
-            $("#btnRegistro").addClass("btn btn-success");
-            $("#ModalRegistro").modal({
-              backdrop: "static",
-              keyboard: false,
-            });
-          }, 200);
+          html +=
+            '<input type="hidden" id="idRegistro" name="idRegistro" value="' +
+            result.data[0].id +
+            '">';
+
+          $("#inputsEditar").html(html);
+          $("#btnRegistro").text("Editar Registro");
+          $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
+          $("#btnRegistro").removeClass("btn btn-info");
+          $("#btnRegistro").addClass("btn btn-success");
+          $("#ModalRegistro").modal({
+            backdrop: "static",
+            keyboard: false,
+          });
           break;
 
         case "2":

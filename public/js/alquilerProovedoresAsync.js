@@ -373,6 +373,7 @@ function registrar(form) {
 
 function editarRegistro(id) {
   $("#alertaForm").html("");
+  $("#inputsEditar").html("");
   edit = true;
   $.ajax({
     data: { idMaquinaria: id }, //datos a enviar a la url

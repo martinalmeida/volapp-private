@@ -50,7 +50,7 @@ class RegistrosAlquilerController
         $registros->fechaFin = isset($_POST['fechaFinal']) ? strtoupper(trim($_POST['fechaFinal'])) : NULL;
 
         if (
-            Validar::numeros($registros->horometroInicial) && Validar::numeros($registros->horometroFin) &&
+            Validar::float($registros->horometroInicial, '.') && Validar::float($registros->horometroFin, '.') &&
             Validar::numeros($registros->placa) && Validar::numeros($registros->acuerdo) &&
             Validar::fecha($registros->fechaInicio, '/', 'mda') &&  Validar::fecha($registros->fechaFin, '/', 'mda')
         ) {
@@ -136,7 +136,7 @@ class RegistrosAlquilerController
         $registros->fechaFin = isset($_POST['fechaFinal']) ? strtoupper(trim($_POST['fechaFinal'])) : NULL;
 
         if (
-            Validar::numeros($registros->id) && Validar::numeros($registros->horometroInicial) && Validar::numeros($registros->horometroFin) &&
+            Validar::numeros($registros->id) && Validar::float($registros->horometroInicial, '.') && Validar::float($registros->horometroFin, '.') &&
             Validar::numeros($registros->placa) && Validar::numeros($registros->acuerdo) && Validar::fecha($registros->fechaInicio, '/', 'mda') &&
             Validar::fecha($registros->fechaFin, '/', 'mda')
         ) {

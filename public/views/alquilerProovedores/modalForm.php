@@ -5,7 +5,7 @@
                 <h4 class="modal-title">
                     Agregar Alquiler para Proovedor
                     <small class="m-0 text-muted">
-                        En el modulo alquiler para proovedores se parametrizan los valores para el dueño unico de la maquinaria.
+                        En el modulo alquiler se parametrizan los valores para el dueño unico de la maquinaria.
                     </small>
                 </h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">

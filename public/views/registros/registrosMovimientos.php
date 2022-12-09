@@ -41,6 +41,8 @@ $view->initializationView();
                                 <th>Acuerdo de Flete o Ruta</th>
                                 <th>kilometraje</th>
                                 <th>Tarifa</th>
+                                <th>Nro Movimientos</th>
+                                <th>Metros Cubicos</th>
                                 <th>Fecha de Inicio</th>
                                 <th>Fecha Final</th>
                                 <th>Titulo del Contrato</th>

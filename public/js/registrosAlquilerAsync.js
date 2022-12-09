@@ -440,34 +440,38 @@ function editarRegistro(id) {
           break;
 
         case "1":
+          $("#codFicha").val(result.data[0].codFicha);
+          $("#horometroInicial").val(result.data[0].horometroInicial);
+          $("#horometroFin").val(result.data[0].horometroFin);
+          $("#placa").val(result.data[0].idMaquinaria);
+          $("#placa").val(result.data[0].idMaquinaria).trigger("change");
+
           $("#acuerdo").prop("disabled", false);
           idSubSelect = result.data[0].idMaquinaria;
           subSelects(idSubSelect);
 
           setTimeout(function () {
-            $("#codFicha").val(result.data[0].codFicha);
-            $("#horometroInicial").val(result.data[0].horometroInicial);
-            $("#horometroFin").val(result.data[0].horometroFin);
-            $("#placa").val(result.data[0].idMaquinaria);
             $("#acuerdo").val(result.data[0].idAlquiler);
-            $("#fechaInicial").val(result.data[0].fechaInicio);
-            $("#fechaFinal").val(result.data[0].fechaFin);
+            $("#acuerdo").val(result.data[0].idAlquiler).trigger("change");
+          }, 300);
 
-            html +=
-              '<input type="hidden" id="idRegistro" name="idRegistro" value="' +
-              result.data[0].id +
-              '">';
-            $("#inputsEditar").html(html);
+          $("#fechaInicial").val(result.data[0].fechaInicio);
+          $("#fechaFinal").val(result.data[0].fechaFin);
 
-            $("#btnRegistro").text("Editar Registro");
-            $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
-            $("#btnRegistro").removeClass("btn btn-info");
-            $("#btnRegistro").addClass("btn btn-success");
-            $("#ModalRegistro").modal({
-              backdrop: "static",
-              keyboard: false,
-            });
-          }, 200);
+          html +=
+            '<input type="hidden" id="idRegistro" name="idRegistro" value="' +
+            result.data[0].id +
+            '">';
+
+          $("#inputsEditar").html(html);
+          $("#btnRegistro").text("Editar Registro");
+          $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
+          $("#btnRegistro").removeClass("btn btn-info");
+          $("#btnRegistro").addClass("btn btn-success");
+          $("#ModalRegistro").modal({
+            backdrop: "static",
+            keyboard: false,
+          });
           break;
 
         case "2":

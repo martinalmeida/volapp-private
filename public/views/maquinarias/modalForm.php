@@ -23,7 +23,7 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="placa">Placa o # de Registro: </label>
-                            <input type="text" onKeyPress="if(this.value.length==7)return false;" class="form-control" id="placa" name="placa" placeholder="Placa o # de Registro" required>
+                            <input type="text" onKeyPress="if(this.value.length==20)return false;" class="form-control" id="placa" name="placa" placeholder="Placa o # de Registro" required>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label" for="marca">Marca: </label>
@@ -62,7 +62,7 @@
                             <input type="text" onKeyPress="if(this.value.length==30)return false;" class="form-control" id="rodaje" name="rodaje" placeholder="Rodaje de maquinaria" required>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <label class="form-label" for="rut">RUT: </label>
+                            <label class="form-label" for="rut">RUN: </label>
                             <input type="text" onKeyPress="if(this.value.length==30)return false;" class="form-control" id="rut" name="rut" placeholder="RUT de maquinaria" required>
                         </div>
                         <div class="col-md-3 mb-3">

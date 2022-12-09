@@ -257,7 +257,7 @@ class Ruta
     public function dataRuta(): void
     {
         // --Preparamos la consulta--
-        $query = "SELECT r.id, r.nombre, r.origen, r.destino, (rc.id)idRuC, rc.kilometraje, rc.tarifa, rc.idContrato FROM $this->tableName r JOIN $this->tableRutasContratos rc ON r.id = rc.idRuta WHERE r.id=? AND rc.status = 1;";
+        $query = "SELECT r.id, r.nombre, r.origen, r.destino, (rc.id)idRuC, rc.kilometraje, rc.tarifa, (rc.idContrato)contrato FROM $this->tableName r JOIN $this->tableRutasContratos rc ON r.id = rc.idRuta WHERE r.id=? AND rc.status = 1;";
         $stmt = $this->conn->prepare($query);
 
         // --Almacenamos los valores--
@@ -269,21 +269,8 @@ class Ruta
             // --Comprobamos que venga algun dato--
             if ($stmt->rowCount() >= 1) {
 
-                // --Cosulta a Objetos--
-                $data = $stmt->fetch(PDO::FETCH_OBJ);
-
-                $datos = array(
-                    'id' => $data->id,
-                    'nombre' => $data->nombre,
-                    'origen' => $data->origen,
-                    'destino' => $data->destino,
-                    'idRuC' => $data->idRuC,
-                    'kilometraje' => $data->kilometraje,
-                    'tarifa' => $data->tarifa,
-                    'contrato' => $data->idContrato,
-                );
                 // --Retornamos las respuestas--
-                echo json_encode(array('status' => '1', 'data' => $datos));
+                echo json_encode(array('status' => '1', 'data' => $stmt->fetchAll(PDO::FETCH_ASSOC)));
             } else {
                 // --Usuario no encontrado o inactivo--
                 echo json_encode(array('status' => '3', 'data' => NULL));

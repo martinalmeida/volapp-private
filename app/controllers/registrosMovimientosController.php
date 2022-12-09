@@ -45,13 +45,16 @@ class RegistrosMovimientosController
         $registros->placa = isset($_POST['placa']) ? strtoupper(trim($_POST['placa'])) : NULL;
         $registros->acuerdo = isset($_POST['acuerdo']) ? strtoupper(trim($_POST['acuerdo'])) : NULL;
         $registros->material = isset($_POST['material']) ? strtoupper(trim($_POST['material'])) : NULL;
+        $registros->movimientos = isset($_POST['movimientos']) ? strtoupper(trim($_POST['movimientos'])) : NULL;
+        $registros->mts3 = isset($_POST['mts3']) ? strtoupper(trim($_POST['mts3'])) : NULL;
         $registros->fechaInicio = isset($_POST['fechaInicial']) ? strtoupper(trim($_POST['fechaInicial'])) : NULL;
         $registros->fechaFin = isset($_POST['fechaFinal']) ? strtoupper(trim($_POST['fechaFinal'])) : NULL;
         $registros->observacion = isset($_POST['observacion']) ? strtoupper(trim($_POST['observacion'])) : NULL;
 
         if (
             Validar::numeros($registros->placa) && Validar::numeros($registros->acuerdo) && Validar::numeros($registros->material) &&
-            Validar::fecha($registros->fechaInicio, '/', 'mda') &&  Validar::fecha($registros->fechaFin, '/', 'mda')
+            Validar::numeros($registros->movimientos) && Validar::float($registros->mts3, '.') && Validar::fecha($registros->fechaInicio, '/', 'mda') &&
+            Validar::fecha($registros->fechaFin, '/', 'mda')
         ) {
             $registros->createRegistro();
         } else {
@@ -130,13 +133,16 @@ class RegistrosMovimientosController
         $registros->placa = isset($_POST['placa']) ? strtoupper(trim($_POST['placa'])) : NULL;
         $registros->acuerdo = isset($_POST['acuerdo']) ? strtoupper(trim($_POST['acuerdo'])) : NULL;
         $registros->material = isset($_POST['material']) ? strtoupper(trim($_POST['material'])) : NULL;
+        $registros->movimientos = isset($_POST['movimientos']) ? strtoupper(trim($_POST['movimientos'])) : NULL;
+        $registros->mts3 = isset($_POST['mts3']) ? strtoupper(trim($_POST['mts3'])) : NULL;
         $registros->fechaInicio = isset($_POST['fechaInicial']) ? strtoupper(trim($_POST['fechaInicial'])) : NULL;
         $registros->fechaFin = isset($_POST['fechaFinal']) ? strtoupper(trim($_POST['fechaFinal'])) : NULL;
         $registros->observacion = isset($_POST['observacion']) ? strtoupper(trim($_POST['observacion'])) : NULL;
 
         if (
             Validar::numeros($registros->placa) && Validar::numeros($registros->acuerdo) && Validar::numeros($registros->material) &&
-            Validar::fecha($registros->fechaInicio, '/', 'mda') &&  Validar::fecha($registros->fechaFin, '/', 'mda') && Validar::numeros($registros->id)
+            Validar::numeros($registros->movimientos) && Validar::float($registros->mts3, '.') && Validar::fecha($registros->fechaInicio, '/', 'mda') &&
+            Validar::fecha($registros->fechaFin, '/', 'mda') && Validar::numeros($registros->id)
         ) {
             $registros->updateRegistro();
         } else {

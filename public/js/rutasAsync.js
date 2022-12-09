@@ -69,6 +69,10 @@ $(document).ready(function () {
   readPermisos();
   writePermisos();
   selects();
+  $("#contrato").select2({
+    placeholder: "Seleccione el Contrato para esta ruta",
+    allowClear: true,
+  });
 });
 
 function readPermisos() {
@@ -135,8 +139,6 @@ function selects() {
         case "1":
           var html = "";
 
-          html +=
-            '<option value="" disabled selected hidden>Seleccione el Contrato para esta ruta</option>';
           for (let i = 0; i < result.data.length; i++) {
             html += result.data[i].html;
           }
@@ -192,6 +194,7 @@ function registrar(form) {
     if (edit == true) {
       peticion = urlBase + "routes/rutas/update";
     } else if (edit == false) {
+      $("#inputsEditar").html("");
       peticion = urlBase + "routes/rutas/create";
     } else if (edit == null) {
       return false;
@@ -295,6 +298,7 @@ function registrar(form) {
 }
 
 function editarRegistro(id) {
+  $("#inputsEditar").html("");
   $("#alertaForm").html("");
   edit = true;
   $.ajax({
@@ -324,23 +328,23 @@ function editarRegistro(id) {
           break;
 
         case "1":
-          $("#nombre").val(result.data.nombre);
-          $("#origen").val(result.data.origen);
-          $("#destino").val(result.data.destino);
-          $("#kilometraje").val(result.data.kilometraje);
-          $("#tarifa").val(result.data.tarifa);
-          $("#contrato").val(result.data.contrato);
+          $("#nombre").val(result.data[0].nombre);
+          $("#origen").val(result.data[0].origen);
+          $("#destino").val(result.data[0].destino);
+          $("#kilometraje").val(result.data[0].kilometraje);
+          $("#tarifa").val(result.data[0].tarifa);
+          $("#contrato").val(result.data[0].contrato);
+          $("#contrato").val(result.data[0].contrato).trigger("change");
 
           html +=
             '<input type="hidden" id="idRuta" name="idRuta" value="' +
-            result.data.id +
+            result.data[0].id +
             '">' +
             '<input type="hidden" id="idRuC" name="idRuC" value="' +
-            result.data.idRuC +
+            result.data[0].idRuC +
             '">';
 
           $("#inputsEditar").html(html);
-
           $("#btnRegistro").text("Editar Contrato");
           $("#btnRegistro").attr("onclick", "registrar('frmRegistro');");
           $("#btnRegistro").removeClass("btn btn-info");

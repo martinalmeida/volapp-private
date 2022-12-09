@@ -26,6 +26,8 @@ class RegistrosMovimientos
     public $acuerdo;
     public $material;
     public $codFicha;
+    public $movimientos;
+    public $mts3;
     public $fechaInicio;
     public $fechaFin;
     public $admon;
@@ -102,7 +104,7 @@ class RegistrosMovimientos
     public function createRegistro(): void
     {
         // --Preparamos la consulta--
-        $query = "INSERT INTO $this->tableName SET idMaquinaria=?, idMovimeinto=?, idMaterial=?, codFicha=?, fechaInicio=?, fechaFin=?, observacion=?, datecreated=?, idUsuario=?, nit=? ;";
+        $query = "INSERT INTO $this->tableName SET idMaquinaria=?, idMovimeinto=?, idMaterial=?, codFicha=?, movimientos=?, mts3=?, fechaInicio=?, fechaFin=?, observacion=?, datecreated=?, idUsuario=?, nit=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
@@ -110,6 +112,8 @@ class RegistrosMovimientos
         $this->acuerdo = htmlspecialchars(strip_tags($this->acuerdo));
         $this->material = htmlspecialchars(strip_tags($this->material));
         $this->codFicha = htmlspecialchars(strip_tags($this->codFicha));
+        $this->movimientos = htmlspecialchars(strip_tags($this->movimientos));
+        $this->mts3 = htmlspecialchars(strip_tags($this->mts3));
         $this->fechaInicio = htmlspecialchars(strip_tags($this->fechaInicio));
         $this->fechaFin = htmlspecialchars(strip_tags($this->fechaFin));
         $this->observacion = htmlspecialchars(strip_tags($this->observacion));
@@ -122,12 +126,14 @@ class RegistrosMovimientos
         $stmt->bindParam(2, $this->acuerdo);
         $stmt->bindParam(3, $this->material);
         $stmt->bindParam(4, $this->codFicha);
-        $stmt->bindParam(5, $this->fechaInicio);
-        $stmt->bindParam(6, $this->fechaFin);
-        $stmt->bindParam(7, $this->observacion);
-        $stmt->bindParam(8, $this->fechaActual);
-        $stmt->bindParam(9, $this->idUser);
-        $stmt->bindParam(10, $this->nit);
+        $stmt->bindParam(5, $this->movimientos);
+        $stmt->bindParam(6, $this->mts3);
+        $stmt->bindParam(7, $this->fechaInicio);
+        $stmt->bindParam(8, $this->fechaFin);
+        $stmt->bindParam(9, $this->observacion);
+        $stmt->bindParam(10, $this->fechaActual);
+        $stmt->bindParam(11, $this->idUser);
+        $stmt->bindParam(12, $this->nit);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
@@ -163,6 +169,8 @@ class RegistrosMovimientos
                             r.origen LIKE :origen OR
                             mo.kilometraje LIKE :kilometraje OR
                             mo.tarifa LIKE :tarifa OR
+                            mo.movimientos LIKE :movimientos OR
+                            mo.mts3 LIKE :mts3 OR
                             rm.fechaInicio LIKE :fechaInicio OR
                             rm.fechaFin LIKE :fechaFin OR
                             c.titulo LIKE :titulo OR
@@ -176,6 +184,8 @@ class RegistrosMovimientos
                 'origen' => "%$searchValue%",
                 'kilometraje' => "%$searchValue%",
                 'tarifa' => "%$searchValue%",
+                'movimientos' => "%$searchValue%",
+                'mts3' => "%$searchValue%",
                 'fechaInicio' => "%$searchValue%",
                 'fechaFin' => "%$searchValue%",
                 'titulo' => "%$searchValue%",
@@ -208,7 +218,7 @@ class RegistrosMovimientos
         $totalRecordwithFilter = $records['allcount'];
         // --Fetch records--
         $stmt = $this->conn->prepare("SELECT 
-                                      rm.id, rm.codFicha, m.placa, concat(r.origen, ' - ', r.destino )acuerdo, mo.kilometraje, mo.tarifa, rm.fechaInicio, rm.fechaFin, c.titulo, rm.observacion, u.nombres, rm.status 
+                                      rm.id, rm.codFicha, m.placa, concat(r.origen, ' - ', r.destino )acuerdo, mo.kilometraje, mo.tarifa, rm.movimientos, rm.mts3, rm.fechaInicio, rm.fechaFin, c.titulo, rm.observacion, u.nombres, rm.status 
                                       FROM $this->tableName rm 
                                       JOIN $this->tableMaquinaria m ON rm.idMaquinaria = m.id 
                                       JOIN $this->tableMovimientos mo ON rm.idMovimeinto = mo.id 
@@ -253,6 +263,8 @@ class RegistrosMovimientos
                 "acuerdo" => $row['acuerdo'],
                 "kilometraje" => $row['kilometraje'],
                 "tarifa" => $row['tarifa'],
+                "movimientos" => $row['movimientos'],
+                "mts3" => $row['mts3'],
                 "fechaInicio" => $row['fechaInicio'],
                 "fechaFin" => $row['fechaFin'],
                 "titulo" => $row['titulo'],
@@ -325,7 +337,7 @@ class RegistrosMovimientos
     public function updateRegistro(): void
     {
         // --Preparamos la consulta--
-        $query = "UPDATE $this->tableName SET idMaquinaria=?, idMovimeinto=?, idMaterial=?, codFicha=?, fechaInicio=?, fechaFin=?, observacion=?, datecreated=?, idUsuario=?, nit=? WHERE id=? ;";
+        $query = "UPDATE $this->tableName SET idMaquinaria=?, idMovimeinto=?, idMaterial=?, codFicha=?, movimientos=?, mts3=?, fechaInicio=?, fechaFin=?, observacion=?, datecreated=?, idUsuario=?, nit=? WHERE id=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
@@ -333,6 +345,8 @@ class RegistrosMovimientos
         $this->acuerdo = htmlspecialchars(strip_tags($this->acuerdo));
         $this->material = htmlspecialchars(strip_tags($this->material));
         $this->codFicha = htmlspecialchars(strip_tags($this->codFicha));
+        $this->movimientos = htmlspecialchars(strip_tags($this->movimientos));
+        $this->mts3 = htmlspecialchars(strip_tags($this->mts3));
         $this->fechaInicio = htmlspecialchars(strip_tags($this->fechaInicio));
         $this->fechaFin = htmlspecialchars(strip_tags($this->fechaFin));
         $this->observacion = htmlspecialchars(strip_tags($this->observacion));
@@ -345,13 +359,15 @@ class RegistrosMovimientos
         $stmt->bindParam(2, $this->acuerdo);
         $stmt->bindParam(3, $this->material);
         $stmt->bindParam(4, $this->codFicha);
-        $stmt->bindParam(5, $this->fechaInicio);
-        $stmt->bindParam(6, $this->fechaFin);
-        $stmt->bindParam(7, $this->observacion);
-        $stmt->bindParam(8, $this->fechaActual);
-        $stmt->bindParam(9, $this->idUser);
-        $stmt->bindParam(10, $this->nit);
-        $stmt->bindParam(11, $this->id);
+        $stmt->bindParam(5, $this->movimientos);
+        $stmt->bindParam(6, $this->mts3);
+        $stmt->bindParam(7, $this->fechaInicio);
+        $stmt->bindParam(8, $this->fechaFin);
+        $stmt->bindParam(9, $this->observacion);
+        $stmt->bindParam(10, $this->fechaActual);
+        $stmt->bindParam(11, $this->idUser);
+        $stmt->bindParam(12, $this->nit);
+        $stmt->bindParam(13, $this->id);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
