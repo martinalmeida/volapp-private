@@ -62,8 +62,8 @@
                             <input type="text" onKeyPress="if(this.value.length==30)return false;" class="form-control" id="rodaje" name="rodaje" placeholder="Rodaje de maquinaria" required>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <label class="form-label" for="rut">RUN: </label>
-                            <input type="text" onKeyPress="if(this.value.length==30)return false;" class="form-control" id="rut" name="rut" placeholder="RUT de maquinaria" required>
+                            <label class="form-label" for="run">RUN: </label>
+                            <input type="text" onKeyPress="if(this.value.length==30)return false;" class="form-control" id="run" name="run" placeholder="Run de maquinaria" required>
                         </div>
                         <div class="col-md-3 mb-3">
                             <label class="form-label" for="gps">GPS: </label>

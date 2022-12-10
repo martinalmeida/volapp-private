@@ -6,9 +6,9 @@ header('Content-type: application/json');
 
 include(LIBRARIES . 'validations.php');
 include(LIBRARIES . 'utilidades.php');
-include(MODELS . 'modelAlquilerProovedores.php');
+include(MODELS . 'modelAlquilerCliente.php');
 
-class AlquilerProovedoresController
+class AlquilerClienteController
 {
     public function read(): void
     {
@@ -16,7 +16,7 @@ class AlquilerProovedoresController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $alquiler = new AlquilerProovedores($db);
+        $alquiler = new AlquilerCliente($db);
 
         $alquiler->getReadPermisos();
     }
@@ -27,7 +27,7 @@ class AlquilerProovedoresController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $alquiler = new AlquilerProovedores($db);
+        $alquiler = new AlquilerCliente($db);
 
         $alquiler->getWritePermisos();
     }
@@ -38,7 +38,7 @@ class AlquilerProovedoresController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $alquiler = new AlquilerProovedores($db);
+        $alquiler = new AlquilerCliente($db);
 
         // --Seteo de valores existentes en el POST--
         $alquiler->placa = isset($_POST['placa']) ? strtoupper(trim($_POST['placa'])) : NULL;
@@ -62,7 +62,7 @@ class AlquilerProovedoresController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $alquiler = new AlquilerProovedores($db);
+        $alquiler = new AlquilerCliente($db);
 
         $alquiler->draw = htmlspecialchars($_POST['draw']);
         $alquiler->row = htmlspecialchars($_POST['start']);
@@ -81,7 +81,7 @@ class AlquilerProovedoresController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $alquiler = new AlquilerProovedores($db);
+        $alquiler = new AlquilerCliente($db);
 
         // --Seteo de valores existentes en el POST--
         $alquiler->id = isset($_POST['idAlquiler']) ? strtoupper(trim($_POST['idAlquiler'])) : NULL;
@@ -100,7 +100,7 @@ class AlquilerProovedoresController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $alquiler = new AlquilerProovedores($db);
+        $alquiler = new AlquilerCliente($db);
 
         // --Seteo de valores existentes en el POST--
         $alquiler->id = isset($_POST['idMaquinaria']) ? strtoupper(trim($_POST['idMaquinaria'])) : NULL;
@@ -119,7 +119,7 @@ class AlquilerProovedoresController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $alquiler = new AlquilerProovedores($db);
+        $alquiler = new AlquilerCliente($db);
 
         // --Seteo de valores existentes en el POST--
         $alquiler->id = isset($_POST['idMaquinaria']) ? strtoupper(trim($_POST['idMaquinaria'])) : NULL;
@@ -145,7 +145,7 @@ class AlquilerProovedoresController
         include_once(DB);
         $database = new Database();
         $db = $database->getConnection();
-        $alquiler = new AlquilerProovedores($db);
+        $alquiler = new AlquilerCliente($db);
 
         // --Seteo de valores existentes en el POST--
         $alquiler->id = isset($_POST['idAlquiler']) ? strtoupper(trim($_POST['idAlquiler'])) : NULL;

@@ -14,6 +14,7 @@
             </div>
             <div class="modal-body">
                 <form id="frmRegistro">
+                    <div id="alertaForm"></div>
                     <div class="form-row">
                         <div class="col-md-12 mb-3">
                             <label class="form-label" for="nombre">Nombres del Material</label>

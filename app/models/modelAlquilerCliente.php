@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 include(MODELS . 'modelSesion.php');
 
-class AlquilerProovedores
+class AlquilerCliente
 {
     // --Parametros Privados--
     private $conn;
-    private $nombreModulo = 'alquilerProovedores';
+    private $nombreModulo = 'AlquilerCliente';
     private $tableName = "maquinarias_contratos";
     private $viewTable = "view_alquiler";
     private $fechaActual;

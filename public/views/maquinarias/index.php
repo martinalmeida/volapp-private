@@ -47,7 +47,7 @@ $view->initializationView();
                                 <th>Nro Serie de Chasis</th>
                                 <th>Nro de Motor</th>
                                 <th>Rodaje</th>
-                                <th>Rut</th>
+                                <th>Run</th>
                                 <th>GPS</th>
                                 <th>Vencimiento del SOAT</th>
                                 <th>Vencimiento de Tecnocomecánica</th>

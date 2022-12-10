@@ -57,7 +57,7 @@ class EmpresasController
                 // --Archivo Corrupto--
                 echo json_encode(array('status' => '4', 'data' => NULL));
             } else {
-                if ($_FILES['logo']['size'] < 2242880) {
+                if ($_FILES['logo']['size'] <= 2000000) {
                     $empresa->contenType = $_FILES['logo']['type'];
                     $empresa->base64 = base64_encode(file_get_contents($_FILES['logo']['tmp_name']));
                     if (
@@ -168,7 +168,7 @@ class EmpresasController
                 // --Archivo Corrupto--
                 echo json_encode(array('status' => '4', 'data' => NULL));
             } else {
-                if ($_FILES['logo']['size'] < 2242880) {
+                if ($_FILES['logo']['size'] <= 2000000) {
                     $empresa->contenType = $_FILES['logo']['type'];
                     $empresa->base64 = base64_encode(file_get_contents($_FILES['logo']['tmp_name']));
                     if (

@@ -4,7 +4,7 @@ include_once(VIEW_CONTROLLER);
 
 use View\ViewController;
 
-$view = new ViewController('alquilerProovedores');
+$view = new ViewController('alquilerCliente');
 
 $view->initializationView();
 ?>
@@ -32,7 +32,7 @@ $view->initializationView();
                 <div class="panel-content">
                     <!-- <div class="panel-tag">
                     </div> -->
-                    <table id="tablAlquilerProovedores" class="table table-bordered table-hover table-striped w-100">
+                    <table id="tablAlquilerCliente" class="table table-bordered table-hover table-striped w-100">
                         <thead class="bg-primary-600">
                             <tr>
                                 <th>id</th>
@@ -60,6 +60,5 @@ $view->initializationView();
 </h3>
 
 <?php
-include_once(VIEW . 'alquilerProovedores/modalForm.php');
-include_once(VIEW . 'alquilerProovedores/modalParametrizar.php');
+include_once(VIEW . 'alquilerCliente/modalForm.php');
 $view->finalizeView();

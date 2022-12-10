@@ -41,8 +41,8 @@ class AlquilerController
         $alquiler = new Alquiler($db);
 
         // --Seteo de valores existentes en el POST--
-        $alquiler->placa = isset($_POST['placaInsertInsert']) ? strtoupper(trim($_POST['placaInsertInsert'])) : NULL;
-        $alquiler->contrato = isset($_POST['contratoInsertInsert']) ? strtoupper(trim($_POST['contratoInsertInsert'])) : NULL;
+        $alquiler->placa = isset($_POST['placaInsert']) ? strtoupper(trim($_POST['placaInsert'])) : NULL;
+        $alquiler->contrato = isset($_POST['contratoInsert']) ? strtoupper(trim($_POST['contratoInsert'])) : NULL;
         $alquiler->standBy = isset($_POST['standByInsert']) ? strtoupper(trim($_POST['standByInsert'])) : NULL;
         $alquiler->tarifaHora = isset($_POST['tarifaInsert']) ? strtoupper(trim($_POST['tarifaInsert'])) : NULL;
 

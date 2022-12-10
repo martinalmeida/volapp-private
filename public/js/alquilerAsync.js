@@ -69,6 +69,14 @@ $(document).ready(function () {
   readPermisos();
   writePermisos();
   selects();
+  $("#placaInsert").select2({
+    placeholder: "Seleccione la placa o # de registro",
+    allowClear: true,
+  });
+  $("#contrato, #contratoInsert").select2({
+    placeholder: "Seleccione el contrato para este acuerdo",
+    allowClear: true,
+  });
 });
 
 function readPermisos() {
@@ -135,13 +143,11 @@ function selects() {
         case "1":
           var html = "";
 
-          html +=
-            '<option value="" disabled selected hidden>Seleccione la placa o # de registro</option>';
           for (let i = 0; i < result.data.length; i++) {
             html += result.data[i].html;
           }
 
-          $("#placaInsertInsert").html(html);
+          $("#placaInsert").html(html);
           break;
 
         case "2":
@@ -209,13 +215,11 @@ function selects() {
         case "1":
           var html = "";
 
-          html +=
-            '<option value="" disabled selected hidden>Seleccione la ruta para este acuerdo</option>';
           for (let i = 0; i < result.data.length; i++) {
             html += result.data[i].html;
           }
 
-          $("#contrato, #contratoInsertInsert").html(html);
+          $("#contrato, #contratoInsert").html(html);
           break;
 
         case "2":
@@ -400,6 +404,7 @@ function inicializarParametrizacion(id) {
           $("#placa").val(result.data[0].placa);
           $("#tipo").val(result.data[0].tipo);
           $("#contrato").val(result.data[0].idContrato);
+          $("#contrato").val(result.data[0].idContrato).trigger("change");
           $("#standBy").val(result.data[0].standby);
           $("#tarifaHora").val(result.data[0].horaTarifa);
           html +=

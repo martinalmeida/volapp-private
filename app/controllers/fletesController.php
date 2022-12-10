@@ -41,8 +41,8 @@ class FletesController
         $fletes = new Fletes($db);
 
         // --Seteo de valores existentes en el POST--
-        $fletes->placa = isset($_POST['placaInsertInsert']) ? strtoupper(trim($_POST['placaInsertInsert'])) : NULL;
-        $fletes->ruta = isset($_POST['rutaInsertInsert']) ? strtoupper(trim($_POST['rutaInsertInsert'])) : NULL;
+        $fletes->placa = isset($_POST['placaInsert']) ? strtoupper(trim($_POST['placaInsert'])) : NULL;
+        $fletes->ruta = isset($_POST['rutaInsert']) ? strtoupper(trim($_POST['rutaInsert'])) : NULL;
         $fletes->flete = isset($_POST['fleteInsert']) ? strtoupper(trim($_POST['fleteInsert'])) : NULL;
 
         if (Validar::numeros($fletes->placa) && Validar::numeros($fletes->ruta) && Validar::float($fletes->flete, '.')) {

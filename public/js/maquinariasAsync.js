@@ -69,7 +69,7 @@ $(document).ready(function () {
       { data: "nroSerieChasis" },
       { data: "nroMotor" },
       { data: "rodaje" },
-      { data: "rut" },
+      { data: "run" },
       { data: "gps" },
       { data: "fechaSoat" },
       { data: "fechaTecno" },
@@ -102,8 +102,13 @@ $(document).ready(function () {
   readPermisos();
   writePermisos();
   runDatePicker();
+  fileMaxSize();
   selects();
   $(":input").inputmask();
+  $("#tpMaquinaria").select2({
+    placeholder: "Seleccione tipo de Maquinaria",
+    allowClear: true,
+  });
 });
 
 function readPermisos() {
@@ -170,8 +175,6 @@ function selects() {
         case "1":
           var html = "";
 
-          html +=
-            '<option value="" disabled selected hidden>Seleccione tipo de Maquinaria</option>';
           for (let i = 0; i < result.data.length; i++) {
             html += result.data[i].html;
           }
@@ -334,18 +337,15 @@ function registrar(form) {
             break;
 
           case "6":
-            Swal.fire({
-              icon: "error",
-              title: "<strong>Tamaño excesivo de Archivo</strong>",
-              html: "<h5>Adjunta un archivo de menor tamaño, el peso maximo es de 10MB.</h5>",
-              showCloseButton: true,
-              showConfirmButton: false,
-              cancelButtonText: "Cerrar",
-              cancelButtonColor: "#dc3545",
-              showCancelButton: true,
-              backdrop: true,
-            });
-            $("#ModalRegistro").modal("hide");
+            html +=
+              '<div class="alert border-danger bg-transparent text-info fade show" role="alert">' +
+              '<div class="d-flex align-items-center"><div class="alert-icon text-danger">' +
+              '<i class="fal fa-exclamation-triangle"></i></div>' +
+              '<div class="flex-1 text-danger"><span class="h5 m-0 fw-700">Adjunta un archivo de menor tamaño, el peso maximo es de 4 MB.</span></div>' +
+              '<button type="button" class="btn btn-danger btn-pills btn-sm btn-w-m waves-effect waves-themed" data-dismiss="alert" aria-label="Close">' +
+              "Cerrar</button></div></div>";
+
+            $("#archivoBase64").html(html);
             break;
 
           default:
@@ -404,6 +404,10 @@ function editarRegistro(id) {
           break;
 
         case "1":
+          $("#tpMaquinaria").val(result.data[0].idTpMaquinaria);
+          $("#tpMaquinaria")
+            .val(result.data[0].idTpMaquinaria)
+            .trigger("change");
           $("#placa").val(result.data[0].placa);
           $("#marca").val(result.data[0].marca);
           $("#referencia").val(result.data[0].referencia);
@@ -414,7 +418,7 @@ function editarRegistro(id) {
           $("#nroSerieChasis").val(result.data[0].nroSerieChasis);
           $("#nroMotor").val(result.data[0].nroMotor);
           $("#rodaje").val(result.data[0].rodaje);
-          $("#rut").val(result.data[0].rut);
+          $("#run").val(result.data[0].run);
           $("#gps").val(result.data[0].gps);
           $("#fechaSoat").val(result.data[0].fechaSoat);
           $("#fechaTecno").val(result.data[0].fechaTecno);
@@ -426,7 +430,6 @@ function editarRegistro(id) {
           $("#documentOperador").val(result.data[0].documentOperador);
           $("#telefonOperador").val(result.data[0].telefonOperador);
           $("#correOperador").val(result.data[0].correOperador);
-          $("#tpMaquinaria").val(result.data[0].idTpMaquinaria);
 
           html +=
             '<button type="button" class="btn btn-outline-danger" onclick="visualizarPDF(' +
@@ -495,6 +498,31 @@ function editarRegistro(id) {
         backdrop: true,
       });
     },
+  });
+}
+
+function fileMaxSize() {
+  $("#archivo").bind("change", function () {
+    var html = "";
+    if (this.files[0].size >= 4000000) {
+      html +=
+        '<div class="alert border-danger bg-transparent text-info fade show" role="alert">' +
+        '<div class="d-flex align-items-center"><div class="alert-icon text-danger">' +
+        '<i class="fal fa-exclamation-triangle"></i></div>' +
+        '<div class="flex-1 text-danger"><span class="h5 m-0 fw-700">Adjunta un archivo de menor tamaño, el peso maximo es de 4 MB.</span></div>' +
+        '<button type="button" class="btn btn-danger btn-pills btn-sm btn-w-m waves-effect waves-themed" data-dismiss="alert" aria-label="Close">' +
+        "Cerrar</button></div></div>";
+      $(':input[type="file"]').val("");
+    } else {
+      html +=
+        '<div class="alert border-faded bg-transparent text-secondary fade show" role="alert">' +
+        '<div class="d-flex align-items-center"><div class="alert-icon"><span class="icon-stack icon-stack-md">' +
+        '<i class="base-7 icon-stack-3x color-success-600"></i><i class="fal fa-check icon-stack-1x text-white"></i></span></div>' +
+        '<div class="flex-1"><span class="h5 color-success-600">Tamaño del archivo admitido!</span><br>' +
+        "el tamaño del archivo es adecuado para guardarlo en el servidor</div>" +
+        '<button type="button" class="btn btn-success btn-pills btn-sm btn-w-m waves-effect waves-themed" data-dismiss="alert" aria-label="Close">Cerrar</button></div></div>';
+    }
+    $("#archivoBase64").html(html);
   });
 }
 

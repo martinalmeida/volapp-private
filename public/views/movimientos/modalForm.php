@@ -18,12 +18,12 @@
                     <div class="form-row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Placa o # de Registro:</label>
-                            <select class="custom-select form-control" id="placaInsertInsert" name="placaInsertInsert">
+                            <select class="custom-select form-control" id="placaInsert" name="placaInsert">
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Asignar Ruta:</label>
-                            <select class="custom-select form-control" id="rutaInsertInsert" name="rutaInsertInsert">
+                            <select class="custom-select form-control" id="rutaInsert" name="rutaInsert">
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">

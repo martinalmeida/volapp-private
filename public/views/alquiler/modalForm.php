@@ -18,12 +18,12 @@
                     <div class="form-row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Placa o # de Registro:</label>
-                            <select class="custom-select form-control" id="placaInsertInsert" name="placaInsertInsert">
+                            <select class="custom-select form-control" id="placaInsert" name="placaInsert">
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Asignar Contrato:</label>
-                            <select class="custom-select form-control" id="contratoInsertInsert" name="contratoInsertInsert">
+                            <select class="custom-select form-control" id="contratoInsert" name="contratoInsert">
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">

@@ -52,7 +52,7 @@ class MaquinariasController
         $maquinaria->nroSerieChasis = isset($_POST['nroSerieChasis']) ? strtoupper(trim($_POST['nroSerieChasis'])) : NULL;
         $maquinaria->nroMotor = isset($_POST['nroMotor']) ? strtoupper(trim($_POST['nroMotor'])) : NULL;
         $maquinaria->rodaje = isset($_POST['rodaje']) ? strtoupper(trim($_POST['rodaje'])) : NULL;
-        $maquinaria->rut = isset($_POST['rut']) ? strtoupper(trim($_POST['rut'])) : NULL;
+        $maquinaria->run = isset($_POST['run']) ? strtoupper(trim($_POST['run'])) : NULL;
         $maquinaria->gps = isset($_POST['gps']) ? strtoupper(trim($_POST['gps'])) : NULL;
         $maquinaria->fechaSoat = isset($_POST['fechaSoat']) ? trim($_POST['fechaSoat']) : NULL;
         $maquinaria->fechaTecno = isset($_POST['fechaTecno']) ? trim($_POST['fechaTecno']) : NULL;
@@ -71,7 +71,7 @@ class MaquinariasController
                 // --Archivo Corrupto--
                 echo json_encode(array('status' => '4', 'data' => NULL));
             } else {
-                if ($_FILES['archivo']['size'] < 10242880) {
+                if ($_FILES['archivo']['size'] <= 4000000) {
                     $maquinaria->contenType = $_FILES['archivo']['type'];
                     $maquinaria->base64 = base64_encode(file_get_contents($_FILES['archivo']['tmp_name']));
                     if (
@@ -192,7 +192,7 @@ class MaquinariasController
         $maquinaria->nroSerieChasis = isset($_POST['nroSerieChasis']) ? strtoupper(trim($_POST['nroSerieChasis'])) : NULL;
         $maquinaria->nroMotor = isset($_POST['nroMotor']) ? strtoupper(trim($_POST['nroMotor'])) : NULL;
         $maquinaria->rodaje = isset($_POST['rodaje']) ? strtoupper(trim($_POST['rodaje'])) : NULL;
-        $maquinaria->rut = isset($_POST['rut']) ? strtoupper(trim($_POST['rut'])) : NULL;
+        $maquinaria->run = isset($_POST['run']) ? strtoupper(trim($_POST['run'])) : NULL;
         $maquinaria->gps = isset($_POST['gps']) ? strtoupper(trim($_POST['gps'])) : NULL;
         $maquinaria->fechaSoat = isset($_POST['fechaSoat']) ? trim($_POST['fechaSoat']) : NULL;
         $maquinaria->fechaTecno = isset($_POST['fechaTecno']) ? trim($_POST['fechaTecno']) : NULL;
@@ -213,7 +213,7 @@ class MaquinariasController
                 // --Archivo Corrupto--
                 echo json_encode(array('status' => '4', 'data' => NULL));
             } else {
-                if ($_FILES['archivo']['size'] < 10242880) {
+                if ($_FILES['archivo']['size'] <= 4000000) {
                     $maquinaria->contenType = $_FILES['archivo']['type'];
                     $maquinaria->base64 = base64_encode(file_get_contents($_FILES['archivo']['tmp_name']));
                     if (

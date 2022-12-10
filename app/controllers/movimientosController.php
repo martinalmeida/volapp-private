@@ -41,8 +41,8 @@ class MovimientosController
         $movimientos = new Movimientos($db);
 
         // --Seteo de valores existentes en el POST--
-        $movimientos->placa = isset($_POST['placaInsertInsert']) ? strtoupper(trim($_POST['placaInsertInsert'])) : NULL;
-        $movimientos->ruta = isset($_POST['rutaInsertInsert']) ? strtoupper(trim($_POST['rutaInsertInsert'])) : NULL;
+        $movimientos->placa = isset($_POST['placaInsert']) ? strtoupper(trim($_POST['placaInsert'])) : NULL;
+        $movimientos->ruta = isset($_POST['rutaInsert']) ? strtoupper(trim($_POST['rutaInsert'])) : NULL;
         $movimientos->kilometraje = isset($_POST['kilometrajeInsert']) ? strtoupper(trim($_POST['kilometrajeInsert'])) : NULL;
         $movimientos->tarifa = isset($_POST['tarifaInsert']) ? strtoupper(trim($_POST['tarifaInsert'])) : NULL;
 
