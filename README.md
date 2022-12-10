@@ -8,6 +8,12 @@ Diseño, desarrollo e Implementación de una plataforma para la facturación de 
 
 ◻ Instalar paquetes de composer: **composer install**
 
+◻ Importar la base de datos volapp.sql desde cmd:
+
+1. C:\xampp\mysql\bin>mysql.exe -h localhost -u root -p<br>
+2. use volapp<br>
+3. source C:/Users/Martin/Downloads/volapp.sql;<br>
+
 #---------------- Status Back ----------------- <br>
 
 status->0 == Fallo la consulta <br>
