@@ -19,7 +19,7 @@ $view->initializationView();
         <div id="panel-1" class="panel">
             <div class="panel-hdr">
                 <h2>
-                    Tabla de Alquiler para Proovedores
+                    Tabla de Alquiler para Cliente
                     <!-- Tabla <span class="fw-300"><i>Usuarios</i></span> -->
                 </h2>
                 <div class="panel-toolbar">
@@ -56,7 +56,7 @@ $view->initializationView();
 </div>
 
 <h3>
-    Pagina de Alquiler para Proovedores
+    Pagina de Alquiler para Cliente
 </h3>
 
 <?php
