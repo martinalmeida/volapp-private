@@ -84,6 +84,7 @@ $(document).ready(function () {
   });
   readPermisos();
   writePermisos();
+  fileMaxSize();
   runDatePicker();
   $(":input").inputmask();
 });
@@ -383,6 +384,31 @@ function editarRegistro(id) {
         backdrop: true,
       });
     },
+  });
+}
+
+function fileMaxSize() {
+  $("#archivo").bind("change", function () {
+    var html = "";
+    if (this.files[0].size >= 4000000) {
+      html +=
+        '<div class="alert border-danger bg-transparent text-info fade show" role="alert">' +
+        '<div class="d-flex align-items-center"><div class="alert-icon text-danger">' +
+        '<i class="fal fa-exclamation-triangle"></i></div>' +
+        '<div class="flex-1 text-danger"><span class="h5 m-0 fw-700">Adjunta un archivo de menor tamaño, el peso maximo es de 4 MB.</span></div>' +
+        '<button type="button" class="btn btn-danger btn-pills btn-sm btn-w-m waves-effect waves-themed" data-dismiss="alert" aria-label="Close">' +
+        "Cerrar</button></div></div>";
+      $(':input[type="file"]').val("");
+    } else {
+      html +=
+        '<div class="alert border-faded bg-transparent text-secondary fade show" role="alert">' +
+        '<div class="d-flex align-items-center"><div class="alert-icon"><span class="icon-stack icon-stack-md">' +
+        '<i class="base-7 icon-stack-3x color-success-600"></i><i class="fal fa-check icon-stack-1x text-white"></i></span></div>' +
+        '<div class="flex-1"><span class="h5 color-success-600">Tamaño del archivo admitido!</span><br>' +
+        "el tamaño del archivo es adecuado para guardarlo en el servidor</div>" +
+        '<button type="button" class="btn btn-success btn-pills btn-sm btn-w-m waves-effect waves-themed" data-dismiss="alert" aria-label="Close">Cerrar</button></div></div>';
+    }
+    $("#archivoBase64").html(html);
   });
 }
 

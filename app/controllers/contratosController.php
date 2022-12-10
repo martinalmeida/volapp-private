@@ -53,7 +53,7 @@ class ContratosController
                 // --Archivo Corrupto--
                 echo json_encode(array('status' => '4', 'data' => NULL));
             } else {
-                if ($_FILES['archivo']['size'] < 10242880) {
+                if ($_FILES['archivo']['size'] <= 4000000) {
                     $contrato->contenType = $_FILES['archivo']['type'];
                     $contrato->base64 = base64_encode(file_get_contents($_FILES['archivo']['tmp_name']));
                     if (
@@ -178,7 +178,7 @@ class ContratosController
                 // --Archivo Corrupto--
                 echo json_encode(array('status' => '4', 'data' => NULL));
             } else {
-                if ($_FILES['archivo']['size'] < 10242880) {
+                if ($_FILES['archivo']['size'] <= 4000000) {
                     $contrato->contenType = $_FILES['archivo']['type'];
                     $contrato->base64 = base64_encode(file_get_contents($_FILES['archivo']['tmp_name']));
                     if (
