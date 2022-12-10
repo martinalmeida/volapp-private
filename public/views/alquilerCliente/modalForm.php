@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">
-                    Agregar Alquiler para Proovedor
+                    Agregar Alquiler para Cliente
                     <small class="m-0 text-muted">
                         En el modulo alquiler se parametrizan los valores para el dueño unico de la maquinaria.
                     </small>
