@@ -9,7 +9,13 @@ class InformesRelacion
     // --Parametros Privados--
     private $conn;
     private $nombreModulo = "informes";
+    private $tableFletes = "fletes";
+    private $tableMovimientos = "movimientos";
+    private $tableRutas = "rutas";
+    private $tableRutContratos = "rutas_contratos";
     private $tableRegisAlquiler = "registros_alquiler";
+    private $tableRegisFlete = "registros_fletes";
+    private $tableRegisMovimientos = "registros_movimientos";
     private $tableMaquinarias = "maquinarias";
     private $tableMaqContratos = "maquinarias_contratos";
     private $tableContratos = "contratos";
@@ -22,12 +28,7 @@ class InformesRelacion
 
     /* Propiedades de los objetos de Datatables para utilizar (Serverside) 
     Procesamiento del lado del servidor */
-    public $draw;
     public $row;
-    public $rowperpage;
-    public $columnIndex;
-    public $columnName;
-    public $columnSortOrder;
 
     // --Constructor para la conexion de la BD--
     public function __construct($db)
@@ -64,14 +65,14 @@ class InformesRelacion
         if ($datos->w === 1) {
 
             $html .= '<h1 class="subheader-title">';
-            $html .= '<i class="fal fa-info-circle"></i> Relación por Alquiler</h1>';
+            $html .= '<i class="fal fa-info-circle"></i> Informe de Relación</h1>';
             $html .= '<button type="button" class="btn btn-primary active m-1" onClick="history.go(-1); return false;"><i class="fal fa-arrow-left"></i> Regresar</button>';
 
             echo json_encode(array('status' => NULL, 'data' => $html));
         } else {
 
             $html .= '<h1 class="subheader-title">';
-            $html .= '<i class="fal fa-info-circle"></i> Relación por Alquiler</h1>';
+            $html .= '<i class="fal fa-info-circle"></i> Informe de Relación</h1>';
             $html .= '<h3>No tienes permisos de escritura para este modulo </h3>';
             $html .= '<button type="button" class="btn btn-primary active m-1" onClick="history.go(-1); return false;"><i class="fal fa-arrow-left"></i> Regresar</button>';
 
@@ -132,6 +133,116 @@ class InformesRelacion
                 "otros" => $row['otros'],
                 "total" => $row['total'],
                 "observacion" => $row['observacion']
+            );
+        }
+        // --Response--
+        $response = array(
+            "aaData" => $data
+        );
+        echo json_encode($response);
+    }
+
+    // -- ⊡ Funcion para dataTables Serverside ⊡ --
+    public function tableRelacionFlete(): void
+    {
+        $sqlRelacion = "";
+        $this->placa != NULL ? $sqlRelacion .= " AND rf.idMaquinaria = $this->placa " : $sqlRelacion .= "";
+        $this->contrato != NULL ? $sqlRelacion .= " AND c.id = $this->contrato " : $sqlRelacion .= "";
+        $this->fechaInicio != NULL ? $sqlRelacion .= " AND STR_TO_DATE(rf.fechaInicio, '%m/%d/%Y') >= STR_TO_DATE('$this->fechaInicio', '%m/%d/%Y') " : $sqlRelacion .= "";
+        $this->fechaFin != NULL ? $sqlRelacion .= " AND STR_TO_DATE(rf.fechaFin, '%m/%d/%Y') <= STR_TO_DATE('$this->fechaFin', '%m/%d/%Y') " : $sqlRelacion .= "";
+
+        // --Fetch records--
+        $stmt = $this->conn->prepare("SELECT
+                                      rf.id,
+                                      rf.codFicha,
+                                      m.placa,
+                                      rf.fechaInicio,
+                                      rf.fechaFin,
+                                      c.titulo,
+                                      concat(r.origen, ' - ', r.destino)ruta,
+                                      rc.kilometraje,
+                                      rc.tarifa,
+                                      (rc.kilometraje * rc.tarifa)total
+                                      FROM $this->tableRegisFlete rf
+                                      join $this->tableMaquinarias m on rf.idMaquinaria = m.id 
+                                      join $this->tableFletes f on f.idMaquinaria = m.id 
+                                      join $this->tableRutas r on f.idRuta = r.id 
+                                      join $this->tableRutContratos rc on rc.idRuta = r.id 
+                                      join $this->tableContratos c on rc.idContrato = c.id 
+                                      WHERE rf.status = 1 AND f.status = 1 AND rc.status = 1 $sqlRelacion GROUP BY rf.id ORDER BY m.placa DESC ");
+        $stmt->execute();
+        $empRecords = $stmt->fetchAll();
+        $data = array();
+        foreach ($empRecords as $row) {
+
+            $data[] = array(
+                "id" => $row['id'],
+                "codFicha" => $row['codFicha'],
+                "placa" => $row['placa'],
+                "fechaInicio" => $row['fechaInicio'],
+                "fechaFin" => $row['fechaFin'],
+                "titulo" => $row['titulo'],
+                "ruta" => $row['ruta'],
+                "kilometraje" => $row['kilometraje'],
+                "tarifa" => $row['tarifa'],
+                "total" => $row['total']
+            );
+        }
+        // --Response--
+        $response = array(
+            "aaData" => $data
+        );
+        echo json_encode($response);
+    }
+
+    // -- ⊡ Funcion para dataTables Serverside ⊡ --
+    public function tableRelacionMovimiento(): void
+    {
+        $sqlRelacion = "";
+        $this->placa != NULL ? $sqlRelacion .= " AND rm.idMaquinaria = $this->placa " : $sqlRelacion .= "";
+        $this->contrato != NULL ? $sqlRelacion .= " AND c.id = $this->contrato " : $sqlRelacion .= "";
+        $this->fechaInicio != NULL ? $sqlRelacion .= " AND STR_TO_DATE(rm.fechaInicio, '%m/%d/%Y') >= STR_TO_DATE('$this->fechaInicio', '%m/%d/%Y') " : $sqlRelacion .= "";
+        $this->fechaFin != NULL ? $sqlRelacion .= " AND STR_TO_DATE(rm.fechaFin, '%m/%d/%Y') <= STR_TO_DATE('$this->fechaFin', '%m/%d/%Y') " : $sqlRelacion .= "";
+
+        // --Fetch records--
+        $stmt = $this->conn->prepare("SELECT
+                                      rm.id,
+                                      rm.codFicha,
+                                      m.placa,
+                                      rm.fechaInicio,
+                                      rm.fechaFin,
+                                      c.titulo,
+                                      concat(r.origen, ' - ', r.destino)ruta,
+                                      rc.kilometraje,
+                                      rc.tarifa,
+                                      rm.mts3,
+                                      rm.movimientos,
+                                      (rc.kilometraje * rc.tarifa * rm.mts3 * rm.movimientos)total
+                                      FROM $this->tableRegisMovimientos rm 
+                                      join $this->tableMaquinarias m on rm.idMaquinaria = m.id 
+                                      join $this->tableMovimientos mo on mo.idMaquinaria =  m.id 
+                                      join $this->tableRutas r on mo.idRuta = r.id 
+                                      join $this->tableRutContratos rc on rc.idRuta = r.id 
+                                      join $this->tableContratos c on rc.idContrato = c.id 
+                                      WHERE rm.status = 1 AND mo.status = 1 AND rc.status = 1 $sqlRelacion GROUP BY rm.id ORDER BY m.placa DESC ");
+        $stmt->execute();
+        $empRecords = $stmt->fetchAll();
+        $data = array();
+        foreach ($empRecords as $row) {
+
+            $data[] = array(
+                "id" => $row['id'],
+                "codFicha" => $row['codFicha'],
+                "placa" => $row['placa'],
+                "fechaInicio" => $row['fechaInicio'],
+                "fechaFin" => $row['fechaFin'],
+                "titulo" => $row['titulo'],
+                "ruta" => $row['ruta'],
+                "kilometraje" => $row['kilometraje'],
+                "tarifa" => $row['tarifa'],
+                "mts3" => $row['mts3'],
+                "movimientos" => $row['movimientos'],
+                "total" => $row['total']
             );
         }
         // --Response--

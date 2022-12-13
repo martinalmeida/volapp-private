@@ -238,7 +238,7 @@ function formRelacion() {
     "'mask': '99/99/9999'" +
     '" im-insert="true">' +
     '<div class="input-group-append"><span class="input-group-text fs-xl"><i class="fal fa-calendar-check"></i></span></div></div></div></form>' +
-    '<button type="button" id="btnGenerar" class="btn btn-success btn-pills btn-block waves-effect waves-themed">Generar la Relación por Alquiler para Cobrar <i class="fal fa-sack-dollar"></i></button>';
+    '<button type="button" id="btnGenerar" class="btn btn-primary btn-pills btn-block waves-effect waves-themed">Generar la Relación por Fletes para Cobrar <i class="fal fa-sack-dollar"></i></button>';
 
   $("#relacionRender").html(html);
   $("#btnGenerar").attr("onclick", "generaRelacion();");
@@ -250,20 +250,17 @@ function generaRelacion() {
   html +=
     '<table id="tablaInforme" class="table table-bordered table-hover table-striped w-100"><thead class="bg-primary-600"><tr>' +
     "<th>ID</th>" +
+    "<th>Codigo Ficha</th>" +
     "<th>Placa o #Registro</th>" +
     "<th>fecha Inicio</th>" +
     "<th>fecha Fin</th>" +
     "<th>Titulo del Contrato</th>" +
-    "<th>Horometro Inicial</th>" +
-    "<th>Horometro Final</th>" +
-    "<th>Total Horas Trabjadas</th>" +
-    "<th>Stand-By</th>" +
-    "<th>Valor Hora</th>" +
-    "<th>Sub Total</th>" +
-    "<th>Deducible anticipo</th>" +
-    "<th>Otros Deducible</th>" +
+    "<th>Ruta (Origen - Destino)</th>" +
+    "<th>Kilometros</th>" +
+    "<th>Tarifa por kilometro</th>" +
+    "<th>Metros Cubicos</th>" +
+    "<th>Movimientos</th>" +
     "<th>Total</th>" +
-    "<th>Observacion</th>" +
     "</tr></thead><tbody></tbody></table>";
 
   $("#relacionGenerada").html(html);
@@ -290,7 +287,7 @@ function generaRelacion() {
     searching: false,
     destroy: true,
     ajax: {
-      url: urlBase + "routes/informesRelacion/relacionAlquiler",
+      url: urlBase + "routes/informesRelacion/relacionMovimiento",
       type: "POST",
       data: {
         placa: placa,
@@ -310,26 +307,23 @@ function generaRelacion() {
         text: "Descargar <i class='fal fa-file-excel'></i>",
         titleAttr: "Generate Excel",
         className: "bg-success-900 btn-sm mr-1",
-        messageTop: "Relación a cobrar de Alquiler de maquinarias",
-        title: "Relación por Alquiler",
+        messageTop: "Relación a cobrar de Movimientos de maquinarias",
+        title: "Relación por Movimientos",
       },
     ],
     columns: [
       { data: "id" },
+      { data: "codFicha" },
       { data: "placa" },
       { data: "fechaInicio" },
       { data: "fechaFin" },
       { data: "titulo" },
-      { data: "horometroInicial" },
-      { data: "horometroFin" },
-      { data: "totalHoras" },
-      { data: "standby" },
-      { data: "horaTarifa" },
-      { data: "subTotal" },
-      { data: "anticipo" },
-      { data: "otros" },
+      { data: "ruta" },
+      { data: "kilometraje" },
+      { data: "tarifa" },
+      { data: "mts3" },
+      { data: "movimientos" },
       { data: "total" },
-      { data: "observacion" },
     ],
     language: {
       lengthMenu: "Mostrar _MENU_ registros",

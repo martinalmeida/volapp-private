@@ -60,4 +60,36 @@ class InformesRelacionController
 
         $informes->tableRelacionAlquiler();
     }
+
+    public function relacionFlete(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $informes = new InformesRelacion($db);
+
+        $informes->placa = isset($_POST['placa']) ? strtoupper(trim($_POST['placa'])) : NULL;
+        $informes->contrato = isset($_POST['contrato']) ? strtoupper(trim($_POST['contrato'])) : NULL;
+        $informes->fechaInicio = isset($_POST['fechaInicio']) ? strtoupper(trim($_POST['fechaInicio'])) : NULL;
+        $informes->fechaFin = isset($_POST['fechaFin']) ? strtoupper(trim($_POST['fechaFin'])) : NULL;
+
+        $informes->tableRelacionFlete();
+    }
+
+    public function relacionMovimiento(): void
+    {
+        // --Importacion e inicializacion de conexion--
+        include_once(DB);
+        $database = new Database();
+        $db = $database->getConnection();
+        $informes = new InformesRelacion($db);
+
+        $informes->placa = isset($_POST['placa']) ? strtoupper(trim($_POST['placa'])) : NULL;
+        $informes->contrato = isset($_POST['contrato']) ? strtoupper(trim($_POST['contrato'])) : NULL;
+        $informes->fechaInicio = isset($_POST['fechaInicio']) ? strtoupper(trim($_POST['fechaInicio'])) : NULL;
+        $informes->fechaFin = isset($_POST['fechaFin']) ? strtoupper(trim($_POST['fechaFin'])) : NULL;
+
+        $informes->tableRelacionMovimiento();
+    }
 }
