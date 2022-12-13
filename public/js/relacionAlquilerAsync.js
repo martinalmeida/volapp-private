@@ -241,14 +241,15 @@ function formRelacion() {
     '<button type="button" id="btnGenerar" class="btn btn-success btn-pills btn-block waves-effect waves-themed">Generar la Relación por Alquiler para Cobrar <i class="fal fa-sack-dollar"></i></button>';
 
   $("#relacionRender").html(html);
-  $("#btnGenerar").attr("onclick", "generaRelacion('frmRelacion');");
+  $("#btnGenerar").attr("onclick", "generaRelacion();");
 }
 
-function generaRelacion(form) {
+function generaRelacion() {
   var html = "";
 
   html +=
     '<table id="tablaInforme" class="table table-bordered table-hover table-striped w-100"><thead class="bg-primary-600"><tr>' +
+    "<th>ID</th>" +
     "<th>Placa o #Registro</th>" +
     "<th>fecha Inicio</th>" +
     "<th>fecha Fin</th>" +
@@ -267,72 +268,82 @@ function generaRelacion(form) {
 
   $("#relacionGenerada").html(html);
 
-  var respuestavalidacion = validarcampos("#" + form);
-  if (respuestavalidacion) {
-    setTimeout(() => {
-      tablaInforme = $("#tablaInforme").DataTable({
-        processing: true,
-        orderClasses: true,
-        deferRender: true,
-        serverSide: true,
-        responsive: true,
-        lengthChange: false,
-        paging: false,
-        searching: false,
-        ajax: {
-          url: urlBase + "routes/informesRelacion/relacionAlquiler",
-          type: "POST",
-          data: function (d) {
-            d.form = $("#" + form).serializeArray();
-          },
-          dataType: "json",
-        },
-        dom:
-          "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
-          "<'row'<'col-sm-12'tr>>" +
-          "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-        buttons: [
-          {
-            extend: "excelHtml5",
-            text: "Descargar <i class='fal fa-file-excel'></i>",
-            titleAttr: "Generate Excel",
-            className: "bg-success-900 btn-sm mr-1",
-          },
-        ],
-        columns: [
-          { data: "id" },
-          { data: "placa" },
-          { data: "fechaInicio" },
-          { data: "fechaFin" },
-          { data: "titulo" },
-          { data: "horometroInicial" },
-          { data: "horometroFin" },
-          { data: "totalHoras" },
-          { data: "standby" },
-          { data: "horaTarifa" },
-          { data: "subTotal" },
-          { data: "anticipo" },
-          { data: "otros" },
-          { data: "total" },
-        ],
-        language: {
-          lengthMenu: "Mostrar _MENU_ registros",
-          zeroRecords: "No se encontraron resultados",
-          info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-          infoEmpty:
-            "Mostrando registros del 0 al 0 de un total de 0 registros",
-          infoFiltered: "(filtrado de un total de _MAX_ registros)",
-          oPaginate: {
-            sFirst: "Primero",
-            sLast: "Último",
-            sNext: "Siguiente",
-            sPrevious: "Anterior",
-          },
-          sProcessing: "Procesando...",
-        },
-      });
-    }, 1000);
-  }
+  let placa = $("#placa").val();
+  let contrato = $("#contrato").val();
+  let fechaInicio = $("#fechaInicio").val();
+  let fechaFin = $("#fechaFin").val();
+
+  tablaInforme = $("#tablaInforme").DataTable({
+    processing: true,
+    orderClasses: true,
+    deferRender: true,
+    serverSide: true,
+    responsive: true,
+    lengthChange: false,
+    paging: false,
+    columnDefs: [
+      {
+        targets: "_all",
+        sortable: false,
+      },
+    ],
+    searching: false,
+    destroy: true,
+    ajax: {
+      url: urlBase + "routes/informesRelacion/relacionAlquiler",
+      type: "POST",
+      data: {
+        placa: placa,
+        contrato: contrato,
+        fechaInicio: fechaInicio,
+        fechaFin: fechaFin,
+      },
+      dataType: "json",
+    },
+    dom:
+      "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
+      "<'row'<'col-sm-12'tr>>" +
+      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+    buttons: [
+      {
+        extend: "excelHtml5",
+        text: "Descargar <i class='fal fa-file-excel'></i>",
+        titleAttr: "Generate Excel",
+        className: "bg-success-900 btn-sm mr-1",
+      },
+    ],
+    columns: [
+      { data: "id" },
+      { data: "placa" },
+      { data: "fechaInicio" },
+      { data: "fechaFin" },
+      { data: "titulo" },
+      { data: "horometroInicial" },
+      { data: "horometroFin" },
+      { data: "totalHoras" },
+      { data: "standby" },
+      { data: "horaTarifa" },
+      { data: "subTotal" },
+      { data: "anticipo" },
+      { data: "otros" },
+      { data: "total" },
+      { data: "observacion" },
+    ],
+    language: {
+      lengthMenu: "Mostrar _MENU_ registros",
+      zeroRecords: "No se encontraron resultados",
+      info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+      infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+      infoFiltered: "(filtrado de un total de _MAX_ registros)",
+      oPaginate: {
+        sFirst: "Primero",
+        sLast: "Último",
+        sNext: "Siguiente",
+        sPrevious: "Anterior",
+      },
+      sProcessing: "Procesando...",
+    },
+  });
 }
 
 function reajustDatatables() {

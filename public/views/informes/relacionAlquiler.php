@@ -30,7 +30,7 @@ $view->initializationView();
             <div class="panel-container show">
                 <div class="panel-content" id="relacionRender">
                 </div>
-                <div id="relacionGenerada">
+                <div class="panel-content" id="relacionGenerada">
                 </div>
             </div>
         </div>
