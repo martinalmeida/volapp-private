@@ -23,7 +23,7 @@ $view->initializationView();
             <div class="row no-gutters row-grid">
                 <div class="col-12">
                     <div class="d-flex flex-column align-items-center justify-content-center p-4">
-                        <img src="<?= $_SESSION['imagenUser']; ?>" class="rounded-circle shadow-2 img-thumbnail" alt="">
+                        <img src="<?= $_SESSION['imagenUser']; ?>" width="100" height="100" class="rounded-circle shadow-2 img-thumbnail" alt="">
                         <h5 class="mb-0 fw-700 text-center mt-3">
                             BIENVENIDO A VOLAPP <?= $_SESSION['usuario']; ?>
                             <small class="text-muted mb-0"><?= $_SESSION['empresa']; ?> nit: <?= $_SESSION['nit']; ?></small>

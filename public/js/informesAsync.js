@@ -5,7 +5,7 @@ $(document).ready(function () {
 function readPermisos() {
   $.ajax({
     dataType: "json",
-    url: urlBase + "routes/informes/read",
+    url: urlBase + "routes/informesRelacion/read",
     type: "GET",
     beforeSend: function () {},
     success: function (result) {
@@ -26,7 +26,7 @@ function getRuta(ruta) {
   $.ajax({
     data: { idRuta: ruta },
     dataType: "json", //Si no se especifica jQuery automaticamente encontrará el tipo basado en el header del archivo llamado (pero toma mas tiempo en cargar, asi que especificalo)
-    url: urlBase + "routes/informes/getRuta", //url a donde hacemos la peticion
+    url: urlBase + "routes/informesRelacion/getRuta", //url a donde hacemos la peticion
     type: "POST",
     beforeSend: function () {
       // $("#overlayText").text("Cerrando Sesión...");
