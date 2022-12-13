@@ -252,7 +252,7 @@ class RegistrosMovimientos
                 $botones .= "<i class='fal fa-edit'></i></button>";
                 $botones .= "<button type='button' class='btn btn-" . $statusColor . " text-white' data-toggle='tooltip' data-placement='top' title='Estado del Registro' onclick='statusRegistro(" . $row['id'] . ", " . $row['status'] . ");'>";
                 $botones .= "<i class='fal fa-eye'></i></button>";
-                $botones .= "<button type='button' class='btn btn-primary text-white' data-toggle='tooltip' data-placement='top' title='Agregar Descontables' onclick='agregarDescontable(" . $row['id'] . ");'>";
+                $botones .= "<button type='button' class='btn btn-primary text-white' data-toggle='tooltip' data-placement='top' title='Agregar Descontables' onclick='deducibles(" . $row['id'] . ");'>";
                 $botones .= "<i class='fal fa-file-invoice-dollar'></i></button>";
             }
             if ($datos->d === 1) {
