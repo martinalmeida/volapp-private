@@ -9,6 +9,7 @@ class InformesRelacionProovedor
     // --Parametros Privados--
     private $conn;
     private $nombreModulo = "informes";
+    private $tableAlquiler = "alquiler";
     private $tableFletes = "fletes";
     private $tableMovimientos = "movimientos";
     private $tableRutas = "rutas";
@@ -20,6 +21,7 @@ class InformesRelacionProovedor
     private $tableMaqContratos = "maquinarias_contratos";
     private $tableContratos = "contratos";
     private $tableDedAlquiler = "deducibles_alquiler";
+    private $tableDedFletes = "deducibles_fletes";
 
     public $placa;
     public $contrato;
@@ -109,11 +111,11 @@ class InformesRelacionProovedor
                                       da.otros,
                                       (((ra.horometroFin - ra.horometroInicial) * (a.horaTarifa)) - (IFNULL(da.admon,0) + IFNULL(da.retefuente,0) + IFNULL(da.reteica,0) + IFNULL(da.anticipo,0) + IFNULL(da.otros,0)))total,
                                       da.observacion  
-                                      FROM registros_alquiler ra 
-                                      JOIN maquinarias m ON ra.idMaquinaria = m.id
-                                      JOIN alquiler a ON ra.idAlquiler = a.id 
-                                      JOIN contratos c ON a.idContrato = c.id 
-                                      LEFT JOIN deducibles_alquiler da ON da.idRegistro = ra.id 
+                                      FROM $this->tableRegisAlquiler ra 
+                                      JOIN $this->tableMaquinarias m ON ra.idMaquinaria = m.id
+                                      JOIN $this->tableAlquiler a ON ra.idAlquiler = a.id 
+                                      JOIN $this->tableContratos c ON a.idContrato = c.id 
+                                      LEFT JOIN $this->tableDedAlquiler da ON da.idRegistro = ra.id 
                                       WHERE ra.status = 1 AND a.status = 1 $sqlRelacion GROUP BY ra.id ORDER BY m.placa DESC ");
         $stmt->execute();
         $empRecords = $stmt->fetchAll();
@@ -166,15 +168,21 @@ class InformesRelacionProovedor
                                       rf.fechaFin,
                                       c.titulo,
                                       concat(r.origen, ' - ', r.destino)ruta,
-                                      rc.kilometraje,
-                                      rc.tarifa,
-                                      (rc.kilometraje * rc.tarifa)total
+                                      f.flete,
+                                      df.admon,
+                                      df.retefuente,
+                                      df.reteica,
+                                      df.anticipo,
+                                      df.otros,
+                                      ((f.flete) - (IFNULL(df.admon,0) + IFNULL(df.retefuente,0) + IFNULL(df.reteica,0) + IFNULL(df.anticipo,0) + IFNULL(df.otros,0)))total,
+                                      df.observacion 
                                       FROM $this->tableRegisFlete rf
-                                      join $this->tableMaquinarias m on rf.idMaquinaria = m.id 
-                                      join $this->tableFletes f on f.idMaquinaria = m.id 
-                                      join $this->tableRutas r on f.idRuta = r.id 
-                                      join $this->tableRutContratos rc on rc.idRuta = r.id 
-                                      join $this->tableContratos c on rc.idContrato = c.id 
+                                      JOIN $this->tableMaquinarias m ON rf.idMaquinaria = m.id 
+                                      JOIN $this->tableFletes f ON rf.idFlete = f.id 
+                                      JOIN $this->tableRutas r ON f.idRuta = r.id 
+                                      JOIN $this->tableRutContratos rc ON r.id = rc.idRuta 
+                                      JOIN $this->tableContratos c ON rc.idContrato = c.id 
+                                      LEFT JOIN $this->tableDedFletes df ON df.idRegistro = rf.id 
                                       WHERE rf.status = 1 AND f.status = 1 AND rc.status = 1 $sqlRelacion GROUP BY rf.id ORDER BY m.placa DESC ");
         $stmt->execute();
         $empRecords = $stmt->fetchAll();
@@ -189,9 +197,14 @@ class InformesRelacionProovedor
                 "fechaFin" => $row['fechaFin'],
                 "titulo" => $row['titulo'],
                 "ruta" => $row['ruta'],
-                "kilometraje" => $row['kilometraje'],
-                "tarifa" => $row['tarifa'],
-                "total" => $row['total']
+                "flete" => $row['flete'],
+                "admon" => $row['admon'],
+                "retefuente" => $row['retefuente'],
+                "reteica" => $row['reteica'],
+                "anticipo" => $row['anticipo'],
+                "otros" => $row['otros'],
+                "total" => $row['total'],
+                "observacion" => $row['observacion']
             );
         }
         // --Response--

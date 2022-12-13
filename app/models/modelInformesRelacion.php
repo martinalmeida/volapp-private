@@ -164,11 +164,11 @@ class InformesRelacion
                                       rc.tarifa,
                                       (rc.kilometraje * rc.tarifa)total
                                       FROM $this->tableRegisFlete rf
-                                      join $this->tableMaquinarias m on rf.idMaquinaria = m.id 
-                                      join $this->tableFletes f on f.idMaquinaria = m.id 
-                                      join $this->tableRutas r on f.idRuta = r.id 
-                                      join $this->tableRutContratos rc on rc.idRuta = r.id 
-                                      join $this->tableContratos c on rc.idContrato = c.id 
+                                      JOIN $this->tableMaquinarias m ON rf.idMaquinaria = m.id 
+                                      JOIN $this->tableFletes f ON rf.idFlete = f.id 
+                                      JOIN $this->tableRutas r ON f.idRuta = r.id 
+                                      JOIN $this->tableRutContratos rc ON rc.idRuta = r.id 
+                                      JOIN $this->tableContratos c ON rc.idContrato = c.id 
                                       WHERE rf.status = 1 AND f.status = 1 AND rc.status = 1 $sqlRelacion GROUP BY rf.id ORDER BY m.placa DESC ");
         $stmt->execute();
         $empRecords = $stmt->fetchAll();
@@ -220,11 +220,11 @@ class InformesRelacion
                                       rm.movimientos,
                                       ((rc.kilometraje * rc.tarifa * rm.mts3 * rm.movimientos) + rm.peaje)total
                                       FROM $this->tableRegisMovimientos rm 
-                                      join $this->tableMaquinarias m on rm.idMaquinaria = m.id 
-                                      join $this->tableMovimientos mo on mo.idMaquinaria =  m.id 
-                                      join $this->tableRutas r on mo.idRuta = r.id 
-                                      join $this->tableRutContratos rc on rc.idRuta = r.id 
-                                      join $this->tableContratos c on rc.idContrato = c.id 
+                                      JOIN $this->tableMaquinarias m ON rm.idMaquinaria = m.id 
+                                      JOIN $this->tableMovimientos mo ON mo.idMaquinaria =  m.id 
+                                      JOIN $this->tableRutas r ON mo.idRuta = r.id 
+                                      JOIN $this->tableRutContratos rc ON rc.idRuta = r.id 
+                                      JOIN $this->tableContratos c ON rc.idContrato = c.id 
                                       WHERE rm.status = 1 AND mo.status = 1 AND rc.status = 1 $sqlRelacion GROUP BY rm.id ORDER BY m.placa DESC ");
         $stmt->execute();
         $empRecords = $stmt->fetchAll();
