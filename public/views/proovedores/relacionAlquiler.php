@@ -4,7 +4,7 @@ include_once(VIEW_CONTROLLER);
 
 use View\ViewController;
 
-$view = new ViewController('relacionAlquilerPoovedor');
+$view = new ViewController('relacionAlquilerProovedor');
 
 $view->initializationView();
 ?>

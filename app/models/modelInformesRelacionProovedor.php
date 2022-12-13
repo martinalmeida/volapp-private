@@ -18,10 +18,10 @@ class InformesRelacionProovedor
     private $tableRegisFlete = "registros_fletes";
     private $tableRegisMovimientos = "registros_movimientos";
     private $tableMaquinarias = "maquinarias";
-    private $tableMaqContratos = "maquinarias_contratos";
     private $tableContratos = "contratos";
     private $tableDedAlquiler = "deducibles_alquiler";
     private $tableDedFletes = "deducibles_fletes";
+    private $tableDedMovimientos = "deducibles_movimientos";
 
     public $placa;
     public $contrato;
@@ -232,18 +232,25 @@ class InformesRelacionProovedor
                                       rm.fechaFin,
                                       c.titulo,
                                       concat(r.origen, ' - ', r.destino)ruta,
-                                      rc.kilometraje,
-                                      rc.tarifa,
+                                      mo.kilometraje,
+                                      mo.tarifa,
                                       rm.mts3,
                                       rm.peaje,
                                       rm.movimientos,
-                                      ((rc.kilometraje * rc.tarifa * rm.mts3 * rm.movimientos) + rm.peaje)total
+                                      dm.admon,
+                                      dm.retefuente,
+                                      dm.reteica,
+                                      dm.anticipo,
+                                      dm.otros,
+                                      (((mo.kilometraje * mo.tarifa * rm.mts3) + rm.peaje ) - (IFNULL(dm.admon,0) + IFNULL(dm.retefuente,0) + IFNULL(dm.reteica,0) + IFNULL(dm.anticipo,0) + IFNULL(dm.otros,0)))total,
+                                      dm.observacion 
                                       FROM $this->tableRegisMovimientos rm 
-                                      join $this->tableMaquinarias m on rm.idMaquinaria = m.id 
-                                      join $this->tableMovimientos mo on mo.idMaquinaria =  m.id 
-                                      join $this->tableRutas r on mo.idRuta = r.id 
-                                      join $this->tableRutContratos rc on rc.idRuta = r.id 
-                                      join $this->tableContratos c on rc.idContrato = c.id 
+                                      JOIN $this->tableMaquinarias m ON rm.idMaquinaria = m.id 
+                                      JOIN $this->tableMovimientos mo ON mo.idMaquinaria = m.id 
+                                      JOIN $this->tableRutas r ON mo.idRuta = r.id 
+                                      JOIN $this->tableRutContratos rc ON rc.idRuta = r.id 
+                                      JOIN $this->tableContratos c ON rc.idContrato = c.id 
+                                      LEFT JOIN $this->tableDedMovimientos dm ON dm.idRegistro = rm.id 
                                       WHERE rm.status = 1 AND mo.status = 1 AND rc.status = 1 $sqlRelacion GROUP BY rm.id ORDER BY m.placa DESC ");
         $stmt->execute();
         $empRecords = $stmt->fetchAll();
@@ -263,7 +270,13 @@ class InformesRelacionProovedor
                 "mts3" => $row['mts3'],
                 "peaje" => $row['peaje'],
                 "movimientos" => $row['movimientos'],
-                "total" => $row['total']
+                "admon" => $row['admon'],
+                "retefuente" => $row['retefuente'],
+                "reteica" => $row['reteica'],
+                "anticipo" => $row['anticipo'],
+                "otros" => $row['otros'],
+                "total" => $row['total'],
+                "observacion" => $row['observacion']
             );
         }
         // --Response--
