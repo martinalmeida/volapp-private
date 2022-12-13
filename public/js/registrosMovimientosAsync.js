@@ -68,6 +68,7 @@ $(document).ready(function () {
       { data: "tarifa" },
       { data: "movimientos" },
       { data: "mts3" },
+      { data: "peaje" },
       { data: "fechaInicio" },
       { data: "fechaFin" },
       { data: "titulo" },
@@ -535,6 +536,7 @@ function editarRegistro(id) {
           $("#material").val(result.data[0].idMaterial);
           $("#movimientos").val(result.data[0].movimientos);
           $("#mts3").val(result.data[0].mts3);
+          $("#peaje").val(result.data[0].peaje);
           $("#fechaInicial").val(result.data[0].fechaInicio);
           $("#fechaFinal").val(result.data[0].fechaFin);
           $("#observacion").val(result.data[0].observacion);

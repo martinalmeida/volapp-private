@@ -43,6 +43,7 @@ $view->initializationView();
                                 <th>Tarifa</th>
                                 <th>Nro Movimientos</th>
                                 <th>Metros Cubicos</th>
+                                <th>Peaje</th>
                                 <th>Fecha de Inicio</th>
                                 <th>Fecha Final</th>
                                 <th>Titulo del Contrato</th>

@@ -47,6 +47,7 @@ class RegistrosMovimientosController
         $registros->material = isset($_POST['material']) ? strtoupper(trim($_POST['material'])) : NULL;
         $registros->movimientos = isset($_POST['movimientos']) ? strtoupper(trim($_POST['movimientos'])) : NULL;
         $registros->mts3 = isset($_POST['mts3']) ? strtoupper(trim($_POST['mts3'])) : NULL;
+        $registros->peaje = isset($_POST['peaje']) ? strtoupper(trim($_POST['peaje'])) : NULL;
         $registros->fechaInicio = isset($_POST['fechaInicial']) ? strtoupper(trim($_POST['fechaInicial'])) : NULL;
         $registros->fechaFin = isset($_POST['fechaFinal']) ? strtoupper(trim($_POST['fechaFinal'])) : NULL;
         $registros->observacion = isset($_POST['observacion']) ? strtoupper(trim($_POST['observacion'])) : NULL;
@@ -135,6 +136,7 @@ class RegistrosMovimientosController
         $registros->material = isset($_POST['material']) ? strtoupper(trim($_POST['material'])) : NULL;
         $registros->movimientos = isset($_POST['movimientos']) ? strtoupper(trim($_POST['movimientos'])) : NULL;
         $registros->mts3 = isset($_POST['mts3']) ? strtoupper(trim($_POST['mts3'])) : NULL;
+        $registros->peaje = isset($_POST['peaje']) ? strtoupper(trim($_POST['peaje'])) : NULL;
         $registros->fechaInicio = isset($_POST['fechaInicial']) ? strtoupper(trim($_POST['fechaInicial'])) : NULL;
         $registros->fechaFin = isset($_POST['fechaFinal']) ? strtoupper(trim($_POST['fechaFinal'])) : NULL;
         $registros->observacion = isset($_POST['observacion']) ? strtoupper(trim($_POST['observacion'])) : NULL;

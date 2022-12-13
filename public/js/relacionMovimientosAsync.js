@@ -238,7 +238,7 @@ function formRelacion() {
     "'mask': '99/99/9999'" +
     '" im-insert="true">' +
     '<div class="input-group-append"><span class="input-group-text fs-xl"><i class="fal fa-calendar-check"></i></span></div></div></div></form>' +
-    '<button type="button" id="btnGenerar" class="btn btn-primary btn-pills btn-block waves-effect waves-themed">Generar la Relación por Fletes para Cobrar <i class="fal fa-sack-dollar"></i></button>';
+    '<button type="button" id="btnGenerar" class="btn btn-primary btn-pills btn-block waves-effect waves-themed">Generar la Relación por Movimientos para Cobrar <i class="fal fa-sack-dollar"></i></button>';
 
   $("#relacionRender").html(html);
   $("#btnGenerar").attr("onclick", "generaRelacion();");
@@ -259,6 +259,7 @@ function generaRelacion() {
     "<th>Kilometros</th>" +
     "<th>Tarifa por kilometro</th>" +
     "<th>Metros Cubicos</th>" +
+    "<th>Peaje</th>" +
     "<th>Movimientos</th>" +
     "<th>Total</th>" +
     "</tr></thead><tbody></tbody></table>";
@@ -322,6 +323,7 @@ function generaRelacion() {
       { data: "kilometraje" },
       { data: "tarifa" },
       { data: "mts3" },
+      { data: "peaje" },
       { data: "movimientos" },
       { data: "total" },
     ],

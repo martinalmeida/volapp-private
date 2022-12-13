@@ -35,13 +35,17 @@
                             <select class="select2 custom-select form-control" id="acuerdo" name="acuerdo">
                             </select>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label class="form-label" for="movimientos">Numero de Movimientos Realizados:</label>
                             <input type="number" onKeyPress="if(this.value.length==12)return false;" class="form-control" id="movimientos" name="movimientos" placeholder="Codigo de la ficha del registro" required>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label class="form-label" for="mts3">Metros Cubicos Cargados:</label>
                             <input type="text" onkeypress="return filterFloat(event,this);" class="form-control" id="mts3" name="mts3" placeholder="Codigo de la ficha del registro" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="peaje">Peaje:</label>
+                            <input type="text" onkeypress="return filterFloat(event,this);" class="form-control" id="peaje" name="peaje" placeholder="Codigo de la ficha del registro" required>
                         </div>
                         <div class="input-group col-md-6 mb-3">
                             <input type="text" class="form-control" id="fechaInicial" name="fechaInicial" placeholder="Fecha de Inicio" data-inputmask="'mask': '99/99/9999'" im-insert="true">

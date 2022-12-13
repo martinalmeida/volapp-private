@@ -216,8 +216,9 @@ class InformesRelacion
                                       rc.kilometraje,
                                       rc.tarifa,
                                       rm.mts3,
+                                      rm.peaje,
                                       rm.movimientos,
-                                      (rc.kilometraje * rc.tarifa * rm.mts3 * rm.movimientos)total
+                                      ((rc.kilometraje * rc.tarifa * rm.mts3 * rm.movimientos) + rm.peaje)total
                                       FROM $this->tableRegisMovimientos rm 
                                       join $this->tableMaquinarias m on rm.idMaquinaria = m.id 
                                       join $this->tableMovimientos mo on mo.idMaquinaria =  m.id 
@@ -241,6 +242,7 @@ class InformesRelacion
                 "kilometraje" => $row['kilometraje'],
                 "tarifa" => $row['tarifa'],
                 "mts3" => $row['mts3'],
+                "peaje" => $row['peaje'],
                 "movimientos" => $row['movimientos'],
                 "total" => $row['total']
             );
