@@ -64,7 +64,17 @@ class InformesRelacionController
         $informes->contrato = isset($_POST['contrato']) ? strtoupper(trim($_POST['contrato'])) : NULL;
         $informes->fechaInicio = isset($_POST['fechaInicio']) ? strtoupper(trim($_POST['fechaInicio'])) : NULL;
         $informes->fechaFin = isset($_POST['fechaFin']) ? strtoupper(trim($_POST['fechaFin'])) : NULL;
-
+        echo $_POST['form'][0]['value'] . '\n';
+        echo $_POST['form'][1]['value'];
+        echo $_POST['form'][2]['value'];
+        echo $_POST['form'][3]['value'];
+        foreach ($data as $key => $val) {
+            $val->Descripcion; // Aceite, Caja
+            $val->Codigo;      // 2222222, 1111111
+            $val->Precio;      // 45, 50
+            $val->Eliminar;    // Eliminar, Eliminar
+        }
+        exit;
         $informes->tableRelacionAlquiler();
     }
 }

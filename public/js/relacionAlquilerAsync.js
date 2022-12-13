@@ -266,66 +266,72 @@ function generaRelacion(form) {
     "</tr></thead><tbody></tbody></table>";
 
   $("#relacionGenerada").html(html);
+
   var respuestavalidacion = validarcampos("#" + form);
   if (respuestavalidacion) {
-    var formData = new FormData(document.getElementById(form));
-    tablaInforme = $("#tablaInforme").DataTable({
-      processing: true,
-      orderClasses: true,
-      deferRender: true,
-      serverSide: true,
-      responsive: true,
-      lengthChange: false,
-      paging: false,
-      searching: false,
-      ajax: {
-        type: "POST",
-        data: formData,
-        url: urlBase + "routes/informesRelacion/relacionAlquiler",
-      },
-      dom:
-        "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
-        "<'row'<'col-sm-12'tr>>" +
-        "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-      buttons: [
-        {
-          extend: "excelHtml5",
-          text: "Descargar <i class='fal fa-file-excel'></i>",
-          titleAttr: "Generate Excel",
-          className: "bg-success-900 btn-sm mr-1",
+    setTimeout(() => {
+      tablaInforme = $("#tablaInforme").DataTable({
+        processing: true,
+        orderClasses: true,
+        deferRender: true,
+        serverSide: true,
+        responsive: true,
+        lengthChange: false,
+        paging: false,
+        searching: false,
+        ajax: {
+          url: urlBase + "routes/informesRelacion/relacionAlquiler",
+          type: "POST",
+          data: function (d) {
+            d.form = $("#" + form).serializeArray();
+          },
+          dataType: "json",
         },
-      ],
-      columns: [
-        { data: "nit" },
-        { data: "digito" },
-        { data: "nombre" },
-        { data: "representante" },
-        { data: "telefono" },
-        { data: "direccion" },
-        { data: "correo" },
-        { data: "pais" },
-        { data: "ciudad" },
-        { data: "contacto" },
-        { data: "emailTec" },
-        { data: "emaiLogis" },
-        { data: "status" },
-        { data: "defaultContent" },
-      ],
-      language: {
-        lengthMenu: "Mostrar _MENU_ registros",
-        zeroRecords: "No se encontraron resultados",
-        info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-        infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
-        infoFiltered: "(filtrado de un total de _MAX_ registros)",
-        oPaginate: {
-          sFirst: "Primero",
-          sLast: "Último",
-          sNext: "Siguiente",
-          sPrevious: "Anterior",
+        dom:
+          "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
+          "<'row'<'col-sm-12'tr>>" +
+          "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+        buttons: [
+          {
+            extend: "excelHtml5",
+            text: "Descargar <i class='fal fa-file-excel'></i>",
+            titleAttr: "Generate Excel",
+            className: "bg-success-900 btn-sm mr-1",
+          },
+        ],
+        columns: [
+          { data: "id" },
+          { data: "placa" },
+          { data: "fechaInicio" },
+          { data: "fechaFin" },
+          { data: "titulo" },
+          { data: "horometroInicial" },
+          { data: "horometroFin" },
+          { data: "totalHoras" },
+          { data: "standby" },
+          { data: "horaTarifa" },
+          { data: "subTotal" },
+          { data: "anticipo" },
+          { data: "otros" },
+          { data: "total" },
+        ],
+        language: {
+          lengthMenu: "Mostrar _MENU_ registros",
+          zeroRecords: "No se encontraron resultados",
+          info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+          infoEmpty:
+            "Mostrando registros del 0 al 0 de un total de 0 registros",
+          infoFiltered: "(filtrado de un total de _MAX_ registros)",
+          oPaginate: {
+            sFirst: "Primero",
+            sLast: "Último",
+            sNext: "Siguiente",
+            sPrevious: "Anterior",
+          },
+          sProcessing: "Procesando...",
         },
-        sProcessing: "Procesando...",
-      },
-    });
+      });
+    }, 1000);
   }
 }
 
