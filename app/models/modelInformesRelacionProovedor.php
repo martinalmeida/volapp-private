@@ -242,7 +242,7 @@ class InformesRelacionProovedor
                                       dm.reteica,
                                       dm.anticipo,
                                       dm.otros,
-                                      (((mo.kilometraje * mo.tarifa * rm.mts3) + rm.peaje ) - (IFNULL(dm.admon,0) + IFNULL(dm.retefuente,0) + IFNULL(dm.reteica,0) + IFNULL(dm.anticipo,0) + IFNULL(dm.otros,0)))total,
+                                      ((((mo.kilometraje * mo.tarifa * rm.mts3) * rm.movimientos )+ (rm.peaje) ) - (IFNULL(dm.admon,0) + IFNULL(dm.retefuente,0) + IFNULL(dm.reteica,0) + IFNULL(dm.anticipo,0) + IFNULL(dm.otros,0)))total,
                                       dm.observacion 
                                       FROM $this->tableRegisMovimientos rm 
                                       JOIN $this->tableMaquinarias m ON rm.idMaquinaria = m.id 
