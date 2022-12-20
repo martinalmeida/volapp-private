@@ -77,7 +77,7 @@ class MaquinariasController
                     if (
                         Validar::numeros($maquinaria->idTpMaquinaria) && Validar::patronalfanumerico1($maquinaria->placa) && Validar::fecha($maquinaria->fechaSoat, '/', 'mda') &&
                         Validar::fecha($maquinaria->fechaTecno, '/', 'mda') && Validar::patronalfanumerico1($maquinaria->propietario) && Validar::numeros($maquinaria->documentoPropietario) &&
-                        Validar::patronalfanumerico1($maquinaria->operador) && Validar::numeros($maquinaria->documentOperador) && Validar::tipoarchivo($maquinaria->contenType, 1)
+                        Validar::tipoarchivo($maquinaria->contenType, 1)
                     ) {
                         $maquinaria->createMaquinaria();
                     } else {
@@ -219,7 +219,7 @@ class MaquinariasController
                     if (
                         Validar::numeros($maquinaria->idTpMaquinaria) && Validar::patronalfanumerico1($maquinaria->placa) && Validar::fecha($maquinaria->fechaSoat, '/', 'mda') &&
                         Validar::fecha($maquinaria->fechaTecno, '/', 'mda') && Validar::patronalfanumerico1($maquinaria->propietario) && Validar::numeros($maquinaria->documentoPropietario) &&
-                        Validar::patronalfanumerico1($maquinaria->operador) && Validar::numeros($maquinaria->documentOperador) && Validar::tipoarchivo($maquinaria->contenType, 1) && Validar::numeros($maquinaria->id)
+                        Validar::tipoarchivo($maquinaria->contenType, 1) && Validar::numeros($maquinaria->id)
                     ) {
                         $maquinaria->updateMaquinaria();
                     } else {
@@ -236,7 +236,7 @@ class MaquinariasController
             if (
                 Validar::numeros($maquinaria->idTpMaquinaria) && Validar::patronalfanumerico1($maquinaria->placa) && Validar::fecha($maquinaria->fechaSoat, '/', 'mda') &&
                 Validar::fecha($maquinaria->fechaTecno, '/', 'mda') && Validar::patronalfanumerico1($maquinaria->propietario) && Validar::numeros($maquinaria->documentoPropietario) &&
-                Validar::patronalfanumerico1($maquinaria->operador) && Validar::numeros($maquinaria->documentOperador) && Validar::tipoarchivo($maquinaria->contenType, 1) && Validar::numeros($maquinaria->id)
+                Validar::tipoarchivo($maquinaria->contenType, 1) && Validar::numeros($maquinaria->id)
             ) {
                 $maquinaria->updateMaquinaria();
             } else {

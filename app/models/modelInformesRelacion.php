@@ -221,7 +221,7 @@ class InformesRelacion
                                       ((rc.kilometraje * rc.tarifa * rm.mts3 * rm.movimientos) + rm.peaje)total
                                       FROM $this->tableRegisMovimientos rm 
                                       JOIN $this->tableMaquinarias m ON rm.idMaquinaria = m.id 
-                                      JOIN $this->tableMovimientos mo ON mo.idMaquinaria =  m.id 
+                                      JOIN $this->tableMovimientos mo ON rm.idMovimeinto = mo.id  
                                       JOIN $this->tableRutas r ON mo.idRuta = r.id 
                                       JOIN $this->tableRutContratos rc ON rc.idRuta = r.id 
                                       JOIN $this->tableContratos c ON rc.idContrato = c.id 
