@@ -20,6 +20,7 @@ class RegistrosFletes
     public $placa;
     public $acuerdo;
     public $codFicha;
+    public $manifiesto;
     public $fechaInicio;
     public $fechaFin;
     public $admon;
@@ -96,13 +97,14 @@ class RegistrosFletes
     public function createRegistro(): void
     {
         // --Preparamos la consulta--
-        $query = "INSERT INTO $this->tableName SET idMaquinaria=?, idFlete=?, codFicha=?, fechaInicio=?, fechaFin=?, observacion=?, datecreated=?, idUsuario=?, nit=? ;";
+        $query = "INSERT INTO $this->tableName SET idMaquinaria=?, idFlete=?, codFicha=?, manifiesto=?, fechaInicio=?, fechaFin=?, observacion=?, datecreated=?, idUsuario=?, nit=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
         $this->placa = htmlspecialchars(strip_tags($this->placa));
         $this->acuerdo = htmlspecialchars(strip_tags($this->acuerdo));
         $this->codFicha = htmlspecialchars(strip_tags($this->codFicha));
+        $this->manifiesto = htmlspecialchars(strip_tags($this->manifiesto));
         $this->fechaInicio = htmlspecialchars(strip_tags($this->fechaInicio));
         $this->fechaFin = htmlspecialchars(strip_tags($this->fechaFin));
         $this->observacion = htmlspecialchars(strip_tags($this->observacion));
@@ -114,12 +116,13 @@ class RegistrosFletes
         $stmt->bindParam(1, $this->placa);
         $stmt->bindParam(2, $this->acuerdo);
         $stmt->bindParam(3, $this->codFicha);
-        $stmt->bindParam(4, $this->fechaInicio);
-        $stmt->bindParam(5, $this->fechaFin);
-        $stmt->bindParam(6, $this->observacion);
-        $stmt->bindParam(7, $this->fechaActual);
-        $stmt->bindParam(8, $this->idUser);
-        $stmt->bindParam(9, $this->nit);
+        $stmt->bindParam(4, $this->manifiesto);
+        $stmt->bindParam(5, $this->fechaInicio);
+        $stmt->bindParam(6, $this->fechaFin);
+        $stmt->bindParam(7, $this->observacion);
+        $stmt->bindParam(8, $this->fechaActual);
+        $stmt->bindParam(9, $this->idUser);
+        $stmt->bindParam(10, $this->nit);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {
@@ -151,6 +154,7 @@ class RegistrosFletes
         if ($searchValue != '') {
             $searchQuery = " AND (id LIKE :id OR 
                             codFicha LIKE :codFicha OR
+                            manifiesto LIKE :manifiesto OR
                             placa LIKE :placa OR
                             acuerdo LIKE :acuerdo OR
                             flete LIKE :flete OR
@@ -163,6 +167,7 @@ class RegistrosFletes
             $searchArray = array(
                 'id' => "%$searchValue%",
                 'codFicha' => "%$searchValue%",
+                'manifiesto' => "%$searchValue%",
                 'placa' => "%$searchValue%",
                 'acuerdo' => "%$searchValue%",
                 'flete' => "%$searchValue%",
@@ -180,7 +185,7 @@ class RegistrosFletes
         $records = $stmt->fetch();
         $totalRecords = $records['allcount'];
         // --Total number of records with filtering--
-        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM $this->viewTable WHERE 1 " . $searchQuery . " AND nit = " . $_SESSION['nit'] . " ");
+        $stmt = $this->conn->prepare("SELECT COUNT(*) AS allcount FROM $this->viewTable WHERE 1 " . $searchQuery . " AND nit = " . $_SESSION['nit'] . " AND status IN(1, 2) ");
         $stmt->execute($searchArray);
         $records = $stmt->fetch();
         $totalRecordwithFilter = $records['allcount'];
@@ -218,6 +223,7 @@ class RegistrosFletes
             $data[] = array(
                 "id" => $row['id'],
                 "codFicha" => $row['codFicha'],
+                "manifiesto" => $row['manifiesto'],
                 "placa" => $row['placa'],
                 "acuerdo" => $row['acuerdo'],
                 "flete" => $row['flete'],
@@ -293,13 +299,14 @@ class RegistrosFletes
     public function updateRegistro(): void
     {
         // --Preparamos la consulta--
-        $query = "UPDATE $this->tableName SET idMaquinaria=?, idFlete=?, codFicha=?, fechaInicio=?, fechaFin=?, observacion=?, dateupdate=?, idUsuario=?, nit=? WHERE id=? ;";
+        $query = "UPDATE $this->tableName SET idMaquinaria=?, idFlete=?, codFicha=?, manifiesto=?, fechaInicio=?, fechaFin=?, observacion=?, dateupdate=?, idUsuario=?, nit=? WHERE id=? ;";
         $stmt = $this->conn->prepare($query);
 
         // --Escapamos los caracteres--
         $this->placa = htmlspecialchars(strip_tags($this->placa));
         $this->acuerdo = htmlspecialchars(strip_tags($this->acuerdo));
         $this->codFicha = htmlspecialchars(strip_tags($this->codFicha));
+        $this->manifiesto = htmlspecialchars(strip_tags($this->manifiesto));
         $this->fechaInicio = htmlspecialchars(strip_tags($this->fechaInicio));
         $this->fechaFin = htmlspecialchars(strip_tags($this->fechaFin));
         $this->observacion = htmlspecialchars(strip_tags($this->observacion));
@@ -311,13 +318,14 @@ class RegistrosFletes
         $stmt->bindParam(1, $this->placa);
         $stmt->bindParam(2, $this->acuerdo);
         $stmt->bindParam(3, $this->codFicha);
-        $stmt->bindParam(4, $this->fechaInicio);
-        $stmt->bindParam(5, $this->fechaFin);
-        $stmt->bindParam(6, $this->observacion);
-        $stmt->bindParam(7, $this->fechaActual);
-        $stmt->bindParam(8, $this->idUser);
-        $stmt->bindParam(9, $this->nit);
-        $stmt->bindParam(10, $this->id);
+        $stmt->bindParam(4, $this->manifiesto);
+        $stmt->bindParam(5, $this->fechaInicio);
+        $stmt->bindParam(6, $this->fechaFin);
+        $stmt->bindParam(7, $this->observacion);
+        $stmt->bindParam(8, $this->fechaActual);
+        $stmt->bindParam(9, $this->idUser);
+        $stmt->bindParam(10, $this->nit);
+        $stmt->bindParam(11, $this->id);
 
         // --Ejecutamos la consulta y validamos ejecucion--
         if ($stmt->execute()) {

@@ -42,6 +42,7 @@ class RegistrosFletesController
 
         // --Seteo de valores existentes en el POST--
         $registros->codFicha = isset($_POST['codFicha']) ? strtoupper(trim($_POST['codFicha'])) : NULL;
+        $registros->manifiesto = isset($_POST['manifiesto']) ? strtoupper(trim($_POST['manifiesto'])) : NULL;
         $registros->placa = isset($_POST['placa']) ? strtoupper(trim($_POST['placa'])) : NULL;
         $registros->acuerdo = isset($_POST['acuerdo']) ? strtoupper(trim($_POST['acuerdo'])) : NULL;
         $registros->fechaInicio = isset($_POST['fechaInicial']) ? strtoupper(trim($_POST['fechaInicial'])) : NULL;
@@ -126,6 +127,7 @@ class RegistrosFletesController
         // --Seteo de valores existentes en el POST--
         $registros->id = isset($_POST['idRegistro']) ? strtoupper(trim($_POST['idRegistro'])) : NULL;
         $registros->codFicha = isset($_POST['codFicha']) ? strtoupper(trim($_POST['codFicha'])) : NULL;
+        $registros->manifiesto = isset($_POST['manifiesto']) ? strtoupper(trim($_POST['manifiesto'])) : NULL;
         $registros->placa = isset($_POST['placa']) ? strtoupper(trim($_POST['placa'])) : NULL;
         $registros->acuerdo = isset($_POST['acuerdo']) ? strtoupper(trim($_POST['acuerdo'])) : NULL;
         $registros->fechaInicio = isset($_POST['fechaInicial']) ? strtoupper(trim($_POST['fechaInicial'])) : NULL;

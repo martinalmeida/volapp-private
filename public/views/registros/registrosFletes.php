@@ -37,6 +37,7 @@ $view->initializationView();
                             <tr>
                                 <th>id</th>
                                 <th>Cod. Ficha</th>
+                                <th>Manifiesto</th>
                                 <th>Placa o Nro Registro</th>
                                 <th>Acuerdo de Flete o Ruta</th>
                                 <th>Valor Flete</th>

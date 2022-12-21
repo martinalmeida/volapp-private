@@ -62,6 +62,7 @@ $(document).ready(function () {
     columns: [
       { data: "id" },
       { data: "codFicha" },
+      { data: "manifiesto" },
       { data: "placa" },
       { data: "acuerdo" },
       { data: "flete" },
@@ -441,6 +442,7 @@ function editarRegistro(id) {
 
         case "1":
           $("#codFicha").val(result.data[0].codFicha);
+          $("#manifiesto").val(result.data[0].manifiesto);
           $("#placa").val(result.data[0].idMaquinaria);
           $("#placa").val(result.data[0].idMaquinaria).trigger("change");
 
