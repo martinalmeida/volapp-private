@@ -261,9 +261,7 @@ function generaRelacion() {
     "<th>Valor Hora</th>" +
     "<th>Sub Total</th>" +
     "<th>Deducible anticipo</th>" +
-    "<th>Otros Deducible</th>" +
     "<th>Total</th>" +
-    "<th>Observacion</th>" +
     "</tr></thead><tbody></tbody></table>";
 
   $("#relacionGenerada").html(html);
@@ -327,9 +325,7 @@ function generaRelacion() {
       { data: "horaTarifa" },
       { data: "subTotal" },
       { data: "anticipo" },
-      { data: "otros" },
       { data: "total" },
-      { data: "observacion" },
     ],
     language: {
       lengthMenu: "Mostrar _MENU_ registros",

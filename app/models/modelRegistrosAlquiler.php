@@ -186,7 +186,7 @@ class RegistrosAlquiler
                                                                   JOIN $this->tableMaquinaria m ON ra.idMaquinaria = m.id 
                                                                   JOIN $this->tableAlquiler a ON ra.idAlquiler = a.id
                                                                   JOIN $this->tableContrato c ON a.idContrato = c.id 
-                                                                  JOIN $this->tableUsuario u ON ra.idUsuario = u.id ");
+                                                                  JOIN $this->tableUsuario u ON ra.idUsuario = u.id WHERE ra.status IN(1, 2) AND ra.nit =  " . $_SESSION['nit'] . " ");
         $stmt->execute();
         $records = $stmt->fetch();
         $totalRecords = $records['allcount'];
@@ -195,7 +195,7 @@ class RegistrosAlquiler
                                                                   JOIN $this->tableMaquinaria m ON ra.idMaquinaria = m.id 
                                                                   JOIN $this->tableAlquiler a ON ra.idAlquiler = a.id
                                                                   JOIN $this->tableContrato c ON a.idContrato = c.id 
-                                                                  JOIN $this->tableUsuario u ON ra.idUsuario = u.id  WHERE 1 " . $searchQuery . "");
+                                                                  JOIN $this->tableUsuario u ON ra.idUsuario = u.id  WHERE 1 " . $searchQuery . " AND ra.status IN(1, 2) AND ra.nit =  " . $_SESSION['nit'] . " ");
         $stmt->execute($searchArray);
         $records = $stmt->fetch();
         $totalRecordwithFilter = $records['allcount'];

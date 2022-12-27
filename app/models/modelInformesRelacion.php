@@ -103,9 +103,7 @@ class InformesRelacion
                                       mc.horaTarifa,
                                       ((ra.horometroFin - ra.horometroInicial) * mc.horaTarifa)subTotal,
                                       da.anticipo,
-                                      da.otros,
-                                      (((ra.horometroFin - ra.horometroInicial) * (mc.horaTarifa)) - (IFNULL(da.anticipo,0) + IFNULL(da.otros,0)))total,
-                                      da.observacion  
+                                      (((ra.horometroFin - ra.horometroInicial) * (mc.horaTarifa)) - (IFNULL(da.anticipo,0)))total
                                       FROM $this->tableRegisAlquiler ra 
                                       JOIN $this->tableMaquinarias m on ra.idMaquinaria = m.id 
                                       JOIN $this->tableMaqContratos mc on mc.idMaquinaria = m.id 
@@ -130,9 +128,7 @@ class InformesRelacion
                 "horaTarifa" => $row['horaTarifa'],
                 "subTotal" => $row['subTotal'],
                 "anticipo" => $row['anticipo'],
-                "otros" => $row['otros'],
-                "total" => $row['total'],
-                "observacion" => $row['observacion']
+                "total" => $row['total']
             );
         }
         // --Response--
