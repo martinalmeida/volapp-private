@@ -307,6 +307,7 @@ function generaRelacion() {
     buttons: [
       {
         extend: "excelHtml5",
+        autoFilter: true,
         text: "Descargar <i class='fal fa-file-excel'></i>",
         titleAttr: "Generate Excel",
         className: "bg-success-900 btn-sm mr-1",
