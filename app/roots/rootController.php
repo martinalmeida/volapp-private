@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/volappConfig.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . '/inc/volappConfig.php');
 include_once(CONTROLLERS . 'sesionController.php');
 
 class Roots
@@ -15,7 +15,7 @@ class Roots
     {
         $self = new self();
         $self->folder = $folder;
-        $url = '/volapp/public/views/' . $self->folder;
+        $url = '/public/views/' . $self->folder;
         if (file_exists($_SERVER['DOCUMENT_ROOT'] . $url . '/index.php')) {
             header('Location: ' . $url);
         } else {
@@ -121,7 +121,7 @@ class Roots
         $self = new self();
         $self->folder = $folder;
         $self->file = $file;
-        $url = '/volapp/public/views/' . $self->folder . '/' . $self->file;
+        $url = '/public/views/' . $self->folder . '/' . $self->file;
         if (file_exists($_SERVER['DOCUMENT_ROOT'] . $url . '.php')) {
             header('Location: ' . $url);
         } else {

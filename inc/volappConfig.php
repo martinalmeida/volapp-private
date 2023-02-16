@@ -6,10 +6,10 @@ date_default_timezone_set('America/Bogota');
 define('LANG', 'es');
 
 // Ruta del servidor
-define('SERVER', $_SERVER['DOCUMENT_ROOT'] . '/volapp/');
+define('SERVER', $_SERVER['DOCUMENT_ROOT'] . '/');
 
 // Rutas principales
-define('ROOT_PATH', '/volapp/');
+define('ROOT_PATH', '/');
 define('APP', SERVER . 'app/');
 define('RESOURCES', ROOT_PATH . 'resources/');
 define('ASEETS', ROOT_PATH . 'aseets/');
@@ -42,9 +42,9 @@ define('JS', RESOURCES . 'js/');
 // Rutas a archivos puntuales
 define('DB', INC . '/db.php');
 define('COMPOSER', SERVER . 'vendor/autoload.php');
-define('TEMPLATE', INCLUDES . '/template.php');
-define('TEMPLATE_LOGIN', INCLUDES . '/templateLogin.php');
-define('VIEW_CONTROLLER', CONTROLLERS . '/viewController.php');
+define('TEMPLATE', INCLUDES . 'template.php');
+define('TEMPLATE_LOGIN', INCLUDES . 'templateLogin.php');
+define('VIEW_CONTROLLER', CONTROLLERS . 'viewController.php');
 
 // Urls vistas 
 define('LOGIN', VIEW . 'login/');

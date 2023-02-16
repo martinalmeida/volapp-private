@@ -1,5 +1,5 @@
 <?php
-include_once($_SERVER['DOCUMENT_ROOT'] . '/volapp/inc/volappConfig.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . '/inc/volappConfig.php');
 include_once(VIEW_CONTROLLER);
 
 use View\ViewController;
