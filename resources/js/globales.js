@@ -2,4 +2,4 @@
 // Desarrollo:
 // var urlBase = "http://localhost/volapp/";
 // Produccion:
-var urlBase = "https://volapp.coosersum.com.co/";
+var urlBase = "https://volApp.coosersum.com.co/";
