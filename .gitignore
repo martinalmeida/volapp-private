@@ -1,4 +1,4 @@
-vendor
+/vendor/
+.vscode/
 resources/js/globales.js
-.env
 .env
